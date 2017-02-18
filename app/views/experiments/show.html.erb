@@ -1,0 +1,42 @@
+<hr>
+<p>Experiment name: <%= @experiment.name %></p>
+<p>Experiment author_id: <%= @experiment.author_id %></p>
+<!-- allow editing of experiments -->
+<%= link_to "Edit", edit_experiment_path(@experiment), :class => 'btn btn-default' %>
+<!-- allow destruction of experiments -->
+<%= link_to "Delete", experiment_path(@experiment),
+method: :delete,
+data: {confirm: 'Are you sure?'}, :class => 'btn btn-danger' %>
+<hr>
+
+<!-- move trials to their folder and do render here: check tutorial ror in 60 minutes, minute 57:46 -->
+<p> Trials </p>
+<% @experiment.trials.each do |trial| %>
+<div class = "well">
+  <p>Task id: <%= trial.task_id %> </p>
+  <%= link_to "Delete Trial", [trial.experiment, trial],
+  method: :delete,
+  data: {confirm: 'Are you sure?'} %>
+</div>
+<%end%>
+
+
+<!-- Button to add trials to experiments -->
+<p> Add Trial </p>
+<%= form_for([@experiment, @experiment.trials.build]) do |f| %>
+<!-- <% if @experiment.errors.any? %>
+  <% @experiment.errors.full_messages.each do |msg| %>
+    <div class = "alert alert-danger"> <%= msg %> </div>
+  <%  end %>
+  <%  end %> -->
+<p>
+<%=  f.label :task_id %> <br>
+<%=  f.text_field :task_id %>
+</p>
+
+
+<p>
+<%=  f.submit %>
+</p>
+
+<% end %>

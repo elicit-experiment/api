@@ -1,0 +1,17 @@
+<h1> Welcome to the new Cosound API </h1>
+<p> Here are all the experiments that have been defined so far: </p>
+
+<% @experiments.each do |exp| %>
+<div class ="well">
+<p>Name of experiment: <%= exp.name %> </p>
+ <p>Author ID of experiment: <%= exp.author_id %> </p>
+
+ <%= link_to "View experiment", experiment_path(exp), :class => 'btn btn-default' %>
+
+ <!-- sd
+ dsds
+ <%= link_to "View experiment", experiment_path(exp) %>
+
+ -->
+</div>
+<% end %>
