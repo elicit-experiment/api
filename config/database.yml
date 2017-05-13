@@ -5,7 +5,7 @@
 #   gem 'sqlite3'
 #
 
-######this used to be the default before goku started playing around
+######this used to be the default before I started playing around
 # default: &default
 #   adapter: sqlite3
 #   pool: 5

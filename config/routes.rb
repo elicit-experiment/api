@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 #root of site
 root 'experiments#index'
 
-#regular route
+#regular route, GET request for /about also routes to pages/about
 get 'about' => 'pages#about'
 
 #set all the CRUD methods (maps HTTP verbs to controller actions)
