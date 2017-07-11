@@ -13,4 +13,8 @@ resources :experiments do
 end
 
 
+get '/v6/Session/Create' => 'sessions#create' , :defaults => { :format => 'json' }
+
+get "/v6/*" => redirect("/")
+
 end
