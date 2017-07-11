@@ -6,20 +6,19 @@
 #
 
 ######this used to be the default before I started playing around
-# default: &default
-#   adapter: sqlite3
-#   pool: 5
-#   timeout: 5000
-
 default: &default
-  adapter: mysql2
-  encoding: utf8
+  adapter: sqlite3
   pool: 5
-  username: gokuadmin
-  password: blahblah
-  host: localhost
-  socket: C:/xammp/mysql/mysql.sock
+  timeout: 5000
 
+#default: &default
+#  adapter: mysql2
+#  encoding: utf8
+#  pool: 5
+#  username: gokuadmin
+#  password: blahblah
+#  host: localhost
+#  socket: C:/xammp/mysql/mysql.sock
 
 development:
   <<: *default
