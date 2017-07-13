@@ -1,18 +1,18 @@
 {
   "Header": {
-    "Duration": 5.044
+    "Duration": 6.165
   },
   "Body": {
     "Count": 1,
     "TotalCount": 1,
     "Results": [{
-      "Id": "a9f56a58-aaaa-eeee-1355-012345678904",
-      "Name": "checkboxgroup test",
+      "Id": "a9f56a58-aaaa-eeee-1355-012345678905",
+      "Name": "OneDScale test",
       "Css": "",
       "Version": "1",
       "LockQuestion": false,
       "EnablePrevious": true,
-      "FooterLabel": "Footer for the checkboxgroup test",
+      "FooterLabel": "Footer for the OneDScale test",
       "RedirectOnCloseUrl": "",
       "CurrentSlideIndex": 0,
       "Fullname": "Questionnaire, 1.0"

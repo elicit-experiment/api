@@ -17,7 +17,8 @@ end
 
 class ExperimentXmlTest < ActiveSupport::TestCase
 
-  experiment_xml_files = ['freetexttest.xml', 'checkboxgrouptest.xml', 'likertscaletest.xml']
+  experiment_xml_files = ['freetexttest.xml', 'checkboxgrouptest.xml', 'likertscaletest.xml', 'radiobottongrouptest.xml', 'onedscaletest.xml']
+#  experiment_xml_files = ['onedscaletest.xml']
 
   experiment_xml_files.each do |experiment_xml|
     test "#get_experiment #{experiment_xml}" do
@@ -56,6 +57,8 @@ class ExperimentXmlTest < ActiveSupport::TestCase
                 },
                  "Events" => ""
               }
+          else
+            exp["Output"] = {}
           end
         end
         assert_equal x.count, expected.count
