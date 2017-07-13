@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   get '/v6/Question/Get' => 'question#show' , :defaults => { :format => 'json' }
   post '/v6/Answer/Set' => 'answer#create' , :defaults => { :format => 'json' }
   get '/v6/Answer/Set' => 'answer#create' , :defaults => { :format => 'json' }
+  get '/v6/Slide/Completed' => 'slide#get' , :defaults => { :format => 'json' }
   match '/v6/Answer/Set', to: 'answer#cors_set_access_control_headers', via: :options
 
   get "/v6/*" => redirect("/")
