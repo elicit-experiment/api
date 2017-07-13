@@ -11,13 +11,15 @@ class QuestionController < ApplicationController
     #    format.json {render :json =>@experiment, :include =>  :trials}
     #  end
     experiment_id = params[:id]
-    trial_index = params[:index] || 0
+    trial_index = (params[:index] || "0").to_i
 
     ExperimentXmls.instance.refresh
     @experiment = ExperimentXmls.instance.experiment_by_id[experiment_id] || {}
-    @results = ExperimentXmls.get_questions(ExperimentXmls.instance.experiments_n[0], trial_index)
+    @experiment_n = ExperimentXmls.instance.experiment_n_by_id[experiment_id]
+    @results = ExperimentXmls.get_questions(@experiment_n, trial_index)
     @response = ChaosResponse.new(@results)
-    @response.Body["FoundCount"] = 1
+    @response.Body["FoundCount"] = @experiment_n.css("Experiment>Trials").children.count
+    @response.Body["StartIndex"] = trial_index
 
     respond_to do |format|
       format.xml { render :xml => @response.to_xml }

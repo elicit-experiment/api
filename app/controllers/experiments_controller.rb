@@ -28,7 +28,7 @@ def show
 
   ExperimentXmls.instance.refresh
   @experiment = ExperimentXmls.instance.experiment_by_id[experiment_id] || {}
-  @results =  [ExperimentXmls.get_experiment(experiment)]
+  @results =  [ExperimentXmls.get_experiment(@experiment)]
   @response = ChaosResponse.new(@results)
 
   respond_to do |format|

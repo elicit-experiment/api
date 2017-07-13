@@ -19,6 +19,7 @@ class ExperimentXmls
   attr_accessor :experiments
   attr_accessor :experiments_n
   attr_accessor :experiment_by_id
+  attr_accessor :experiment_n_by_id
 
   def refresh
     root = File.join Rails.root, "experiment_xmls"
@@ -26,6 +27,7 @@ class ExperimentXmls
     @experiments = []
     @experiments_n = []
     @experiment_by_id = {}
+    @experiment_n_by_id = {}
 
     Dir.glob(File.join(root, "*.xml")).each do |experiment_file|
       load_experiment(experiment_file)
@@ -37,9 +39,11 @@ class ExperimentXmls
   def load_experiment(experiment_file)
     exp = Hash.from_xml(File.read(experiment_file))
     exp_n = Nokogiri.XML(File.read(experiment_file))
+    id = exp["Experiment"]["Id"]
     @experiments << exp
-    @experiment_by_id[exp["Experiment"]["Id"]] = exp
+    @experiment_by_id[id] = exp
     @experiments_n << exp_n
+    @experiment_n_by_id[id] = exp_n
     [exp, exp_n]
   end
 

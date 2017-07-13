@@ -18,7 +18,6 @@ end
 class ExperimentXmlTest < ActiveSupport::TestCase
 
   experiment_xml_files = ['freetexttest.xml', 'checkboxgrouptest.xml', 'likertscaletest.xml', 'radiobottongrouptest.xml', 'onedscaletest.xml']
-#  experiment_xml_files = ['onedscaletest.xml']
 
   experiment_xml_files.each do |experiment_xml|
     test "#get_experiment #{experiment_xml}" do
@@ -64,11 +63,11 @@ class ExperimentXmlTest < ActiveSupport::TestCase
         assert_equal x.count, expected.count
         x.each_with_index do |act, i|
           puts "ACTUAL #{i}"
-          ap act, { sort_keys: true, indent: 2}
+          ap act, { sort_keys: true, indent: 2 }
           puts "EXPECTED #{i}"
-          ap expected[i], { sort_keys: true, indent: 2}
+          ap expected[i], { sort_keys: true, indent: 2 }
           puts "DIFF #{i}"
-          ap act.diff(expected[i]), { sort_keys: true, indent: 2}
+          ap act.diff(expected[i]), { sort_keys: true, indent: 2 }
           assert_equal act, expected[i]
         end
       end
