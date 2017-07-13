@@ -45,7 +45,7 @@ class ExperimentXmls
 
   def self.get_experiment(experiment)
     e = experiment["Experiment"].map.reject { |k,v| k.eql? "Trials" }.to_h
-    e["Css"] = nil unless e.has_key? "Css"
+    e["Css"] = "" unless e.has_key? "Css"
     e["CurrentSlideIndex"] = 0
     e["LockQuestion"] = e["LockQuestion"] == "1"
     e["EnablePrevious"] = e["EnablePrevious"] == "1"

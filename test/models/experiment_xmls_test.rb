@@ -17,7 +17,9 @@ end
 
 class ExperimentXmlTest < ActiveSupport::TestCase
 
-  ['freetexttest.xml', 'checkboxgrouptest.xml'].each do |experiment_xml|
+  experiment_xml_files = ['freetexttest.xml', 'checkboxgrouptest.xml', 'likertscaletest.xml']
+
+  experiment_xml_files.each do |experiment_xml|
     test "#get_experiment #{experiment_xml}" do
       exp, exp_n = ExperimentXmls.instance.load_experiment(file_fixture("experiment_xmls/#{experiment_xml}"))
       id = exp["Experiment"]["Id"]
@@ -29,7 +31,7 @@ class ExperimentXmlTest < ActiveSupport::TestCase
     end
   end
 
-  ['freetexttest.xml', 'checkboxgrouptest.xml'].each do |experiment_xml|
+  experiment_xml_files.each do |experiment_xml|
     test "#get_questions #{experiment_xml}" do
       exp, exp_n = ExperimentXmls.instance.load_experiment(file_fixture("experiment_xmls/#{experiment_xml}"))
       id = exp["Experiment"]["Id"]
