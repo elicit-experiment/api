@@ -44,28 +44,54 @@ class ExperimentXmls
   end
 
   def self.get_experiment(experiment)
-    experiment["Experiment"].map.reject { |k,v| k.eql? "Trials" }.to_h
+    e = experiment["Experiment"].map.reject { |k,v| k.eql? "Trials" }.to_h
+    e["Css"] = nil unless e.has_key? "Css"
+    e["CurrentSlideIndex"] = 0
+    e["LockQuestion"] = e["LockQuestion"] == "1"
+    e["EnablePrevious"] = e["EnablePrevious"] == "1"
+    e["Fullname"] = "Questionnaire, 1.0"
+    e["RedirectOnCloseUrl"] = "" if e["RedirectOnCloseUrl"].nil?
+    e.delete "NoOfTrials"
+    e.delete "TrialsCompleted"
+    e.delete "Target"
+    e.delete "CreatedBy"
+    e.delete "ExperimentDescription"
+    e
+  end
+
+  # https://stackoverflow.com/questions/23903055/how-to-replace-all-nil-value-with-in-a-ruby-hash-recursively
+  def self.denilize(h)
+    h.each_with_object({}) { |(k,v),g|
+      g[k] = (Hash === v) ?  denilize(v) : v ? v : '' }
   end
 
   def self.get_questions(experiment, trial_no = 0)
-    trial = experiment.css("Experiment Trials").children[trial_no].children
+    id = experiment.css("Experiment>Id").text
+    trial = experiment.css("Experiment>Trials").children[trial_no].children
 
     results = trial.each_with_index.map do |element, index|
       #input = element.css("Inputs")[0].children.map(&:to_hash)
       #output = element.css("Outputs")[0].children.reject{ |n| n.text.blank? }.map(&:to_hash)
-      input = element.css("Inputs")[0].children.map{|x| Hash.from_xml(x.to_s)}
-      output = element.css("Outputs")[0].children.map{|x| Hash.from_xml(x.to_s)}
+      input = element.css("Inputs").map{ |i| i.children.map{ |x| Hash.from_xml(URI.unescape(x.to_s)) } }.first
+      output = element.css("Outputs").map{ |o|
+        o.children.map{ |x|
+          h = Hash.from_xml(x.to_s)
+          h.delete('Validation')
+          h = h.compact }.reject{ |c| c.empty? }
+      }.reject{ |c| c.empty? }.flatten
+      output = output.reduce({}, :merge)["Value"] || {}
+      output = {} unless element.name.eql? "Monitor"
+      output = ExperimentXmls.denilize(output)
       {
-        "Fullname": "Question, 1.0.0",
-        "Id": "a9f56a58-aaaa-eeee-1355-012345678904:#{index}",
-        "Input": input,
-        "Output": output,
-        "Type": element.name,
-        "UserAnswer": nil
+        "Fullname" => "Question, 1.0.0",
+        "Id" => "#{id}:#{index}",
+        "Input" => input,
+        "Output" => output,
+        "Type" => element.name,
+        "UserAnswer" => nil
       }
     end
 
-    ap results
     results
   end
 end

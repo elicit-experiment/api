@@ -1,0 +1,98 @@
+{
+  "Header": {
+    "Duration": 3.4369
+  },
+  "Body": {
+    "Count": 5,
+    "FoundCount": 2,
+    "StartIndex": 0,
+    "Results": [{
+      "Id": "a9f56a58-aaaa-eeee-1355-012345678901:0",
+      "UserAnswer": null,
+      "Type": "Header",
+      "Fullname": "Question, 1.0.0",
+      "Input": [{
+        "HeaderLabel": "Freetext test"
+      }],
+      "Output": {}
+    }, {
+      "Id": "a9f56a58-aaaa-eeee-1355-012345678901:1",
+      "UserAnswer": null,
+      "Type": "Freetext",
+      "Fullname": "Question, 1.0.0",
+      "Input": [{
+        "Events": null
+      }, {
+        "Instrument": {
+          "Label": "Only digits here (LabelPosition=top)",
+          "LabelPosition": "top",
+          "Validation": "^[0-9]+$",
+          "BoxWidth": null,
+          "BoxHeight": null,
+          "Resizable": null
+        }
+      }],
+      "Output": {}
+    }, {
+      "Id": "a9f56a58-aaaa-eeee-1355-012345678901:2",
+      "UserAnswer": null,
+      "Type": "Freetext",
+      "Fullname": "Question, 1.0.0",
+      "Input": [{
+        "Events": null
+      }, {
+        "Instrument": {
+          "Label": "Any char here (LabelPosition=right)",
+          "LabelPosition": "right",
+          "Validation": ".+",
+          "BoxWidth": null,
+          "BoxHeight": null,
+          "Resizable": null
+        }
+      }],
+      "Output": {}
+    }, {
+      "Id": "a9f56a58-aaaa-eeee-1355-012345678901:3",
+      "UserAnswer": null,
+      "Type": "Freetext",
+      "Fullname": "Question, 1.0.0",
+      "Input": [{
+        "Events": null
+      }, {
+        "Instrument": {
+          "Label": "This wants an email (LabelPosition=left)",
+          "LabelPosition": "left",
+          "Validation": "[-0-9a-zA-Z.+_]+@[-0-9a-zA-Z.+_]+\\.[a-zA-Z]{2,4}",
+          "BoxWidth": null,
+          "BoxHeight": null,
+          "Resizable": null
+        }
+      }],
+      "Output": {}
+    }, {
+      "Id": "a9f56a58-aaaa-eeee-1355-012345678901:4",
+      "UserAnswer": null,
+      "Type": "Monitor",
+      "Fullname": "Question, 1.0.0",
+      "Input": [{
+        "Validation": null
+      }, {
+        "Events": null
+      }],
+      "Output": {
+        "Events": "",
+        "Context": {
+          "Type": "",
+          "Data": ""
+        }
+      }
+    }]
+  },
+  "Error": {
+    "Fullname": null,
+    "Message": null,
+    "Stacktrace": null,
+    "InnerException": null,
+    "Exception": null
+  }
+}

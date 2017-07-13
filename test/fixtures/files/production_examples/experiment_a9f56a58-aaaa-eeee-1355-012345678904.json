@@ -1,0 +1,26 @@
+{
+  "Header": {
+    "Duration": 4.383
+  },
+  "Body": {
+    "Count": 1,
+    "TotalCount": 1,
+    "Results": [{
+      "Id": "a9f56a58-aaaa-eeee-1355-012345678904",
+      "Name": "checkboxgroup test",
+      "Css": null,
+      "Version": "1",
+      "LockQuestion": false,
+      "EnablePrevious": true,
+      "FooterLabel": "Footer for the checkboxgroup test",
+      "RedirectOnCloseUrl": "",
+      "CurrentSlideIndex": 0,
+      "Fullname": "Questionnaire, 1.0"
+    }]
+  },
+  "Error": {
+    "Fullname": null,
+    "Message": null,
+    "InnerException": null
+  }
+}

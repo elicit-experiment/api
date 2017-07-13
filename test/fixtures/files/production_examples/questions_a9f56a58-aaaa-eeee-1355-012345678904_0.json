@@ -1,0 +1,132 @@
+{
+  "Header": {
+    "Duration": 4.7478
+  },
+  "Body": {
+    "Count": 5,
+    "FoundCount": 4,
+    "StartIndex": 0,
+    "Results": [{
+      "Id": "a9f56a58-aaaa-eeee-1355-012345678904:0",
+      "UserAnswer": null,
+      "Type": "Header",
+      "Fullname": "Question, 1.0.0",
+      "Input": [{
+        "HeaderLabel": "{{center|checkboxgroup test}}"
+      }],
+      "Output": {}
+    }, {
+      "Id": "a9f56a58-aaaa-eeee-1355-012345678904:1",
+      "UserAnswer": null,
+      "Type": "CheckBoxGroup",
+      "Fullname": "Question, 1.0.0",
+      "Input": [{
+        "Events": null
+      }, {
+        "Instrument": {
+          "HeaderLabel": "checkboxgroup (AlignForStimuli=1)",
+          "MinNoOfSelections": "1",
+          "MaxNoOfSelections": "1",
+          "AlignForStimuli": "1",
+          "Items": {
+            "Item": [{
+              "Id": "0:yes",
+              "Label": "yes",
+              "Selected": "0"
+            }, {
+              "Id": "1:no",
+              "Label": "no",
+              "Selected": "0"
+            }]
+          },
+          "Stimulus": null
+        }
+      }],
+      "Output": {}
+    }, {
+      "Id": "a9f56a58-aaaa-eeee-1355-012345678904:2",
+      "UserAnswer": null,
+      "Type": "CheckBoxGroup",
+      "Fullname": "Question, 1.0.0",
+      "Input": [{
+        "Events": null
+      }, {
+        "Instrument": {
+          "HeaderLabel": "checkboxgroup (AlignForStimuli=0)",
+          "MinNoOfSelections": "1",
+          "MaxNoOfSelections": "1",
+          "AlignForStimuli": "0",
+          "Items": {
+            "Item": [{
+              "Id": "0:yes",
+              "Label": "yes",
+              "Selected": "0"
+            }, {
+              "Id": "1:no",
+              "Label": "no",
+              "Selected": "0"
+            }]
+          },
+          "Stimulus": null
+        }
+      }],
+      "Output": {}
+    }, {
+      "Id": "a9f56a58-aaaa-eeee-1355-012345678904:3",
+      "UserAnswer": null,
+      "Type": "CheckBoxGroup",
+      "Fullname": "Question, 1.0.0",
+      "Input": [{
+        "Events": null
+      }, {
+        "Instrument": {
+          "HeaderLabel": "checkboxgroup with stimuli",
+          "MinNoOfSelections": "1",
+          "MaxNoOfSelections": "1",
+          "AlignForStimuli": "1",
+          "Items": {
+            "Item": [{
+              "Id": "0:yes",
+              "Label": "yes",
+              "Selected": "0"
+            }, {
+              "Id": "1:no",
+              "Label": "no",
+              "Selected": "0"
+            }]
+          },
+          "Stimulus": {
+            "Type": "audio/mpeg",
+            "URI": "https://s3-eu-west-1.amazonaws.com/ac0926766ce9afd07d63b7c8a5896b0c/system/140_item/resources/set1/100.mp3",
+            "Label": "This is my stimuli Label"
+          }
+        }
+      }],
+      "Output": {}
+    }, {
+      "Id": "a9f56a58-aaaa-eeee-1355-012345678904:4",
+      "UserAnswer": null,
+      "Type": "Monitor",
+      "Fullname": "Question, 1.0.0",
+      "Input": [{
+        "Validation": null
+      }, {
+        "Events": null
+      }],
+      "Output": {
+        "Context": {
+          "Data": "",
+          "Type": ""
+        },
+        "Events": ""
+      }
+    }]
+  },
+  "Error": {
+    "Fullname": null,
+    "Message": null,
+    "Stacktrace": null,
+    "InnerException": null,
+    "Exception": null
+  }
+}

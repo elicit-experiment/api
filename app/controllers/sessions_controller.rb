@@ -36,7 +36,6 @@ class SessionsController < ApplicationController
     #Session.new(session_params)
 
     respond_to do |format|
-puts format
       #if @session.save
       #  format.html { redirect_to @session, notice: 'Session was successfully created.' }
       #  format.json { render :show, status: :created, location: @session }
