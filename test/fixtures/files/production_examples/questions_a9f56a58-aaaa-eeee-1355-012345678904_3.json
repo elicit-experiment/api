@@ -1,0 +1,51 @@
+{
+  "Header": {
+    "Duration": 4.5416
+  },
+  "Body": {
+    "Count": 3,
+    "FoundCount": 4,
+    "StartIndex": 3,
+    "Results": [{
+      "Id": "a9f56a58-aaaa-eeee-1355-012345678904:13",
+      "UserAnswer": null,
+      "Type": "Header",
+      "Fullname": "Question, 1.0.0",
+      "Input": [{
+        "HeaderLabel": "Thank you for your participation"
+      }],
+      "Output": {}
+    }, {
+      "Id": "a9f56a58-aaaa-eeee-1355-012345678904:14",
+      "UserAnswer": null,
+      "Type": "Monitor",
+      "Fullname": "Question, 1.0.0",
+      "Input": [{
+        "Validation": null
+      }, {
+        "Events": null
+      }],
+      "Output": {
+        "Events": "",
+        "Context": {
+          "Type": "",
+          "Data": ""
+        }
+      }
+    }, {
+      "Id": "a9f56a58-aaaa-eeee-1355-012345678904:15",
+      "UserAnswer": null,
+      "Type": "EndOfExperiment",
+      "Fullname": "Question, 1.0.0",
+      "Input": [],
+      "Output": {}
+    }]
+  },
+  "Error": {
+    "Fullname": null,
+    "Message": null,
+    "Stacktrace": null,
+    "InnerException": null,
+    "Exception": null
+  }
+}

@@ -1,0 +1,541 @@
+{
+  "Header": {
+    "Duration": 99.1508
+  },
+  "Body": {
+    "Count": 5,
+    "FoundCount": 4,
+    "StartIndex": 1,
+    "Results": [{
+      "Id": "a9f56a58-aaaa-eeee-1355-012345678904:5",
+      "UserAnswer": null,
+      "Type": "Header",
+      "Fullname": "Question, 1.0.0",
+      "Input": [{
+        "HeaderLabel": "{{center|checkboxgroup test}}"
+      }],
+      "Output": {}
+    }, {
+      "Id": "a9f56a58-aaaa-eeee-1355-012345678904:6",
+      "UserAnswer": null,
+      "Type": "CheckBoxGroup",
+      "Fullname": "Question, 1.0.0",
+      "Input": [{
+        "Events": null
+      }, {
+        "Instrument": {
+          "HeaderLabel": "checkboxgroup (AlignForStimuli=1, minSelect=2,maxSelect=10)",
+          "MinNoOfSelections": "2",
+          "MaxNoOfSelections": "10",
+          "AlignForStimuli": "1",
+          "Items": {
+            "Item": [{
+              "Id": "0:bla1",
+              "Label": "bla1",
+              "Selected": "0"
+            }, {
+              "Id": "1:bla12",
+              "Label": "bla12",
+              "Selected": "0"
+            }, {
+              "Id": "2:bla123",
+              "Label": "bla123",
+              "Selected": "0"
+            }, {
+              "Id": "3:bla1234",
+              "Label": "bla1234",
+              "Selected": "0"
+            }, {
+              "Id": "4:bla12345",
+              "Label": "bla12345",
+              "Selected": "0"
+            }, {
+              "Id": "5:bla123456",
+              "Label": "bla123456",
+              "Selected": "0"
+            }, {
+              "Id": "6:bla1234567",
+              "Label": "bla1234567",
+              "Selected": "0"
+            }, {
+              "Id": "7:bla12345678",
+              "Label": "bla12345678",
+              "Selected": "0"
+            }, {
+              "Id": "8:bla123456789",
+              "Label": "bla123456789",
+              "Selected": "0"
+            }, {
+              "Id": "9:bla1234567890",
+              "Label": "bla1234567890",
+              "Selected": "0"
+            }, {
+              "Id": "10:blablabla",
+              "Label": "blablabla",
+              "Selected": "0"
+            }, {
+              "Id": "11:blablablabla",
+              "Label": "blablablabla",
+              "Selected": "0"
+            }, {
+              "Id": "12:bla bla bla bla bla bla bla bla",
+              "Label": "bla bla bla bla bla bla bla bla",
+              "Selected": "0"
+            }, {
+              "Id": "13:bla bla bla bla bla bla bla bla bla",
+              "Label": "bla bla bla bla bla bla bla bla bla",
+              "Selected": "0"
+            }, {
+              "Id": "14:bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla",
+              "Label": "bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla",
+              "Selected": "0"
+            }, {
+              "Id": "15:{{center|centered bla}}",
+              "Label": "{{center|centered bla}}",
+              "Selected": "0"
+            }, {
+              "Id": "16:{{n}}{{center|centered bla}}",
+              "Label": "{{n}}{{center|centered bla}}",
+              "Selected": "0"
+            }, {
+              "Id": "17:{{n}}{{n}}{{b|bold bla}}",
+              "Label": "{{n}}{{n}}{{b|bold bla}}",
+              "Selected": "0"
+            }, {
+              "Id": "18:bla",
+              "Label": "bla",
+              "Selected": "0"
+            }, {
+              "Id": "19:bla",
+              "Label": "bla",
+              "Selected": "0"
+            }, {
+              "Id": "20:bla",
+              "Label": "bla",
+              "Selected": "0"
+            }, {
+              "Id": "21:bla",
+              "Label": "bla",
+              "Selected": "0"
+            }, {
+              "Id": "22:bla",
+              "Label": "bla",
+              "Selected": "0"
+            }, {
+              "Id": "23:bla",
+              "Label": "bla",
+              "Selected": "0"
+            }, {
+              "Id": "24:bla",
+              "Label": "bla",
+              "Selected": "0"
+            }, {
+              "Id": "25:bla",
+              "Label": "bla",
+              "Selected": "0"
+            }, {
+              "Id": "26:bla",
+              "Label": "bla",
+              "Selected": "0"
+            }]
+          },
+          "Stimulus": null
+        }
+      }],
+      "Output": {}
+    }, {
+      "Id": "a9f56a58-aaaa-eeee-1355-012345678904:7",
+      "UserAnswer": null,
+      "Type": "CheckBoxGroup",
+      "Fullname": "Question, 1.0.0",
+      "Input": [{
+        "Events": null
+      }, {
+        "Instrument": {
+          "HeaderLabel": "checkboxgroup (AlignForStimuli=0, minSelect=10,maxSelect=10))",
+          "MinNoOfSelections": "10",
+          "MaxNoOfSelections": "10",
+          "AlignForStimuli": "0",
+          "Items": {
+            "Item": [{
+              "Id": "0:bla1",
+              "Label": "bla1",
+              "Selected": "0"
+            }, {
+              "Id": "1:bla12",
+              "Label": "bla12",
+              "Selected": "0"
+            }, {
+              "Id": "2:bla123",
+              "Label": "bla123",
+              "Selected": "0"
+            }, {
+              "Id": "3:bla1234",
+              "Label": "bla1234",
+              "Selected": "0"
+            }, {
+              "Id": "4:bla12345",
+              "Label": "bla12345",
+              "Selected": "0"
+            }, {
+              "Id": "5:bla123456",
+              "Label": "bla123456",
+              "Selected": "0"
+            }, {
+              "Id": "6:bla1234567",
+              "Label": "bla1234567",
+              "Selected": "0"
+            }, {
+              "Id": "7:bla12345678",
+              "Label": "bla12345678",
+              "Selected": "0"
+            }, {
+              "Id": "8:bla123456789",
+              "Label": "bla123456789",
+              "Selected": "0"
+            }, {
+              "Id": "9:bla1234567890",
+              "Label": "bla1234567890",
+              "Selected": "0"
+            }, {
+              "Id": "10:blablabla",
+              "Label": "blablabla",
+              "Selected": "0"
+            }, {
+              "Id": "11:blablablabla",
+              "Label": "blablablabla",
+              "Selected": "0"
+            }, {
+              "Id": "12:bla bla bla bla bla bla bla bla",
+              "Label": "bla bla bla bla bla bla bla bla",
+              "Selected": "0"
+            }, {
+              "Id": "13:bla bla bla bla bla bla bla bla bla",
+              "Label": "bla bla bla bla bla bla bla bla bla",
+              "Selected": "0"
+            }, {
+              "Id": "14:bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla",
+              "Label": "bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla",
+              "Selected": "0"
+            }, {
+              "Id": "15:{{center|centered bla}}",
+              "Label": "{{center|centered bla}}",
+              "Selected": "0"
+            }, {
+              "Id": "16:{{n}}{{center|centered bla}}",
+              "Label": "{{n}}{{center|centered bla}}",
+              "Selected": "0"
+            }, {
+              "Id": "17:{{n}}{{n}}{{b|bold bla}}",
+              "Label": "{{n}}{{n}}{{b|bold bla}}",
+              "Selected": "0"
+            }, {
+              "Id": "18:bla",
+              "Label": "bla",
+              "Selected": "0"
+            }, {
+              "Id": "19:bla",
+              "Label": "bla",
+              "Selected": "0"
+            }, {
+              "Id": "20:bla",
+              "Label": "bla",
+              "Selected": "0"
+            }, {
+              "Id": "21:bla",
+              "Label": "bla",
+              "Selected": "0"
+            }, {
+              "Id": "22:bla",
+              "Label": "bla",
+              "Selected": "0"
+            }, {
+              "Id": "23:bla",
+              "Label": "bla",
+              "Selected": "0"
+            }, {
+              "Id": "24:bla",
+              "Label": "bla",
+              "Selected": "0"
+            }, {
+              "Id": "25:bla",
+              "Label": "bla",
+              "Selected": "0"
+            }, {
+              "Id": "26:bla",
+              "Label": "bla",
+              "Selected": "0"
+            }]
+          },
+          "Stimulus": null
+        }
+      }],
+      "Output": {}
+    }, {
+      "Id": "a9f56a58-aaaa-eeee-1355-012345678904:8",
+      "UserAnswer": null,
+      "Type": "CheckBoxGroup",
+      "Fullname": "Question, 1.0.0",
+      "Input": [{
+        "Events": null
+      }, {
+        "Instrument": {
+          "HeaderLabel": "checkboxgroup with stimuli",
+          "MinNoOfSelections": "1",
+          "MaxNoOfSelections": "1",
+          "AlignForStimuli": "1",
+          "Items": {
+            "Item": [{
+              "Id": "0:bla1",
+              "Label": "bla1",
+              "Selected": "0"
+            }, {
+              "Id": "1:bla12",
+              "Label": "bla12",
+              "Selected": "0"
+            }, {
+              "Id": "2:bla123",
+              "Label": "bla123",
+              "Selected": "0"
+            }, {
+              "Id": "3:bla1234",
+              "Label": "bla1234",
+              "Selected": "0"
+            }, {
+              "Id": "4:bla12345",
+              "Label": "bla12345",
+              "Selected": "0"
+            }, {
+              "Id": "5:bla123456",
+              "Label": "bla123456",
+              "Selected": "0"
+            }, {
+              "Id": "6:bla1234567",
+              "Label": "bla1234567",
+              "Selected": "0"
+            }, {
+              "Id": "7:bla12345678",
+              "Label": "bla12345678",
+              "Selected": "0"
+            }, {
+              "Id": "8:bla123456789",
+              "Label": "bla123456789",
+              "Selected": "0"
+            }, {
+              "Id": "9:bla1234567890",
+              "Label": "bla1234567890",
+              "Selected": "0"
+            }, {
+              "Id": "10:blablabla",
+              "Label": "blablabla",
+              "Selected": "0"
+            }, {
+              "Id": "11:blablablabla",
+              "Label": "blablablabla",
+              "Selected": "0"
+            }, {
+              "Id": "12:bla bla bla bla bla bla bla bla",
+              "Label": "bla bla bla bla bla bla bla bla",
+              "Selected": "0"
+            }, {
+              "Id": "13:bla bla bla bla bla bla bla bla bla",
+              "Label": "bla bla bla bla bla bla bla bla bla",
+              "Selected": "0"
+            }, {
+              "Id": "14:bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla",
+              "Label": "bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla bla",
+              "Selected": "0"
+            }, {
+              "Id": "15:{{center|centered bla}}",
+              "Label": "{{center|centered bla}}",
+              "Selected": "0"
+            }, {
+              "Id": "16:{{n}}{{center|centered bla}}",
+              "Label": "{{n}}{{center|centered bla}}",
+              "Selected": "0"
+            }, {
+              "Id": "17:{{n}}{{n}}{{b|bold bla}}",
+              "Label": "{{n}}{{n}}{{b|bold bla}}",
+              "Selected": "0"
+            }, {
+              "Id": "18:bla",
+              "Label": "bla",
+              "Selected": "0"
+            }, {
+              "Id": "19:bla",
+              "Label": "bla",
+              "Selected": "0"
+            }, {
+              "Id": "20:bla",
+              "Label": "bla",
+              "Selected": "0"
+            }, {
+              "Id": "21:bla",
+              "Label": "bla",
+              "Selected": "0"
+            }, {
+              "Id": "22:bla",
+              "Label": "bla",
+              "Selected": "0"
+            }, {
+              "Id": "23:bla",
+              "Label": "bla",
+              "Selected": "0"
+            }, {
+              "Id": "24:bla",
+              "Label": "bla",
+              "Selected": "0"
+            }, {
+              "Id": "25:bla",
+              "Label": "bla",
+              "Selected": "0"
+            }, {
+              "Id": "26:bla",
+              "Label": "bla",
+              "Selected": "0"
+            }]
+          },
+          "Stimulus": {
+            "Type": "audio/mpeg",
+            "URI": "https://s3-eu-west-1.amazonaws.com/ac0926766ce9afd07d63b7c8a5896b0c/system/140_item/resources/set1/100.mp3",
+            "Label": "This is my stimuli Label"
+          }
+        }
+      }],
+      "Output": {}
+    }, {
+      "Id": "a9f56a58-aaaa-eeee-1355-012345678904:9",
+      "UserAnswer": null,
+      "Type": "Monitor",
+      "Fullname": "Question, 1.0.0",
+      "Input": [{
+        "Validation": null
+      }, {
+        "Events": null
+      }],
+      "Output": {
+        "TimeZone": "",
+        "Events": [{
+          "Id": "/",
+          "Type": "Start",
+          "Method": "Monitor",
+          "Data": "None",
+          "DateTime": "2017-06-19T11:24:12.764Z"
+        }, {
+          "Id": "/",
+          "Type": "Start",
+          "Method": "Monitor",
+          "Data": "None",
+          "DateTime": "2017-06-19T12:36:44.819Z"
+        }, {
+          "Id": "/",
+          "Type": "Start",
+          "Method": "Monitor",
+          "Data": "None",
+          "DateTime": "2017-06-20T11:49:29.902Z"
+        }, {
+          "Id": "/",
+          "Type": "Start",
+          "Method": "Monitor",
+          "Data": "None",
+          "DateTime": "2017-07-08T23:53:06.663Z"
+        }, {
+          "Id": "/",
+          "Type": "Start",
+          "Method": "Monitor",
+          "Data": "None",
+          "DateTime": "2017-07-10T15:24:35.956Z"
+        }, {
+          "Id": "/",
+          "Type": "Start",
+          "Method": "Monitor",
+          "Data": "None",
+          "DateTime": "2017-07-10T16:58:33.214Z"
+        }, {
+          "Id": "/",
+          "Type": "Start",
+          "Method": "Monitor",
+          "Data": "None",
+          "DateTime": "2017-07-10T23:57:48.051Z"
+        }, {
+          "Id": "/",
+          "Type": "Start",
+          "Method": "Monitor",
+          "Data": "None",
+          "DateTime": "2017-07-11T00:02:01.989Z"
+        }, {
+          "Id": "/",
+          "Type": "Start",
+          "Method": "Monitor",
+          "Data": "None",
+          "DateTime": "2017-07-11T18:50:55.896Z"
+        }, {
+          "Id": "/",
+          "Type": "Start",
+          "Method": "Monitor",
+          "Data": "None",
+          "DateTime": "2017-07-11T20:06:14.115Z"
+        }, {
+          "Id": "/",
+          "Type": "Start",
+          "Method": "Monitor",
+          "Data": "None",
+          "DateTime": "2017-07-11T21:55:30.727Z"
+        }, {
+          "Id": "/",
+          "Type": "Start",
+          "Method": "Monitor",
+          "Data": "None",
+          "DateTime": "2017-07-11T22:10:23.284Z"
+        }, {
+          "Id": "/",
+          "Type": "Start",
+          "Method": "Monitor",
+          "Data": "None",
+          "DateTime": "2017-07-13T17:35:28.990Z"
+        }, {
+          "Id": "/",
+          "Type": "Start",
+          "Method": "Monitor",
+          "Data": "None",
+          "DateTime": "2017-07-13T17:36:22.922Z"
+        }, {
+          "Id": "/",
+          "Type": "Start",
+          "Method": "Monitor",
+          "Data": "None",
+          "DateTime": "2017-07-13T17:36:33.242Z"
+        }, {
+          "Id": "/",
+          "Type": "Stop",
+          "Method": "Monitor",
+          "Data": "None",
+          "DateTime": "2017-07-13T17:39:44.025Z"
+        }, {
+          "Id": "/",
+          "Type": "Start",
+          "Method": "Monitor",
+          "Data": "None",
+          "DateTime": "2017-07-13T18:13:45.192Z"
+        }, {
+          "Id": "/",
+          "Type": "Start",
+          "Method": "Monitor",
+          "Data": "None",
+          "DateTime": "2017-07-13T19:44:21.403Z"
+        }],
+        "Context": {
+          "Type": "UserAgent",
+          "Data": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36"
+        }
+      }
+    }]
+  },
+  "Error": {
+    "Fullname": null,
+    "Message": null,
+    "Stacktrace": null,
+    "InnerException": null,
+    "Exception": null
+  }
+}

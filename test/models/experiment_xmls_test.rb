@@ -44,6 +44,18 @@ class ExperimentXmlTest < ActiveSupport::TestCase
         expected_response = JSON.parse(json_output.read)
         x = ExperimentXmls.get_questions(exp_n, trial)
         expected = expected_response["Body"]["Results"]
+        expected.each do |exp|
+          # clean up any monitor information from the 'real' server files
+          if exp["Type"].eql? "Monitor"
+            exp["Output"] = {
+                "Context" => {
+                  "Data" => "",
+                  "Type" => ""
+                },
+                 "Events" => ""
+              }
+          end
+        end
         assert_equal x.count, expected.count
         x.each_with_index do |act, i|
           puts "ACTUAL #{i}"

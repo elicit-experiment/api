@@ -67,6 +67,10 @@ class ExperimentXmls
 
   def self.get_questions(experiment, trial_no = 0)
     id = experiment.css("Experiment>Id").text
+    base_question_no = 0
+    if trial_no > 0
+      base_question_no = (0..(trial_no-1)).map { |t| experiment.css("Experiment>Trials").children[t].children.count }.reduce(&:+)
+    end
     trial = experiment.css("Experiment>Trials").children[trial_no].children
 
     results = trial.each_with_index.map do |element, index|
@@ -82,9 +86,11 @@ class ExperimentXmls
       output = output.reduce({}, :merge)["Value"] || {}
       output = {} unless element.name.eql? "Monitor"
       output = ExperimentXmls.denilize(output)
+
+      question_no = base_question_no+ index
       {
         "Fullname" => "Question, 1.0.0",
-        "Id" => "#{id}:#{index}",
+        "Id" => "#{id}:#{question_no}",
         "Input" => input,
         "Output" => output,
         "Type" => element.name,
