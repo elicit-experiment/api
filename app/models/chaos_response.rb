@@ -14,9 +14,11 @@ class ChaosResponse
       "TotalCount": results.count      
     }
     @Error = {
+      "Exception": nil,
       "Fullname": nil,
       "InnerException": nil,
-      "Message": nil
+      "Message": nil,
+      "Stacktrace": nil
     }
     @Header = {
       "Duration": 69.2729

@@ -17,14 +17,23 @@ def new
 end
 
 def show
-  @experiment = Experiment.find(params[:id])
+#  @experiment = Experiment.find(params[:id])
+#  respond_to do |format|
+#    format.html #show.html.erb
+#  #  format.xml {render xml: @experiment, :include => { :trials => { :except => :trial_id } } }
+#    format.xml {render xml: @experiment, :include =>  :trials}
+#    format.json {render :json =>@experiment, :include =>  :trials}
+#  end
+  experiment_id = params[:id]
+
+  ExperimentXmls.instance.refresh
+  @experiment = ExperimentXmls.instance.experiment_by_id[experiment_id] || {}
+  @results =  [ExperimentXmls.get_experiment(experiment)]
+  @response = ChaosResponse.new(@results)
+
   respond_to do |format|
-    format.html #show.html.erb
-  #  format.xml {render xml: @experiment, :include => { :trials => { :except => :trial_id } } }
-    format.xml {render xml: @experiment, :include =>  :trials}
-    format.json {render :json =>@experiment, :include =>  :trials}
-
-
+    format.xml { render :xml => @response.to_xml }
+    format.json { render :json => @response.to_json }
   end
 end
 

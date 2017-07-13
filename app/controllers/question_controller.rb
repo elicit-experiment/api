@@ -1,0 +1,33 @@
+class QuestionController < ApplicationController
+  #### uncomment to add authentication
+  #  http_basic_authenticate_with name:"florian", password:"dtucompute", only: [:index]
+
+  def show
+    #  @experiment = Experiment.find(params[:id])
+    #  respond_to do |format|
+    #    format.html #show.html.erb
+    #  #  format.xml {render xml: @experiment, :include => { :trials => { :except => :trial_id } } }
+    #    format.xml {render xml: @experiment, :include =>  :trials}
+    #    format.json {render :json =>@experiment, :include =>  :trials}
+    #  end
+    experiment_id = params[:id]
+
+    ExperimentXmls.instance.refresh
+    @experiment = ExperimentXmls.instance.experiment_by_id[experiment_id] || {}
+    @results = ExperimentXmls.get_questions(ExperimentXmls.instance.experiments_n[0], 0)
+    @response = ChaosResponse.new(@results)
+    @response.Body["FoundCount"] = 1
+
+    respond_to do |format|
+      format.xml { render :xml => @response.to_xml }
+      format.json { render :json => @response.to_json }
+    end
+  end
+
+  private
+
+  def post_params
+    #validate POST parameters
+    params.require(:experiment).permit(:author_id, :name)
+  end
+end
