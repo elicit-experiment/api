@@ -1,9 +1,31 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  name: MyString
-  author_id: 1
+  ExperimentId: MyString
+  Name: MyString
+  Version: 1
+  ExperimentDescription: MyText
+  CreatedBy: MyString
+  Data: MyText
+  LockQuestion: 1
+  EnablePrevious: 1
+  NoOfTrials: 1
+  TrialsCompleted: 1
+  FooterLabel: MyText
+  RedirectOnCloseUrl: MyString
+  FileName: MyString
 
 two:
-  name: MyString
-  author_id: 1
+  ExperimentId: MyString
+  Name: MyString
+  Version: 1
+  ExperimentDescription: MyText
+  CreatedBy: MyString
+  Data: MyText
+  LockQuestion: 1
+  EnablePrevious: 1
+  NoOfTrials: 1
+  TrialsCompleted: 1
+  FooterLabel: MyText
+  RedirectOnCloseUrl: MyString
+  FileName: MyString

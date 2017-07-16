@@ -21,19 +21,46 @@ class ExperimentXmls
   attr_accessor :experiment_by_id
   attr_accessor :experiment_n_by_id
 
-  def refresh
-    root = File.join Rails.root, "experiment_xmls"
-
+  def initialize
     @experiments = []
     @experiments_n = []
     @experiment_by_id = {}
     @experiment_n_by_id = {}
+  end
+
+  def refresh
+    root = File.join Rails.root, "experiment_xmls"
+
+    Experiment.delete_all
 
     Dir.glob(File.join(root, "*.xml")).each do |experiment_file|
-      load_experiment(experiment_file)
-    end
+      exp, exp_n = load_experiment(experiment_file)
+      id = exp["Experiment"]["Id"]
 
-    ap @experiment_by_id
+      e = Experiment.find_or_create_by(ExperimentId: id)
+      e.attributes = {
+        :ExperimentId => id,
+        :Name => exp["Experiment"]["Name"],
+        :Version => exp["Experiment"]["Version"].to_i,
+        :ExperimentDescription => exp["Experiment"]["ExperimentDescription"],
+        :CreatedBy => exp["Experiment"]["CreatedBy"],
+        :LockQuestion => exp["Experiment"]["LockQuestion"],
+        :EnablePrevious => exp["Experiment"]["EnablePrevious"],
+        :NoOfTrials => exp["Experiment"]["NoOfTrials"],
+        :TrialsCompleted => exp["Experiment"]["TrialsCompleted"],
+        :FooterLabel => exp["Experiment"]["FooterLabel"],
+        :RedirectOnCloseUrl => exp["Experiment"]["RedirectOnCloseUrl"],
+        :FileName => experiment_file,
+      }
+      e.save!
+    end
+  end
+
+  def load_experiment_by_id(id)
+    root = File.join Rails.root, "experiment_xmls"
+    file_name = File.join(root, "#{id}.xml")
+
+    load_experiment(file_name)
   end
 
   def load_experiment(experiment_file)
@@ -44,6 +71,7 @@ class ExperimentXmls
     @experiment_by_id[id] = exp
     @experiments_n << exp_n
     @experiment_n_by_id[id] = exp_n
+
     [exp, exp_n]
   end
 

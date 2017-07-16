@@ -10,21 +10,48 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170206004202) do
+ActiveRecord::Schema.define(version: 20170716232327) do
 
-  create_table "experiments", force: :cascade do |t|
-    t.string   "name"
-    t.integer  "author_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+  create_table "contexts", force: :cascade do |t|
+    t.datetime "DateTime"
+    t.text     "Type"
+    t.text     "Data"
+    t.string   "ExperimentId"
+    t.string   "QuestionId"
+    t.string   "TrialId"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
-  create_table "trials", force: :cascade do |t|
-    t.integer  "task_id"
-    t.integer  "experiment_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
-    t.index ["experiment_id"], name: "index_trials_on_experiment_id"
+  create_table "events", force: :cascade do |t|
+    t.datetime "DateTime"
+    t.text     "EventId"
+    t.text     "Type"
+    t.text     "Method"
+    t.text     "Data"
+    t.string   "ExperimentId"
+    t.string   "QuestionId"
+    t.string   "TrialId"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+  end
+
+  create_table "experiments", force: :cascade do |t|
+    t.string   "ExperimentId"
+    t.string   "Name"
+    t.integer  "Version"
+    t.text     "ExperimentDescription"
+    t.string   "CreatedBy"
+    t.text     "Data"
+    t.integer  "LockQuestion"
+    t.integer  "EnablePrevious"
+    t.integer  "NoOfTrials"
+    t.integer  "TrialsCompleted"
+    t.text     "FooterLabel"
+    t.string   "RedirectOnCloseUrl"
+    t.string   "FileName"
+    t.datetime "created_at",            null: false
+    t.datetime "updated_at",            null: false
   end
 
 end

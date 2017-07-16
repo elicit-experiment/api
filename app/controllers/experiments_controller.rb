@@ -17,21 +17,25 @@ def new
 end
 
 def show
-#  @experiment = Experiment.find(params[:id])
-#  respond_to do |format|
-#    format.html #show.html.erb
-#  #  format.xml {render xml: @experiment, :include => { :trials => { :except => :trial_id } } }
-#    format.xml {render xml: @experiment, :include =>  :trials}
-#    format.json {render :json =>@experiment, :include =>  :trials}
-#  end
   experiment_id = params[:id]
 
-  ExperimentXmls.instance.refresh
+  if experiment_id.gsub(/\d/, '') == ''
+    e = Experiment.find(experiment_id)
+    experiment_id = e.ExperimentId
+  else
+    e = Experiment.where({:ExperimentId => experiment_id}).first
+  end
+
+  unless ExperimentXmls.instance.experiment_by_id && ExperimentXmls.instance.experiment_by_id.has_key?(experiment_id)
+    ExperimentXmls.instance.load_experiment e.FileName
+  end
+
   @experiment = ExperimentXmls.instance.experiment_by_id[experiment_id] || {}
   @results =  [ExperimentXmls.get_experiment(@experiment)]
   @response = ChaosResponse.new(@results)
 
   respond_to do |format|
+    format.html { redirect_to "http://localhost:5504/#Experiment/#{e.ExperimentId}" }
     format.xml { render :xml => @response.to_xml }
     format.json { render :json => @response.to_json }
   end

@@ -3,15 +3,10 @@
 
 <% @experiments.each do |exp| %>
 <div class ="well">
-<p>Name of experiment: <%= exp.name %> </p>
- <p>Author ID of experiment: <%= exp.author_id %> </p>
+  <p>Name of experiment: <%= exp.Name %> </p>
+  <p>Author ID of experiment: <%= exp.CreatedBy %> </p>
 
- <%= link_to "View experiment", experiment_path(exp), :class => 'btn btn-default' %>
+  <%= link_to "View experiment", experiment_path(exp), :class => 'btn btn-default' %>
 
- <!-- sd
- dsds
- <%= link_to "View experiment", experiment_path(exp) %>
-
- -->
 </div>
 <% end %>

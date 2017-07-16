@@ -5,8 +5,23 @@ class AnswerController < ApplicationController
   after_action :cors_set_access_control_headers
 
   def create
-    ap params
     @response = ChaosResponse.new([])
+
+    questionId = params[:questionId]
+    output = JSON.parse(params[:output])
+
+    context = Context.new({:QuestionId => questionId}.merge(output["Context"])) if output["Context"]
+    events = output["Events"].each do |event|
+      event["EventId"] = event["Id"]
+      event.delete "Id"
+#      event = Event.new(event)
+      event = Event.new({:QuestionId => questionId}.merge(event))
+    end
+
+    ap context
+    ap events
+
+    #@post = Post.new(params[:post]) 
 
     respond_to do |format|
       format.xml { render :xml => '' }

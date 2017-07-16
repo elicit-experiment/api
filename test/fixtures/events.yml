@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  DateTime: 2017-07-14 09:22:45
+  EventId: MyText
+  Type: MyText
+  Method: MyText
+  Data: MyText
+  ExperimentId: MyString
+  QuestionId: MyString
+  TrialId: MyString
+
+two:
+  DateTime: 2017-07-14 09:22:45
+  EventId: MyText
+  Type: MyText
+  Method: MyText
+  Data: MyText
+  ExperimentId: MyString
+  QuestionId: MyString
+  TrialId: MyString
