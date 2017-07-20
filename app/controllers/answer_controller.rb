@@ -14,7 +14,6 @@ class AnswerController < ApplicationController
     events = output["Events"].each do |event|
       event["EventId"] = event["Id"]
       event.delete "Id"
-#      event = Event.new(event)
       event = Event.new({:QuestionId => questionId}.merge(event))
     end
 

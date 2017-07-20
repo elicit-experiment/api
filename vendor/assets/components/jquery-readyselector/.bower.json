@@ -1,0 +1,25 @@
+{
+  "author": "John Firebaugh <john.firebaugh@verbasoftware.com>",
+  "name": "jquery-readyselector",
+  "description": "Extends `$().ready()` to provide a convenient syntax for page-specific script",
+  "version": "0.1.0",
+  "main": "./jquery.readyselector.js",
+  "devDependencies": {
+    "mocha": "*",
+    "chai": "*",
+    "sinon": "*",
+    "sinon-chai": "*",
+    "jsdom": "*",
+    "jquery": "*"
+  },
+  "homepage": "https://github.com/askehansen/jquery-readyselector",
+  "_release": "0.1.0",
+  "_resolution": {
+    "type": "version",
+    "tag": "v0.1.0",
+    "commit": "0f13b16eb482ff2042268aefa61db85f3b783fbd"
+  },
+  "_source": "https://github.com/askehansen/jquery-readyselector.git",
+  "_target": "0.1.0",
+  "_originalSource": "jquery-readyselector"
+}

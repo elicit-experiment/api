@@ -1,0 +1,32 @@
+{
+  "name": "Cockpit.API",
+  "homepage": "https://lab.compute.dtu.dk/cosound/Cockpit.API",
+  "authors": [
+    "Iain Bryson <iain@iain-bryson.ca>"
+  ],
+  "description": "Experiment Webserver",
+  "main": "",
+  "moduleType": [
+    "globals"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "vendor/assets/components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap": "^4",
+    "jquery": "2.0.3",
+    "jquery-readyselector": "0.1.0",
+    "jquery-ujs": "1.2.1",
+    "require-css": "0.1.5",
+    "require-less": "0.1.2",
+    "underscore": "^1.8.3",
+    "fallback": "^1.1.8"
+  }
+}

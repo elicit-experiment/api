@@ -19,6 +19,7 @@ end
 def show
   experiment_id = params[:id]
 
+  # two kinds of IDs: integer value, or GUID
   if experiment_id.gsub(/\d/, '') == ''
     e = Experiment.find(experiment_id)
     experiment_id = e.ExperimentId
