@@ -1,0 +1,82 @@
+class StudyController < ApplicationController
+  before_action :set_study, only: [:show, :edit, :update, :destroy]
+
+  # GET /studys
+  # GET /studys.json
+  def index
+#    @study = Study.new({ :title => "Test Study", :principal_investigator_user_id => 1 })
+#    @study.save!
+    @studies = Study.all
+
+    respond_to do |format|
+      format.json { render json: @studies }
+    end
+  end
+
+  # GET /studys/1
+  # GET /studys/1.json
+  def show
+  end
+
+  # GET /studys/new
+  def new
+    @study = Study.new
+  end
+
+  # GET /studys/1/edit
+  def edit
+  end
+
+  # POST /studys
+  # POST /studys.json
+  def create
+    x = params.permit(:title, :principal_investigator_user_id)
+    @study = Study.new(x)
+
+    respond_to do |format|
+      if @study.save
+        format.html { redirect_to @study, notice: 'Study was successfully created.' }
+        format.json { render json: @study.to_json, status: :created, location: @study }
+      else
+        format.html { render :new }
+        format.json { render json: @study.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # PATCH/PUT /studys/1
+  # PATCH/PUT /studys/1.json
+  def update
+    respond_to do |format|
+      if @study.update(study_params)
+        format.html { redirect_to @study, notice: 'Study was successfully updated.' }
+        format.json { render :show, status: :ok, location: @study }
+      else
+        format.html { render :edit }
+        format.json { render json: @study.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  # DELETE /studys/1
+  # DELETE /studys/1.json
+  def destroy
+    @study.destroy
+    @study.save!
+    respond_to do |format|
+#      format.html { redirect_to studys_url, notice: 'Study was successfully destroyed.' }
+      format.json { head :no_content }
+    end
+  end
+
+  private
+    # Use callbacks to share common setup or constraints between actions.
+    def set_study
+      @study = Study.find(params[:id])
+    end
+
+    # Never trust parameters from the scary internet, only allow the white list through.
+    def study_params
+      params.require(:study).permit(:name, :email, :anonymous, :role)
+    end
+end

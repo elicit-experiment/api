@@ -15,3 +15,73 @@
  */
 
 @import "bootstrap/scss/bootstrap";
+
+.new-study {
+ text-align:center;
+ font-size: 36px; 
+}
+
+.study {
+  height: 100px;
+  -webkit-transition: 0.5s;
+  -moz-transition: 0.5s;
+  -o-transition: 0.5s;
+  visibility: hidden; 
+}
+
+.study.show {
+  visibility: visible; 
+}
+
+.fade-apear {
+  opacity: 1;
+  height: 100%;
+}
+
+.fade-appear.fade-appear-active {
+  opacity: 0.5;
+  height: 0px;
+  transition: all 500ms ease-in-out;
+}
+
+.fade-enter {
+  opacity: 0.5;
+  transform: scale(1,.2);
+  height: 20%;
+  max-height:10%;
+  overflow-y:clip;
+}
+
+.fade-enter.fade-enter-active {
+  opacity: 1;
+  height: auto;
+  max-height:auto;
+  transform: scale(1,1.0);
+  transition: all 500ms ease-in-out;
+}
+
+.fade-exit {
+  opacity: 1;
+  transform: scale(1,1.0);
+}
+
+.fade-exit.fade-exit-active {
+  transform: scale(1,.2);
+  height: 20%;
+  max-height:10%;
+  overflow-y:clip;
+  opacity: 0.2;
+  transition: all 300ms ease-in-out;
+}
+
+
+.remove-study {
+  display:block;
+  position:absolute;
+  right:6px;
+  top:20px;  
+}
+
+.study-wrapper {
+  position: relative;
+}

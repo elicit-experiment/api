@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :users
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   #root of site
@@ -21,4 +22,6 @@ Rails.application.routes.draw do
   match '/v6/Answer/Set', to: 'answer#cors_set_access_control_headers', via: :options
 
   get "/v6/*" => redirect("/")
+
+  resources :study
 end
