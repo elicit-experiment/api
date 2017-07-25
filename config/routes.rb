@@ -24,4 +24,7 @@ Rails.application.routes.draw do
   get "/v6/*" => redirect("/")
 
   resources :study
+
+  get '/admin'  => 'admin#index'
+  match '/admin/*' => 'admin#index', via: :all
 end

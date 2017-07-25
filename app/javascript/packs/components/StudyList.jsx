@@ -1,7 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
-import StudyStore from '../packs/store/StudyStore'
+import StudyStore from '../store/StudyStore'
 import TransitionGroup from 'react-transition-group/TransitionGroup'
 import Transition from 'react-transition-group/Transition';
 import CSSTransition from 'react-transition-group/CSSTransition';
@@ -42,9 +42,7 @@ class Study extends React.Component {
     return (text.length > 0 && text.length < 64);
   }
 
-
   render() {
-
     return (
       <div className='study-wrapper' key={this.props.study.id}>
         <div className='well study show' data-studyId={this.props.study.id}>
@@ -56,7 +54,6 @@ class Study extends React.Component {
               paramName="title"
               change={this.titleChanged}
               style={{
-                backgroundColor: 'yellow',
                 minWidth: 150,
                 display: 'inline-block',
                 margin: 0,
@@ -124,11 +121,5 @@ class StudyList extends React.Component {
   };
 }
 
-//<Study study={study} />
- 
-document.addEventListener('DOMContentLoaded', () => {
-  ReactDOM.render(
-    <StudyList/>,
-    document.getElementById('study-list'),
-  )
-})
+export default StudyList;
+
