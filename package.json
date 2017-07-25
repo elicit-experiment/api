@@ -25,6 +25,7 @@
     "prop-types": "^15.5.10",
     "rails-erb-loader": "^5.0.2",
     "react": "^15.6.1",
+    "react-addons-update": "^15.6.0",
     "react-dom": "^15.6.1",
     "react-edit-inline": "^1.0.8",
     "react-transition-group": "^2.2.0",

@@ -47,10 +47,12 @@ class StudyController < ApplicationController
   # PATCH/PUT /studys/1
   # PATCH/PUT /studys/1.json
   def update
+    study_params = params.permit(:title, :principal_investigator_user_id)
+
     respond_to do |format|
       if @study.update(study_params)
         format.html { redirect_to @study, notice: 'Study was successfully updated.' }
-        format.json { render :show, status: :ok, location: @study }
+        format.json { render json: @study.to_json, status: :ok, location: @study }
       else
         format.html { render :edit }
         format.json { render json: @study.errors, status: :unprocessable_entity }

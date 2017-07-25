@@ -10,6 +10,8 @@ import {
   EventEmitter
 } from 'events';
 import $ from 'jquery';
+import update from 'react-addons-update'
+
 
 const CHANGE_EVENT = 'change';
 
@@ -73,6 +75,37 @@ class StudyStoreClass extends EventEmitter {
       console.dir(_store.list)
       this.emit(CHANGE_EVENT)
     })
+  }
+
+  updateItem(newItem) {
+    console.dir(newItem)
+
+    var putItem = JSON.parse(JSON.stringify(newItem))
+    delete putItem['id']
+    delete putItem['created_at']
+    delete putItem['updated_at']
+    var loadRequest = $.ajax({
+      type: 'PUT',
+      dataType: 'json',
+      contentType: "application/json; charset=utf-8",
+      data: JSON.stringify(putItem, null, 2),
+      url: "/study/" + newItem.id // + ".json"
+    })
+    loadRequest.done((dataFromServer) => {
+
+      let index = _store.list.findIndex((x) => {
+        return x.id == newItem.id
+      })
+
+      _store.list = update(_store.list, {
+        $splice: [
+          [index, 1, newItem]
+        ]
+      });
+      console.dir(_store.list)
+      this.emit(CHANGE_EVENT)
+    })
+
   }
 
   addChangeListener(cb) {
