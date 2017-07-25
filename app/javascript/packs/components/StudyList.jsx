@@ -118,7 +118,7 @@ class StudyList extends React.Component {
     let studies = {studies: StudyStore.getList().list }
     console.dir(studies)
     this.setState(studies)
-  };
+  }
 }
 
 export default StudyList;

@@ -26,5 +26,7 @@ Rails.application.routes.draw do
   resources :study
 
   get '/admin'  => 'admin#index'
+  get '/admin/users'  => 'admin#index'
+  get '/admin/studies'  => 'admin#index'
   match '/admin/*' => 'admin#index', via: :all
 end

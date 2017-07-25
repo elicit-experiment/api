@@ -6,11 +6,11 @@ import StudyManagement from './StudyManagement'
 import UserManagement from './UserManagement'
 
 const Header = () => (
-      <ul className="nav navbar-nav">
-        <li><Link to='/admin'>Home</Link></li>
-        <li><Link to='/admin/studies'>Study Management</Link></li>
-        <li><Link to='/admin/users'>User Management</Link></li>
-      </ul>
+  <ul className="nav navbar-nav">
+    <li><Link to='/admin'>Home</Link></li>
+    <li><Link to='/admin/studies'>Study Management</Link></li>
+    <li><Link to='/admin/users'>User Management</Link></li>
+  </ul>
 )
 
 //      <Route exact path='/admin' component={Home}/>
@@ -18,9 +18,9 @@ const Header = () => (
 const Content = () => (
   <main>
     <Switch>
-      <Route exact path='/admin' component={StudyManagement}/>
       <Route path='/admin/studies' component={StudyManagement}/>
       <Route path='/admin/users' component={UserManagement}/>
+      <Route exact path='/admin' component={StudyManagement}/>
     </Switch>
   </main>
 )
