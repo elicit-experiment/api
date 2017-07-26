@@ -4,6 +4,8 @@ const { Editors, Toolbar, Formatters } = require('react-data-grid-addons');
 const { AutoComplete: AutoCompleteEditor, DropDownEditor } = Editors;
 const { ImageFormatter } = Formatters;
 import UserStore from '../store/UserStore'
+import UserConstants from '../constants/UserConstants'
+import update from 'react-addons-update'
 
 class UserList extends React.Component {
   constructor(props) {
@@ -36,6 +38,7 @@ class UserList extends React.Component {
       {
         key: 'role',
         name: 'Role',
+        editor: <DropDownEditor options={UserConstants.roles}/>,
         editable: true,
         width: 200,
         resizable: true
