@@ -29,7 +29,7 @@ class StudyStoreClass extends EventEmitter {
   loadItems() {
     var loadRequest = $.ajax({
       type: 'GET',
-      url: "/study.json"
+      url: "/studies.json"
     })
     loadRequest.done((dataFromServer) => {
       if (dataFromServer) {
@@ -45,7 +45,7 @@ class StudyStoreClass extends EventEmitter {
       dataType: 'json',
       contentType: "application/json; charset=utf-8",
       data: JSON.stringify(x, null, 2),
-      url: "/study.json"
+      url: "/studies.json"
     })
     postRequest.done((dataFromServer) => {
       console.dir(dataFromServer)
@@ -60,7 +60,7 @@ class StudyStoreClass extends EventEmitter {
     var loadRequest = $.ajax({
       type: 'DELETE',
       data: '{}',
-      url: "/study/" + id
+      url: "/studies/" + id
     })
     loadRequest.done((dataFromServer) => {
       /*
@@ -89,7 +89,7 @@ class StudyStoreClass extends EventEmitter {
       dataType: 'json',
       contentType: "application/json; charset=utf-8",
       data: JSON.stringify(putItem, null, 2),
-      url: "/study/" + newItem.id // + ".json"
+      url: "/studies/" + newItem.id // + ".json"
     })
     loadRequest.done((dataFromServer) => {
 
