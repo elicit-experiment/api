@@ -65,14 +65,14 @@ class UserList extends React.Component {
 
   handleGridRowsUpdated({ fromRow, toRow, updated }) {
     let rows = this.state.rows.slice();
-
     for (let i = fromRow; i <= toRow; i++) {
       let rowToUpdate = rows[i];
       let updatedRow = /* React.addons.*/update(rowToUpdate, {$merge: updated});
+      UserStore.updateItem(updatedRow)
       rows[i] = updatedRow;
     }
 
-    this.setState({ rows });
+//    this.setState({ rows });
   }
 
   handleAddRow({ newRowIndex }) {
