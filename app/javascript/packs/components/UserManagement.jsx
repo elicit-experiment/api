@@ -68,7 +68,7 @@ class UserList extends React.Component {
 
     for (let i = fromRow; i <= toRow; i++) {
       let rowToUpdate = rows[i];
-      let updatedRow = React.addons.update(rowToUpdate, {$merge: updated});
+      let updatedRow = /* React.addons.*/update(rowToUpdate, {$merge: updated});
       rows[i] = updatedRow;
     }
 
@@ -77,15 +77,15 @@ class UserList extends React.Component {
 
   handleAddRow({ newRowIndex }) {
     const newRow = {
-      value: newRowIndex,
-      userStory: '',
-      developer: '',
-      epic: ''
+      email: 'test@example.com',
+      name: 'New User',
+      role: 'registered_user'
     }
+    UserStore.newItem(newRow);
 
-    let rows = this.state.rows.slice();
-    rows = React.addons.update(rows, {$push: [newRow]});
-    this.setState({ rows });
+//    let rows = this.state.rows.slice();
+//    rows = /* React.addons.*/update(rows, {$push: [newRow]});
+//   this.setState({ rows });
   }
 
   getSize() {
@@ -113,8 +113,8 @@ class UserList extends React.Component {
         columns={this.getColumns()}
         rowGetter={this.getRowAt.bind(this)}
         rowsCount={this.getSize()}
-        onGridRowsUpdated={this.handleGridRowsUpdated}
-        toolbar={<Toolbar onAddRow={this.handleAddRow}/>}
+        onGridRowsUpdated={this.handleGridRowsUpdated.bind(this)}
+        toolbar={<Toolbar onAddRow={this.handleAddRow.bind(this)}/>}
         enableRowSelect={true}
         rowHeight={50}
         minHeight={600}
