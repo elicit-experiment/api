@@ -23,7 +23,7 @@ Rails.application.routes.draw do
 
   get "/v6/*" => redirect("/")
 
-  resources :study
+  resources :studies
 
   get '/admin'  => 'admin#index'
   get '/admin/users'  => 'admin#index'

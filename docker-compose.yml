@@ -1,0 +1,21 @@
+version: '2'
+services:
+  app-api:
+    build: .
+    volumes:
+      - /var/www/app/public:/var/www/app/public
+    expose:
+      - "3000"
+  app-frontend:
+    build: frontend
+    volumes:
+      - /var/www/frontend/public:/var/www/frontend/public
+  web:
+    build: revproxy
+    volumes:
+      - /var/www/app/public:/var/www/app/public
+      - /var/www/frontend/public:/var/www/frontend/public
+    links:
+      - app-api
+    ports:
+      - "80:80"

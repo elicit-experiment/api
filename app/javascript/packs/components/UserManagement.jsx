@@ -130,10 +130,7 @@ class UserList extends React.Component {
   }
 
   handleChangedEvent(event) {
-    console.dir(this)
-    console.log("udating users")
     let users = {rows: UserStore.getList().list }
-    console.dir(users)
     this.setState(users)
   }
 }

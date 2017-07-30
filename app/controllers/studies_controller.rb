@@ -33,14 +33,10 @@ class StudiesController < ApplicationController
     x = params.permit(:title, :principal_investigator_user_id)
     @study = Study.new(x)
 
-    respond_to do |format|
-      if @study.save
-        format.html { redirect_to @study, notice: 'Study was successfully created.' }
-        format.json { render json: @study.to_json, status: :created, location: @study }
-      else
-        format.html { render :new }
-        format.json { render json: @study.errors, status: :unprocessable_entity }
-      end
+    if @study.save
+      render json: @study.to_json, status: :created
+    else
+      render json: @study.errors, status: :unprocessable_entity 
     end
   end
 

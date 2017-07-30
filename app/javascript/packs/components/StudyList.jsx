@@ -97,7 +97,7 @@ class StudyList extends React.Component {
         </Fade>
       )
     })
-    console.dir(studies)
+
     return(
     <div>
       <h1>{studies.length} Studies</h1>
@@ -114,9 +114,7 @@ class StudyList extends React.Component {
   }
 
   handleChangedEvent = (event) => {
-    console.log("udating studies")
     let studies = {studies: StudyStore.getList().list }
-    console.dir(studies)
     this.setState(studies)
   }
 }

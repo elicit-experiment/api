@@ -7,4 +7,11 @@
 // To reference this file, add <%= javascript_pack_tag 'application' %> to the appropriate
 // layout file, like app/views/layouts/application.html.erb
 
+import jQuery from 'jquery'
+window.$ = jQuery
+window.jQuery = jQuery
+
+import 'bootstrap/dist/css/bootstrap'
+import 'bootstrap/dist/js/bootstrap'
+
 console.log('Hello World from Webpacker')
