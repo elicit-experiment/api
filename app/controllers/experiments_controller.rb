@@ -2,90 +2,90 @@ class ExperimentsController < ApplicationController
 #### uncomment to add authentication
 #  http_basic_authenticate_with name:"florian", password:"dtucompute", only: [:index]
 
-def index
-    #show all experiments
+  def index
+    # show all experiments
+    ExperimentXmls.instance.refresh
     @experiments = Experiment.all
+    Rails.logger.info "#{@experiments.ai}"
     respond_to do |format|
-    format.html #show.html.erb
-    format.json {render :json =>@experiments, :include =>  :trials}
-    format.xml {render xml:@experiments, include: :trials}
-end
+      format.html #show.html.erb
+      format.json { render :json =>@experiments, :include =>  :trials }
+      format.xml { render xml:@experiments, include: :trials }
+    end
   end
 
-def new
-  @experiment = Experiment.new
-end
-
-def show
-  experiment_id = params[:id]
-
-  # two kinds of IDs: integer value, or GUID
-  if experiment_id.gsub(/\d/, '') == ''
-    e = Experiment.find(experiment_id)
-    experiment_id = e.ExperimentId
-  else
-    e = Experiment.where({:ExperimentId => experiment_id}).first
+  def new
+    @experiment = Experiment.new
   end
 
-  unless ExperimentXmls.instance.experiment_by_id && ExperimentXmls.instance.experiment_by_id.has_key?(experiment_id)
-    ExperimentXmls.instance.load_experiment e.FileName
-  end
+  def show
+    experiment_id = params[:id]
 
-  @experiment = ExperimentXmls.instance.experiment_by_id[experiment_id] || {}
-  @results =  [ExperimentXmls.get_experiment(@experiment)]
-  @response = ChaosResponse.new(@results)
+    # two kinds of IDs: integer value, or GUID
+    if experiment_id.gsub(/\d/, '') == ''
+      e = Experiment.find(experiment_id)
+      experiment_id = e.ExperimentId
+    else
+      e = Experiment.where({:ExperimentId => experiment_id}).first
+    end
 
-  respond_to do |format|
-    format.html { redirect_to "http://localhost:5504/#Experiment/#{e.ExperimentId}" }
-    format.xml { render :xml => @response.to_xml }
-    format.json { render :json => @response.to_json }
-  end
-end
+    unless ExperimentXmls.instance.experiment_by_id && ExperimentXmls.instance.experiment_by_id.has_key?(experiment_id)
+      ExperimentXmls.instance.load_experiment e.FileName
+    end
 
-def create
-  #show to the screen what you just sent
-  #render plain: params[:experiment].inspect
+    @experiment = ExperimentXmls.instance.experiment_by_id[experiment_id] || {}
+    @results =  [ExperimentXmls.get_experiment(@experiment)]
+    @response = ChaosResponse.new(@results)
 
-  #validate the post_params
-  @experiment = Experiment.new(post_params)
-  if(@experiment.save)
     respond_to do |format|
-     format.json{render :json => @experiment, :status => :created, :location => @experiment }
-     format.xml{render :xml => @experiment, :status => :created, :location => @experiment }
-     format.html {redirect_to @experiment}
-   end
-
-  else render 'new'
+      format.html { redirect_to "http://docker.local:8080/#Experiment/#{e.ExperimentId}" }
+      format.xml { render :xml => @response.to_xml }
+      format.json { render :json => @response.to_json }
+    end
   end
 
+  def create
+    #show to the screen what you just sent
+    #render plain: params[:experiment].inspect
 
-end
-
-def edit
-  @experiment = Experiment.find(params[:id])
-end
-
-def update
-  @experiment = Experiment.find(params[:id])
-
-  #check the post_params, shouldn't it be experiment_params?
-  if(@experiment.update(post_params))
-      redirect_to @experiment #and return?
-  else render 'edit'
+    #validate the post_params
+    @experiment = Experiment.new(post_params)
+    if(@experiment.save)
+      respond_to do |format|
+       format.json { render :json => @experiment, :status => :created, :location => @experiment }
+       format.xml { render :xml => @experiment, :status => :created, :location => @experiment }
+       format.html { redirect_to @experiment }
+     end
+    else
+      render 'new'
+    end
   end
-end
 
-def destroy
-  @experiment = Experiment.find (params[:id])
-  @experiment.destroy
+  def edit
+    @experiment = Experiment.find(params[:id])
+  end
 
-  redirect_to experiments_path
-end
+  def update
+    @experiment = Experiment.find(params[:id])
 
-private def post_params
-  #validate POST parameters
-  params.require(:experiment).permit(:author_id, :name)
-end
+    #check the post_params, shouldn't it be experiment_params?
+    if(@experiment.update(post_params))
+        redirect_to @experiment #and return?
+    else render 'edit'
+    end
+  end
+
+  def destroy
+    @experiment = Experiment.find (params[:id])
+    @experiment.destroy
+
+    redirect_to experiments_path
+  end
+
+  private def post_params
+    #validate POST parameters
+    params.require(:experiment).permit(:author_id, :name)
+  end
 
 end
 

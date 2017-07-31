@@ -1,4 +1,4 @@
-/frontend
-/revproxy
-/Gemfile.lock
+frontend
+revproxy
+./Gemfile.lock
 

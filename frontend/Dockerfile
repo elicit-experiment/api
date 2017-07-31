@@ -18,6 +18,10 @@ RUN git clone https://github.com/cosound/Cockpit.Experiments.Web.git
 
 WORKDIR Cockpit.Experiments.Web
 
+RUN sed -i'' -E 's/(\s+portalPath\: ).*/\1"http:\/\/docker.local"/g' gulpfile.js 
+
+RUN cat gulpfile.js | grep portalPath
+
 RUN npm install
 
 RUN gulp build
