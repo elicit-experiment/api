@@ -7,7 +7,12 @@ services:
     expose:
       - "3000"
   app-frontend:
-    build: frontend
+    build:
+        context: frontend
+        args:
+          - API_URL=cogsys-devel.compute.dtu.dk
+    environment:
+      - API_URL=cogsys-devel.compute.dtu.dk
     volumes:
       - /var/www/frontend/public:/var/www/frontend/public
   web:

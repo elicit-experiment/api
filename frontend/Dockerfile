@@ -1,5 +1,7 @@
 FROM node
 
+ARG API_URL
+
 RUN apt-get update
 RUN apt-get install -y ruby-dev build-essential
 #RUN gem install compass --pre
@@ -18,7 +20,7 @@ RUN git clone https://github.com/cosound/Cockpit.Experiments.Web.git
 
 WORKDIR Cockpit.Experiments.Web
 
-RUN sed -i'' -E 's/(\s+portalPath\: ).*/\1"http:\/\/docker.local"/g' gulpfile.js 
+RUN sed -i'' -E "s/(\s+portalPath\: ).*/\1\"http:\/\/$API_URL\"/g" gulpfile.js 
 
 RUN cat gulpfile.js | grep portalPath
 
