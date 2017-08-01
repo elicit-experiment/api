@@ -38,7 +38,7 @@ class ExperimentsController < ApplicationController
     @response = ChaosResponse.new(@results)
 
     respond_to do |format|
-      format.html { redirect_to "http://docker.local:8080/#Experiment/#{e.ExperimentId}" }
+      format.html { redirect_to "#{root_url.chomp('/')}:8080/#Experiment/#{e.ExperimentId}" }
       format.xml { render :xml => @response.to_xml }
       format.json { render :json => @response.to_json }
     end
