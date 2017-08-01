@@ -76,7 +76,7 @@ class ExperimentsController < ApplicationController
   end
 
   def destroy
-    @experiment = Experiment.find (params[:id])
+    @experiment = Experiment.find(params[:id])
     @experiment.destroy
 
     redirect_to experiments_path

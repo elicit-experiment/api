@@ -84,10 +84,10 @@ class Study extends React.Component {
           </div>
           <div className="row study-info-row">
             <b className="col-xs-2">Protocols:</b>
-            <b className="col-xs-1 study-info-protocols-count">0</b>
             <div className="col-xs-1">
-              <button className='edit-protocols glyphicon glyphicon-edit' onClick={this.editProtocols}>  </button>
+              <button className='edit-protocols glyphicon glyphicon-edit' disabled onClick={this.editProtocols}>  </button>
             </div>
+            <b className="col-xs-1 study-info-protocols-count">0</b>
           </div>
           <button className='remove-study' onClick={this.deleteStudy}> &times; </button>
         </div>
