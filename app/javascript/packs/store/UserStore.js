@@ -33,12 +33,17 @@ class UserStoreClass extends EventEmitter {
   loadItems() {
     var loadRequest = $.ajax({
       type: 'GET',
+      ifModified: true,
       url: userRootPath
     })
-    loadRequest.done((dataFromServer) => {
-      if (dataFromServer) {
-        _store.list = dataFromServer
-        this.emit(CHANGE_EVENT)
+    loadRequest.done((dataFromServer, status) => {
+      if (status == 'success') {
+        if (dataFromServer) {
+          _store.list = dataFromServer
+          this.emit(CHANGE_EVENT)
+        }
+      } else {
+        console.warn("GET of users: " + status)
       }
     })
   }

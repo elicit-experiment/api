@@ -21,7 +21,7 @@
 }
 
 .study {
-  height: 100px;
+  height: 120px;
   -webkit-transition: 0.5s;
   -moz-transition: 0.5s;
   -o-transition: 0.5s;
@@ -83,4 +83,20 @@
 
 .study-wrapper {
   position: relative;
+}
+
+h1 {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
+.study-info-row {
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+}
+
+.study-info-protocols-count {
+  text-align:left;
+  margin-left:0px;
+  padding-left:0px;
 }

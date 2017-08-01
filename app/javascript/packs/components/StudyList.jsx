@@ -2,11 +2,13 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import StudyStore from '../store/StudyStore'
+import UserStore from '../store/UserStore'
 import TransitionGroup from 'react-transition-group/TransitionGroup'
 import Transition from 'react-transition-group/Transition';
 import CSSTransition from 'react-transition-group/CSSTransition';
 import InlineEdit from 'react-edit-inline';
 import update from 'react-addons-update'
+import Dropdown from './DropDown'
 
 const Fade = ({ children, ...props }) => (
  <CSSTransition
@@ -42,14 +44,20 @@ class Study extends React.Component {
     return (text.length > 0 && text.length < 64);
   }
 
+  dropDownOnChange(x) {
+    console.log(x)
+  }
+
   render() {
     return (
       <div className='study-wrapper' key={this.props.study.id}>
         <div className='well study show' data-studyId={this.props.study.id}>
-          <p><b>Title:</b>
+          <div className="row study-info-row">
+            <b className="col-xs-2">Title:</b>
             <InlineEdit
               validate={this.customValidateTitle}
-              activeClassName="editing"
+              activeClassName="editing col-xs-5"
+              className='col-xs-5'
               text={this.state.title}
               paramName="title"
               change={this.titleChanged}
@@ -63,8 +71,24 @@ class Study extends React.Component {
                 border: 0
               }}
             />
-          </p>
-          <p><b>PI:</b>{this.props.study.principal_investigator_name}</p>
+          </div>
+          <div className="row study-info-row">
+            <b className="col-xs-2">PI:</b>
+            <Dropdown id='userDropDown'
+                  className='col-xs-5'
+                  options={this.props.users} 
+                  value='this.props.study.principal_investigator_user_id'
+                  labelField='name'
+                  valueField='id'
+                  onChange={this.dropDownOnChange}/>
+          </div>
+          <div className="row study-info-row">
+            <b className="col-xs-2">Protocols:</b>
+            <b className="col-xs-1 study-info-protocols-count">0</b>
+            <div className="col-xs-1">
+              <button className='edit-protocols glyphicon glyphicon-edit' onClick={this.editProtocols}>  </button>
+            </div>
+          </div>
           <button className='remove-study' onClick={this.deleteStudy}> &times; </button>
         </div>
       </div>
@@ -92,7 +116,7 @@ class StudyList extends React.Component {
       return(
         <Fade key={study.id} appear={true} >
         <div>
-        <Study study={study} key={study.id}> </Study>
+        <Study study={study} users={this.state.users} key={study.id}> </Study>
         </div>
         </Fade>
       )
@@ -109,13 +133,15 @@ class StudyList extends React.Component {
   }
 
   componentDidMount() {
+    UserStore.loadItems()
+    UserStore.addListener('change', this.handleChangedEvent, this);
     StudyStore.loadItems()
     StudyStore.addListener('change', this.handleChangedEvent, this);
   }
 
   handleChangedEvent = (event) => {
-    let studies = {studies: StudyStore.getList().list }
-    this.setState(studies)
+    let s = { studies: StudyStore.getList().list, users: UserStore.getList().list }
+    this.setState(s)
   }
 }
 

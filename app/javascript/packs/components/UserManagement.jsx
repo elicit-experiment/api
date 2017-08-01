@@ -11,9 +11,7 @@ class UserList extends React.Component {
   constructor(props) {
     super(props)
     this.rows = []
-    if (this.store && this.store.users) {
-      this.rows = this.store.users
-    }
+    this.state = this.props.users || { rows: [] }
     this._columns = [
       {
         key: 'id',
@@ -137,7 +135,7 @@ class UserList extends React.Component {
 
 const UserManagement = () => (
   <div>
-    <UserList></UserList>
+    <UserList users={ {rows: UserStore.getList().list } } ></UserList>
   </div>
 )
 

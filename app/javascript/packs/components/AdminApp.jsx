@@ -19,7 +19,8 @@ const Header = () => (
       </div>
       <div id="admin-nav" className="navbar-collapse ">
         <ul className="nav navbar-nav">
-          <li><Link to='/admin'>Home</Link></li>
+          <li><Link to='/'>Home</Link></li>
+          <li><Link to='/admin'>Admin</Link></li>
           <li><Link to='/admin/studies'>Study Management</Link></li>
           <li><Link to='/admin/users'>User Management</Link></li>
         </ul>
