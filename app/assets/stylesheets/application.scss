@@ -28,7 +28,22 @@
   visibility: hidden; 
 }
 
-.study.show {
+.study-summary {
+  height: 140px;
+  -webkit-transition: 0.5s;
+  -moz-transition: 0.5s;
+  -o-transition: 0.5s;
+  visibility: hidden; 
+}
+
+.study-detail {
+  -webkit-transition: 0.5s;
+  -moz-transition: 0.5s;
+  -o-transition: 0.5s;
+}
+
+
+.study-summary.show {
   visibility: visible; 
 }
 

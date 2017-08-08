@@ -1,12 +1,44 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
-import InlineEdit from 'react-edit-inline';
+import InlineEdit from 'react-edit-inline'
 import update from 'react-addons-update'
 import Dropdown from './DropDown'
 import { AppRoutes } from './AdminApp'
 import { Link } from 'react-router-dom'
 import pathToRegexp from 'path-to-regexp'
+
+
+const ProtocolInfoLink = (props) => (
+  <div className="row study-info-row">
+    <b className="col-xs-2">Protocols:</b>
+    <div className="col-xs-2">
+      <Link to={ `/admin/studies/${props.study.id}` } className="active">
+          <i className="glyphicon glyphicon-edit" aria-hidden="true"></i> Edit
+      </Link>
+    </div>
+    <b className="col-xs-1 study-info-protocols-count">0</b>
+  </div>
+)
+
+const ProtocolEdit = (props) => (
+  <div className="row study-info-row">
+    <b className="col-xs-2">Protocols:</b>
+    <div className="col-xs-8">
+    <h1>
+      one
+      <br/>
+      one
+      <br/>
+      one
+      <br/>
+      one
+      <br/>
+    </h1>
+    </div>
+  </div>
+)
+
 
 class Study extends React.Component {
   constructor(props){
@@ -38,9 +70,17 @@ class Study extends React.Component {
   }
 
   render() {
+    var protocols_row, study_class;
+    if (this.props.edit_protocols) {
+      protocols_row = <ProtocolEdit study={this.props.study} />
+      study_class = 'well show study-detail'
+    } else {
+      protocols_row = <ProtocolInfoLink study={this.props.study} />
+      study_class = 'well show study-summary'
+    }
     return (
       <div className='study-wrapper' key={this.props.study.id}>
-        <div className='well study show' data-studyId={this.props.study.id}>
+        <div className={study_class} data-studyId={this.props.study.id}>
           <div className="row study-info-row">
             <b className="col-xs-2">Title:</b>
             <div className='col-xs-5'>
@@ -74,15 +114,7 @@ class Study extends React.Component {
                   onChange={this.dropDownOnChange}/>
             </div>
           </div>
-          <div className="row study-info-row">
-            <b className="col-xs-2">Protocols:</b>
-            <div className="col-xs-2">
-              <Link to={ `/admin/studies/${this.props.study.id}` } className="btn btn-white btn-default active">
-                  <i className="glyphicon glyphicon-edit" aria-hidden="true"></i> Edit
-              </Link>
-            </div>
-            <b className="col-xs-1 study-info-protocols-count">0</b>
-          </div>
+          {protocols_row}
           <button className='remove-study' onClick={this.deleteStudy}> &times; </button>
         </div>
       </div>

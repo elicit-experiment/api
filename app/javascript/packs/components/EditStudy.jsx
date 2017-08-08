@@ -48,7 +48,10 @@ class EditStudy extends React.Component {
   render() {
     if (this.state.study) {
       return (
-        <Study {...this.props} study={this.state.study} />
+        <div>
+          <h1></h1>
+          <Study {...this.props} study={this.state.study} edit_protocols={true} />
+        </div>
       )
     } else {
       return (
