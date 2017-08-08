@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @protocol.Name %>
+</p>
+
+<p>
+  <strong>Version:</strong>
+  <%= @protocol.Version %>
+</p>
+
+<p>
+  <strong>Type:</strong>
+  <%= @protocol.Type %>
+</p>
+
+<p>
+  <strong>Definitiondata:</strong>
+  <%= @protocol.DefinitionData %>
+</p>
+
+<%= link_to 'Edit', edit_protocol_path(@protocol) %> |
+<%= link_to 'Back', protocols_path %>

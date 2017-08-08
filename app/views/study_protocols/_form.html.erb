@@ -1,0 +1,27 @@
+<%= form_with(model: study_protocol, local: true) do |form| %>
+  <% if study_protocol.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(study_protocol.errors.count, "error") %> prohibited this study_protocol from being saved:</h2>
+
+      <ul>
+      <% study_protocol.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :belongs_to %>
+    <%= form.text_field :belongs_to, id: :study_protocol_belongs_to %>
+  </div>
+
+  <div class="field">
+    <%= form.label :belongs_to %>
+    <%= form.text_field :belongs_to, id: :study_protocol_belongs_to %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit %>
+  </div>
+<% end %>

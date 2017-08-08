@@ -2,9 +2,13 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Switch, Route, BrowserRouter } from 'react-router-dom'
 import { Link } from 'react-router-dom'
+import StudyStore from '../store/StudyStore'
+import UserStore from '../store/UserStore'
 import StudyManagement from './StudyManagement'
 import UserManagement from './UserManagement'
+import EditStudy from './EditStudy'
 import {withRouter} from 'react-router'
+import pathToRegexp from 'path-to-regexp'
 
 const Header = () => (
   <nav className="navbar navbar-default navbar-fixed-top">
@@ -29,8 +33,32 @@ const Header = () => (
   </nav>
 )
 
+const AppRoutes = {
+  edit_study: {
+    route: '/admin/studies/:study_id',
+    //toPath: pathToRegexp.compile('/admin/studies/:study_id')
+  }
+}
+
+const Foo = () => (
+  <h1>h1</h1>
+)
+
 class AdminApp extends React.Component {
-    render() {
+  constructor(props){
+    super(props);
+    this.state = {
+        users: [],
+        studies: []
+    }
+  }
+
+
+  render() {
+      console.log("render...")
+      if (this.state.studies) {
+        console.log(`setting state: ${this.state.studies.length} studies`)
+      }
       return(
     <BrowserRouter>
     <div>
@@ -38,22 +66,36 @@ class AdminApp extends React.Component {
       <div id="wrap">
           <div className="container">
           <Switch>
-            <Route path='/admin/studies' component={StudyManagement}/>
+            <Route exact path='/admin/studies' render={routeProps => <StudyManagement {...routeProps} users={this.state.users} studies={this.state.studies} /> } />
+            <Route path='/admin/studies/:study_id' render={routeProps => <EditStudy {...routeProps} users={this.state.users} studies={this.state.studies} /> } />
             <Route path='/admin/users' component={UserManagement}/>
-            <Route exact path='/admin' component={StudyManagement}/>
+            <Route exact path='/admin' render={routeProps => <StudyManagement {...routeProps} users={this.state.users} studies={this.state.studies} /> } />
           </Switch>
         </div>
       </div>
 
-      <div id="footer">
+      <footer id="footer" className="navbar navbar-fixed-bottom">
         <div className="container">
           <p className="text-muted credit">DTU</p>
         </div>
-      </div>
+      </footer>
     </div>
     </BrowserRouter>
   )
   }
+
+  componentDidMount() {
+    UserStore.loadItems()
+    UserStore.addListener('change', this.handleChangedEvent, this);
+    StudyStore.loadItems()
+    StudyStore.addListener('change', this.handleChangedEvent, this);
+  }
+
+  handleChangedEvent = (event) => {
+    console.log(`setting state: ${StudyStore.getList().list.length} studies`)
+    let s = { studies: StudyStore.getList().list, users: UserStore.getList().list }
+    this.setState(s)
+  }
 }
 
-export { Header as Header, AdminApp as AdminApp };
+export { Header as Header, AdminApp as AdminApp, AppRoutes };

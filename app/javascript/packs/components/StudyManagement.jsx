@@ -1,9 +1,9 @@
 import React from 'react'
 import StudyList from './StudyList'
 
-const StudyManagement = () => (
+const StudyManagement = (props) => (
   <div>
-    <StudyList />
+    <StudyList {...props} />
   </div>
 )
 

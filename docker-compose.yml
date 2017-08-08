@@ -10,8 +10,10 @@ services:
     build:
         context: frontend
         args:
+          - API_URL=docker.local
           - API_URL=cogsys-devel.compute.dtu.dk
     environment:
+      - API_URL=docker.local
       - API_URL=cogsys-devel.compute.dtu.dk
     volumes:
       - /var/www/frontend/public:/var/www/frontend/public

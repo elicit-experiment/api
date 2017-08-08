@@ -1,0 +1,2 @@
+module StudyProtocolsHelper
+end
