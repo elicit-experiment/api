@@ -64,8 +64,8 @@ ActiveRecord::Schema.define(version: 20170807215833) do
   end
 
   create_table "protocols_studies", id: false, force: :cascade do |t|
-    t.integer "protocol_id", null: false
     t.integer "study_id", null: false
+    t.integer "protocol_id", null: false
   end
 
   create_table "studies", force: :cascade do |t|

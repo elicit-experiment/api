@@ -16,17 +16,21 @@ class EditStudy extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     let newState = this.buildState(nextProps)
-    if (newState.study_id !== this.state.study_id || !this.state.study) {
+    //if (newState.study_id !== this.state.study_id || !this.state.study) {
       this.setState(newState);
-    }
+    //}
   }
 
   buildState(props) {
     let study_id = props.match.params.study_id
     let study = _.find(props.studies, (study) => study_id == study.id)
+    console.dir(props)
+    let study_protocols = props.study_protocols.filter((sp) => sp.study_id !== study_id )
+    console.dir(study_protocols)
     return {
         study_id: study_id,
-        study: study
+        study: study,
+        study_protocols: study_protocols
     }
   }
 
@@ -50,7 +54,7 @@ class EditStudy extends React.Component {
       return (
         <div>
           <h1></h1>
-          <Study {...this.props} study={this.state.study} edit_protocols={true} />
+          <Study {...this.props} study={this.state.study} study_protocols={this.state.study_protocols} edit_protocols={true} />
         </div>
       )
     } else {

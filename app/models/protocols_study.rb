@@ -1,0 +1,2 @@
+class ProtocolsStudy < ApplicationRecord
+end

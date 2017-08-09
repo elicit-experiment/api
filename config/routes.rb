@@ -26,7 +26,9 @@ Rails.application.routes.draw do
 
   get "/v6/*" => redirect("/")
 
-  resources :studies
+  resources :studies do
+    resources :protocols, :controller => "study_protocols"
+  end
 
   resources :protocols
 

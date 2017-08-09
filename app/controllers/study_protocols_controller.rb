@@ -1,20 +1,24 @@
 class StudyProtocolsController < ApplicationController
-  before_action :set_study_protocol, only: [:show, :edit, :update, :destroy]
+  before_action :set_study_protocol, only: [:edit, :update, :destroy]
 
   # GET /study_protocols
   # GET /study_protocols.json
   def index
-    @study_protocols = StudyProtocol.all
+    @study_protocols = ProtocolsStudy.all
+    respond_to do |format|
+      format.json { render json: @study_protocols }
+    end
   end
 
   # GET /study_protocols/1
   # GET /study_protocols/1.json
   def show
+    @study_protocols = StudyProtocol.where({:study_id => params[:study_id]})
+    render json: @study_protocol.errors
   end
 
   # GET /study_protocols/new
   def new
-    @study_protocol = StudyProtocol.new
   end
 
   # GET /study_protocols/1/edit
@@ -24,12 +28,14 @@ class StudyProtocolsController < ApplicationController
   # POST /study_protocols
   # POST /study_protocols.json
   def create
-    @study_protocol = StudyProtocol.new(study_protocol_params)
+#    puts ActiveRecord::Base.connection.tables
+    safe_params = params.require(:study_id)
+    @study_protocol = ProtocolsStudy.new({ :study_id => params[:study_id], :protocol_id => 0})
 
     respond_to do |format|
       if @study_protocol.save
         format.html { redirect_to @study_protocol, notice: 'Study protocol was successfully created.' }
-        format.json { render :show, status: :created, location: @study_protocol }
+        format.json { render json: @study_protocol.to_json, status: :created }
       else
         format.html { render :new }
         format.json { render json: @study_protocol.errors, status: :unprocessable_entity }
@@ -69,6 +75,6 @@ class StudyProtocolsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def study_protocol_params
-      params.require(:study_protocol).permit(:belongs_to, :belongs_to)
+      params.require(:study_id).permit(:protocol_id)
     end
 end

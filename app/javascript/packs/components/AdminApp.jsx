@@ -4,6 +4,8 @@ import { Switch, Route, BrowserRouter } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import StudyStore from '../store/StudyStore'
 import UserStore from '../store/UserStore'
+import ProtocolStore from '../store/ProtocolStore'
+import StudyProtocolStore from '../store/StudyProtocolsStore'
 import StudyManagement from './StudyManagement'
 import UserManagement from './UserManagement'
 import EditStudy from './EditStudy'
@@ -49,13 +51,14 @@ class AdminApp extends React.Component {
     super(props);
     this.state = {
         users: [],
-        studies: []
+        studies: [],
+        protocols: [],
+        study_protocols: []
     }
   }
 
 
   render() {
-      console.log("render...")
       if (this.state.studies) {
         console.log(`setting state: ${this.state.studies.length} studies`)
       }
@@ -66,8 +69,8 @@ class AdminApp extends React.Component {
       <div id="wrap">
           <div className="container">
           <Switch>
-            <Route exact path='/admin/studies' render={routeProps => <StudyManagement {...routeProps} users={this.state.users} studies={this.state.studies} /> } />
-            <Route path='/admin/studies/:study_id' render={routeProps => <EditStudy {...routeProps} users={this.state.users} studies={this.state.studies} /> } />
+            <Route exact path='/admin/studies' render={routeProps => <StudyManagement {...routeProps} users={this.state.users} studies={this.state.studies} protocols={this.state.protocols} study_protocols={this.state.study_protocols} /> } />
+            <Route path='/admin/studies/:study_id' render={routeProps => <EditStudy {...routeProps} users={this.state.users} studies={this.state.studies} protocols={this.state.protocols} study_protocols={this.state.study_protocols} /> } />
             <Route path='/admin/users' component={UserManagement}/>
             <Route exact path='/admin' render={routeProps => <StudyManagement {...routeProps} users={this.state.users} studies={this.state.studies} /> } />
           </Switch>
@@ -85,15 +88,19 @@ class AdminApp extends React.Component {
   }
 
   componentDidMount() {
-    UserStore.loadItems()
-    UserStore.addListener('change', this.handleChangedEvent, this);
-    StudyStore.loadItems()
-    StudyStore.addListener('change', this.handleChangedEvent, this);
+    for (let store of [UserStore, StudyStore, ProtocolStore, StudyProtocolStore]) {
+      store.loadItems()
+      store.addListener('change', this.handleChangedEvent, this);
+    }
   }
 
   handleChangedEvent = (event) => {
-    console.log(`setting state: ${StudyStore.getList().list.length} studies`)
-    let s = { studies: StudyStore.getList().list, users: UserStore.getList().list }
+    let s = {
+      studies: StudyStore.getList().list, 
+      users: UserStore.getList().list,
+      protocols: ProtocolStore.getList().list,
+      study_protocols: StudyProtocolStore.getList().list,
+    }
     this.setState(s)
   }
 }

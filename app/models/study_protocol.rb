@@ -1,2 +1,0 @@
-class StudyProtocol < ApplicationRecord
-end

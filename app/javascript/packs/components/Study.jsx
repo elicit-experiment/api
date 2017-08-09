@@ -4,6 +4,9 @@ import PropTypes from 'prop-types'
 import InlineEdit from 'react-edit-inline'
 import update from 'react-addons-update'
 import Dropdown from './DropDown'
+import ProtocolStore from '../store/ProtocolStore'
+import StudyProtocolsStore from '../store/StudyProtocolsStore'
+import StudyStore from '../store/StudyStore'
 import { AppRoutes } from './AdminApp'
 import { Link } from 'react-router-dom'
 import pathToRegexp from 'path-to-regexp'
@@ -21,23 +24,34 @@ const ProtocolInfoLink = (props) => (
   </div>
 )
 
-const ProtocolEdit = (props) => (
+
+const NewProtocol = (props) => (
+    <div className='well glyphicon glyphicon-plus' onClick={(e) => {
+      StudyProtocolsStore.newItem({ study_id: props.study.id })
+    }
+  }></div>
+)
+
+
+const ProtocolEdit = (props) => {
+
+  console.dir(props)
+  let protocols = props.study_protocols.map( (sp, i) => {
+    return (
+            <div key={i}>{sp.study_id} x {sp.protocol_id}</div>
+    )
+  })
+
+  return (  
   <div className="row study-info-row">
     <b className="col-xs-2">Protocols:</b>
     <div className="col-xs-8">
-    <h1>
-      one
-      <br/>
-      one
-      <br/>
-      one
-      <br/>
-      one
-      <br/>
-    </h1>
+    {protocols}
+    <NewProtocol {...props} />
     </div>
   </div>
 )
+}
 
 
 class Study extends React.Component {
@@ -50,6 +64,7 @@ class Study extends React.Component {
         users: this.props.users,
         studies: this.props.studies
     }
+    console.dir(props)
   }
 
   titleChanged(data) {
@@ -71,8 +86,9 @@ class Study extends React.Component {
 
   render() {
     var protocols_row, study_class;
+    console.log(this.props)
     if (this.props.edit_protocols) {
-      protocols_row = <ProtocolEdit study={this.props.study} />
+      protocols_row = <ProtocolEdit study={this.props.study} study_protocols={this.props.study_protocols} />
       study_class = 'well show study-detail'
     } else {
       protocols_row = <ProtocolInfoLink study={this.props.study} />
