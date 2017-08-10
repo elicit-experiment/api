@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170807215833) do
+ActiveRecord::Schema.define(version: 20170809222613) do
 
   create_table "contexts", force: :cascade do |t|
     t.datetime "DateTime"
@@ -54,28 +54,6 @@ ActiveRecord::Schema.define(version: 20170807215833) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "protocols", force: :cascade do |t|
-    t.string "Name"
-    t.integer "Version"
-    t.string "Type"
-    t.string "DefinitionData"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "protocols_studies", id: false, force: :cascade do |t|
-    t.integer "study_id", null: false
-    t.integer "protocol_id", null: false
-  end
-
-  create_table "studies", force: :cascade do |t|
-    t.string "title"
-    t.integer "principal_investigator_user_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["principal_investigator_user_id"], name: "index_studies_on_principal_investigator_user_id"
-  end
-
   create_table "users", force: :cascade do |t|
     t.string "name"
     t.string "email"
@@ -85,4 +63,25 @@ ActiveRecord::Schema.define(version: 20170807215833) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "protocols", force: :cascade do |t|
+    t.string "Name"
+    t.integer "Version"
+    t.string "Type"
+    t.string "DefinitionData"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "studies", force: :cascade do |t|
+    t.string "title"
+    t.references :principal_investigator_user, index: true, null: false, foreign_key: { to_table: :users }
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "protocols_studies", id: false, force: :cascade do |t|
+    t.references :study, index: true, null: false, foreign_key: true, foreign_key: { to_table: :studies }
+    t.references :protocol, index: true, null: false, foreign_key: true, foreign_key: { to_table: :protocols }
+    t.integer "sequence_no", null: false
+  end
 end

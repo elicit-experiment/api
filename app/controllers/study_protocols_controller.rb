@@ -30,7 +30,10 @@ class StudyProtocolsController < ApplicationController
   def create
 #    puts ActiveRecord::Base.connection.tables
     safe_params = params.require(:study_id)
-    @study_protocol = ProtocolsStudy.new({ :study_id => params[:study_id], :protocol_id => 0})
+    p = { :study_id => params[:study_id],
+          :protocol_id => 0,
+          :sequence_no => params[:sequence_no] }
+    @study_protocol = ProtocolsStudy.new(params.permit(:study_id, :protocol_id, :sequence_no))
 
     respond_to do |format|
       if @study_protocol.save
@@ -75,6 +78,6 @@ class StudyProtocolsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def study_protocol_params
-      params.require(:study_id).permit(:protocol_id)
+      params.require(:study_id).permit(:protocol_id, :sequence_no)
     end
 end

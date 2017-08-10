@@ -30,7 +30,8 @@ class EditStudy extends React.Component {
     return {
         study_id: study_id,
         study: study,
-        study_protocols: study_protocols
+        study_protocols: study_protocols,
+        protocols: props.protocols
     }
   }
 
@@ -54,7 +55,7 @@ class EditStudy extends React.Component {
       return (
         <div>
           <h1></h1>
-          <Study {...this.props} study={this.state.study} study_protocols={this.state.study_protocols} edit_protocols={true} />
+          <Study {...this.props} study={this.state.study} study_protocols={this.state.study_protocols} protocols={this.state.protocols} edit_protocols={true} />
         </div>
       )
     } else {

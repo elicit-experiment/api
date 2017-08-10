@@ -5,6 +5,10 @@ class ProtocolsController < ApplicationController
   # GET /protocols.json
   def index
     @protocols = Protocol.all
+    puts @protocols
+    respond_to do |format|
+      format.json { render json: @protocols }
+    end
   end
 
   # GET /protocols/1

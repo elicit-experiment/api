@@ -20,34 +20,58 @@ const ProtocolInfoLink = (props) => (
           <i className="glyphicon glyphicon-edit" aria-hidden="true"></i> Edit
       </Link>
     </div>
-    <b className="col-xs-1 study-info-protocols-count">0</b>
+    <b className="col-xs-1 study-info-protocols-count">{(props.study_protocols || []).length}</b>
   </div>
 )
 
 
 const NewProtocol = (props) => (
-    <div className='well glyphicon glyphicon-plus' onClick={(e) => {
-      StudyProtocolsStore.newItem({ study_id: props.study.id })
+  <div className='row'>
+    <div className='well col-xs-12 glyphicon glyphicon-plus' onClick={(e) => {
+      StudyProtocolsStore.newItem({ study_id: props.study.id, sequence_no: props.sequence_no, protocol_id: props.default_protocol_id })
     }
   }></div>
+  </div>
 )
 
 
 const ProtocolEdit = (props) => {
 
   console.dir(props)
-  let protocols = props.study_protocols.map( (sp, i) => {
+  var protocols = props.protocols.map(_.clone)
+  let sequences = [0].concat(props.study_protocols.map((p) => p.sequence_no))
+  console.dir(sequences)
+  let new_sequence_no = (Math.max.apply(Math, sequences)) + 1
+  protocols.push({Name: "+ Create new protocol", id: "new"})
+  console.dir(protocols)
+  let protocol_list = props.study_protocols.map( (sp, i) => {
     return (
-            <div key={i}>{sp.study_id} x {sp.protocol_id}</div>
+      <div className='row well ' key={sp.sequence_no}>
+        <div className='col-xs-4'>
+          <b>
+            {protocols[sp.protocol_id].Type}
+          </b>
+        </div>
+         <div className='col-xs-8'>
+              <Dropdown id='protocolDropDown'
+                    options={protocols} 
+                    value={sp.protocol_id}
+                    labelField='Name'
+                    valueField='id'
+                    onChange={this.dropDownOnChange} />
+         </div>
+       </div>
     )
   })
 
+  console.log(new_sequence_no)
+
   return (  
-  <div className="row study-info-row">
+  <div className="row study-info-row"  key={'new-protocol'}>
     <b className="col-xs-2">Protocols:</b>
     <div className="col-xs-8">
-    {protocols}
-    <NewProtocol {...props} />
+    {protocol_list}
+    <NewProtocol {...props} sequence_no={new_sequence_no} default_protocol_id={props.protocols[0].id}/>
     </div>
   </div>
 )
@@ -86,12 +110,13 @@ class Study extends React.Component {
 
   render() {
     var protocols_row, study_class;
+    let study_protocols = this.props.study_protocols.filter((sp) => sp.study_id === this.props.study.id )
     console.log(this.props)
     if (this.props.edit_protocols) {
-      protocols_row = <ProtocolEdit study={this.props.study} study_protocols={this.props.study_protocols} />
+      protocols_row = <ProtocolEdit study={this.props.study} study_protocols={study_protocols} protocols={this.props.protocols} />
       study_class = 'well show study-detail'
     } else {
-      protocols_row = <ProtocolInfoLink study={this.props.study} />
+      protocols_row = <ProtocolInfoLink study={this.props.study} study_protocols={study_protocols} />
       study_class = 'well show study-summary'
     }
     return (

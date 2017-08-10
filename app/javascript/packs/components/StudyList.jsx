@@ -8,6 +8,7 @@ import InlineEdit from 'react-edit-inline';
 import update from 'react-addons-update'
 import Dropdown from './DropDown'
 import Study from './Study'
+import StudyStore from '../store/StudyStore'
 import { AppRoutes } from './AdminApp'
 import { Link } from 'react-router-dom'
 import pathToRegexp from 'path-to-regexp'
@@ -23,7 +24,7 @@ const Fade = ({ children, ...props }) => (
 );
 
 const NewStudy = props => (
-    <div className='well new-study study show' onClick={(e) => {
+    <div className='well new-study well show study-summary' onClick={(e) => {
       StudyStore.newItem({title: "New Study", principal_investigator_user_id: 1})
     }
   }>+</div>
@@ -38,7 +39,7 @@ class StudyList extends React.Component {
       return(
         <Fade key={study.id} appear={true} >
         <div>
-        <Study study={study} users={this.props.users} key={study.id}> </Study>
+        <Study study={study} users={this.props.users} study_protocols={this.props.study_protocols} key={study.id}> </Study>
         </div>
         </Fade>
       )

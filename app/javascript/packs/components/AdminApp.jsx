@@ -70,9 +70,9 @@ class AdminApp extends React.Component {
           <div className="container">
           <Switch>
             <Route exact path='/admin/studies' render={routeProps => <StudyManagement {...routeProps} users={this.state.users} studies={this.state.studies} protocols={this.state.protocols} study_protocols={this.state.study_protocols} /> } />
+            <Route exact path='/admin' render={routeProps => <StudyManagement {...routeProps} users={this.state.users} studies={this.state.studies} protocols={this.state.protocols} study_protocols={this.state.study_protocols} /> } />
             <Route path='/admin/studies/:study_id' render={routeProps => <EditStudy {...routeProps} users={this.state.users} studies={this.state.studies} protocols={this.state.protocols} study_protocols={this.state.study_protocols} /> } />
             <Route path='/admin/users' component={UserManagement}/>
-            <Route exact path='/admin' render={routeProps => <StudyManagement {...routeProps} users={this.state.users} studies={this.state.studies} /> } />
           </Switch>
         </div>
       </div>
@@ -101,6 +101,7 @@ class AdminApp extends React.Component {
       protocols: ProtocolStore.getList().list,
       study_protocols: StudyProtocolStore.getList().list,
     }
+    console.dir(s)
     this.setState(s)
   }
 }

@@ -1,3 +1,3 @@
 class Study < ApplicationRecord
-  belongs_to :user, foreign_key: "principal_investigator_user_id"
+  has_one :user, foreign_key: "principal_investigator_user_id"
 end

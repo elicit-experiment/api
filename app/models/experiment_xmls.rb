@@ -32,6 +32,7 @@ class ExperimentXmls
     root = File.join Rails.root, "experiment_xmls"
 
     Experiment.delete_all
+    Protocol.delete_all
 
     Dir.glob(File.join(root, "*.xml")).each do |experiment_file|
       exp, exp_n = load_experiment(experiment_file)
@@ -53,6 +54,15 @@ class ExperimentXmls
         :FileName => experiment_file,
       }
       e.save!
+
+      p = Protocol.new()
+      p.attributes = {
+        :Name => exp["Experiment"]["Name"],
+        :Version => 1,
+        :Type => "ExperimentXml",
+        :DefinitionData => experiment_file
+      }
+      p.save!
     end
   end
 
