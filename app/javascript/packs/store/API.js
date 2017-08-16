@@ -1,6 +1,8 @@
 import $ from 'jquery'
 import _ from 'lodash'
 
+const BASE_API_URL = "/api/v1"
+
 class API {
   constructor(props) {
     this.props = props
@@ -11,7 +13,7 @@ class API {
   }
 
   get(success, failure) {
-    let url = `/${this.props.resource}.json`
+    let url = `${BASE_API_URL}/${this.props.resource}.json`
     console.log(`GET: ${url}`)
     let req = $.ajax(_.extend({
       type: 'GET',
@@ -23,7 +25,7 @@ class API {
   }
 
   post(x, success, failure) {
-    let url = `/${this.props.resource}.json`
+    let url = `${BASE_API_URL}/${this.props.resource}.json`
     console.log(`POST ${url}`)
     console.dir(x)
     let req = $.ajax(_.extend({
@@ -36,7 +38,7 @@ class API {
   }
 
   remove(id, success, failure) {
-    let url = `/${this.props.resource}/${id}`
+    let url = `${BASE_API_URL}/${this.props.resource}/${id}`
     console.log(`DELETE: ${url}`)
     let req = $.ajax(_.extend({
       type: 'DELETE',
@@ -56,7 +58,7 @@ class API {
     delete putItem['updated_at']
     let req = $.ajax(_.extend({
       type: 'PUT',
-      url: `/${this.props.resource}/${newItem.id}`,
+      url: `${BASE_API_URL}/${this.props.resource}/${newItem.id}`,
       data: putItem,
       success: success,
       failure: failure
