@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { BrowserRouter } from 'react-router-dom'
 import { Header, AdminApp } from './components/AdminApp'
+import './main.scss'
 
 document.addEventListener('DOMContentLoaded', () => {
   var elt = document.getElementById('admin-app')

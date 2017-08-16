@@ -32,6 +32,7 @@ class ExperimentXmls
     root = File.join Rails.root, "experiment_xmls"
 
     Experiment.delete_all
+    ProtocolsStudy.delete_all
     Protocol.delete_all
 
     Dir.glob(File.join(root, "*.xml")).each do |experiment_file|

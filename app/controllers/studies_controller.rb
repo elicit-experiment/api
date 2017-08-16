@@ -8,9 +8,7 @@ class StudiesController < ApplicationController
 #    @study.save!
     @studies = Study.all
 
-    respond_to do |format|
-      format.json { render json: @studies }
-    end
+    render json: @studies
   end
 
   # GET /studys/1

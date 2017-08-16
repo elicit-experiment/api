@@ -5,9 +5,7 @@ class StudyProtocolsController < ApplicationController
   # GET /study_protocols.json
   def index
     @study_protocols = ProtocolsStudy.all
-    respond_to do |format|
-      format.json { render json: @study_protocols }
-    end
+    render json: @study_protocols
   end
 
   # GET /study_protocols/1
