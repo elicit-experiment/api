@@ -39,7 +39,9 @@ gem 'kaminari'
 
 # for api doc
 gem 'swagger-blocks', '1.3.1'
-gem 'swagger_engine'
+gem 'swagger_ui_engine'
+gem 'rspec-rails'
+gem 'apivore'
 
 # authentication
 gem 'devise', '~> 4.3.0'

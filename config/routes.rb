@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
-  resources :study_protocols
-  resources :protocols
-  resources :users
+  mount SwaggerUiEngine::Engine, at: "/api-docs"
+
+  get '/apidocs/v1/swagger.json' => 'apidocs#index', :defaults => { :format => 'json' }
+
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   #root of site
@@ -26,11 +27,16 @@ Rails.application.routes.draw do
 
   get "/v6/*" => redirect("/")
 
-  resources :studies do
-    resources :protocols, :controller => "study_protocols"
+  scope :api do   
+    scope :v1 do
+      resources :study_protocols
+      resources :protocols
+      resources :users
+      resources :studies do
+        resources :protocols, :controller => "study_protocols"
+      end
+    end
   end
-
-  resources :protocols
 
   get '/admin'  => 'admin#index'
   get '/admin/users'  => 'admin#index'

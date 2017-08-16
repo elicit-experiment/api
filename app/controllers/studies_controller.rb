@@ -4,8 +4,6 @@ class StudiesController < ApplicationController
   # GET /studys
   # GET /studys.json
   def index
-#    @study = Study.new({ :title => "Test Study", :principal_investigator_user_id => 1 })
-#    @study.save!
     @studies = Study.all
 
     render json: @studies
