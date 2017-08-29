@@ -1,9 +1,9 @@
-class Study < ApplicationRecord
+class StudyDefinition < ApplicationRecord
   has_one :user, foreign_key: "principal_investigator_user_id"
 
   include Swagger::Blocks
 
-  swagger_schema :Study do
+  swagger_schema :StudyDefinition do
     key :required, [:principal_investigator_user_id, :title]
     property :id do
       key :type, :integer

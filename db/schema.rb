@@ -63,25 +63,83 @@ ActiveRecord::Schema.define(version: 20170809222613) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "protocols", force: :cascade do |t|
-    t.string "Name"
-    t.integer "Version"
-    t.string "Type"
-    t.string "DefinitionData"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "studies", force: :cascade do |t|
+  create_table "study_definitions", force: :cascade do |t|
     t.string "title"
+    t.string "description"
     t.references :principal_investigator_user, index: true, null: false, foreign_key: { to_table: :users }
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
+  create_table "protocol_definitions", force: :cascade do |t|
+    t.string "Name"
+    t.integer "Version"
+    t.string "Type"
+    t.string "DefinitionData"
+    t.references :study_definition, index: true, null: false, foreign_key: { to_table: :study_definitions }
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "phase_definitions", force: :cascade do |t|
+    t.string "DefinitionData"
+    t.references :study_definition, index: true, null: false, foreign_key: { to_table: :study_definitions }
+    t.references :protocol_definition, index: true, null: false, foreign_key: { to_table: :protocol_definitions }
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "phase_orders", force: :cascade do |t|
+    t.string "SequenceData"
+    t.references :study_definition, index: true, null: false, foreign_key: { to_table: :study_definitions }
+    t.references :protocol_definition, index: true, null: false, foreign_key: { to_table: :protocol_definitions }
+    t.references :user, index: true, null: false, foreign_key: { to_table: :users }
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "trial_definitions", force: :cascade do |t|
+    t.string "DefinitionData"
+    t.references :study_definition, index: true, null: false, foreign_key: { to_table: :study_definitions }
+    t.references :protocol_definition, index: true, null: false, foreign_key: { to_table: :protocol_definitions }
+    t.references :phase_definition, index: true, null: false, foreign_key: { to_table: :phase_definitions }
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "trial_orders", force: :cascade do |t|
+    t.string "SequenceData"
+    t.references :study_definition, index: true, null: false, foreign_key: { to_table: :study_definitions }
+    t.references :protocol_definition, index: true, null: false, foreign_key: { to_table: :protocol_definitions }
+    t.references :phase_definition, index: true, null: false, foreign_key: { to_table: :phase_definitions }
+    t.references :user, index: true, null: false, foreign_key: { to_table: :users }
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "components", force: :cascade do |t|
+    t.string "DefinitionData"
+    t.references :trial_definition, index: true, null: false, foreign_key: { to_table: :trial_definitions }
+    t.references :study_definition, index: true, null: false, foreign_key: { to_table: :study_definitions }
+    t.references :protocol_definition, index: true, null: false, foreign_key: { to_table: :protocol_definitions }
+    t.references :phase_definition, index: true, null: false, foreign_key: { to_table: :phase_definitions }
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "stimuli", force: :cascade do |t|
+    t.string "DefinitionData"
+    t.references :trial_definition, index: true, null: false, foreign_key: { to_table: :trial_definitions }
+    t.references :study_definition, index: true, null: false, foreign_key: { to_table: :study_definitions }
+    t.references :protocol_definition, index: true, null: false, foreign_key: { to_table: :protocol_definitions }
+    t.references :phase_definition, index: true, null: false, foreign_key: { to_table: :phase_definitions }
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "protocols_studies", id: false, force: :cascade do |t|
-    t.references :study, index: true, null: false, foreign_key: true, foreign_key: { to_table: :studies }
-    t.references :protocol, index: true, null: false, foreign_key: true, foreign_key: { to_table: :protocols }
+    t.references :study_definition, index: true, null: false, foreign_key: { to_table: :study_definitions }
+    t.references :protocol_definition, index: true, null: false, foreign_key: { to_table: :protocol_definitions }
     t.integer "sequence_no", null: false
   end
 end

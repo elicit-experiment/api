@@ -1,4 +1,4 @@
-class Apidocs::V1::StudiesApidocs
+class Apidocs::V1::StudyDefinitionsApidocs
   include Swagger::Blocks
 
   swagger_path '/v1/studies' do
@@ -61,10 +61,5 @@ class Apidocs::V1::StudiesApidocs
         end
       end
     end
-
-
   end
-
-
-
 end
