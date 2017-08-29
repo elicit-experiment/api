@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
-  use_doorkeeper
+  
+  devise_for :users
+
+  use_doorkeeper do
+    #skip_controllers :authorizations, :applications, :authorized_applications
+  end
+
   mount SwaggerUiEngine::Engine, at: "/api-docs"
 
   get '/apidocs/v1/swagger.json' => 'apidocs#index', :defaults => { :format => 'json' }
