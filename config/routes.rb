@@ -1,11 +1,5 @@
 Rails.application.routes.draw do
   
-  devise_for :users
-
-  use_doorkeeper do
-    #skip_controllers :authorizations, :applications, :authorized_applications
-  end
-
   mount SwaggerUiEngine::Engine, at: "/api-docs"
 
   get '/apidocs/v1/swagger.json' => 'apidocs#index', :defaults => { :format => 'json' }
@@ -36,9 +30,14 @@ Rails.application.routes.draw do
 
   scope :api do   
     scope :v1 do
+      devise_for :users
+
+      use_doorkeeper do
+        #skip_controllers :authorizations, :applications, :authorized_applications
+      end
+
       resources :study_protocols
       resources :protocols
-      resources :users
       resources :studies do
         resources :protocols, :controller => "study_protocols"
       end

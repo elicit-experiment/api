@@ -47,7 +47,7 @@ Doorkeeper.configure do
   # reuse_access_token
 
   # Issue access tokens with refresh token (disabled by default)
-  # use_refresh_token
+  use_refresh_token
 
   # Provide support for an owner to be assigned to each registered application (disabled by default)
   # Optional parameter confirmation: true (default false) if you want to enforce ownership of
@@ -65,7 +65,7 @@ Doorkeeper.configure do
   # By default it retrieves first from the `HTTP_AUTHORIZATION` header, then
   # falls back to the `:client_id` and `:client_secret` params from the `params` object.
   # Check out the wiki for more information on customization
-  # client_credentials :from_basic, :from_params
+  client_credentials :from_basic, :from_params
 
   # Change the way access token is authenticated from the request object.
   # By default it retrieves first from the `HTTP_AUTHORIZATION` header, then
@@ -103,7 +103,7 @@ Doorkeeper.configure do
   #   http://tools.ietf.org/html/rfc6819#section-4.4.3
   #
   # grant_flows %w(authorization_code client_credentials)
-  grant_flows %w(password)
+  grant_flows %w(password client_credentials)
 
   # Under some circumstances you might want to have applications auto-approved,
   # so that the user skips the authorization step.
