@@ -4063,6 +4063,10 @@ react-addons-update@^15.6.0:
     fbjs "^0.8.9"
     object-assign "^4.1.0"
 
+react-api@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.yarnpkg.com/react-api/-/react-api-1.0.5.tgz#9f8ca031423477cac266d6468eb1051ab875bfa0"
+
 react-data-grid-addons@^2.0.54:
   version "2.0.54"
   resolved "https://registry.yarnpkg.com/react-data-grid-addons/-/react-data-grid-addons-2.0.54.tgz#fae0f8d98599e87ccc23ab4912acb01473873657"

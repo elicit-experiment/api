@@ -37,10 +37,10 @@ export default ({
 
   switch (action.type) {
     case REQUEST_CLIENT_TOKEN:
-      fetchClientToken(requestClientTokenSuccess, error, action.asyncDoneCallback);
+      fetchClientToken().then(requestClientTokenSuccess).then(action.asyncDoneCallback).catch(error);
       break;
     case LOGIN_USER:
-      fetchUserToken(action.data, logInSuccess, error);
+      fetchClientToken(action.data).then(logInSuccess).catch(error);
       break;
     default:
       return next(action);
