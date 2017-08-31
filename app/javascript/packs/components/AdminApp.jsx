@@ -63,16 +63,15 @@ class AdminApp extends React.Component {
         console.log(`setting state: ${this.state.studies.length} studies`)
       }
       return(
-    <BrowserRouter>
     <div>
       <Header></Header>
       <div id="wrap" className="admin-app-container container">
-          <Switch>
-            <Route exact path='/admin/studies' render={routeProps => <StudyManagement {...routeProps} users={this.state.users} studies={this.state.studies} protocols={this.state.protocols} study_protocols={this.state.study_protocols} /> } />
-            <Route exact path='/admin' render={routeProps => <StudyManagement {...routeProps} users={this.state.users} studies={this.state.studies} protocols={this.state.protocols} study_protocols={this.state.study_protocols} /> } />
-            <Route path='/admin/studies/:study_id' render={routeProps => <EditStudy {...routeProps} users={this.state.users} studies={this.state.studies} protocols={this.state.protocols} study_protocols={this.state.study_protocols} /> } />
-            <Route path='/admin/users' component={UserManagement}/>
-          </Switch>
+        <Switch>
+          <Route exact path='/admin/studies' render={routeProps => <StudyManagement {...routeProps} users={this.state.users} studies={this.state.studies} protocols={this.state.protocols} study_protocols={this.state.study_protocols} /> } />
+          <Route exact path='/admin' render={routeProps => <StudyManagement {...routeProps} users={this.state.users} studies={this.state.studies} protocols={this.state.protocols} study_protocols={this.state.study_protocols} /> } />
+          <Route path='/admin/studies/:study_id' render={routeProps => <EditStudy {...routeProps} users={this.state.users} studies={this.state.studies} protocols={this.state.protocols} study_protocols={this.state.study_protocols} /> } />
+          <Route path='/admin/users' component={UserManagement}/>
+        </Switch>
       </div>
       <footer id="footer" className="navbar navbar-fixed-bottom admin-footer">
         <div className="container">
@@ -80,7 +79,6 @@ class AdminApp extends React.Component {
         </div>
       </footer>
     </div>
-    </BrowserRouter>
   )
   }
 
