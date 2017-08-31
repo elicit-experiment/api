@@ -7,7 +7,8 @@ import { connect } from 'react-redux';
 import { Provider } from 'react-redux';
 
 // Import Components
-import { AdminApp } from './components/AdminApp';
+import { AdminApp } from './components/AdminApp'
+import LoginSignUpContainer from './components/login_signup/LoginSignUpContainer'
 
 // Import Actions
 import { requestClientToken, receiveClientToken, receiveUserToken } from './actions/tokens_actions';
@@ -75,7 +76,7 @@ const Root = (props) => {
         if (token_status == 'user') {
           return <AdminApp />
         } else if (token_status == 'client') {
-          return <div>Sign in... {props.clientToken}</div>
+          return <LoginSignUpContainer></LoginSignUpContainer>
         } else {
           return <div>Loading...</div>          
         }
@@ -91,7 +92,7 @@ const Root = (props) => {
 const mapStateToProps = (state) => ({
   clientToken: clientToken(state),
   userToken: userToken(state),
-  currentUser: currentUser(state),
+//    currentUser: currentUser(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({
