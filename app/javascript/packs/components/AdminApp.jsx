@@ -11,6 +11,8 @@ import UserManagement from './UserManagement'
 import EditStudy from './EditStudy'
 import {withRouter} from 'react-router'
 import pathToRegexp from 'path-to-regexp'
+import { Provider, connect } from "react-redux";
+import elicitApi from "../api/elicit-api.js"; 
 
 const Header = () => (
   <nav className="navbar navbar-default navbar-fixed-top">
@@ -57,18 +59,15 @@ class AdminApp extends React.Component {
     }
   }
 
-
   render() {
-      if (this.state.studies) {
-        console.log(`setting state: ${this.state.studies.length} studies`)
-      }
+      console.dir(this.props)
       return(
     <div>
       <Header></Header>
       <div id="wrap" className="admin-app-container container">
         <Switch>
-          <Route exact path='/admin/studies' render={routeProps => <StudyManagement {...routeProps} users={this.state.users} studies={this.state.studies} protocols={this.state.protocols} study_protocols={this.state.study_protocols} /> } />
-          <Route exact path='/admin' render={routeProps => <StudyManagement {...routeProps} users={this.state.users} studies={this.state.studies} protocols={this.state.protocols} study_protocols={this.state.study_protocols} /> } />
+          <Route exact path='/admin/studies' render={routeProps => <StudyManagement {...routeProps} studies={this.props.studies} /> } />
+          <Route exact path='/admin' render={routeProps => <StudyManagement {...routeProps} {...this.props} /> } />
           <Route path='/admin/studies/:study_id' render={routeProps => <EditStudy {...routeProps} users={this.state.users} studies={this.state.studies} protocols={this.state.protocols} study_protocols={this.state.study_protocols} /> } />
           <Route path='/admin/users' component={UserManagement}/>
         </Switch>
@@ -83,10 +82,9 @@ class AdminApp extends React.Component {
   }
 
   componentDidMount() {
-    for (let store of [UserStore, StudyStore, ProtocolStore, StudyProtocolStore]) {
-      store.loadItems()
-      store.addListener('change', this.handleChangedEvent, this);
-    }
+    const {dispatch} = this.props;
+
+    dispatch(elicitApi.actions.studies.sync());
   }
 
   handleChangedEvent = (event) => {
@@ -101,4 +99,9 @@ class AdminApp extends React.Component {
   }
 }
 
-export { Header as Header, AdminApp as AdminApp, AppRoutes };
+const mapStateToProps = (state) => ({
+  studies: state.studies
+});
+const connectedAdminApp = connect(mapStateToProps)(AdminApp)
+
+export { Header as Header, connectedAdminApp as AdminApp, AppRoutes };

@@ -1,5 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { Provider, connect } from "react-redux";
 import PropTypes from 'prop-types'
 import TransitionGroup from 'react-transition-group/TransitionGroup'
 import Transition from 'react-transition-group/Transition';
@@ -12,6 +13,7 @@ import StudyStore from '../store/StudyStore'
 import { AppRoutes } from './AdminApp'
 import { Link } from 'react-router-dom'
 import pathToRegexp from 'path-to-regexp'
+import elicitApi from "../api/elicit-api.js"; 
 
 const Fade = ({ children, ...props }) => (
  <CSSTransition
@@ -23,19 +25,32 @@ const Fade = ({ children, ...props }) => (
  </CSSTransition>
 );
 
-const NewStudy = props => (
+class _NewStudy extends React.Component {
+  constructor(props){
+    super(props);
+  }
+  render() {
+    const {dispatch} = this.props;
+    const new_study_def = { title: "New Study", principal_investigator_user_id: 0 }
+    console.dir(new_study_def)
+   return (
     <div className='well new-study well show study-summary' onClick={(e) => {
-      StudyStore.newItem({title: "New Study", principal_investigator_user_id: 1})
+        dispatch(elicitApi.actions.new_study_definition({}, { body: JSON.stringify(new_study_def) } ));
     }
   }>+</div>
-)
+  )
+  }
+}
+
+const NewStudy = connect((state) => ({ }))(_NewStudy)
+
 
 class StudyList extends React.Component {
   render() {
-    if (!this.props.studies) {
+    if (!this.props.studies || !this.props.studies.data) {
       return (<div><h1>Loading...</h1></div>)
     }
-    var studies = this.props.studies.map( (study, i) => {
+    var studies = this.props.studies.data.map( (study, i) => {
       return(
         <Fade key={study.id} appear={true} >
         <div>

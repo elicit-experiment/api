@@ -4,8 +4,9 @@ class StudiesController < ApplicationController
   # GET /studys
   # GET /studys.json
   def index
-    @studies = Study.all
+    @studies = StudyDefinition.all
 
+    puts @studies
     render json: @studies
   end
 
@@ -16,7 +17,7 @@ class StudiesController < ApplicationController
 
   # GET /studys/new
   def new
-    @study = Study.new
+    @study = StudyDefinition.new
   end
 
   # GET /studys/1/edit
@@ -27,7 +28,8 @@ class StudiesController < ApplicationController
   # POST /studys.json
   def create
     x = params.permit(:title, :principal_investigator_user_id)
-    @study = Study.new(x)
+    ap x
+    @study = StudyDefinition.new(x)
 
     if @study.save
       render json: @study.to_json, status: :created
@@ -66,7 +68,7 @@ class StudiesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_study
-      @study = Study.find(params[:id])
+      @study = StudyDefinition.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

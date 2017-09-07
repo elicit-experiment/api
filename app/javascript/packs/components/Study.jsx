@@ -25,25 +25,31 @@ const ProtocolInfoLink = (props) => (
 )
 
 
-const NewProtocol = (props) => (
+class NewProtocol extends React.Component {
+  constructor(props){
+    super(props);
+  }
+  render() {
+   return (
   <div className='row'>
     <div className='well col-xs-12 glyphicon glyphicon-plus' onClick={(e) => {
-      StudyProtocolsStore.newItem({ study_id: props.study.id, sequence_no: props.sequence_no, protocol_id: props.default_protocol_id })
+        const {dispatch} = this.props;
+        const new_study_def = { study_id: props.study.id, sequence_no: props.sequence_no, protocol_id: props.default_protocol_id }
+
+        dispatch(elicitApi.actions.protocol_definition(new_study_def));
     }
   }></div>
-  </div>
-)
+  </div>)
+  }
+}
 
 
 const ProtocolEdit = (props) => {
 
-  console.dir(props)
   var protocols = props.protocols.map(_.clone)
   let sequences = [0].concat(props.study_protocols.map((p) => p.sequence_no))
-  console.dir(sequences)
   let new_sequence_no = (Math.max.apply(Math, sequences)) + 1
   protocols.push({Name: "+ Create new protocol", id: "new"})
-  console.dir(protocols)
   let protocol_list = props.study_protocols.map( (sp, i) => {
     return (
       <div className='row well ' key={sp.sequence_no}>
@@ -88,7 +94,6 @@ class Study extends React.Component {
         users: this.props.users,
         studies: this.props.studies
     }
-    console.dir(props)
   }
 
   titleChanged(data) {
@@ -96,7 +101,6 @@ class Study extends React.Component {
         title: {$set: data.title},
       });
       StudyStore.updateItem(newData)
-      console.log(data)
       this.setState({...data})
   }
 
@@ -105,13 +109,11 @@ class Study extends React.Component {
   }
 
   dropDownOnChange(x) {
-    console.log(x)
   }
 
   render() {
     var protocols_row, study_class;
-    let study_protocols = this.props.study_protocols.filter((sp) => sp.study_id === this.props.study.id )
-    console.log(this.props)
+    let study_protocols = (this.props.study_protocols || []).filter((sp) => sp.study_id === this.props.study.id )
     if (this.props.edit_protocols) {
       protocols_row = <ProtocolEdit study={this.props.study} study_protocols={study_protocols} protocols={this.props.protocols} />
       study_class = 'well show study-detail'
@@ -148,7 +150,7 @@ class Study extends React.Component {
             <b className="col-xs-2">PI:</b>
             <div className='col-xs-5'>
             <Dropdown id='userDropDown'
-                  options={this.props.users} 
+                  options={this.props.users || []} 
                   value='this.props.study.principal_investigator_user_id'
                   labelField='name'
                   valueField='id'

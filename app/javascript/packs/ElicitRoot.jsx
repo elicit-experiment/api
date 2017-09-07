@@ -74,7 +74,7 @@ const Root = (props) => {
       <div>
       <Route exact path="/admin" render={routeProps => {
         if (token_status == 'user') {
-          return <AdminApp />
+          return <AdminApp/>
         } else if (token_status == 'client') {
           return <LoginSignUpContainer></LoginSignUpContainer>
         } else {

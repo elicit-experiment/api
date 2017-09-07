@@ -7,7 +7,6 @@ class LogInSignUp extends React.Component {
     this.logInForm = this.logInForm.bind(this);
     this.signUpForm = this.signUpForm.bind(this);
     this.toggleLogIn = this.toggleLogIn.bind(this);
-    this.logInAsGuest = this.logInAsGuest.bind(this);
     this.state = {
       logInForm: true,
       userName: "",
@@ -58,15 +57,6 @@ class LogInSignUp extends React.Component {
     };
   }
 
-  logInAsGuest(e) {
-    e.preventDefault();
-    let credentials = { userName: "lukeSkywalker",
-                        password: "password" };
-    this.props.logInUser(credentials);
-    $("#myModal").modal('hide');
-    $("#myNavbar").collapse("hide"); // Hides the collap dropdown navbar while on mobile devices
-  }
-
   // Generates the HTML for the login form
   logInForm() {
     return(
@@ -100,7 +90,6 @@ class LogInSignUp extends React.Component {
                   <label><input type="checkbox" value=""/>Remember me</label>
                 </div>
                 <button type="submit" className="btn btn-success btn-block"><span className="glyphicon glyphicon-off"></span> Login</button>
-                <button type="submit" className="btn btn-success btn-block" onClick={this.logInAsGuest}><span className="glyphicon glyphicon-off"></span> Guest Login</button>
               </form>
             </div>
             <div className="modal-footer">
