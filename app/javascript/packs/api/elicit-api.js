@@ -17,7 +17,7 @@ const default_headers = {
 
 export default reduxApi({
   studies: {
-    url: `${api_root}/studies`,
+    url: `${api_root}/study_definitions`,
     // reimplement default `transformers.object`
     transformer: transformers.array,
     // base endpoint options `fetch(url, options)`
@@ -28,7 +28,7 @@ export default reduxApi({
 
   new_study_definition: {
     reducerName: 'updateStudyDefinition',
-    url: `${api_root}/studies`,
+    url: `${api_root}/study_definitions`,
     virtual: true,
     transformer: transformers.array,
     options: {

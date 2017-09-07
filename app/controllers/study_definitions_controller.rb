@@ -1,4 +1,4 @@
-class StudiesController < ApplicationController
+class StudyDefinitionsController < ApplicationController
   before_action :set_study, only: [:show, :edit, :update, :destroy]
 
   # GET /studys

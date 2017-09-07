@@ -13,7 +13,6 @@ import {
 import thunk from "redux-thunk";
 import elicitApi from "../api/elicit-api";
 import RootReducer from '../reducers/root_reducer';
-import MasterMiddleware from '../middleware/master_middleware';
 import {
   logger
 } from 'redux-logger'

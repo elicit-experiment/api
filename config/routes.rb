@@ -37,8 +37,8 @@ Rails.application.routes.draw do
       end
 
       resources :study_protocols
-      resources :protocols
-      resources :studies do
+      resources :protocol_definitions
+      resources :study_definitions do
         resources :protocols, :controller => "study_protocols"
       end
     end
