@@ -1,8 +1,8 @@
 class StudyDefinitionsController < ApplicationController
   before_action :set_study, only: [:show, :edit, :update, :destroy]
 
-#  before_action :authenticate_user!
-  before_action :doorkeeper_authorize!
+  before_action :authenticate_user!
+#  before_action :doorkeeper_authorize!
 
   # GET /studys
   # GET /studys.json
