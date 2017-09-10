@@ -1,0 +1,9 @@
+ test_app:
+  name: "test_app"
+  uid: one
+  secret: "tell no one"
+  scopes: "public"
+
+  redirect_uri: "https://localhost"
+  created_at: <%= 5.day.ago.to_s(:db) %>
+  updated_at: <%= 5.day.ago.to_s(:db) %>

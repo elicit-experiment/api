@@ -33,7 +33,6 @@ export default reduxApi({
     transformer: transformers.array,
     options: {
       method: 'post',
-      headers: _.extend({}, default_headers)
     },
     postfetch: [
       function({
@@ -64,4 +63,21 @@ export default reduxApi({
       }
     }
   }
-}).use("fetch", adapterFetch(fetch))
+}).use("options", (url, params, getState) => {
+  const {
+    tokens: {
+      clientToken,
+      userToken
+    }
+  } = getState();
+  console.dir(getState())
+    // Add token to header request
+  if (userToken) {
+    return {
+      headers: {...default_headers,
+        Authorization: `Bearer ${userToken}`
+      }
+    };
+  }
+  return headers;
+}).use("fetch", adapterFetch(fetch));

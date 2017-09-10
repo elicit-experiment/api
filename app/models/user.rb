@@ -3,6 +3,7 @@ class User < ApplicationRecord
   # :confirmable, :lockable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
+  devise :doorkeeper
   validates :role, acceptance: { accept: ['admin', 'registered_user', 'anonymous_user'] }
 
   class << self

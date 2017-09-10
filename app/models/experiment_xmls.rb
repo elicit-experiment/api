@@ -31,9 +31,9 @@ class ExperimentXmls
   def refresh
     root = File.join Rails.root, "experiment_xmls"
 
-    Experiment.delete_all
-    ProtocolsStudy.delete_all
-    Protocol.delete_all
+#    Experiment.delete_all
+#    ProtocolsStudy.delete_all
+#    Protocol.delete_all
 
     Dir.glob(File.join(root, "*.xml")).each do |experiment_file|
       exp, exp_n = load_experiment(experiment_file)

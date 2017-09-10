@@ -2,6 +2,8 @@ Doorkeeper.configure do
   # Change the ORM that doorkeeper will use (needs plugins)
   orm :active_record
 
+  Devise::Doorkeeper.configure_doorkeeper(self)
+
   # This block will be called to check whether the resource owner is authenticated or not.
   resource_owner_authenticator do
     fail "Please configure doorkeeper resource_owner_authenticator block located in #{__FILE__}"
@@ -58,8 +60,11 @@ Doorkeeper.configure do
   # Define access token scopes for your provider
   # For more information go to
   # https://github.com/doorkeeper-gem/doorkeeper/wiki/Using-Scopes
-  # default_scopes  :public
-  # optional_scopes :write, :update
+  default_scopes  :public
+  optional_scopes :write
+
+  #scopes_flows_whitelist :public => [:all], :write => [:password, :assertion, :refresh_token]
+  #flows_default_scopes :password => [:public, :write], :assertion => [:public, :write], :client_credentials => [:public], :refresh_token => [:public, :write]
 
   # Change the way client credentials are retrieved from the request object.
   # By default it retrieves first from the `HTTP_AUTHORIZATION` header, then

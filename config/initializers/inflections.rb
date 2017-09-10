@@ -17,4 +17,5 @@
 
 ActiveSupport::Inflector.inflections do |inflect|
   inflect.irregular 'stimulus', 'stimuli'
+  inflect.irregular 'study_definition', 'study_definitions'
 end

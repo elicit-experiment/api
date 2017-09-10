@@ -1,12 +1,14 @@
 class StudyDefinitionsController < ApplicationController
   before_action :set_study, only: [:show, :edit, :update, :destroy]
 
+#  before_action :authenticate_user!
+  before_action :doorkeeper_authorize!
+
   # GET /studys
   # GET /studys.json
   def index
     @studies = StudyDefinition.all
 
-    puts @studies
     render json: @studies
   end
 
@@ -28,7 +30,6 @@ class StudyDefinitionsController < ApplicationController
   # POST /studys.json
   def create
     x = params.permit(:title, :principal_investigator_user_id)
-    ap x
     @study = StudyDefinition.new(x)
 
     if @study.save
@@ -43,14 +44,10 @@ class StudyDefinitionsController < ApplicationController
   def update
     study_params = params.permit(:title, :principal_investigator_user_id)
 
-    respond_to do |format|
-      if @study.update(study_params)
-        format.html { redirect_to @study, notice: 'Study was successfully updated.' }
-        format.json { render json: @study.to_json, status: :ok, location: @study }
-      else
-        format.html { render :edit }
-        format.json { render json: @study.errors, status: :unprocessable_entity }
-      end
+    if @study.update(study_params)
+      render json: @study.to_json, status: :ok, location: @study
+    else
+      render json: @study.errors, status: :unprocessable_entity
     end
   end
 
@@ -59,10 +56,7 @@ class StudyDefinitionsController < ApplicationController
   def destroy
     @study.destroy
     @study.save!
-    respond_to do |format|
-#      format.html { redirect_to studys_url, notice: 'Study was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+    head :no_content
   end
 
   private

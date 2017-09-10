@@ -46,10 +46,12 @@ gem 'apivore'
 # authentication
 gem 'devise', '~> 4.3.0'
 gem 'doorkeeper'
+gem 'devise-doorkeeper'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
+  gem 'mocha'
 end
 
 group :development do
