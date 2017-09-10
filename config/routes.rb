@@ -28,6 +28,14 @@ Rails.application.routes.draw do
 
   get "/v6/*" => redirect("/")
 
+  namespace :api do   
+    namespace :v1 do
+      resources :study_definitions, defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index] do
+        resources :protocols, :controller => "study_protocols"
+      end
+    end
+  end
+
   scope :api do   
     scope :v1 do
       devise_for :users
@@ -38,9 +46,6 @@ Rails.application.routes.draw do
 
       resources :study_protocols
       resources :protocol_definitions
-      resources :study_definitions do
-        resources :protocols, :controller => "study_protocols"
-      end
     end
   end
 

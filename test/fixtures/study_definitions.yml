@@ -2,12 +2,12 @@
 
 one:
   title: MyString
-  principal_investigator_user_id: one
+  principal_investigator_user_id: 1
   created_at: <%= 5.day.ago.to_s(:db) %>
   updated_at: <%= 5.day.ago.to_s(:db) %>
 
 two:
   title: MyString
-  principal_investigator_user_id: two
+  principal_investigator_user_id: 1
   created_at: <%= 5.day.ago.to_s(:db) %>
   updated_at: <%= 5.day.ago.to_s(:db) %>

@@ -10,6 +10,7 @@ class StubToken
   end
 end
 
+module Api::V1
 class StudyDefinitionControllerTest < ActionDispatch::IntegrationTest
 #  include Devise::TestHelpers 
 
@@ -26,43 +27,40 @@ class StudyDefinitionControllerTest < ActionDispatch::IntegrationTest
 
 
   test "should get index" do
-    get study_definitions_url, as: :json, :headers => @headers
+    get api_v1_study_definitions_url, as: :json, :headers => @headers
     assert_response :success
   end
 
-  test "should get new" do
-    get new_study_definition_url, as: :json, :headers => @headers
-    assert_response :success
-  end
+#  test "should get new" do
+#    get api_v1_new_study_definition_url, as: :json, :headers => @headers
+#    assert_response :success
+#  end
 
   test "should create study_definition" do
     assert_difference('StudyDefinition.count') do
-      post study_definitions_url, params: { title: "test post", principal_investigator_user_id: 0 }, :as => :json, :headers => @headers
+      post api_v1_study_definitions_url, params: {study_definition: { title: "test post", principal_investigator_user_id: @user.id } }, :as => :json, :headers => @headers
     end
 
     assert_response :success
   end
 
   test "should show study_definition" do
-    get study_definition_url(@study_definition), as: :json, :headers => @headers
-    assert_response :success
-  end
-
-  test "should get edit" do
-    get edit_study_definition_url(@study_definition), as: :json, :headers => @headers
+    get api_v1_study_definition_url(@study_definition), as: :json, :headers => @headers
     assert_response :success
   end
 
   test "should update study_definition" do
-    patch study_definition_url(@study_definition), params: { title: "new" }, :as => :json, :headers => @headers
+    patch api_v1_study_definition_url(@study_definition), params: {study_definition: { title: "new", principal_investigator_user_id: @user.id  } }, :as => :json, :headers => @headers
     assert_response :success
   end
 
   test "should destroy study_definition" do
     assert_difference('StudyDefinition.count', -1) do
-      delete study_definition_url(@study_definition), :as => :json, :headers => @headers
+      delete api_v1_study_definition_url(@study_definition), :as => :json, :headers => @headers
     end
 
     assert_response :success
   end
 end
+end
+
