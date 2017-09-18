@@ -1,5 +1,5 @@
 Issues:
-	- Sign-in doesn't redirect 
+	- Sign-in doesn't redirect  @done(2017-09-18)
 	- `respond_with` error: `RuntimeError: In order to use respond_with, first you need to declare the formats your controller responds to in the class level.`  @done(2017-09-10)
 	- interrelating fixture elements  @done(2017-09-10)
 	- logout

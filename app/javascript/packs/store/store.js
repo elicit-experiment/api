@@ -17,14 +17,13 @@ import {
   logger
 } from 'redux-logger'
 
+export var store
 
-
-const configureStore = (preloadedState = {}) => {
-  return createStore(
+export const configureStore = (preloadedState = {}) => {
+  store = createStore(
     RootReducer,
     preloadedState,
     applyMiddleware(thunk, logger)
   )
+  return store
 };
-
-export default configureStore;

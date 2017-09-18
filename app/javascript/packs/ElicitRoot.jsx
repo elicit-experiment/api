@@ -18,33 +18,36 @@ import { clientToken, userToken, currentUser } from './reducers/selector';
 
 
 //Define Root Component and Router
-const Root = (props) => {
+const RawRootRoutes = (props) => {
   const store = props.store
 
-  var token_status = 'none'
 
-  if (!sessionStorage.clientToken || sessionStorage.clientToken === 'undefined') {
-    console.log("no client token")
-    store.dispatch(requestClientToken( () => { } ))
-  } else if (!props.clientToken) {
-    console.log(`client token not in state ${sessionStorage.clientToken}`)
-    store.dispatch(receiveClientToken({access_token: sessionStorage.clientToken }))
-    token_status = 'client'
-  } else {
-    token_status = 'client'    
+  const _tokenStatus = (props) => {
+    var token_status = 'none'
+
+    if (!sessionStorage.clientToken || sessionStorage.clientToken === 'undefined') {
+      console.log("no client token")
+      store.dispatch(requestClientToken( () => { } ))
+    } else if (!props.clientToken) {
+      console.log(`client token not in state ${sessionStorage.clientToken}`)
+      store.dispatch(receiveClientToken({access_token: sessionStorage.clientToken }))
+      token_status = 'client'
+    } else {
+      token_status = 'client'    
+    }
+
+    if (!sessionStorage.userToken || sessionStorage.userToken === 'undefined') {
+      console.log("no user token")
+  //    store.dispatch(requestUserToken( () => { } ))
+    } else if (!props.userToken) {
+      console.log(`user token not in state ${sessionStorage.clientToken}`)
+      store.dispatch(receiveUserToken({access_token: sessionStorage.userToken }))
+      token_status = 'user'
+    } else {
+      token_status = 'user'    
+    }
+    return token_status    
   }
-
-  if (!sessionStorage.userToken || sessionStorage.userToken === 'undefined') {
-    console.log("no user token")
-//    store.dispatch(requestUserToken( () => { } ))
-  } else if (!props.userToken) {
-    console.log(`user token not in state ${sessionStorage.clientToken}`)
-    store.dispatch(receiveUserToken({access_token: sessionStorage.userToken }))
-    token_status = 'user'
-  } else {
-    token_status = 'user'    
-  }
-
 
   // Ensures the existence of a client/user token before accessing the site
   const _ensureClientOrUserToken = (asyncDoneCallback) => {
@@ -66,15 +69,14 @@ const Root = (props) => {
     }
   };
 
-  console.dir(props.store.getState())
+  console.dir(`ROOT RERENDERING ${_tokenStatus(props)}`)
 
   return (
-<Provider store={store}>
-    <BrowserRouter history={history}>
       <div>
-      <Route exact path="/admin" render={routeProps => {
+      <Route exact path="/admin" render={ routeProps => {
+        var token_status = _tokenStatus(props)
         if (token_status == 'user') {
-          return <AdminApp/>
+          return <AdminApp {...props} />
         } else if (token_status == 'client') {
           return <LoginSignUpContainer></LoginSignUpContainer>
         } else {
@@ -83,23 +85,32 @@ const Root = (props) => {
       } } >
       </Route>
       </div>
+  );
+};
+
+
+const mapStateToProps = (state) => ( {
+  clientToken: clientToken(state),
+  userToken: userToken(state),
+//    currentUser: currentUser(state),
+})
+
+const mapDispatchToProps = (dispatch) => ({
+});
+
+const RootRoutes = connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(RawRootRoutes);
+
+const Root = (props) => {
+  return (
+<Provider store={props.store}>
+    <BrowserRouter history={history}>
+      <RootRoutes {...props} />
     </BrowserRouter>
 </Provider>
   );
 };
 
-
-const mapStateToProps = (state) => ({
-  clientToken: clientToken(state),
-  userToken: userToken(state),
-//    currentUser: currentUser(state),
-});
-
-const mapDispatchToProps = (dispatch) => ({
-});
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(Root);
-
+export default Root

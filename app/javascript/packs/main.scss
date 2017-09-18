@@ -1,4 +1,4 @@
-
+@import "../scss/long-shadow-mixin.scss";
 
  body {
   padding-top: 50px;
@@ -124,4 +124,17 @@ h1 {
   padding-left:0px;
 }
 
+
+.elicit-title {
+  font-size: 20vw;
+  text-align: center;
+  margin-top: 20vw;
+  text-shadow: 1px 1px rgba(187,187,187, 0.95), 2px 2px rgba(187,187,187, 0.90), 3px 3px rgba(187,187,187, 0.85), 4px 4px rgba(187,187,187, 0.80), 5px 5px rgba(187,187,187, 0.75), 6px 6px rgba(187,187,187, 0.70), 7px 7px rgba(187,187,187, 0.65), 8px 8px rgba(187,187,187, 0.60), 9px 9px rgba(187,187,187, 0.55), 10px 10px rgba(187,187,187, 0.50), 11px 11px rgba(187,187,187, 0.45), 12px 12px rgba(187,187,187, 0.40), 13px 13px rgba(187,187,187, 0.35), 14px 14px rgba(187,187,187, 0.30), 15px 15px rgba(187,187,187, 0.25), 16px 16px rgba(187,187,187, 0.20), 17px 17px rgba(187,187,187, 0.15), 18px 18px rgba(187,187,187, 0.10), 19px 19px rgba(187,187,187, 0.05), 20px 20px rgba(187,187,187, 0.00)
+}
+
+.elicit-subtitle {
+  font-size: 5vw;
+  text-align: center;
+  margin-top: 10vw;
+}
 

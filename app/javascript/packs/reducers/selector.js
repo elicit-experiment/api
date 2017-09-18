@@ -1,14 +1,12 @@
 export const clientToken = (state) => {
   console.dir(`clientToken ${state}`)
   const ct = state ? state.tokens.clientToken : undefined;
-  console.dir(ct)
   return ct
 };
 
 export const userToken = (state) => {
   console.dir(`userToken ${state}`)
-  const ct = state ? state.tokens.clientToken : undefined;
-  console.dir(ct)
+  const ct = state ? state.tokens.userToken : undefined;
   return ct
 };
 

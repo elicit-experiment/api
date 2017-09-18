@@ -27,7 +27,8 @@ class LoginSignUpContainer extends React.Component {
   }
   render() {
     return <div>
-              <h1>hello!</h1>
+              <h1 className="elicit-title">Elicit</h1>
+              <h3 className="elicit-subtitle">dtu</h3>
               <LoginSignUp {...this.props}></LoginSignUp>
            </div>
 

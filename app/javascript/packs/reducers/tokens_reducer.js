@@ -26,12 +26,12 @@ const TokensReducer = (state = {
     case RECEIVE_USER_TOKEN:
       //Set userToken to sessionStorage to maintain token in event of page refresh
       sessionStorage.setItem("userToken", action.userToken.access_token);
-      newState = state;
+      newState = _.extend({}, state);
       newState.userToken = action.userToken.access_token;
       return newState;
     case RESET_USER_TOKEN:
       sessionStorage.removeItem("userToken");
-      newState = state;
+      newState = _.extend({}, state);
       newState.userToken = undefined;
       return newState;
     default:

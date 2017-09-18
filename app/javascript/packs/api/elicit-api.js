@@ -7,6 +7,10 @@ import adapterFetch from "redux-api/lib/adapters/fetch";
 import $ from 'jquery'
 import _ from 'lodash'
 
+import {
+  resetUserToken
+} from "../actions/tokens_actions"
+
 const api_root = '/api/v1'
 const public_client_id = 'admin_public'
 const public_client_secret = 'czZCaGRSa3F0MzpnWDFmQmF0M2JW'
@@ -15,7 +19,12 @@ const default_headers = {
   'Content-Type': 'application/json',
 }
 
-export default reduxApi({
+import {
+  store
+} from '../store/store';
+
+
+const api = reduxApi({
   studies: {
     url: `${api_root}/study_definitions`,
     // reimplement default `transformers.object`
@@ -23,7 +32,7 @@ export default reduxApi({
     // base endpoint options `fetch(url, options)`
     options: {
       headers: _.extend({}, default_headers)
-    },
+    }
   },
 
   new_study_definition: {
@@ -39,6 +48,7 @@ export default reduxApi({
         dispatch,
         actions
       }) {
+        debugger;
         dispatch(actions.studies()); // update list of items after modify any item
       }
     ]
@@ -70,8 +80,7 @@ export default reduxApi({
       userToken
     }
   } = getState();
-  console.dir(getState())
-    // Add token to header request
+  // Add token to header request
   if (userToken) {
     return {
       headers: {...default_headers,
@@ -80,4 +89,13 @@ export default reduxApi({
     };
   }
   return headers;
-}).use("fetch", adapterFetch(fetch));
+}).use("responseHandler",
+  (err, data) => {
+    console.dir(err)
+    if (err && (err.error == 'invalid_token')) {
+      store.dispatch(resetUserToken())
+    }
+    return data;
+  }).use("fetch", adapterFetch(fetch));
+
+export default api
