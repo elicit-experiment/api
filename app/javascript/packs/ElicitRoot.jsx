@@ -25,49 +25,20 @@ const RawRootRoutes = (props) => {
   const _tokenStatus = (props) => {
     var token_status = 'none'
 
-    if (!sessionStorage.clientToken || sessionStorage.clientToken === 'undefined') {
+    if (!props.clientToken || !props.clientToken.access_token) {
       console.log("no client token")
       store.dispatch(requestClientToken( () => { } ))
-    } else if (!props.clientToken) {
-      console.log(`client token not in state ${sessionStorage.clientToken}`)
-      store.dispatch(receiveClientToken({access_token: sessionStorage.clientToken }))
-      token_status = 'client'
     } else {
       token_status = 'client'    
     }
 
-    if (!sessionStorage.userToken || sessionStorage.userToken === 'undefined') {
+    if (!props.userToken || !props.userToken.access_token) {
       console.log("no user token")
-  //    store.dispatch(requestUserToken( () => { } ))
-    } else if (!props.userToken) {
-      console.log(`user token not in state ${sessionStorage.clientToken}`)
-      store.dispatch(receiveUserToken({access_token: sessionStorage.userToken }))
-      token_status = 'user'
     } else {
       token_status = 'user'    
     }
     return token_status    
   }
-
-  // Ensures the existence of a client/user token before accessing the site
-  const _ensureClientOrUserToken = (asyncDoneCallback) => {
-    return;
-    if (!sessionStorage.clientToken && !sessionStorage.userToken) {
-      store.dispatch(requestClientToken(asyncDoneCallback));
-    } else if (sessionStorage.userToken && !store.getState().users.currentUser) {
-      store.dispatch(requestCurrentUser(asyncDoneCallback));
-    } else {
-      asyncDoneCallback();
-    }
-  };
-
-  // Ensures the user is logged in before accessing a particular route
-  const _ensureLoggedIn = (nextState, replace) => {
-    let currentUser = store.getState().users.currentUser;
-    if (!currentUser) {
-      replace("/");
-    }
-  };
 
   console.dir(`ROOT RERENDERING ${_tokenStatus(props)}`)
 

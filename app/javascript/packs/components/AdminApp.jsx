@@ -95,9 +95,10 @@ class AdminApp extends React.Component {
   }
 
   componentDidMount() {
+    console.log("AdminApp MOUNT")
     const {dispatch} = this.props;
 
-    dispatch(elicitApi.actions.studies.sync());
+    dispatch(elicitApi.actions.studies());
   }
 
   handleChangedEvent = (event) => {

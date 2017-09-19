@@ -31,11 +31,11 @@ class _NewStudy extends React.Component {
   }
   render() {
     const {dispatch} = this.props;
-    const new_study_def = { title: "New Study", principal_investigator_user_id: 0 }
+    const new_study_def = {study_definition: { title: "New Study", principal_investigator_user_id: 0 } }
     console.dir(new_study_def)
    return (
     <div className='well new-study well show study-summary' onClick={(e) => {
-        dispatch(elicitApi.actions.new_study_definition({}, { body: JSON.stringify(new_study_def) } ));
+        dispatch(elicitApi.actions.study_definition.post({}, { body: JSON.stringify(new_study_def) } ));
     }
   }>+</div>
   )

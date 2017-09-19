@@ -35,3 +35,12 @@ export const fetchUserToken = (credentials, success, error) => {
   }, credentials)
   return fetchToken(token_request)
 };
+
+export const refreshUserToken = (refresh_token, success, error) => {
+  let token_request = _.extend({
+    client_id: public_client_id,
+    client_secret: public_client_secret,
+    grant_type: 'refresh_token'
+  }, refresh_token)
+  return fetchToken(token_request)
+};

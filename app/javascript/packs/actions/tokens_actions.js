@@ -9,14 +9,10 @@ export const LOGIN_USER = "USER_CREATE_SUCCESS";
 export const RECEIVE_USER_TOKEN = "RECEIVE_USER_TOKEN";
 export const RESET_USER_TOKEN = "RESET_USER_TOKEN";
 
-/*
-export const requestClientToken = (asyncDoneCallback) => ({
-  type: REQUEST_CLIENT_TOKEN,
-  asyncDoneCallback
-});
-*/
-
-const error = (e) => console.log("error in tokens middleware:", e)
+const error = (e) => {
+  console.log("error in tokens middleware:", e)
+  debugger
+}
 
 export const requestClientToken = (asyncDoneCallback) => {
   return (dispatch) => {
@@ -35,13 +31,6 @@ export const receiveClientToken = (clientToken) => ({
   clientToken
 });
 
-/*
-    export const logInUser = (data) => ({
-      type: LOGIN_USER,
-      data
-    });
-*/
-
 export const logInUser = (data) => {
   return (dispatch) => {
     //dispatch(itemsIsLoading(true));
@@ -50,7 +39,18 @@ export const logInUser = (data) => {
       dispatch(receiveUserToken(data))
     }
 
-    console.dir(data)
+    fetchUserToken(data).then(gotData).catch(error);
+  };
+}
+
+export const refreshUserToken = (data) => {
+  return (dispatch) => {
+    //dispatch(itemsIsLoading(true));
+
+    const gotData = (data) => {
+      dispatch(receiveUserToken(data))
+    }
+
     fetchUserToken(data).then(gotData).catch(error);
   };
 }

@@ -10,7 +10,8 @@ import StudyStore from '../store/StudyStore'
 import { AppRoutes } from './AdminApp'
 import { Link } from 'react-router-dom'
 import pathToRegexp from 'path-to-regexp'
-
+import elicitApi from '../api/elicit-api.js'
+import { connect } from "react-redux";
 
 const ProtocolInfoLink = (props) => (
   <div className="row study-info-row">
@@ -165,9 +166,16 @@ class Study extends React.Component {
   }
 
   deleteItem(itm) {
-    StudyStore.removeItem(this.props.study.id)
+    console.dir(itm)
+    console.dir(this.props.study)
+    const {dispatch} = this.props;
+    console.dir(elicitApi.actions)
+    dispatch(elicitApi.actions.study_definition.delete({id: this.props.study.id}));
   }
 }
 
-export default Study;
+const mapStateToProps = (state) => ({
+});
+
+export default connect(mapStateToProps)(Study);
 

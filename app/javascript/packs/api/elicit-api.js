@@ -32,47 +32,57 @@ const api = reduxApi({
     // base endpoint options `fetch(url, options)`
     options: {
       headers: _.extend({}, default_headers)
+    },
+    // per https://github.com/lexich/redux-api/issues/114
+    reducer(state, action) {
+      if (action.type === "@@redux-api@studies_append_study_definition") {
+        return {...state,
+          data: state.data.concat(action.data)
+        };
+      }
+      if (action.type === "@@redux-api@studies_delete_study_definition") {
+        //        debugger;
+        return {...state,
+          data: state.data.filter((item, index) => item.id !== action.id)
+        };
+      }
+      return state;
     }
+
   },
 
-  new_study_definition: {
-    reducerName: 'updateStudyDefinition',
-    url: `${api_root}/study_definitions`,
-    virtual: true,
+  study_definition: {
+    url: `${api_root}/study_definitions/:id`,
     transformer: transformers.array,
-    options: {
-      method: 'post',
-    },
+    crud: true,
     postfetch: [
       function({
+        data,
+        actions,
         dispatch,
-        actions
+        getState,
+        request,
+        response
       }) {
-        debugger;
-        dispatch(actions.studies()); // update list of items after modify any item
+        if (request.params.method === "POST") {
+          dispatch({
+            type: "@@redux-api@studies_append_study_definition",
+            data
+          });
+        }
+        if (request.params.method === "DELETE") {
+          dispatch({
+            type: "@@redux-api@studies_delete_study_definition",
+            id: request.pathvars.id
+          });
+        }
+        //        dispatch(actions.studies()); // update list of items after modify any item
       }
-    ]
-  },
-
-  // simple endpoint description
-  entry: `/api/v1/entry/:id`,
-  // complex endpoint description
-  regions: {
-    url: `/api/v1/regions`,
-    // reimplement default `transformers.object`
-    transformer: transformers.array,
-    // base endpoint options `fetch(url, options)`
-    validation: (data, cb) => {
-      console.dir(data)
-        // check data format
-      return true
-    },
+    ],
     options: {
-      headers: {
-        "Accept": "application/json"
-      }
+      headers: _.extend({}, default_headers)
     }
-  }
+  },
 }).use("options", (url, params, getState) => {
   const {
     tokens: {
@@ -84,16 +94,24 @@ const api = reduxApi({
   if (userToken) {
     return {
       headers: {...default_headers,
-        Authorization: `Bearer ${userToken}`
+        Authorization: `Bearer ${userToken.access_token}`
       }
     };
   }
   return headers;
 }).use("responseHandler",
   (err, data) => {
-    console.dir(err)
+    if (data !== undefined) {
+      return data
+    }
     if (err && (err.error == 'invalid_token')) {
       store.dispatch(resetUserToken())
+      return data
+    }
+    if (err) {
+      // this is necessary because just returning the (undefiend) data 
+      // will still cause the postfetch hook to run.
+      throw "bad";
     }
     return data;
   }).use("fetch", adapterFetch(fetch));
