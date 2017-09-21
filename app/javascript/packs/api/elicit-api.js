@@ -27,6 +27,8 @@ import {
   refreshUserToken
 } from '../actions/tokens_actions'
 
+import update from 'react-addons-update'
+
 const refreshTokenIfExpired = ({
   actions,
   dispatch,
@@ -47,9 +49,14 @@ const refreshTokenIfExpired = ({
   return cb()
 }
 
-const api = reduxApi({
-  studies: {
-    url: `${api_root}/study_definitions`,
+//
+// Generic endpoint, with one action set for the whole collection (which will create a store for the collection)
+// and another for the CRUD operations on the individual elements.
+//
+const make_entity_def = (singular, plural, endpoint) => {
+  var def = {}
+  def[plural] = {
+    url: `${api_root}/${endpoint}`,
     // reimplement default `transformers.object`
     transformer: transformers.array,
     // base endpoint options `fetch(url, options)`
@@ -61,24 +68,32 @@ const api = reduxApi({
     ],
     // per https://github.com/lexich/redux-api/issues/114
     reducer(state, action) {
-      if (action.type === "@@redux-api@studies_append_study_definition") {
+      if (action.type === `@@redux-api@${plural}_append_${singular}`) {
         return {...state,
           data: state.data.concat(action.data)
         };
       }
-      if (action.type === "@@redux-api@studies_delete_study_definition") {
-        //        debugger;
+      if (action.type === `@@redux-api@${plural}_delete_${singular}`) {
         return {...state,
           data: state.data.filter((item, index) => item.id !== action.id)
         };
       }
+      if (action.type === `@@redux-api@${plural}_update_${singular}`) {
+        return {...state,
+          data: state.data.map((item) => {
+            if (item.id === action.id) {
+              return action.updates[0]
+            } else {
+              return item
+            }
+          })
+        };
+      }
       return state;
     }
-
-  },
-
-  study_definition: {
-    url: `${api_root}/study_definitions/:id`,
+  }
+  def[singular] = {
+    url: `${api_root}/${endpoint}/:id`,
     transformer: transformers.array,
     crud: true,
     prefetch: [
@@ -95,14 +110,21 @@ const api = reduxApi({
       }) {
         if (request.params.method === "POST") {
           dispatch({
-            type: "@@redux-api@studies_append_study_definition",
+            type: `@@redux-api@${plural}_append_${singular}`,
             data
           });
         }
         if (request.params.method === "DELETE") {
           dispatch({
-            type: "@@redux-api@studies_delete_study_definition",
+            type: `@@redux-api@${plural}_delete_${singular}`,
             id: request.pathvars.id
+          });
+        }
+        if (request.params.method === "PATCH") {
+          dispatch({
+            type: `@@redux-api@${plural}_update_${singular}`,
+            id: request.pathvars.id,
+            updates: data
           });
         }
         //        dispatch(actions.studies()); // update list of items after modify any item
@@ -111,8 +133,12 @@ const api = reduxApi({
     options: {
       headers: _.extend({}, default_headers)
     }
-  },
-}).use("options", (url, params, getState) => {
+  }
+  return def
+}
+
+const api = reduxApi(_.extend({},
+  make_entity_def('study_definition', 'studies', 'study_definitions'))).use("options", (url, params, getState) => {
   const {
     tokens: {
       clientToken,
