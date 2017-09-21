@@ -115,6 +115,7 @@ class AdminApp extends React.Component {
 
 const mapStateToProps = (state) => ({
   studies: state.studies,
+  study_definition: state.study_definition,
   userToken: state.tokens.userToken
 });
 const connectedAdminApp = connect(mapStateToProps)(AdminApp)

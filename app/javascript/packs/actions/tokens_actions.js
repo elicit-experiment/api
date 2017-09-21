@@ -1,6 +1,7 @@
 import {
   fetchClientToken,
-  fetchUserToken
+  fetchUserToken,
+  fetchRefreshUserToken
 } from '../api/api.js'
 
 export const REQUEST_CLIENT_TOKEN = "REQUEST_CLIENT_TOKEN";
@@ -18,11 +19,11 @@ export const requestClientToken = (asyncDoneCallback) => {
   return (dispatch) => {
     //dispatch(itemsIsLoading(true));
 
-    const gotData = (data) => {
+    const processSuccess = (data) => {
       dispatch(receiveClientToken(data))
     }
 
-    fetchClientToken().then(gotData).then(asyncDoneCallback).catch(error);
+    fetchClientToken().then(processSuccess).then(asyncDoneCallback).catch(error);
   };
 }
 
@@ -31,7 +32,7 @@ export const receiveClientToken = (clientToken) => ({
   clientToken
 });
 
-export const logInUser = (data) => {
+export const logInUser = (credentials) => {
   return (dispatch) => {
     //dispatch(itemsIsLoading(true));
 
@@ -39,11 +40,11 @@ export const logInUser = (data) => {
       dispatch(receiveUserToken(data))
     }
 
-    fetchUserToken(data).then(gotData).catch(error);
+    fetchUserToken(credentials).then(gotData).catch(error);
   };
 }
 
-export const refreshUserToken = (data) => {
+export const refreshUserToken = (access_token, refresh_token, asyncDoneCallback) => {
   return (dispatch) => {
     //dispatch(itemsIsLoading(true));
 
@@ -51,7 +52,7 @@ export const refreshUserToken = (data) => {
       dispatch(receiveUserToken(data))
     }
 
-    fetchUserToken(data).then(gotData).catch(error);
+    fetchRefreshUserToken(access_token, refresh_token).then(gotData).then(asyncDoneCallback).catch(error);
   };
 }
 

@@ -101,9 +101,13 @@ class Study extends React.Component {
       const newData = update(this.props.study, {
         title: {$set: data.title},
       });
-      StudyStore.updateItem(newData)
+      const {dispatch} = this.props;
+      let body = {study_definition: newData}
+      console.dir(body)
+      console.dir(elicitApi.actions)
+      dispatch(elicitApi.actions.study_definition.patch({id: this.props.study.id}, { body: JSON.stringify(body) }))
       this.setState({...data})
-  }
+  } 
 
   validateTitle(text) {
     return (text.length > 0 && text.length < 64);

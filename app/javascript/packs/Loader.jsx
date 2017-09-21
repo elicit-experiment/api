@@ -11,7 +11,12 @@ import ElicitRoot from './ElicitRoot';
 const getToken = (tok) => {
   if (sessionStorage[tok]) {
     try {
-        return JSON.parse(sessionStorage[tok])
+        let token = JSON.parse(sessionStorage[tok])
+        let expire_time = token.created_at + token.expires_in
+        if (expire_time < (new Date()).getTime()) {
+          console.log('EXPIRED!')
+        }
+        return token
     } catch (e) {
      console.warn("Bad stuff in localstorage for usertoken.")
      sessionStorage.removeItem(tok)

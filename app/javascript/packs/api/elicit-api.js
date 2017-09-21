@@ -23,6 +23,29 @@ import {
   store
 } from '../store/store';
 
+import {
+  refreshUserToken
+} from '../actions/tokens_actions'
+
+const refreshTokenIfExpired = ({
+  actions,
+  dispatch,
+  getState
+}, cb) => {
+  const {
+    tokens: {
+      userToken: userToken
+    }
+  } = getState();
+  let expire_time = userToken.created_at + userToken.expires_in
+  console.log(expire_time)
+  if (expire_time < (new Date()).getTime()) {
+    console.log('EXPIRED TOKEN')
+    dispatch(refreshUserToken(userToken.access_token, userToken.refresh_token, cb))
+    return
+  }
+  return cb()
+}
 
 const api = reduxApi({
   studies: {
@@ -33,6 +56,9 @@ const api = reduxApi({
     options: {
       headers: _.extend({}, default_headers)
     },
+    prefetch: [
+      refreshTokenIfExpired
+    ],
     // per https://github.com/lexich/redux-api/issues/114
     reducer(state, action) {
       if (action.type === "@@redux-api@studies_append_study_definition") {
@@ -55,6 +81,9 @@ const api = reduxApi({
     url: `${api_root}/study_definitions/:id`,
     transformer: transformers.array,
     crud: true,
+    prefetch: [
+      refreshTokenIfExpired
+    ],
     postfetch: [
       function({
         data,
