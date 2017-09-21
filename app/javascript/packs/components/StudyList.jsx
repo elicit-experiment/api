@@ -9,7 +9,6 @@ import InlineEdit from 'react-edit-inline';
 import update from 'react-addons-update'
 import Dropdown from './DropDown'
 import Study from './Study'
-import StudyStore from '../store/StudyStore'
 import { AppRoutes } from './AdminApp'
 import { Link } from 'react-router-dom'
 import pathToRegexp from 'path-to-regexp'

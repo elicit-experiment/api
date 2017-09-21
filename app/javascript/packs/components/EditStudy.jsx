@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import StudyStore from '../store/StudyStore'
 import _ from 'lodash'
 import InlineEdit from 'react-edit-inline';
 import update from 'react-addons-update'
