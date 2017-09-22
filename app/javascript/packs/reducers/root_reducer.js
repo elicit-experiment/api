@@ -1,4 +1,11 @@
 import _ from 'lodash'
+import {
+  LOGOUT_USER
+} from '../actions/tokens_actions'
+
+import {
+  actions
+} from '../api/elicit-api'
 
 //Import Dependencies
 import {
@@ -15,6 +22,24 @@ const reducers = _.extend({
 }, elicitApi.reducers)
 
 //Combine Reducers
-const RootReducer = combineReducers(reducers);
+const appReducer = combineReducers(reducers);
+
+const RootReducer = (state, action) => {
+  if (action.type === LOGOUT_USER) {
+    sessionStorage.removeItem("userToken");
+    // save routing and clientToken, but nuke everything else
+    const {
+      tokens: {
+        clientToken: clientToken
+      }
+    } = state
+    state = {
+      tokens: {
+        clientToken: clientToken
+      }
+    }
+  }
+  return appReducer(state, action)
+}
 
 export default RootReducer;

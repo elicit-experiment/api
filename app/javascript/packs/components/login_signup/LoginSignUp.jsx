@@ -9,7 +9,7 @@ class LogInSignUp extends React.Component {
     this.toggleLogIn = this.toggleLogIn.bind(this);
     this.state = {
       logInForm: true,
-      userName: "",
+      dismissable: props.dismissable || false,
       email: "",
       password: "",
       passwordConfirmation: "",
@@ -36,12 +36,11 @@ class LogInSignUp extends React.Component {
   signUpUser() {
     return (e) => {
       e.preventDefault();
-      let credentials = { username: this.state.userName,
-                          email: this.state.email,
+      let credentials = { email: this.state.email,
                           password: this.state.password,
                           password_confirmation: this.state.passwordConfirmation };
       this.props.createUser({user: credentials});
-      $("#logInModal").modal('hide');
+      $("#signUpModal").modal('hide');
     };
   }
 
@@ -49,12 +48,16 @@ class LogInSignUp extends React.Component {
   logInUser() {
     return (e) => {
       e.preventDefault();
-      let credentials = { email: this.state.userName,
+      let credentials = { email: this.state.email,
                           password: this.state.password };
       this.props.logInUser(credentials);
       $("#logInModal").modal('hide');
       $("#myNavbar").collapse("hide"); // Hides the collapsible dropdown navbar while on mobile devices
     };
+  }
+
+  dismissButton() {
+    return this.state.dismissable ? <button type="button" className="close" data-dismiss="modal">&times;</button> : <div></div>
   }
 
   // Generates the HTML for the login form
@@ -65,18 +68,18 @@ class LogInSignUp extends React.Component {
 
           <div className="modal-content">
             <div className="modal-header" style={{padding:"35px 50px"}}>
-              <button type="button" className="close" data-dismiss="modal">&times;</button>
+              {this.dismissButton()}
               <h4><span className="glyphicon glyphicon-lock"></span> Login</h4>
             </div>
             <div className="modal-body" style={{padding:"40px 50px"}}>
               <form role="form" onSubmit={this.logInUser()}>
                 <div className="form-group">
-                  <label htmlFor="usrname"><span className="glyphicon glyphicon-user"></span> Username</label>
+                  <label htmlFor="usrname"><span className="glyphicon glyphicon-user"></span> Email</label>
                   <input type="text"
                          className="form-control"
-                         id="usrname"
-                         placeholder="Enter username"
-                         onChange={this.updateState('userName')}/>
+                         id="email"
+                         placeholder="Enter email"
+                         onChange={this.updateState('email')}/>
                 </div>
                 <div className="form-group">
                   <label htmlFor="psw"><span className="glyphicon glyphicon-eye-open"></span> Password</label>
@@ -111,19 +114,11 @@ class LogInSignUp extends React.Component {
 
           <div className="modal-content">
             <div className="modal-header" style={{padding:"35px 50px"}}>
-              <button type="button" className="close" data-dismiss="modal">&times;</button>
+              {this.dismissButton()}
               <h4><span className="glyphicon glyphicon-lock"></span> Sign Up</h4>
             </div>
             <div className="modal-body" style={{padding:"40px 50px"}}>
               <form role="form" onSubmit={this.signUpUser()}>
-                <div className="form-group">
-                  <label htmlFor="usrname"><span className="glyphicon glyphicon-user"></span> Username</label>
-                  <input type="text"
-                         className="form-control"
-                         id="usrname"
-                         placeholder="Enter username"
-                         onChange={this.updateState('userName')}/>
-                </div>
                 <div className="form-group">
                   <label htmlFor="usrname"><span className="glyphicon glyphicon-user"></span> Email</label>
                   <input type="text"

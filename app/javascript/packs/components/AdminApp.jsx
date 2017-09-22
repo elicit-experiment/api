@@ -11,7 +11,7 @@ import { Provider, connect } from "react-redux";
 import elicitApi from "../api/elicit-api.js"; 
 
 import {
-  resetUserToken
+  logoutUser
 } from "../actions/tokens_actions"
 
 class Header extends React.Component {
@@ -37,8 +37,8 @@ class Header extends React.Component {
         </ul>
 
         <ul className="nav navbar-nav navbar-right">
-          <li><a onClick={ (e) => { this.props.dispatch(resetUserToken()) } }>{username}</a></li>
-          <li><a onClick={ (e) => { this.props.dispatch(resetUserToken()) } }>Logout</a></li>
+          <li><a onClick={ (e) => { this.props.dispatch(logoutUser()) } }>{username}</a></li>
+          <li><a onClick={ (e) => { this.props.dispatch(logoutUser()) } }>Logout</a></li>
           <li>&nbsp;</li>
         </ul>
       </div>

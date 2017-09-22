@@ -8,7 +8,7 @@ import LoginSignUp from './LoginSignUp';
 
 // Import Actions
 import { logInUser } from '../../actions/tokens_actions';
-//import { createUser } from '../../actions/users_actions';
+import elicitApi from '../../api/elicit-api.js';
 
 //Map State to Props
 const mapStateToProps = (state) => ({
@@ -17,7 +17,7 @@ const mapStateToProps = (state) => ({
 
 // Map Dispatch to Props
 const mapDispatchToProps = (dispatch) => ({
-//  createUser: (data) => dispatch(createUser(data)),
+  createUser: (new_user_def) => dispatch(elicitApi.actions.user.post({}, { body: JSON.stringify(new_user_def) } )),
   logInUser: (data) => dispatch(logInUser(data))
 });
 

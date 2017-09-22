@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  
+
   mount SwaggerUiEngine::Engine, at: "/api-docs"
 
   get '/apidocs/v1/swagger.json' => 'apidocs#index', :defaults => { :format => 'json' }
@@ -28,29 +28,32 @@ Rails.application.routes.draw do
 
   get "/v6/*" => redirect("/")
 
-  namespace :api do   
+  # API
+  namespace :api do
     namespace :v1 do
       resources :study_definitions, defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index] do
         resources :protocols, :controller => "study_protocols"
       end
-      get 'users/current' => 'users#show_current_user', :defaults => { :format => 'json' }
-      resources :users, defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index] do
-      end
     end
   end
 
-  scope :api do   
+  # users/auth
+  scope :api do
     scope :v1 do
-      devise_for :users
-
-      use_doorkeeper do
-        #skip_controllers :authorizations, :applications, :authorized_applications
+      devise_for :users, controllers: {
+        registrations: 'api/v1/users',
+        confirmations: 'api/v1/confirmations'
+      }
+      devise_scope :user do
+        get 'users/current' => "api/v1/users#show_current_user"
+        resources :users, only: [:show, :index], controller: 'api/v1/users', :constraints => { :id => /[^\/]+/ } do
+        end
       end
-
-      resources :study_protocols
-      resources :protocol_definitions
+      use_doorkeeper
     end
   end
+
+  ## Admin app pages -- just load the client app
 
   get '/admin'  => 'admin#index'
   get '/admin/users'  => 'admin#index'

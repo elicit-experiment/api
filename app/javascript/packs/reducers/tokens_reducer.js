@@ -41,7 +41,7 @@ const TokensReducer = (state = {
       newState.userToken = {
         access_token: undefined
       };
-      return newState;
+      return undefined;
     default:
       return state;
   }

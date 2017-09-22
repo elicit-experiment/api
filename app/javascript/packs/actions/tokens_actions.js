@@ -9,10 +9,10 @@ export const RECEIVE_CLIENT_TOKEN = "RECEIVE_CLIENT_TOKEN";
 export const LOGIN_USER = "USER_CREATE_SUCCESS";
 export const RECEIVE_USER_TOKEN = "RECEIVE_USER_TOKEN";
 export const RESET_USER_TOKEN = "RESET_USER_TOKEN";
+export const LOGOUT_USER = "LOGOUT_USER";
 
 const error = (e) => {
   console.log("error in tokens middleware:", e)
-  debugger
 }
 
 export const requestClientToken = (asyncDoneCallback) => {
@@ -63,4 +63,9 @@ export const receiveUserToken = (userToken) => ({
 
 export const resetUserToken = () => ({
   type: RESET_USER_TOKEN
+});
+
+
+export const logoutUser = () => ({
+  type: LOGOUT_USER
 });

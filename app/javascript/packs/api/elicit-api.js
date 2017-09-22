@@ -8,7 +8,8 @@ import $ from 'jquery'
 import _ from 'lodash'
 
 import {
-  resetUserToken
+  resetUserToken,
+  logInUser
 } from "../actions/tokens_actions"
 
 const api_root = '/api/v1'
@@ -24,7 +25,8 @@ import {
 } from '../store/store';
 
 import {
-  refreshUserToken
+  refreshUserToken,
+  loginUser,
 } from '../actions/tokens_actions'
 
 import update from 'react-addons-update'
@@ -39,13 +41,20 @@ const refreshTokenIfExpired = ({
       userToken: userToken
     }
   } = getState();
-  let expire_time = userToken.created_at + userToken.expires_in
-  console.log(expire_time)
-  if (expire_time < (new Date()).getTime()) {
-    console.log('EXPIRED TOKEN')
-    dispatch(refreshUserToken(userToken.access_token, userToken.refresh_token, cb))
-    return
+  if (userToken && userToken.created_at && userToken.expires_in) {
+
+    let expire_time = userToken.created_at + userToken.expires_in
+    console.dir(userToken)
+    console.log(((new Date(expire_time * 1000))).toString())
+    let time_to_live = expire_time * 1000 - (new Date()).getTime()
+    console.log(`userToken time to live ${time_to_live}`)
+    if (time_to_live < 0) {
+      console.log('EXPIRED TOKEN!')
+      dispatch(refreshUserToken(userToken.access_token, userToken.refresh_token, cb))
+      return
+    }
   }
+  // no token? don't make the call.
   return cb()
 }
 
@@ -152,21 +161,49 @@ const current_user = {
   }
 }
 
+var user_entity = make_entity_def('user', 'user', 'users');
+
+// for users, make sure when we post (sign up) we chain the login action)
+user_entity.user.postfetch.push(function({
+  data,
+  actions,
+  dispatch,
+  getState,
+  request,
+  response
+}) {
+  if (!request || !request.params) {
+    return
+  }
+  if (request.params.method === "POST") {
+    let creds = JSON.parse(request.params.body).user
+    dispatch(logInUser(creds));
+  }
+})
+
 const api = reduxApi(_.extend({},
   current_user,
   make_entity_def('study_definition', 'studies', 'study_definitions'),
-  make_entity_def('user', 'user', 'users'))).use("options", (url, params, getState) => {
+  user_entity)).use("options", (url, params, getState) => {
   const {
     tokens: {
       clientToken,
       userToken
     }
   } = getState();
-  // Add token to header request
-  if (userToken) {
+  console.log('adding headers...')
+    // Add token to header request
+  if (userToken && userToken.access_token) {
     return {
       headers: {...default_headers,
         Authorization: `Bearer ${userToken.access_token}`
+      }
+    }
+  }
+  if (clientToken && clientToken.access_token) {
+    return {
+      headers: {...default_headers,
+        Authorization: `Bearer ${clientToken.access_token}`
       }
     };
   }

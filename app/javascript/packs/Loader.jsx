@@ -32,9 +32,6 @@ const preloadedStore = {
     clientToken: getToken('clientToken'),
     userToken: getToken('userToken')
   },
-  users: {
-    currenUser: undefined
-  }
 }
 
 const store = configureStore(preloadedStore);
