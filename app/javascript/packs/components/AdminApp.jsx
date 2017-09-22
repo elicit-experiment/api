@@ -16,6 +16,8 @@ import {
 
 class Header extends React.Component {
   render() {
+    console.dir(this.props.current_user)
+    let username = (this.props.current_user.data.email) ? this.props.current_user.data.email : "none"
     return (
   <nav className="nav navbar navbar-default navbar-fixed-top">
       <div className="navbar-header">
@@ -35,7 +37,7 @@ class Header extends React.Component {
         </ul>
 
         <ul className="nav navbar-nav navbar-right">
-          <li><a onClick={ (e) => { this.props.dispatch(resetUserToken()) } }>(user)</a></li>
+          <li><a onClick={ (e) => { this.props.dispatch(resetUserToken()) } }>{username}</a></li>
           <li><a onClick={ (e) => { this.props.dispatch(resetUserToken()) } }>Logout</a></li>
           <li>&nbsp;</li>
         </ul>
@@ -60,16 +62,9 @@ const Foo = () => (
 class AdminApp extends React.Component {
   constructor(props){
     super(props);
-    this.state = {
-        users: [],
-        studies: [],
-        protocols: [],
-        study_protocols: []
-    }
   }
 
   render() {
-      console.dir(this.props)
       return(
     <div>
       <Header {...this.props} ></Header>
@@ -95,6 +90,7 @@ class AdminApp extends React.Component {
     const {dispatch} = this.props;
 
     dispatch(elicitApi.actions.studies());
+    dispatch(elicitApi.actions.current_user());
   }
 
   handleChangedEvent = (event) => {
@@ -111,6 +107,7 @@ class AdminApp extends React.Component {
 
 const mapStateToProps = (state) => ({
   studies: state.studies,
+  current_user: state.current_user,
   study_definition: state.study_definition,
   userToken: state.tokens.userToken
 });

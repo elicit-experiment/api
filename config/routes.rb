@@ -33,6 +33,9 @@ Rails.application.routes.draw do
       resources :study_definitions, defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index] do
         resources :protocols, :controller => "study_protocols"
       end
+      get 'users/current' => 'users#show_current_user', :defaults => { :format => 'json' }
+      resources :users, defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index] do
+      end
     end
   end
 

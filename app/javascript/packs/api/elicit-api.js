@@ -108,6 +108,9 @@ const make_entity_def = (singular, plural, endpoint) => {
         request,
         response
       }) {
+        if (!request || !request.params) {
+          debugger;
+        }
         if (request.params.method === "POST") {
           dispatch({
             type: `@@redux-api@${plural}_append_${singular}`,
@@ -137,8 +140,22 @@ const make_entity_def = (singular, plural, endpoint) => {
   return def
 }
 
+const current_user = {
+  current_user: {
+    url: `${api_root}/users/current`,
+    options: {
+      headers: _.extend({}, default_headers)
+    },
+    prefetch: [
+      refreshTokenIfExpired
+    ]
+  }
+}
+
 const api = reduxApi(_.extend({},
-  make_entity_def('study_definition', 'studies', 'study_definitions'))).use("options", (url, params, getState) => {
+  current_user,
+  make_entity_def('study_definition', 'studies', 'study_definitions'),
+  make_entity_def('user', 'user', 'users'))).use("options", (url, params, getState) => {
   const {
     tokens: {
       clientToken,
