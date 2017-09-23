@@ -16,8 +16,8 @@ class ApidocsController < ActionController::Base
       end
     end
     tag do
-      key :name, 'study'
-      key :description, 'Studies operations'
+      key :name, 'study_definitions'
+      key :description, 'Study Definition Operations'
       externalDocs do
         key :description, 'Find more info here'
         key :url, 'https://swagger.io'
@@ -32,6 +32,8 @@ class ApidocsController < ActionController::Base
   # A list of all classes that have swagger_* declarations.
   SWAGGERED_CLASSES = [
     Apidocs::V1::StudyDefinitionsApidocs,
+    Apidocs::V1::UsersApidocs,
+    Apidocs::V1::AuthenticationApidocs,
     StudyDefinition,
     ErrorModel,
     self,

@@ -81,6 +81,10 @@ Rails.application.configure do
     config.logger = ActiveSupport::TaggedLogging.new(logger)
   end
 
+  # below are only used for swagger ui to auto-populate test client id
+  config.swagger_default_client_id = 'ef4032ea6c300bc4e11aa8326951b5142f14f6b1741b6d4f3aaeefffe6e6df02'
+  config.swagger_default_client_secret = '6bd054801b29825b9926266a68263fe9b5af7c3d393924435f12a826865befd1'
+
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 end

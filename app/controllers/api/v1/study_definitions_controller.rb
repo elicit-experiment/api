@@ -4,9 +4,10 @@ module Api::V1
     # Must have 'write' token
     before_action only: [:update, :destroy] do # must be owner of study_definition being edited/deleted
       resource = get_resource
-      if resource.principal_investigator_user_id != current_user.id #current_resource_owner
-        permission_denied
-      end
+      Rails.logger.info "Attempt to modify study owned by #{resource.principal_investigator_user_id} by #{current_user.id}"
+#      if resource.principal_investigator_user_id != current_user.id #current_resource_owner
+#        permission_denied
+#      end
     end
 
     before_action :authenticate_user!
@@ -40,9 +41,10 @@ module Api::V1
     private
 
     def study_definition_params
+      ap params.permit!
       #ap params
-      permit_json_params(params[:study_definition], :foo) do
-        params.require(:study_definition).permit(:principal_investigator_user_id)#.merge(:principal_investigator_user_id => current_resource_owner)
+      permit_json_params(params[:study_definition], :study_definition) do
+        params.require(:study_definition).permit(:principal_investigator_user_id, :title)#.merge(:principal_investigator_user_id => current_resource_owner)
       end
     end
   end
