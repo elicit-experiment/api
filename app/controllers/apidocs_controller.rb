@@ -57,10 +57,13 @@ class ApidocsController < ActionController::Base
   SWAGGERED_CLASSES = [
     Apidocs::V1::StudyDefinitionsApidocs,
     Apidocs::V1::ProtocolDefinitionsApidocs,
+    Apidocs::V1::PhaseDefinitionsApidocs,
     Apidocs::V1::UsersApidocs,
     Apidocs::V1::AuthenticationApidocs,
     StudyDefinition,
     ProtocolDefinition,
+    PhaseDefinition,
+    PhaseDefinition,
     ElicitError,
     User,
     self,

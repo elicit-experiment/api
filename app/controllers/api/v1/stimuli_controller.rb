@@ -6,9 +6,14 @@ module Api::V1
     private
 
     def stimulus_params
-      ap params.permit!
-      permit_json_params(params[:stimulus], :stimulus) do
-        params.require(:stimulus).permit(:definition_data)
+      params.require(:study_definition_id, :protocol_definition_id, :phase_definition_id)
+      permit_json_params(params[:stimulus_params], :phase_definition) do
+        origin = {:study_definition_id => params[:study_definition_id],
+                  :protocol_definition_id => params[:protocol_definition_id],
+                  :phase_definition_id => params[:phase_definition_id],
+                  :trial_definition_id => params[:trial_definition_id]
+                 }
+        params.require(:stimulus_params).permit(:definition_data).merge(origin)
       end
     end
   end

@@ -6,9 +6,9 @@ module Api::V1
     private
 
     def phase_definition_params
-      ap params.permit!
+      params.require([:study_definition_id, :protocol_definition_id])
       permit_json_params(params[:phase_definition], :phase_definition) do
-        params.require(:phase_definition).permit(:definition_data)
+        params.require(:phase_definition).permit(:definition_data).merge({:study_definition_id => params[:study_definition_id], :protocol_definition_id => params[:protocol_definition_id]})
       end
     end
   end
