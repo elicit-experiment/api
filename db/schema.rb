@@ -13,7 +13,7 @@
 ActiveRecord::Schema.define(version: 20170829210919) do
 
   create_table "components", force: :cascade do |t|
-    t.string "DefinitionData"
+    t.string "definition_data"
     t.integer "trial_definition_id", null: false
     t.integer "study_definition_id", null: false
     t.integer "protocol_definition_id", null: false
@@ -109,7 +109,7 @@ ActiveRecord::Schema.define(version: 20170829210919) do
   end
 
   create_table "phase_definitions", force: :cascade do |t|
-    t.string "DefinitionData"
+    t.string "definition_data"
     t.integer "study_definition_id", null: false
     t.integer "protocol_definition_id", null: false
     t.datetime "created_at", null: false
@@ -119,7 +119,7 @@ ActiveRecord::Schema.define(version: 20170829210919) do
   end
 
   create_table "phase_orders", force: :cascade do |t|
-    t.string "SequenceData"
+    t.string "sequence_data"
     t.integer "study_definition_id", null: false
     t.integer "protocol_definition_id", null: false
     t.integer "user_id", null: false
@@ -131,10 +131,10 @@ ActiveRecord::Schema.define(version: 20170829210919) do
   end
 
   create_table "protocol_definitions", force: :cascade do |t|
-    t.string "Name"
-    t.integer "Version"
-    t.string "Type"
-    t.string "DefinitionData"
+    t.string "name"
+    t.integer "version"
+    t.string "type"
+    t.string "definition_data"
     t.integer "study_definition_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -150,7 +150,7 @@ ActiveRecord::Schema.define(version: 20170829210919) do
   end
 
   create_table "stimuli", force: :cascade do |t|
-    t.string "DefinitionData"
+    t.string "definition_data"
     t.integer "trial_definition_id", null: false
     t.integer "study_definition_id", null: false
     t.integer "protocol_definition_id", null: false
@@ -173,7 +173,7 @@ ActiveRecord::Schema.define(version: 20170829210919) do
   end
 
   create_table "trial_definitions", force: :cascade do |t|
-    t.string "DefinitionData"
+    t.string "definition_data"
     t.integer "study_definition_id", null: false
     t.integer "protocol_definition_id", null: false
     t.integer "phase_definition_id", null: false
@@ -185,7 +185,7 @@ ActiveRecord::Schema.define(version: 20170829210919) do
   end
 
   create_table "trial_orders", force: :cascade do |t|
-    t.string "SequenceData"
+    t.string "sequnece_data"
     t.integer "study_definition_id", null: false
     t.integer "protocol_definition_id", null: false
     t.integer "phase_definition_id", null: false

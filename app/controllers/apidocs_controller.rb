@@ -20,7 +20,31 @@ class ApidocsController < ActionController::Base
       key :description, 'Study Definition Operations'
       externalDocs do
         key :description, 'Find more info here'
-        key :url, 'https://swagger.io'
+        key :url, 'https://'
+      end
+    end
+    tag do
+      key :name, 'protocol_definitions'
+      key :description, 'Protocol Definition Operations'
+      externalDocs do
+        key :description, 'Find more info here'
+        key :url, 'https://'
+      end
+    end
+    tag do
+      key :name, 'users'
+      key :description, 'User Operations'
+      externalDocs do
+        key :description, 'Find more info here'
+        key :url, 'https://'
+      end
+    end
+    tag do
+      key :name, 'Authentication'
+      key :description, 'Authentication Operations'
+      externalDocs do
+        key :description, 'Find more info here'
+        key :url, 'https://'
       end
     end
     key :host, 'localhost:3000'
@@ -32,9 +56,11 @@ class ApidocsController < ActionController::Base
   # A list of all classes that have swagger_* declarations.
   SWAGGERED_CLASSES = [
     Apidocs::V1::StudyDefinitionsApidocs,
+    Apidocs::V1::ProtocolDefinitionsApidocs,
     Apidocs::V1::UsersApidocs,
     Apidocs::V1::AuthenticationApidocs,
     StudyDefinition,
+    ProtocolDefinition,
     ElicitError,
     User,
     self,

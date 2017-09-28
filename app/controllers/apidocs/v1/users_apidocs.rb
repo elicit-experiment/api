@@ -5,18 +5,10 @@ class Apidocs::V1::UsersApidocs
     operation :get do
       key :description, 'Returns a List of Users'
       key :summary, 'Returns a List of Users'
+      key :operationId, 'findUsers'
       key :tags, [
         'Users'
       ]
-      response 200 do
-        key :description, 'User Object'
-        schema do
-          key :type, :array
-          items do
-            key :'$ref', :UserResponseObject
-          end
-        end
-      end
       parameter do
         key :name, :authorization
         key :in, :header
@@ -25,12 +17,14 @@ class Apidocs::V1::UsersApidocs
         key :type, :string
         key :default, 'Bearer PASTE_ACCESS_TOKEN_HERE'
       end
-      parameter do
-        key :name, :query
-        key :in, :query
-        key :description, 'Username/Email filter'
-        key :type, :string
-        key :required, true
+      response 200 do
+        key :description, 'User Object'
+        schema do
+          key :type, :array
+          items do
+            key :'$ref', :UserResponseObject
+          end
+        end
       end
       response :default do
         key :description, 'Returned when an unexpected error occurs'

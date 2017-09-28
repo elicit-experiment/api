@@ -32,7 +32,16 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :study_definitions, defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index] do
-        resources :protocols, :controller => "study_protocols"
+        resources :protocol_definitions, :controller => "protocol_definitions", defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index] do
+          resources :phase_definitions, :controller => "phase_definitions", defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index] do
+            resources :trial_definitions, :controller => "trial_definitions", defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index] do
+              resources :components, :controller => "components", defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index] do
+              end
+              resources :stimuli, :controller => "stimuli", defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index] do
+              end
+            end
+          end
+        end
       end
     end
   end
@@ -46,7 +55,7 @@ Rails.application.routes.draw do
       }
       devise_scope :user do
         get 'users/current' => "api/v1/users#show_current_user"
-        resources :users, only: [:show, :index], controller: 'api/v1/users', :constraints => { :id => /[^\/]+/ } do
+        resources :users, only: [:show, :index], controller: 'api/v1/users', :defaults => { :format => 'json' }, :constraints => { :id => /[^\/]+/ } do
         end
       end
       use_doorkeeper

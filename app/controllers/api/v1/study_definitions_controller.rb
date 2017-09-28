@@ -1,50 +1,14 @@
 module Api::V1
   class StudyDefinitionsController < ApiController
 
-    # Must have 'write' token
-    before_action only: [:update, :destroy] do # must be owner of study_definition being edited/deleted
-      resource = get_resource
-      Rails.logger.info "Attempt to modify study owned by #{resource.principal_investigator_user_id} by #{current_user.id}"
-#      if resource.principal_investigator_user_id != current_user.id #current_resource_owner
-#        permission_denied
-#      end
-    end
-
-    before_action :authenticate_user!
-  #  before_action :doorkeeper_authorize!, except: [:show]
-  #  before_action -> { doorkeeper_authorize! :write }, only: [:create, :update, :destroy]
-
-    def index
-      super
-    end
-
-    def query_params
-      super
-    end
-
-    def search_param
-      super
-    end
-
-    def page_params
-      if action_name == "index"
-        page = params[:page] || 1
-        page_size = params[:page_size] || 20
-        { :page => page, :page_size => page_size}
-      end
-    end
-
-    def eager_load_fields
-      super
-    end
+    include StudyCreation
 
     private
 
     def study_definition_params
       ap params.permit!
-      #ap params
       permit_json_params(params[:study_definition], :study_definition) do
-        params.require(:study_definition).permit(:principal_investigator_user_id, :title)#.merge(:principal_investigator_user_id => current_resource_owner)
+        params.require(:study_definition).permit(:principal_investigator_user_id, :title)
       end
     end
   end

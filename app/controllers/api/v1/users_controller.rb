@@ -1,7 +1,7 @@
 module Api::V1
   class UsersController < Devise::RegistrationsController
 
-    before_action -> { doorkeeper_authorize! :write }, only: [:update, :index]
+    before_action -> { doorkeeper_authorize! :public }, only: [:update, :index]
     before_action only: [:new, :create] do |controller| # access to register api requires authenticated client token
 #      doorkeeper_authorize! :public unless controller.request.format.html?
     end
@@ -37,13 +37,13 @@ module Api::V1
 
     def index
       if !params.has_key?(:query) or params[:query].length < 3
-        # I'm doing this now temporarily to be able to see all the users
         @users = User.all()
       else
         username_query = { username: /#{params[:query]}/i }
         email_query = {email: params[:query]}
         @users = User.or(username_query, email_query).all()
       end
+      render json: @users
     end
 
     def show

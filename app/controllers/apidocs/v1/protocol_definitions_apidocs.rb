@@ -1,16 +1,16 @@
-class Apidocs::V1::StudyDefinitionsApidocs
+class Apidocs::V1::ProtocolDefinitionsApidocs
   include Swagger::Blocks
 
-  swagger_path '/study_definitions' do
+  swagger_path '/study_definitions/{study_definition_id}/protocol_definitions' do
     operation :get do
-      key :summary, 'All Study Definitions'
+      key :summary, 'All Protocol Definitions'
       key :description, 'Returns all study definitions from the system that the user has access to'
-      key :operationId, 'findStudyDefinitions'
+      key :operationId, 'findProtocolDefinitions'
       key :produces, [
         'application/json'
       ]
       key :tags, [
-        'study_definitions'
+        'protocol_definitions'
       ]
       parameter do
         key :name, :authorization
@@ -21,11 +21,11 @@ class Apidocs::V1::StudyDefinitionsApidocs
         key :default, 'Bearer PASTE_ACCESS_TOKEN_HERE'
       end
       response 200 do
-        key :description, 'study_definitions response'
+        key :description, 'protocol_definitions response'
         schema do
           key :type, :array
           items do
-            key :'$ref', :StudyDefinition
+            key :'$ref', :ProtocolDefinition
           end
         end
       end
@@ -38,14 +38,14 @@ class Apidocs::V1::StudyDefinitionsApidocs
     end
 
     operation :post do
-      key :summary, 'New Study Definition'
-      key :description, 'Creates a new study definitions'
-      key :operationId, 'addStudy'
+      key :summary, 'New Protocol Definition'
+      key :description, 'Creates a new protocol definition'
+      key :operationId, 'addProtocolDefinition'
       key :produces, [
         'application/json'
       ]
       key :tags, [
-        'study_definitions'
+        'protocol_definitions'
       ]
       parameter do
         key :name, :authorization
@@ -56,18 +56,25 @@ class Apidocs::V1::StudyDefinitionsApidocs
         key :default, 'Bearer PASTE_ACCESS_TOKEN_HERE'
       end
       parameter do
-        key :name, :study
+        key :name, :protocol_definition
         key :in, :body
-        key :description, 'Study to add to the store'
+        key :description, 'Protocol definition to add to the store'
         key :required, true
         schema do
-          key :'$ref', :StudyDefinitionInput
+          key :'$ref', :ProtocolDefinitionInput
         end
       end
+      parameter do
+        key :name, :study_definition_id
+        key :in, :path
+        key :description, 'Study definition id which this protocol definition is added to'
+        key :required, true
+        key :type, :string
+      end
       response 201 do
-        key :description, 'study response'
+        key :description, 'protocol definition response'
         schema do
-          key :'$ref', :StudyDefinition
+          key :'$ref', :ProtocolDefinition
         end
       end
       response :default do
@@ -79,14 +86,14 @@ class Apidocs::V1::StudyDefinitionsApidocs
     end
   end
 
-  # Update Study Definition Object
-  swagger_path '/study_definitions/{id}' do
+  # Update Protocol Definition Object
+  swagger_path '/study_definitions/{study_definition_id}/protocol_definitions/{id}' do
     operation :put do
-      key :description, 'Updates a Study Definition'
-      key :summary, 'Updates a Study Definition'
-      key :operationId, 'updateStudyDefinition'
+      key :description, 'Updates a Protocol Definition'
+      key :summary, 'Updates a Protocol Definition'
+      key :operationId, 'updateProtocolDefinition'
       key :tags, [
-        'study_definitions'
+        'protocol_definitions'
       ]
       parameter do
         key :name, :authorization
@@ -99,7 +106,7 @@ class Apidocs::V1::StudyDefinitionsApidocs
       parameter do
         key :name, :id
         key :in, :path
-        key :description, 'ID of study definition to fetch'
+        key :description, 'ID of protocol definition to fetch'
         key :required, true
         key :type, :integer
         key :format, :int64
@@ -107,17 +114,17 @@ class Apidocs::V1::StudyDefinitionsApidocs
       parameter do
         key :name, :study_definition
         key :in, :body
-        key :description, 'Study Definition Object to update'
+        key :description, 'Protocol Definition Object to update'
         key :required, true
         schema do
-          key :'$ref', :StudyDefinition
+          key :'$ref', :ProtocolDefinition
         end
       end
 
       response 200 do
-        key :description, 'Study Definition Object'
+        key :description, 'Protocol Definition Object'
         schema do
-          key :'$ref', :StudyDefinition
+          key :'$ref', :ProtocolDefinition
         end
       end
       response 401 do
@@ -135,14 +142,14 @@ class Apidocs::V1::StudyDefinitionsApidocs
     end
   end
 
-  # Delete Study Definition Object
-  swagger_path '/study_definitions/{id}' do
+  # Delete Protocol Definition Object
+  swagger_path '/study_definitions/{study_definition_id}/protocol_definitions/{id}' do
     operation :delete do
-      key :description, 'Deletes a Study Definition'
-      key :summary, 'Deletes a Study Definition'
-      key :operationId, 'deleteStudyDefinition'
+      key :description, 'Deletes a Protocol Definition'
+      key :summary, 'Deletes a Protocol Definition'
+      key :operationId, 'deleteProtocolDefinition'
       key :tags, [
-        'study_definitions'
+        'protocol_definitions'
       ]
       parameter do
         key :name, :authorization
@@ -179,25 +186,24 @@ class Apidocs::V1::StudyDefinitionsApidocs
     end
   end
 
-  swagger_schema :StudyDefinitionInput do
-    key :required, [:study_definition]
-    property :study_definition do
-      key :'$ref', :StudyDefinitionInputBody
+  swagger_schema :ProtocolDefinitionInput do
+    key :required, [:protocol_definition]
+    property :protocol_definition do
+      key :'$ref', :ProtocolDefinitionInputBody
     end
   end
 
-  swagger_schema :StudyDefinitionInputBody do
-    key :required, [:principal_investigator_user_id, :title]
+  swagger_schema :ProtocolDefinitionInputBody do
+    key :required, [:definition_data, :name]
     property :id do
       key :type, :integer
       key :format, :int64
     end
-    property :title do
+    property :name do
       key :type, :string
     end
-    property :principal_investigator_user_id do
-      key :type, :integer
-      key :format, :int64
+    property :definition_data do
+      key :type, :string
     end
   end
 
