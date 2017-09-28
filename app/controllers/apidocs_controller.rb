@@ -23,8 +23,8 @@ class ApidocsController < ActionController::Base
         key :url, 'https://swagger.io'
       end
     end
-    key :host, 'petstore.swagger.wordnik.com'
-    key :basePath, '/api'
+    key :host, 'localhost:3000'
+    key :basePath, '/api/v1'
     key :consumes, ['application/json']
     key :produces, ['application/json']
   end
@@ -35,7 +35,8 @@ class ApidocsController < ActionController::Base
     Apidocs::V1::UsersApidocs,
     Apidocs::V1::AuthenticationApidocs,
     StudyDefinition,
-    ErrorModel,
+    ElicitError,
+    User,
     self,
   ].freeze
 

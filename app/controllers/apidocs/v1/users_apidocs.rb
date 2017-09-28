@@ -35,7 +35,7 @@ class Apidocs::V1::UsersApidocs
       response :default do
         key :description, 'Returned when an unexpected error occurs'
         schema do
-          key :'$ref', :ErrorModel
+          key :'$ref', :ElicitError
         end
       end
     end
@@ -77,7 +77,7 @@ class Apidocs::V1::UsersApidocs
       response :default do
         key :description, 'Returned when an unexpected error occurs'
         schema do
-          key :'$ref', :ErrorModel
+          key :'$ref', :ElicitError
         end
       end
     end
@@ -118,7 +118,7 @@ class Apidocs::V1::UsersApidocs
       response :default do
         key :description, 'Returned when an unexpected error occurs'
         schema do
-          key :'$ref', :ErrorModel
+          key :'$ref', :ElicitError
         end
       end
     end
@@ -134,7 +134,7 @@ class Apidocs::V1::UsersApidocs
       response 200 do
         key :description, 'User Object'
         schema do
-          key :'$ref', :ExtendedUserResponseObject
+          key :'$ref', :User
         end
       end
       parameter do
@@ -156,7 +156,7 @@ class Apidocs::V1::UsersApidocs
       response :default do
         key :description, 'Returned when an unexpected error occurs'
         schema do
-          key :'$ref', :ErrorModel
+          key :'$ref', :ElicitError
         end
       end
     end
@@ -174,7 +174,7 @@ class Apidocs::V1::UsersApidocs
       response 200 do
         key :description, 'User Object'
         schema do
-          key :'$ref', :ExtendedUserResponseObject
+          key :'$ref', :User
         end
       end
       parameter do
@@ -188,7 +188,7 @@ class Apidocs::V1::UsersApidocs
       response :default do
         key :description, 'Returned when an unexpected error occurs'
         schema do
-          key :'$ref', :ErrorModel
+          key :'$ref', :ElicitError
         end
       end
     end
