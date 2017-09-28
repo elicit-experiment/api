@@ -32,6 +32,22 @@ class ApidocsController < ActionController::Base
       end
     end
     tag do
+      key :name, 'phase_definitions'
+      key :description, 'Phase Definition Operations'
+      externalDocs do
+        key :description, 'Find more info here'
+        key :url, 'https://'
+      end
+    end
+    tag do
+      key :name, 'trial_definitions'
+      key :description, 'Trial Definition Operations'
+      externalDocs do
+        key :description, 'Find more info here'
+        key :url, 'https://'
+      end
+    end
+    tag do
       key :name, 'users'
       key :description, 'User Operations'
       externalDocs do
@@ -58,12 +74,13 @@ class ApidocsController < ActionController::Base
     Apidocs::V1::StudyDefinitionsApidocs,
     Apidocs::V1::ProtocolDefinitionsApidocs,
     Apidocs::V1::PhaseDefinitionsApidocs,
+    Apidocs::V1::TrialDefinitionsApidocs,
     Apidocs::V1::UsersApidocs,
     Apidocs::V1::AuthenticationApidocs,
     StudyDefinition,
     ProtocolDefinition,
     PhaseDefinition,
-    PhaseDefinition,
+    TrialDefinition,
     ElicitError,
     User,
     self,

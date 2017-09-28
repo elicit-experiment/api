@@ -6,7 +6,7 @@ module Api::V1
     private
 
     def stimulus_params
-      params.require(:study_definition_id, :protocol_definition_id, :phase_definition_id)
+      params.require([:study_definition_id, :protocol_definition_id, :phase_definition_id, :trial_definition_id])
       permit_json_params(params[:stimulus_params], :phase_definition) do
         origin = {:study_definition_id => params[:study_definition_id],
                   :protocol_definition_id => params[:protocol_definition_id],
