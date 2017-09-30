@@ -185,7 +185,7 @@ ActiveRecord::Schema.define(version: 20170829210919) do
   end
 
   create_table "trial_orders", force: :cascade do |t|
-    t.string "sequnece_data"
+    t.string "sequence_data"
     t.integer "study_definition_id", null: false
     t.integer "protocol_definition_id", null: false
     t.integer "phase_definition_id", null: false

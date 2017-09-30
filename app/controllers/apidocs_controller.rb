@@ -40,8 +40,40 @@ class ApidocsController < ActionController::Base
       end
     end
     tag do
+      key :name, 'phase_order'
+      key :description, 'Phase Order Operations'
+      externalDocs do
+        key :description, 'Find more info here'
+        key :url, 'https://'
+      end
+    end
+    tag do
       key :name, 'trial_definitions'
       key :description, 'Trial Definition Operations'
+      externalDocs do
+        key :description, 'Find more info here'
+        key :url, 'https://'
+      end
+    end
+    tag do
+      key :name, 'trial_order'
+      key :description, 'Trial Order Operations'
+      externalDocs do
+        key :description, 'Find more info here'
+        key :url, 'https://'
+      end
+    end
+    tag do
+      key :name, 'components'
+      key :description, 'Operations on components'
+      externalDocs do
+        key :description, 'Find more info here'
+        key :url, 'https://'
+      end
+    end
+    tag do
+      key :name, 'stimuli'
+      key :description, 'Operations on Stimuli'
       externalDocs do
         key :description, 'Find more info here'
         key :url, 'https://'
@@ -74,7 +106,9 @@ class ApidocsController < ActionController::Base
     Apidocs::V1::StudyDefinitionsApidocs,
     Apidocs::V1::ProtocolDefinitionsApidocs,
     Apidocs::V1::PhaseDefinitionsApidocs,
+    Apidocs::V1::PhaseOrderApidocs,
     Apidocs::V1::TrialDefinitionsApidocs,
+    Apidocs::V1::TrialOrderApidocs,
     Apidocs::V1::ComponentsApidocs,
     Apidocs::V1::StimuliApidocs,
     Apidocs::V1::UsersApidocs,
@@ -82,7 +116,9 @@ class ApidocsController < ActionController::Base
     StudyDefinition,
     ProtocolDefinition,
     PhaseDefinition,
+    PhaseOrder,
     TrialDefinition,
+    TrialOrder,
     Component,
     Stimulus,
     ElicitError,

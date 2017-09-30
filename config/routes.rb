@@ -33,7 +33,9 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :study_definitions, defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index] do
         resources :protocol_definitions, :controller => "protocol_definitions", defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index] do
+          resources :phase_order, :controller => "phase_order", defaults: { format: 'json' }, only: [:show, :update, :create]
           resources :phase_definitions, :controller => "phase_definitions", defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index] do
+            resources :trial_order, :controller => "trial_order", defaults: { format: 'json' }, only: [:show, :update, :create]
             resources :trial_definitions, :controller => "trial_definitions", defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index] do
               resources :components, :controller => "components", defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index] do
               end

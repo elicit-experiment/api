@@ -7,7 +7,7 @@ class Apidocs::V1::UsersApidocs
       key :summary, 'Returns a List of Users'
       key :operationId, 'findUsers'
       key :tags, [
-        'Users'
+        'users'
       ]
       parameter do
         key :name, :authorization
@@ -41,7 +41,7 @@ class Apidocs::V1::UsersApidocs
       key :description, 'Creates new User'
       key :summary, 'Creates new User'
       key :tags, [
-        'Users'
+        'users'
       ]
       response 200 do
         key :description, 'User Object'
@@ -82,7 +82,7 @@ class Apidocs::V1::UsersApidocs
       key :description, 'Updates Authenticated User'
       key :summary, 'Updates Authenticated User'
       key :tags, [
-        'Users'
+        'users'
       ]
       response 200 do
         key :description, 'User Object'
@@ -123,7 +123,7 @@ class Apidocs::V1::UsersApidocs
       key :description, "Returns User's Profile"
       key :summary, "Returns User's Profile"
       key :tags, [
-        'Users'
+        'users'
       ]
       response 200 do
         key :description, 'User Object'
@@ -163,7 +163,7 @@ class Apidocs::V1::UsersApidocs
       key :description, "Returns Authenticated User's Profile"
       key :summary, "Returns Authenticated User's Profile"
       key :tags, [
-        'Users', 'Authentication'
+        'users', 'Authentication'
       ]
       response 200 do
         key :description, 'User Object'
