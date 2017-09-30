@@ -1,1 +1,0 @@
-stimulus_apidocs.rb
