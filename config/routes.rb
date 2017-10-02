@@ -18,15 +18,17 @@ Rails.application.routes.draw do
   end
 
   # routes to enable the CHAOS protocol used by the clients
-  get '/v6/Session/Create' => 'sessions#create' , :defaults => { :format => 'json' }
-  get '/v6/Experiment/Get' => 'experiments#show' , :defaults => { :format => 'json' }
-  get '/v6/Question/Get' => 'question#show' , :defaults => { :format => 'json' }
-  post '/v6/Answer/Set' => 'answer#create' , :defaults => { :format => 'json' }
-  get '/v6/Answer/Set' => 'answer#create' , :defaults => { :format => 'json' }
-  get '/v6/Slide/Completed' => 'slide#get' , :defaults => { :format => 'json' }
-  match '/v6/Answer/Set', to: 'answer#cors_set_access_control_headers', via: :options
+	  scope :v6 do
+		  get 'Session/Create' => 'chaos_api/v6/sessions#create' , :defaults => { :format => 'json' }
+		  get 'Experiment/Get' => 'chaos_api/v6/experiments#show' , :defaults => { :format => 'json' }
+		  get 'Question/Get' => 'chaos_api/v6/question#show' , :defaults => { :format => 'json' }
+		  post 'Answer/Set' => 'chaos_api/v6/answer#create' , :defaults => { :format => 'json' }
+		  get 'Answer/Set' => 'chaos_api/v6/answer#create' , :defaults => { :format => 'json' }
+		  get 'Slide/Completed' => 'chaos_api/v6/slide#get' , :defaults => { :format => 'json' }
+		  match 'Answer/Set', to: 'chaos_api/v6/answer#cors_set_access_control_headers', via: :options
 
-  get "/v6/*" => redirect("/")
+		  get "/*" => redirect("/")
+	  end
 
   # API
   namespace :api do
