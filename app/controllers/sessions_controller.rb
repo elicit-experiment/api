@@ -35,15 +35,7 @@ class SessionsController < ApplicationController
       ])
     #Session.new(session_params)
 
-    respond_to do |format|
-      #if @session.save
-      #  format.html { redirect_to @session, notice: 'Session was successfully created.' }
-      #  format.json { render :show, status: :created, location: @session }
-      #else
-        format.html { render :new }
-        format.json { render json: @session.to_json }
-      #end
-    end
+    render json: @session.to_json
   end
 
   # PATCH/PUT /sessions/1

@@ -8,6 +8,7 @@ import { Provider } from 'react-redux';
 
 // Import Components
 import { AdminApp } from './components/AdminApp'
+import { ParticipantApp } from './components/participant_app/ParticipantApp'
 import LoginSignUpContainer from './components/login_signup/LoginSignUpContainer'
 
 // Import Actions
@@ -48,6 +49,17 @@ const RawRootRoutes = (props) => {
         var token_status = _tokenStatus(props)
         if (token_status == 'user') {
           return <AdminApp {...props} />
+        } else if (token_status == 'client') {
+          return <LoginSignUpContainer></LoginSignUpContainer>
+        } else {
+          return <div>Loading...</div>          
+        }
+      } } >
+      </Route>
+      <Route exact path="/participant" render={ routeProps => {
+        var token_status = _tokenStatus(props)
+        if (token_status == 'user') {
+          return <ParticipantApp {...props} />
         } else if (token_status == 'client') {
           return <LoginSignUpContainer></LoginSignUpContainer>
         } else {

@@ -7,12 +7,11 @@ import Transition from 'react-transition-group/Transition';
 import CSSTransition from 'react-transition-group/CSSTransition';
 import InlineEdit from 'react-edit-inline';
 import update from 'react-addons-update'
-import Dropdown from './DropDown'
-import Study from './Study'
-import { AppRoutes } from './AdminApp'
+import Dropdown from '../DropDown'
+import Study from './ParticipantStudy'
 import { Link } from 'react-router-dom'
 import pathToRegexp from 'path-to-regexp'
-import elicitApi from "../api/elicit-api.js"; 
+import elicitApi from "../../api/elicit-api.js"; 
 
 const Fade = ({ children, ...props }) => (
  <CSSTransition
@@ -26,7 +25,7 @@ const Fade = ({ children, ...props }) => (
 
 
 
-class StudyList extends React.Component {
+class ParticipantStudyList extends React.Component {
   render() {
     if (!this.props.studies || !this.props.studies.data) {
       return (<div><h1>Loading...</h1></div>)
@@ -35,7 +34,7 @@ class StudyList extends React.Component {
       return(
         <Fade key={study.id} appear={true} >
         <div>
-        <Study study={study} users={this.props.users} study_protocols={this.props.study_protocols} key={study.id}> </Study>
+        <Study study={study} users={this.props.users} key={study.id}> </Study>
         </div>
         </Fade>
       )
@@ -51,5 +50,5 @@ class StudyList extends React.Component {
   }
 }
 
-export default StudyList;
+export default ParticipantStudyList;
 

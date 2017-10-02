@@ -67,7 +67,7 @@ Rails.application.routes.draw do
   ## Admin app pages -- just load the client app
 
   get '/admin'  => 'admin#index'
-  get '/admin/users'  => 'admin#index'
-  get '/admin/studies'  => 'admin#index'
+  get '/participant'  => 'admin#index'
   match '/admin/*remainder' => 'admin#index', via: :all
+  match '/participant/*remainder' => 'admin#index', via: :all
 end
