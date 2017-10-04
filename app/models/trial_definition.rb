@@ -3,6 +3,11 @@ class TrialDefinition < ApplicationRecord
   has_one :protocol, :class_name => "ProtocolDefinition", :foreign_key => "protocol_definition_id"
   has_one :phase, :class_name => "PhaseDefinition", :foreign_key => "phase_definition_id"
 
+
+  def self.default_order(trials)
+    (0..trials.count).to_a
+  end
+
   include Swagger::Blocks
 
   swagger_schema :TrialDefinition do

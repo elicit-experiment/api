@@ -1,7 +1,8 @@
 module ChaosApi::V6
   class AnswerController < ApplicationController
-    #### uncomment to add authentication
-    #  http_basic_authenticate_with name:"florian", password:"dtucompute", only: [:index]
+
+    include ActionController::MimeResponds
+
     before_action :cors_preflight_check
     after_action :cors_set_access_control_headers
 

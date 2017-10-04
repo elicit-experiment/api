@@ -1,17 +1,9 @@
 module ChaosApi::V6
   class QuestionController < ApplicationController
-    #### uncomment to add authentication
-    #  http_basic_authenticate_with name:"florian", password:"dtucompute", only: [:index]
-
+    include ActionController::MimeResponds
+    
     def show
-      #  @experiment = Experiment.find(params[:id])
-      #  respond_to do |format|
-      #    format.html #show.html.erb
-      #  #  format.xml {render xml: @experiment, :include => { :trials => { :except => :trial_id } } }
-      #    format.xml {render xml: @experiment, :include =>  :trials}
-      #    format.json {render :json =>@experiment, :include =>  :trials}
-      #  end
-      experiment_id = params[:id]
+      experiment_id = "a9f56a58-aaaa-eeee-1355-012345678901"#params[:id]
       trial_index = (params[:index] || "0").to_i
 
       ExperimentXmls.instance.refresh
@@ -21,6 +13,18 @@ module ChaosApi::V6
       @response = ChaosResponse.new(@results)
       @response.Body["FoundCount"] = @experiment_n.css("Experiment>Trials").children.count
       @response.Body["StartIndex"] = trial_index
+
+
+      @response = StudyDefinition.find(params[:id]).to_chaos_questions(trial_index)
+
+      ap @response
+      ap @response.Body[:Results]
+
+      @results.each_with_index do |r, i| 
+        ap i
+        ap r
+        ap @response.Body[:Results][i]
+      end
 
       respond_to do |format|
         format.xml { render :xml => @response.to_xml }

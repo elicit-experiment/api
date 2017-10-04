@@ -167,6 +167,14 @@ ActiveRecord::Schema.define(version: 20170829210919) do
     t.string "title"
     t.string "description"
     t.integer "principal_investigator_user_id", null: false
+    t.integer "version"
+    t.text "data"
+    t.integer "lock_question"
+    t.integer "enable_previous"
+    t.integer "no_of_trials"
+    t.integer "trials_completed"
+    t.text "footer_label"
+    t.string "redirect_close_on_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["principal_investigator_user_id"], name: "index_study_definitions_on_principal_investigator_user_id"

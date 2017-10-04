@@ -16,6 +16,8 @@ end
 class ExperimentXmls
   include Singleton
 
+  include Denilize
+
   attr_accessor :experiments
   attr_accessor :experiments_n
   attr_accessor :experiment_by_id
@@ -31,39 +33,35 @@ class ExperimentXmls
   def refresh
     root = File.join Rails.root, "experiment_xmls"
 
-#    Experiment.delete_all
-#    ProtocolsStudy.delete_all
-#    Protocol.delete_all
-
     Dir.glob(File.join(root, "*.xml")).each do |experiment_file|
       exp, exp_n = load_experiment(experiment_file)
       id = exp["Experiment"]["Id"]
 
-      e = Experiment.find_or_create_by(ExperimentId: id)
-      e.attributes = {
-        :ExperimentId => id,
-        :Name => exp["Experiment"]["Name"],
-        :Version => exp["Experiment"]["Version"].to_i,
-        :ExperimentDescription => exp["Experiment"]["ExperimentDescription"],
-        :CreatedBy => exp["Experiment"]["CreatedBy"],
-        :LockQuestion => exp["Experiment"]["LockQuestion"],
-        :EnablePrevious => exp["Experiment"]["EnablePrevious"],
-        :NoOfTrials => exp["Experiment"]["NoOfTrials"],
-        :TrialsCompleted => exp["Experiment"]["TrialsCompleted"],
-        :FooterLabel => exp["Experiment"]["FooterLabel"],
-        :RedirectOnCloseUrl => exp["Experiment"]["RedirectOnCloseUrl"],
-        :FileName => experiment_file,
-      }
-      e.save!
+#      e = Experiment.find_or_create_by(ExperimentId: id)
+#      e.attributes = {
+#        :ExperimentId => id,
+#        :Name => exp["Experiment"]["Name"],
+#        :Version => exp["Experiment"]["Version"].to_i,
+#        :ExperimentDescription => exp["Experiment"]["ExperimentDescription"],
+#        :CreatedBy => exp["Experiment"]["CreatedBy"],
+#        :LockQuestion => exp["Experiment"]["LockQuestion"],
+#        :EnablePrevious => exp["Experiment"]["EnablePrevious"],
+#        :NoOfTrials => exp["Experiment"]["NoOfTrials"],
+#        :TrialsCompleted => exp["Experiment"]["TrialsCompleted"],
+#        :FooterLabel => exp["Experiment"]["FooterLabel"],
+#        :RedirectOnCloseUrl => exp["Experiment"]["RedirectOnCloseUrl"],
+#        :FileName => experiment_file,
+#      }
+#      e.save!
 
-      p = Protocol.new()
-      p.attributes = {
-        :Name => exp["Experiment"]["Name"],
-        :Version => 1,
-        :Type => "ExperimentXml",
-        :DefinitionData => experiment_file
-      }
-      p.save!
+#      p = Protocol.new()
+#      p.attributes = {
+#        :Name => exp["Experiment"]["Name"],
+#        :Version => 1,
+#        :Type => "ExperimentXml",
+#        :DefinitionData => experiment_file
+#      }
+#      p.save!
     end
   end
 
@@ -102,12 +100,6 @@ class ExperimentXmls
     e
   end
 
-  # https://stackoverflow.com/questions/23903055/how-to-replace-all-nil-value-with-in-a-ruby-hash-recursively
-  def self.denilize(h)
-    h.each_with_object({}) { |(k,v),g|
-      g[k] = (Hash === v) ?  denilize(v) : v ? v : '' }
-  end
-
   def self.get_questions(experiment, trial_no = 0)
     id = experiment.css("Experiment>Id").text
     base_question_no = 0
@@ -115,20 +107,19 @@ class ExperimentXmls
       base_question_no = (0..(trial_no-1)).map { |t| experiment.css("Experiment>Trials").children[t].children.count }.reduce(&:+)
     end
     trial = experiment.css("Experiment>Trials").children[trial_no].children
-
     results = trial.each_with_index.map do |element, index|
-      #input = element.css("Inputs")[0].children.map(&:to_hash)
-      #output = element.css("Outputs")[0].children.reject{ |n| n.text.blank? }.map(&:to_hash)
-      input = element.css("Inputs").map{ |i| i.children.map{ |x| Hash.from_xml(URI.unescape(x.to_s)) } }.first
+      ap element
+      ap element.css("Inputs").children.map{|x| x.to_s}.reject{ |s| s =~ /^\s*$/ }.map{ |s| Hash.from_xml(URI.unescape(s)) }
+      input = element.css("Inputs").map{ |i| i.children.map{ |x| URI.unescape(x.to_s) }.reject{ |s| s =~ /^\s*$/ }.map{ |s| Hash.from_xml(s) } }.first
       output = element.css("Outputs").map{ |o|
-        o.children.map{ |x|
-          h = Hash.from_xml(x.to_s)
+        o.children.map{ |x| URI.unescape(x.to_s) }.reject{ |s| s =~ /^\s*$/ }.map{ |s|
+          h = Hash.from_xml(s)
           h.delete('Validation')
           h = h.compact }.reject{ |c| c.empty? }
       }.reject{ |c| c.empty? }.flatten
       output = output.reduce({}, :merge)["Value"] || {}
       output = {} unless element.name.eql? "Monitor"
-      output = ExperimentXmls.denilize(output)
+      output = Denilize.denilize(output)
 
       question_no = base_question_no+ index
       {

@@ -1,6 +1,8 @@
 module ChaosApi::V6
   class TrialsController < ApplicationController
 
+    include ActionController::MimeResponds
+
     def create
       @experiment = Experiment.find (params[:experiment_id])
       @trial = @experiment.trials.create(trial_params)

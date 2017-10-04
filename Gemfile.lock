@@ -236,6 +236,7 @@ DEPENDENCIES
   rack-cors
   rails (~> 5.1.0)
   rails-erd
+  responders
   rspec-rails
   sqlite3
   swagger-blocks (= 1.3.1)
