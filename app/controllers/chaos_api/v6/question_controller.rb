@@ -3,8 +3,10 @@ module ChaosApi::V6
     include ActionController::MimeResponds
     
     def show
-      experiment_id = "a9f56a58-aaaa-eeee-1355-012345678901"#params[:id]
       trial_index = (params[:index] || "0").to_i
+
+      @study_definition = StudyDefinition.find(params[:id])
+      experiment_id = @study_definition.data
 
       ExperimentXmls.instance.refresh
       @experiment = ExperimentXmls.instance.experiment_by_id[experiment_id] || {}
@@ -15,15 +17,13 @@ module ChaosApi::V6
       @response.Body["StartIndex"] = trial_index
 
 
-      @response = StudyDefinition.find(params[:id]).to_chaos_questions(trial_index)
+      @response = @study_definition.to_chaos_questions(trial_index)
 
-      ap @response
-      ap @response.Body[:Results]
-
+      # compare the prototype generation with the new created one
       @results.each_with_index do |r, i| 
         ap i
-        ap r
-        ap @response.Body[:Results][i]
+        core_model = @response.Body[:Results][i]
+        ap core_model.deep_diff(r)
       end
 
       respond_to do |format|
