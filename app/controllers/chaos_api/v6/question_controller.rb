@@ -19,6 +19,7 @@ module ChaosApi::V6
 
       @response = @study_definition.to_chaos_questions(trial_index)
 
+      Rails.logger.info("XML response #{@results.count} SD response #{@response.Body[:Results].count}")
       # compare the prototype generation with the new created one
       @results.each_with_index do |r, i| 
         ap i

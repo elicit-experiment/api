@@ -11,9 +11,6 @@ export const RECEIVE_USER_TOKEN = "RECEIVE_USER_TOKEN";
 export const RESET_USER_TOKEN = "RESET_USER_TOKEN";
 export const LOGOUT_USER = "LOGOUT_USER";
 
-const error = (e) => {
-  console.log("error in tokens middleware:", e)
-}
 
 export const requestClientToken = (asyncDoneCallback) => {
   return (dispatch) => {
@@ -21,6 +18,10 @@ export const requestClientToken = (asyncDoneCallback) => {
 
     const processSuccess = (data) => {
       dispatch(receiveClientToken(data))
+    }
+
+    const error = (e) => {
+      console.log("error in tokens middleware:", e)
     }
 
     fetchClientToken().then(processSuccess).then(asyncDoneCallback).catch(error);
@@ -40,6 +41,10 @@ export const logInUser = (credentials) => {
       dispatch(receiveUserToken(data))
     }
 
+    const error = (e) => {
+      console.log("error in tokens middleware:", e)
+    }
+
     fetchUserToken(credentials).then(gotData).catch(error);
   };
 }
@@ -50,6 +55,12 @@ export const refreshUserToken = (access_token, refresh_token, asyncDoneCallback)
 
     const gotData = (data) => {
       dispatch(receiveUserToken(data))
+    }
+
+    const error = (e) => {
+      // TODO : maybe we retry?
+      console.log(`Failed to refresh user token; treating as logout. Error ${e}`)
+      dispatch(logoutUser())
     }
 
     fetchRefreshUserToken(access_token, refresh_token).then(gotData).then(asyncDoneCallback).catch(error);

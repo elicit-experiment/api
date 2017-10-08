@@ -1,5 +1,7 @@
 class StudyDefinition < ApplicationRecord
-  has_one :user, foreign_key: "principal_investigator_user_id"
+  belongs_to :principal_investigator, :class_name => "User", :foreign_key => "principal_investigator_user_id"
+
+  has_many :protocol_definitions, :dependent => :delete_all
 
   include Denilize
 

@@ -157,7 +157,31 @@ const current_user = {
     },
     prefetch: [
       refreshTokenIfExpired
-    ]
+    ],
+  }
+}
+
+const take_study = {
+  take_study: {
+    url: `${api_root}/study_definitions/:id/take`,
+    options: {
+      headers: _.extend({}, default_headers)
+    },
+    prefetch: [
+      refreshTokenIfExpired
+    ],
+    postfetch: [
+      function({
+        data,
+        actions,
+        dispatch,
+        getState,
+        request,
+        response
+      }) {
+        window.location.href = data.url
+      }
+    ],
   }
 }
 
@@ -183,6 +207,7 @@ user_entity.user.postfetch.push(function({
 
 const api = reduxApi(_.extend({},
   current_user,
+  take_study,
   make_entity_def('study_definition', 'studies', 'study_definitions'),
   user_entity)).use("options", (url, params, getState) => {
   const {

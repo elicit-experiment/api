@@ -8,30 +8,27 @@ import { Link } from 'react-router-dom'
 import pathToRegexp from 'path-to-regexp'
 import elicitApi from '../../api/elicit-api.js'
 import { connect } from "react-redux";
+import elicitConfig from '../../ElicitConfig.js'
 
+const TakeStudyLink = (props) => {
 
-const TakeStudyLink = (props) => (
-  <div className="row study-info-row">
-    <b className="col-xs-2"></b>
-    <div className="col-xs-2">
-      <i className="glyphicon glyphicon-edit" aria-hidden="true"></i> 
-      <a href={ `http://localhost:8080/#Experiment/${props.study.id}` } className="active">
+  return <div className="row study-info-row">
+    <b className="col-xs-2">
+      <button onClick={ (e) => {
+        props.take_study({id: props.study_id}) } } className="active btn btn-xs ">
           Take Study
-      </a>
+      </button>
+    </b>
+    <div className="col-xs-5">
     </div>
   </div>
-)
+}
 
 
 class ParticipantStudy extends React.Component {
   constructor(props){
     super(props);
-    this.state = {
-        title: this.props.study.title,
-        users: this.props.users
-    }
   }
-
 
   render() {
     var study_class = 'well show study-summary'
@@ -41,22 +38,17 @@ class ParticipantStudy extends React.Component {
           <div className="row study-info-row">
             <b className="col-xs-2">Title:</b>
             <div className='col-xs-5'>
-              {this.state.title}
+              {this.props.study.id} — {this.props.study.title}
             </div>
           </div>
           <div className="row study-info-row">
             <b className="col-xs-2">PI:</b>
             <div className='col-xs-5'>
-            <Dropdown id='userDropDown'
-                  options={this.props.users || []} 
-                  value='this.props.study.principal_investigator_user_id'
-                  labelField='name'
-                  valueField='id'
-                  onChange={this.dropDownOnChange}/>
+            <b>{this.props.study.principal_investigator.email}</b>
             </div>
           </div>
           <div className="row study-info-row">
-            <TakeStudyLink study={this.props.study}/>
+            <TakeStudyLink study_id={this.props.study.id} take_study={this.props.take_study}/>
           </div>
         </div>
       </div>
@@ -66,6 +58,9 @@ class ParticipantStudy extends React.Component {
 
 const mapStateToProps = (state) => ({
 });
+const mapDispatchToProps = (dispatch) => ({
+    take_study: (x) => { dispatch(elicitApi.actions.take_study(x)) }
+});
 
-export default connect(mapStateToProps)(ParticipantStudy);
+export default connect(mapStateToProps, mapDispatchToProps)(ParticipantStudy);
 

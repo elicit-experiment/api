@@ -89,8 +89,8 @@ class AdminApp extends React.Component {
     console.log("AdminApp MOUNT")
     const {dispatch} = this.props;
 
-    dispatch(elicitApi.actions.studies());
-    dispatch(elicitApi.actions.current_user());
+    // don't dispatch these simultaneously; there will be problems if we try and refresh the token
+    dispatch(elicitApi.actions.studies()).then(() => {dispatch(elicitApi.actions.current_user())} );
   }
 
   handleChangedEvent = (event) => {

@@ -12,5 +12,6 @@ OauthApplication.create!([
 
 User.create!([
 { :email => 'bryson.iain@gmail.com', :password => 'password', :password_confirmation => 'password', :role => 'admin', :anonymous => false, :sign_in_count => 0 },
+{ :email => 'foo5@bar.com', :password => 'abcd12_', :password_confirmation => 'abcd12_', :role => 'registered_user', :anonymous => false, :sign_in_count => 0 },
 ])
 

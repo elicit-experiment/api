@@ -1,5 +1,8 @@
 class ProtocolDefinition < ApplicationRecord
-  has_one :study, :class_name => "StudyDefinition", :foreign_key => "study_definition_id"
+  belongs_to :study_definition, :class_name => "StudyDefinition", :foreign_key => "study_definition_id"
+
+  has_many :phase_definitions, :dependent => :delete_all
+  has_many :phase_orders, :dependent => :delete_all
 
   include Swagger::Blocks
 

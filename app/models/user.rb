@@ -6,6 +6,8 @@ class User < ApplicationRecord
   devise :doorkeeper
   validates :role, acceptance: { accept: ['admin', 'registered_user', 'anonymous_user'] }
 
+  has_many :study_definitions
+
   class << self
      def authenticate(email, password)
        user = User.find_for_authentication(email: email)
@@ -16,12 +18,15 @@ class User < ApplicationRecord
   include Swagger::Blocks
 
   swagger_schema :User do
-    key :required, [:code, :message]
-    property :code do
+    key :required, [:id, :email]
+    property :id do
       key :type, :integer
       key :format, :int64
     end
-    property :message do
+    property :email do
+      key :type, :string
+    end
+    property :role do
       key :type, :string
     end
   end

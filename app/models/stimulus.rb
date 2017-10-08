@@ -1,8 +1,8 @@
 class Stimulus < ApplicationRecord
-  has_one :study, :class_name => "StudyDefinition", :foreign_key => "study_definition_id"
-  has_one :protocol, :class_name => "ProtocolDefinition", :foreign_key => "protocol_definition_id"
-  has_one :phase, :class_name => "PhaseDefinition", :foreign_key => "phase_definition_id"
-  has_one :trial, :class_name => "TrialDefinition", :foreign_key => "trial_definition_id"
+  belongs_to :study_definition, :class_name => "StudyDefinition", :foreign_key => "study_definition_id"
+  belongs_to :protocol_definition, :class_name => "ProtocolDefinition", :foreign_key => "protocol_definition_id"
+  belongs_to :phase_definition, :class_name => "PhaseDefinition", :foreign_key => "phase_definition_id"
+  belongs_to :trial_definition, :class_name => "TrialDefinition", :foreign_key => "trial_definition_id"
 
  include Swagger::Blocks
 

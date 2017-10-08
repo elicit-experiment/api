@@ -162,6 +162,7 @@ class Apidocs::V1::UsersApidocs
     operation :get do
       key :description, "Returns Authenticated User's Profile"
       key :summary, "Returns Authenticated User's Profile"
+      key :operationId, 'getCurrentUser'
       key :tags, [
         'users', 'Authentication'
       ]

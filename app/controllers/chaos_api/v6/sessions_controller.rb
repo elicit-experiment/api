@@ -25,18 +25,29 @@ module ChaosApi::V6
     # POST /sessions
     # POST /sessions.json
     def create
-      @session = ChaosResponse.new([
-                                     {
-                                       "DateCreated": Time.now.to_i,
-                                       "DateModified": Time.now.to_i,
-                                       "FullName": "Chaos.Portal.Core.Data.Model.Session",
-                                       "Guid": "5e0ba6e8-1b11-4787-b944-015741f769d5",
-                                       "UserGuid": "c0b231e9-7d98-4f52-885e-af4837faa352"
-                                     }
-      ])
-      #Session.new(session_params)
+      qp = Rack::Utils.parse_nested_query URI(request.referer).query
+      session_guid = qp['session_guid'] 
+      session_guid_alt = request.cookies['session_guid']
+      Rails.logger.info("#{session_guid} #{session_guid_alt}")
 
-      render json: @session.to_json
+      session = Chaos::ChaosSession.where({:session_guid => session_guid}).first
+
+      if (session == nil)
+        @response = ChaosResponse.new(nil, "Unknown session")
+        render json: @response.to_json, :status => :unprocessable_entity
+      else
+        @response = ChaosResponse.new([
+                                       {
+                                         "DateCreated": Time.now.to_i,
+                                         "DateModified": Time.now.to_i,
+                                         "FullName": "Chaos.Portal.Core.Data.Model.Session",
+                                         "Guid": session_guid,
+                                         "UserGuid": "c0b231e9-7d98-4f52-885e-af48%08x" % session.user_id
+                                       }
+        ])
+        render json: @response.to_json, :status => :ok
+      end
+
     end
 
     # PATCH/PUT /sessions/1

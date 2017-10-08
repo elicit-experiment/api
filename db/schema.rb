@@ -12,20 +12,6 @@
 
 ActiveRecord::Schema.define(version: 20170829210919) do
 
-  create_table "components", force: :cascade do |t|
-    t.string "definition_data"
-    t.integer "trial_definition_id", null: false
-    t.integer "study_definition_id", null: false
-    t.integer "protocol_definition_id", null: false
-    t.integer "phase_definition_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["phase_definition_id"], name: "index_components_on_phase_definition_id"
-    t.index ["protocol_definition_id"], name: "index_components_on_protocol_definition_id"
-    t.index ["study_definition_id"], name: "index_components_on_study_definition_id"
-    t.index ["trial_definition_id"], name: "index_components_on_trial_definition_id"
-  end
-
   create_table "contexts", force: :cascade do |t|
     t.datetime "DateTime"
     t.text "Type"
@@ -67,6 +53,17 @@ ActiveRecord::Schema.define(version: 20170829210919) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "chaos_sessions", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "session_guid", null: false
+    t.string "url", null: false
+    t.datetime "expires_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false    
+  end
+
+  add_foreign_key :chaos_sessions, :users, column: :user_id
 
   create_table "oauth_access_grants", force: :cascade do |t|
     t.integer "resource_owner_id", null: false
@@ -118,6 +115,9 @@ ActiveRecord::Schema.define(version: 20170829210919) do
     t.index ["study_definition_id"], name: "index_phase_definitions_on_study_definition_id"
   end
 
+  add_foreign_key :phase_definitions, :study_definitions, column: :study_definition_id
+  add_foreign_key :phase_definitions, :protocol_definitions, column: :protocol_definition_id
+
   create_table "phase_orders", force: :cascade do |t|
     t.string "sequence_data"
     t.integer "study_definition_id", null: false
@@ -130,6 +130,9 @@ ActiveRecord::Schema.define(version: 20170829210919) do
     t.index ["user_id"], name: "index_phase_orders_on_user_id"
   end
 
+  add_foreign_key :phase_orders, :study_definitions, column: :study_definition_id
+  add_foreign_key :phase_orders, :protocol_definitions, column: :protocol_definition_id
+
   create_table "protocol_definitions", force: :cascade do |t|
     t.string "name"
     t.integer "version"
@@ -141,27 +144,7 @@ ActiveRecord::Schema.define(version: 20170829210919) do
     t.index ["study_definition_id"], name: "index_protocol_definitions_on_study_definition_id"
   end
 
-  create_table "protocols_studies", id: false, force: :cascade do |t|
-    t.integer "study_definition_id", null: false
-    t.integer "protocol_definition_id", null: false
-    t.integer "sequence_no", null: false
-    t.index ["protocol_definition_id"], name: "index_protocols_studies_on_protocol_definition_id"
-    t.index ["study_definition_id"], name: "index_protocols_studies_on_study_definition_id"
-  end
-
-  create_table "stimuli", force: :cascade do |t|
-    t.string "definition_data"
-    t.integer "trial_definition_id", null: false
-    t.integer "study_definition_id", null: false
-    t.integer "protocol_definition_id", null: false
-    t.integer "phase_definition_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["phase_definition_id"], name: "index_stimuli_on_phase_definition_id"
-    t.index ["protocol_definition_id"], name: "index_stimuli_on_protocol_definition_id"
-    t.index ["study_definition_id"], name: "index_stimuli_on_study_definition_id"
-    t.index ["trial_definition_id"], name: "index_stimuli_on_trial_definition_id"
-  end
+  add_foreign_key :protocol_definitions, :study_definitions, column: :study_definition_id
 
   create_table "study_definitions", force: :cascade do |t|
     t.string "title"
@@ -180,6 +163,8 @@ ActiveRecord::Schema.define(version: 20170829210919) do
     t.index ["principal_investigator_user_id"], name: "index_study_definitions_on_principal_investigator_user_id"
   end
 
+  add_foreign_key :study_definitions, :users, column: :principal_investigator_user_id
+
   create_table "trial_definitions", force: :cascade do |t|
     t.string "definition_data"
     t.integer "study_definition_id", null: false
@@ -191,6 +176,10 @@ ActiveRecord::Schema.define(version: 20170829210919) do
     t.index ["protocol_definition_id"], name: "index_trial_definitions_on_protocol_definition_id"
     t.index ["study_definition_id"], name: "index_trial_definitions_on_study_definition_id"
   end
+
+  add_foreign_key :trial_definitions, :study_definitions, column: :study_definition_id
+  add_foreign_key :trial_definitions, :protocol_definitions, column: :protocol_definition_id
+  add_foreign_key :trial_definitions, :phase_definitions, column: :phase_definition_id
 
   create_table "trial_orders", force: :cascade do |t|
     t.string "sequence_data"
@@ -205,6 +194,48 @@ ActiveRecord::Schema.define(version: 20170829210919) do
     t.index ["study_definition_id"], name: "index_trial_orders_on_study_definition_id"
     t.index ["user_id"], name: "index_trial_orders_on_user_id"
   end
+
+  add_foreign_key :trial_orders, :study_definitions, column: :study_definition_id
+  add_foreign_key :trial_orders, :protocol_definitions, column: :protocol_definition_id
+  add_foreign_key :trial_orders, :phase_definitions, column: :phase_definition_id
+
+  create_table "components", force: :cascade do |t|
+    t.string "definition_data"
+    t.integer "trial_definition_id", null: false
+    t.integer "study_definition_id", null: false
+    t.integer "protocol_definition_id", null: false
+    t.integer "phase_definition_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["phase_definition_id"], name: "index_components_on_phase_definition_id"
+    t.index ["protocol_definition_id"], name: "index_components_on_protocol_definition_id"
+    t.index ["study_definition_id"], name: "index_components_on_study_definition_id"
+    t.index ["trial_definition_id"], name: "index_components_on_trial_definition_id"
+  end
+
+  add_foreign_key :components, :study_definitions, column: :study_definition_id
+  add_foreign_key :components, :protocol_definitions, column: :protocol_definition_id
+  add_foreign_key :components, :phase_definitions, column: :phase_definition_id
+  add_foreign_key :components, :trial_definitions, column: :phase_definition_id
+
+  create_table "stimuli", force: :cascade do |t|
+    t.string "definition_data"
+    t.integer "trial_definition_id", null: false
+    t.integer "study_definition_id", null: false
+    t.integer "protocol_definition_id", null: false
+    t.integer "phase_definition_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["phase_definition_id"], name: "index_stimuli_on_phase_definition_id"
+    t.index ["protocol_definition_id"], name: "index_stimuli_on_protocol_definition_id"
+    t.index ["study_definition_id"], name: "index_stimuli_on_study_definition_id"
+    t.index ["trial_definition_id"], name: "index_stimuli_on_trial_definition_id"
+  end
+
+  add_foreign_key :stimuli, :study_definitions, column: :study_definition_id
+  add_foreign_key :stimuli, :protocol_definitions, column: :protocol_definition_id
+  add_foreign_key :stimuli, :phase_definitions, column: :phase_definition_id
+  add_foreign_key :stimuli, :trial_definitions, column: :phase_definition_id
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false

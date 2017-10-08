@@ -129,10 +129,10 @@ class Study extends React.Component {
           <div className="row study-info-row">
             <b className="col-xs-2">Title:</b>
             <div className='col-xs-5'>
-              <InlineEdit
+              {this.props.study.id} — <InlineEdit
                 validate={this.customValidateTitle}
-                activeClassName="editing col-xs-5"
-                className='col-xs-5'
+                activeClassName="editing col-xs-5xx"
+                className='col-xs-5xx'
                 text={this.state.title}
                 paramName="title"
                 change={this.titleChanged}
@@ -151,12 +151,7 @@ class Study extends React.Component {
           <div className="row study-info-row">
             <b className="col-xs-2">PI:</b>
             <div className='col-xs-5'>
-            <Dropdown id='userDropDown'
-                  options={this.props.users || []} 
-                  value='this.props.study.principal_investigator_user_id'
-                  labelField='name'
-                  valueField='id'
-                  onChange={this.dropDownOnChange}/>
+            <b>{this.props.study.principal_investigator.email}</b>
             </div>
           </div>
           {protocols_row}

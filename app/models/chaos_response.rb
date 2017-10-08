@@ -7,21 +7,21 @@ class ChaosResponse
   attr_accessor :Error
   attr_accessor :Header
 
-  def initialize(results)
+  def initialize(results, error_msg = nil)
     @Body = {
-      "Count": results.count,
+      "Count": results != nil ? results.count : nil,
       "Results": results,
-      "TotalCount": results.count      
+      "TotalCount": results != nil ? results.count : nil      
     }
     @Error = {
       "Exception": nil,
       "Fullname": nil,
       "InnerException": nil,
-      "Message": nil,
+      "Message": error_msg,
       "Stacktrace": nil
     }
     @Header = {
-      "Duration": 69.2729
+      "Duration": 1.000
     }
   end
 end
