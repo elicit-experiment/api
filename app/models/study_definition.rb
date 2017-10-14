@@ -76,8 +76,8 @@ class StudyDefinition < ApplicationRecord
         end
       end.flatten
 
-      ap chaos_trial
-      ap @components
+      #ap chaos_trial
+      #ap @components
 
       response = ChaosResponse.new(chaos_trial)
       response.Body["FoundCount"] = @trial_order.count

@@ -36,24 +36,6 @@ ActiveRecord::Schema.define(version: 20170829210919) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "experiments", force: :cascade do |t|
-    t.string "ExperimentId"
-    t.string "Name"
-    t.integer "Version"
-    t.text "ExperimentDescription"
-    t.string "CreatedBy"
-    t.text "Data"
-    t.integer "LockQuestion"
-    t.integer "EnablePrevious"
-    t.integer "NoOfTrials"
-    t.integer "TrialsCompleted"
-    t.text "FooterLabel"
-    t.string "RedirectOnCloseUrl"
-    t.string "FileName"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "chaos_sessions", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "session_guid", null: false
@@ -236,6 +218,75 @@ ActiveRecord::Schema.define(version: 20170829210919) do
   add_foreign_key :stimuli, :protocol_definitions, column: :protocol_definition_id
   add_foreign_key :stimuli, :phase_definitions, column: :phase_definition_id
   add_foreign_key :stimuli, :trial_definitions, column: :phase_definition_id
+
+
+  #
+  # Study/Experiment Results
+  #
+
+  create_table "study_result_study_results", force: :cascade do |t|
+    t.integer "study_definition_id", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "started_at"
+    t.datetime "completed_at"
+  end
+
+  add_foreign_key :study_result_study_results, :study_definitions, column: :study_definition_id
+  add_foreign_key :study_result_study_results, :users, column: :user_id
+
+  create_table "study_result_experiments", force: :cascade do |t|
+    t.integer "study_definition_id", null: false
+    t.integer "protocol_definition_id", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "completed_at"
+  end
+
+  add_foreign_key :study_result_experiments, :study_definitions, column: :study_definition_id
+  add_foreign_key :study_result_experiments, :protocol_definitions, column: :protocol_definition_id
+  add_foreign_key :study_result_experiments, :users, column: :user_id
+
+  create_table "study_result_stages", force: :cascade do |t|
+    t.integer "study_definition_id", null: false
+    t.integer "protocol_definition_id", null: false
+    t.integer "phase_definition_id", null: false
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "completed_at"
+  end
+
+  add_foreign_key :study_result_stages, :study_definitions, column: :study_definition_id
+  add_foreign_key :study_result_stages, :protocol_definitions, column: :protocol_definition_id
+  add_foreign_key :study_result_stages, :phase_definitions, column: :phase_definition_id
+  add_foreign_key :study_result_stages, :users, column: :user_id
+
+  create_table "study_result_data_points", force: :cascade do |t|
+    t.integer "study_definition_id", null: false
+    t.integer "protocol_definition_id", null: false
+    t.integer "phase_definition_id", null: false
+    t.integer "trial_definition_id", null: false
+    t.integer "component_id", null: false
+    t.integer "user_id", null: false
+    t.string "kind"
+    t.string "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_foreign_key :study_result_data_points, :study_definitions, column: :study_definition_id
+  add_foreign_key :study_result_data_points, :protocol_definitions, column: :protocol_definition_id
+  add_foreign_key :study_result_data_points, :phase_definitions, column: :phase_definition_id
+  add_foreign_key :study_result_data_points, :trial_definitions, column: :trial_definition_id
+  add_foreign_key :study_result_data_points, :components, column: :component_id
+  add_foreign_key :data_points, :users, column: :user_id
+
+  #
+  # Users
+  #
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false

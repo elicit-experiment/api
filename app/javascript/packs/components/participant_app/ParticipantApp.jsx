@@ -3,8 +3,7 @@ import ReactDOM from 'react-dom'
 import { Switch, Route, BrowserRouter } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import ParticipantStudyList from './ParticipantStudyList'
-import TakeStudy from './TakeStudy'
-import {withRouter} from 'react-router'
+import { withRouter } from 'react-router'
 import pathToRegexp from 'path-to-regexp'
 import { Provider, connect } from "react-redux";
 import elicitApi from "../../api/elicit-api.js"; 

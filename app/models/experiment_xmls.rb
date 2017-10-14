@@ -106,7 +106,7 @@ class ExperimentXmls
   def self.get_questions(experiment, trial_no = 0)
     id = experiment.css("Experiment>Id").text
     trial_els = experiment.css("//Experiment/Trials/Trial")
-    ap trial_els.children
+    #ap trial_els.children
     num_trials = trial_els.count
     Rails.logger.info "Trials #{id} #{experiment.css("Experiment>Name").text} #{num_trials} -- #{trial_no}"
     base_question_no = 0
@@ -115,7 +115,7 @@ class ExperimentXmls
     end
     trial = trial_els[trial_no].children
     results = trial.reject{|e| e.name.eql?"text" and (e.text.blank?) }.each_with_index.map do |element, index|
-      ap element.css("Inputs").children.map{|x| x.to_s}.reject{ |s| s =~ /^\s*$/ }.map{ |s| Hash.from_xml(URI.unescape(s)) }
+      #ap element.css("Inputs").children.map{|x| x.to_s}.reject{ |s| s =~ /^\s*$/ }.map{ |s| Hash.from_xml(URI.unescape(s)) }
       input = element.css("Inputs").map{ |i| i.children.map{ |x| URI.unescape(x.to_s) }.reject{ |s| s =~ /^\s*$/ }.map{ |s| Hash.from_xml(s) } }.first
       output = element.css("Outputs").map{ |o|
         (o.children || []).map{ |x| URI.unescape(x.to_s) }.reject{ |s| s =~ /^\s*$/ }.map{ |s|

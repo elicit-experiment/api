@@ -16,15 +16,14 @@ module ChaosApi::V6
       @response.Body["FoundCount"] = @experiment_n.css("Experiment>Trials").children.count
       @response.Body["StartIndex"] = trial_index
 
-
       @response = @study_definition.to_chaos_questions(trial_index)
 
       Rails.logger.info("XML response #{@results.count} SD response #{@response.Body[:Results].count}")
       # compare the prototype generation with the new created one
       @results.each_with_index do |r, i| 
-        ap i
+#        ap i
         core_model = @response.Body[:Results][i]
-        ap core_model.deep_diff(r)
+#        ap core_model.deep_diff(r)
       end
 
       respond_to do |format|

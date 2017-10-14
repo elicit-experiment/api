@@ -9,21 +9,26 @@ module ChaosApi::V6
       Rails.logger.info "#{@experiments.ai}"
       respond_to do |format|
         format.json { render :json => @experiments }
-        format.xml { render xml: @experiments }
+        format.xml  { render xml: @experiments }
       end
     end
 
     def show
       id = params[:id]
+      sessionGUID = params[:sessionGUID]
 
       @experiment = StudyDefinition.find(id).to_chaos_experiment
+      @chaos_session = Chaos::ChaosSession.where({:session_guid => sessionGUID})
 
       @results =  [@experiment]
       @response = ChaosResponse.new(@results)
 
+      ap @chaos_session
+      ap @results
+
       respond_to do |format|
         format.html { redirect_to "#{root_url.chomp('/')}:8080/#Experiment/#{id}" }
-        format.xml { render :xml => @response.to_xml }
+        format.xml  { render :xml => @response.to_xml }
         format.json { render :json => @response.to_json }
       end
     end

@@ -9,20 +9,7 @@ import pathToRegexp from 'path-to-regexp'
 import elicitApi from '../../api/elicit-api.js'
 import { connect } from "react-redux";
 import elicitConfig from '../../ElicitConfig.js'
-
-const TakeStudyLink = (props) => {
-
-  return <div className="row study-info-row">
-    <b className="col-xs-2">
-      <button onClick={ (e) => {
-        props.take_study({id: props.study_id}) } } className="active btn btn-xs ">
-          Take Study
-      </button>
-    </b>
-    <div className="col-xs-5">
-    </div>
-  </div>
-}
+import ParticipantProtocolList from "./ParticipantProtocolList"
 
 
 class ParticipantStudy extends React.Component {
@@ -48,7 +35,7 @@ class ParticipantStudy extends React.Component {
             </div>
           </div>
           <div className="row study-info-row">
-            <TakeStudyLink study_id={this.props.study.id} take_study={this.props.take_study}/>
+            <ParticipantProtocolList {...this.props} />
           </div>
         </div>
       </div>

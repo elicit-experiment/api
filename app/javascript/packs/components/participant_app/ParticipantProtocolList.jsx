@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom'
 import { Provider, connect } from "react-redux";
 import PropTypes from 'prop-types'
 import { Fade } from '../effects/Fade'
-import TransitionGroup from 'react-transition-group/TransitionGroup'
 import InlineEdit from 'react-edit-inline';
 import update from 'react-addons-update'
 import Dropdown from '../DropDown'
@@ -11,18 +10,16 @@ import Study from './ParticipantStudy'
 import { Link } from 'react-router-dom'
 import pathToRegexp from 'path-to-regexp'
 import elicitApi from "../../api/elicit-api.js"; 
+import ParticipantProtocol from "./ParticipantProtocol"
 
 
-class ParticipantStudyList extends React.Component {
+class ParticipantProtocolList extends React.Component {
   render() {
-    if (!this.props.studies || !this.props.studies.data) {
-      return (<div><h1>Loading...</h1></div>)
-    }
-    var studies = this.props.studies.data.map( (study, i) => {
+    var protocols = this.props.study.protocol_definitions.map( (protocol, i) => {
       return(
-        <Fade key={study.id} appear={true} >
+        <Fade key={protocol.id} appear={true} >
         <div>
-        <Study study={study} users={this.props.users} key={study.id}> </Study>
+        <ParticipantProtocol protocol={protocol} study={this.props.study} users={this.props.users} key={protocol.id}> </ParticipantProtocol>
         </div>
         </Fade>
       )
@@ -30,13 +27,10 @@ class ParticipantStudyList extends React.Component {
 
     return(
     <div>
-      <h1>{studies.length} Studies</h1>
-      <TransitionGroup>
-        {studies}
-      </TransitionGroup>
+        {protocols}
     </div>)
   }
 }
 
-export default ParticipantStudyList;
+export default ParticipantProtocolList;
 

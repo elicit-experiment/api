@@ -161,9 +161,9 @@ const current_user = {
   }
 }
 
-const take_study = {
-  take_study: {
-    url: `${api_root}/study_definitions/:id/take`,
+const take_protocol = {
+  take_protocol: {
+    url: `${api_root}/study_definitions/:study_definition_id/protocol_definitions/:protocol_definition_id//take`,
     options: {
       headers: _.extend({}, default_headers)
     },
@@ -207,7 +207,7 @@ user_entity.user.postfetch.push(function({
 
 const api = reduxApi(_.extend({},
   current_user,
-  take_study,
+  take_protocol,
   make_entity_def('study_definition', 'studies', 'study_definitions'),
   user_entity)).use("options", (url, params, getState) => {
   const {
