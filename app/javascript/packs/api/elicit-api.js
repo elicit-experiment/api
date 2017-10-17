@@ -38,7 +38,8 @@ const refreshTokenIfExpired = ({
 }, cb) => {
   const {
     tokens: {
-      userToken: userToken
+      userToken: userToken,
+      userTokenIsLoading: userTokenIsLoading
     }
   } = getState();
   if (userToken && userToken.created_at && userToken.expires_in) {
@@ -50,6 +51,17 @@ const refreshTokenIfExpired = ({
     console.log(`userToken time to live ${time_to_live}`)
     if (time_to_live < 0) {
       console.log('EXPIRED TOKEN!')
+      if (userTokenIsLoading) {
+        console.log('Token load in progress, retrying in 3s');
+        setTimeout(() => {
+          refreshTokenIfExpired({
+            actions: actions,
+            dispatch: dispatch,
+            getState: getState
+          }, cb)
+        }, 3000)
+        return
+      }
       dispatch(refreshUserToken(userToken.access_token, userToken.refresh_token, cb))
       return
     }

@@ -12,33 +12,14 @@
 
 ActiveRecord::Schema.define(version: 20170829210919) do
 
-  create_table "contexts", force: :cascade do |t|
-    t.datetime "DateTime"
-    t.text "Type"
-    t.text "Data"
-    t.string "ExperimentId"
-    t.string "QuestionId"
-    t.string "TrialId"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "events", force: :cascade do |t|
-    t.datetime "DateTime"
-    t.text "EventId"
-    t.text "Type"
-    t.text "Method"
-    t.text "Data"
-    t.string "ExperimentId"
-    t.string "QuestionId"
-    t.string "TrialId"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "chaos_sessions", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "session_guid", null: false
+    t.integer "study_definition_id"
+    t.integer "protocol_definition_id"
+    t.integer "phase_definition_id"
+    t.integer "experiment_id"
+    t.integer "stage_id"
     t.string "url", null: false
     t.datetime "expires_at", null: false
     t.datetime "created_at", null: false
@@ -46,6 +27,11 @@ ActiveRecord::Schema.define(version: 20170829210919) do
   end
 
   add_foreign_key :chaos_sessions, :users, column: :user_id
+  add_foreign_key :chaos_sessions, :study_result_experiments, column: :study_result_experiment_id
+  add_foreign_key :chaos_sessions, :study_definitions, column: :study_definition_id
+  add_foreign_key :chaos_sessions, :protocol_definitions, column: :protocol_definition_id
+  add_foreign_key :chaos_sessions, :phase_definitions, column: :phase_definition_id
+  add_foreign_key :chaos_sessions, :study_result_stages, column: :stage_id
 
   create_table "oauth_access_grants", force: :cascade do |t|
     t.integer "resource_owner_id", null: false
@@ -253,7 +239,10 @@ ActiveRecord::Schema.define(version: 20170829210919) do
     t.integer "study_definition_id", null: false
     t.integer "protocol_definition_id", null: false
     t.integer "phase_definition_id", null: false
+    t.integer "last_completed_trial"
+    t.integer "num_trials"
     t.integer "user_id", null: false
+    t.integer "context_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "completed_at"
@@ -263,6 +252,7 @@ ActiveRecord::Schema.define(version: 20170829210919) do
   add_foreign_key :study_result_stages, :protocol_definitions, column: :protocol_definition_id
   add_foreign_key :study_result_stages, :phase_definitions, column: :phase_definition_id
   add_foreign_key :study_result_stages, :users, column: :user_id
+  add_foreign_key :study_result_stages, :study_result_contexts, column: :context_id
 
   create_table "study_result_data_points", force: :cascade do |t|
     t.integer "study_definition_id", null: false
@@ -272,7 +262,10 @@ ActiveRecord::Schema.define(version: 20170829210919) do
     t.integer "component_id", null: false
     t.integer "user_id", null: false
     t.string "kind"
+    t.string "point_type"
     t.string "value"
+    t.string "method"
+    t.datetime "datetime"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -283,6 +276,15 @@ ActiveRecord::Schema.define(version: 20170829210919) do
   add_foreign_key :study_result_data_points, :trial_definitions, column: :trial_definition_id
   add_foreign_key :study_result_data_points, :components, column: :component_id
   add_foreign_key :data_points, :users, column: :user_id
+
+  create_table "study_result_contexts", force: :cascade do |t|
+    t.datetime "datetime"
+    t.text "context_type"
+    t.text "data"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
 
   #
   # Users

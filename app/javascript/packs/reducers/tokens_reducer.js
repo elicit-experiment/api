@@ -6,14 +6,18 @@ import {
   RECEIVE_CLIENT_TOKEN,
   RECEIVE_USER_TOKEN,
   RESET_USER_TOKEN,
-  REFRESH_USER_TOKEN
+  REFRESH_USER_TOKEN,
+  CLIENT_TOKEN_IS_LOADING,
+  USER_TOKEN_IS_LOADING
 } from '../actions/tokens_actions';
 
 //Define Tokens' Reducer & State
 const TokensReducer = (state = {
   clientToken: undefined,
   userToken: undefined,
-  currentUser: undefined
+  currentUser: undefined,
+  clientTokenIsLoading: false,
+  userTokenIsLoading: false,
 }, action) => {
   let newState;
   switch (action.type) {
@@ -42,6 +46,18 @@ const TokensReducer = (state = {
         access_token: undefined
       };
       return undefined;
+    case CLIENT_TOKEN_IS_LOADING:
+      return update(state, {
+        'clientTokenIsLoading': {
+          $set: action.clientTokenIsLoading
+        }
+      });
+    case USER_TOKEN_IS_LOADING:
+      return update(state, {
+        'userTokenIsLoading': {
+          $set: action.userTokenIsLoading
+        }
+      });
     default:
       return state;
   }

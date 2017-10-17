@@ -1,5 +1,4 @@
 class PhaseOrder < ApplicationRecord
-  belongs_to :user_definition, foreign_key: "principal_investigator_user_id"
   belongs_to :study_definition, :class_name => "StudyDefinition", :foreign_key => "study_definition_id"
   belongs_to :protocol_definition, :class_name => "ProtocolDefinition", :foreign_key => "protocol_definition_id"
 

@@ -48,3 +48,12 @@ i=2
 echo "https://dev-api.cosound.dk/v6/Question/Get?id=${guid}&index=${i}&format=json3&userHTTPStatusCodes=False"
 curl "https://dev-api.cosound.dk/v6/Question/Get?id=${guid}&index=${i}&format=json3&userHTTPStatusCodes=False" -H 'Origin: http://localhost:5504' -H 'Accept-Encoding: gzip, deflate, br' -H 'Accept-Language: en-US,en;q=0.8,fr;q=0.6' -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36' -H 'Accept: */*' -H 'Referer: http://localhost:5504/' -H 'Connection: keep-alive' --compressed > test/fixtures/files/production_examples/questions_${guid}_${i}.json
 ```
+
+
+# Design
+
+## Extract DB diagram
+
+```
+bundle exec erd
+```

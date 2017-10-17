@@ -14,6 +14,7 @@ module ElicitApi
     config.api_only = false
 
     config.autoload_paths << "#{Rails.root}/lib"
+    config.autoload_paths << "#{Rails.root}/app/services"
 
     config.elicit = config_for(:elicit_config)
   end

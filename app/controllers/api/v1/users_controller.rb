@@ -1,6 +1,7 @@
 module Api::V1
   class UsersController < Devise::RegistrationsController
 
+    include ElicitErrors
     before_action -> { doorkeeper_authorize! :public }, only: [:update, :index]
     before_action only: [:new, :create] do |controller| # access to register api requires authenticated client token
 #      doorkeeper_authorize! :public unless controller.request.format.html?
@@ -31,7 +32,7 @@ module Api::V1
       if @user.update(user_params)
         render json: @user
       else
-        render json: @user.errors, status: :unprocessable_entity
+        render json: @user.errors, status: :unauthorized
       end
     end
 

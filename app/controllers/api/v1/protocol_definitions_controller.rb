@@ -15,15 +15,39 @@ module Api::V1
       }
       session = Chaos::ChaosSession.new(session_params)
 
-      study_result = StudyResult::StudyResult.find_or_create_by({:user_id => current_user.id, :study_definition_id => study_definition_id})
+      study_result = StudyResult::StudyResult.find_or_create_by({
+        :user_id => current_user.id,
+        :study_definition_id => study_definition_id})
 
       study_result.save!
 
-      protocol_result = StudyResult::Experiment.find_or_create_by({:user_id => current_user.id, :study_definition_id => study_definition_id, :protocol_definition_id => protocol_definition_id})
+      experiment = StudyResult::Experiment.find_or_create_by({
+        :user_id => current_user.id,
+        :study_definition_id => study_definition_id,
+        :protocol_definition_id => protocol_definition_id})
 
-      protocol_result.save!
+      experiment.save!
  
-      if session.save && protocol_result.save
+      # TODO: figure out how to find the first stage 
+      start_phase = PhaseDefinition.where({
+        :study_definition_id => study_definition_id,
+        :protocol_definition_id => protocol_definition_id}).first!
+
+      stage = StudyResult::Stage.find_or_create_by({
+        :user_id => current_user.id,
+        :study_definition_id => study_definition_id,
+        :protocol_definition_id => protocol_definition_id,
+        :phase_definition_id => start_phase.id})
+
+      stage.save!
+
+      session.study_definition_id = study_definition_id
+      session.protocol_definition_id = protocol_definition_id
+      session.phase_definition_id = start_phase.id
+      session.experiment_id = experiment.id
+      session.stage_id = stage.id
+ 
+      if session.save
         respond_with session
       else
         render json: ElicitError.new("Failed to create session", :unprocessable_entity), status: :unprocessable_entity

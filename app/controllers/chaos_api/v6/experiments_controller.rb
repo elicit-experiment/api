@@ -17,8 +17,9 @@ module ChaosApi::V6
       id = params[:id]
       sessionGUID = params[:sessionGUID]
 
-      @experiment = StudyDefinition.find(id).to_chaos_experiment
-      @chaos_session = Chaos::ChaosSession.where({:session_guid => sessionGUID})
+      @chaos_session = Chaos::ChaosSession.where({:session_guid => sessionGUID}).includes([:stage, :study_definition, :protocol_definition]).first
+
+      @experiment = ChaosExperimentService.new(@chaos_session.study_definition, @chaos_session.protocol_definition).make_experiment(@chaos_session.stage)
 
       @results =  [@experiment]
       @response = ChaosResponse.new(@results)

@@ -17,6 +17,7 @@ module ChaosApi::V6
     end
 
     private def trial_params
-    params.require(:trial).permit(:task_id)
+      params.require(:trial).permit(:task_id)
+    end
   end
 end

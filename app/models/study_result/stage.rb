@@ -1,4 +1,8 @@
 module StudyResult
+  def self.table_name_prefix
+    'study_result_'
+  end
+
   class Stage < ApplicationRecord
     belongs_to :study_definition, :class_name => "StudyDefinition", :foreign_key => "study_definition_id"
     belongs_to :protocol_definition, :class_name => "ProtocolDefinition", :foreign_key => "protocol_definition_id"

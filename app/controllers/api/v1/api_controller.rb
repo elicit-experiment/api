@@ -1,5 +1,8 @@
 module Api::V1
   class ApiController < ApplicationController
+
+    include ElicitErrors
+
     prepend_before_action :set_resource, only: [:destroy, :show, :update]
 
     respond_to :json
@@ -87,19 +90,6 @@ module Api::V1
         render json: get_resource.errors, status: :unprocessable_entity
       end
     end
-
-    def not_found(message = "object not found")
-      raise ElicitError.new(message, :not_found)
-    end
-
-    def unprocessable_entity(message = "object not found")
-      raise ElicitError.new(message, :unprocessable_entity)
-    end
-
-    def permission_denied
-      raise ElicitError.new("permission denied", :unauthorized)
-    end
-
 
     private
 

@@ -7,9 +7,21 @@ module ChaosApi::V6
     after_action :cors_set_access_control_headers
 
     def get
-      ap params
-      @questionnaireId = params[:questionaireId]
+      params.require([:sessionGUID, :questionaireId, :slideIndex])
+
+      @protocol_id = params[:questionaireId]
       @slideIndex = params[:slideIndex]
+      @sessionGUID = params[:sessionGUID]
+      @response = ChaosResponse.new([])
+
+      @chaos_session = Chaos::ChaosSession.where({:session_guid => @sessionGUID}).includes([:experiment, :phase_definition, :stage]).first
+
+      @protocol_definition = ProtocolDefinition.find(@protocol_id)
+
+      @chaos_session.stage.last_completed_trial = @slideIndex
+
+      @chaos_session.stage.save!
+
       @response = ChaosResponse.new([])
 
       respond_to do |format|
@@ -19,10 +31,5 @@ module ChaosApi::V6
     end
 
     private
-
-    def post_params
-      #validate POST parameters
-      params.require(:experiment).permit(:author_id, :name)
-    end
   end
 end
