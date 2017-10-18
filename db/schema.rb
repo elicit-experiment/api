@@ -275,7 +275,7 @@ ActiveRecord::Schema.define(version: 20170829210919) do
   add_foreign_key :study_result_data_points, :phase_definitions, column: :phase_definition_id
   add_foreign_key :study_result_data_points, :trial_definitions, column: :trial_definition_id
   add_foreign_key :study_result_data_points, :components, column: :component_id
-  add_foreign_key :data_points, :users, column: :user_id
+  add_foreign_key :study_result_data_points, :users, column: :user_id
 
   create_table "study_result_contexts", force: :cascade do |t|
     t.datetime "datetime"
@@ -310,5 +310,16 @@ ActiveRecord::Schema.define(version: 20170829210919) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
+
+  create_table "protocol_users", force: :cascade do |t|
+    t.integer "user_id", null: false 
+    t.integer "protocol_definition_id", null: false 
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["protocol_definition_id"], name: "index_protocol_definition_id"
+    t.index ["user_id"], name: "index_user_id"
+  end
+  add_foreign_key :protocol_users, :users, column: :user_id
+  add_foreign_key :protocol_users, :protocol_definitions, column: :protocol_definition_id
 
 end

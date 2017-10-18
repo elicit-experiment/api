@@ -112,6 +112,7 @@ class ApidocsController < ActionController::Base
     Apidocs::V1::ComponentsApidocs,
     Apidocs::V1::StimuliApidocs,
     Apidocs::V1::UsersApidocs,
+    Apidocs::V1::ProtocolUsersApidocs,
     Apidocs::V1::AuthenticationApidocs,
     StudyDefinition,
     ProtocolDefinition,
@@ -123,6 +124,7 @@ class ApidocsController < ActionController::Base
     Stimulus,
     ElicitError,
     User,
+    ProtocolUser,
     self,
   ].freeze
 
