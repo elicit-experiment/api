@@ -95,6 +95,14 @@ class ApidocsController < ActionController::Base
         key :url, 'https://'
       end
     end
+    tag do
+      key :name, 'study_results'
+      key :description, 'Operations for getting the results of studies'
+      externalDocs do
+        key :description, 'Find more info here'
+        key :url, 'https://'
+      end
+    end
     key :host, 'localhost:3000'
     key :basePath, '/api/v1'
     key :consumes, ['application/json']
@@ -114,6 +122,12 @@ class ApidocsController < ActionController::Base
     Apidocs::V1::UsersApidocs,
     Apidocs::V1::ProtocolUsersApidocs,
     Apidocs::V1::AuthenticationApidocs,
+
+    Apidocs::V1::StudyResultsApidocs,
+    Apidocs::V1::ExperimentsApidocs,
+    Apidocs::V1::StagesApidocs,
+    Apidocs::V1::DataPointsApidocs,
+
     StudyDefinition,
     ProtocolDefinition,
     PhaseDefinition,

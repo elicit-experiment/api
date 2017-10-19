@@ -34,20 +34,30 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       resources :study_definitions, defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index] do
+        resources :study_results, :controller => "study_results", defaults: { format: 'json' }, only: [:show, :destroy, :create, :index]
         resources :protocol_definitions, :controller => "protocol_definitions", defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index] do
           get 'take' => "protocol_definitions#take"
+          resources :experiments, :controller => "experiments", defaults: { format: 'json' }, only: [:show, :destroy, :create, :index]
+          resources :data_points, :controller => "data_points", defaults: { format: 'json' }, only: [:index]
           resources :users, :controller => "protocol_users", defaults: { format: 'json' }, only: [:show, :destroy, :create, :index]
           resources :phase_order, :controller => "phase_order", defaults: { format: 'json' }, only: [:show, :update, :create]
           resources :phase_definitions, :controller => "phase_definitions", defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index] do
+            resources :stages, :controller => "stages", defaults: { format: 'json' }, only: [:show, :destroy, :create, :index]
             resources :trial_order, :controller => "trial_order", defaults: { format: 'json' }, only: [:show, :update, :create]
             resources :trial_definitions, :controller => "trial_definitions", defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index] do
-              resources :components, :controller => "components", defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index] do
-              end
-              resources :stimuli, :controller => "stimuli", defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index] do
-              end
+              resources :data_points, :controller => "data_points", defaults: { format: 'json' }, only: [:index, :show, :update, :create]
+              resources :components, :controller => "components", defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index]
+              resources :stimuli, :controller => "stimuli", defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index]
             end
           end
         end
+      end
+    end
+  end
+
+  scope :api do
+    scope :v1 do
+      scope :results do
       end
     end
   end
