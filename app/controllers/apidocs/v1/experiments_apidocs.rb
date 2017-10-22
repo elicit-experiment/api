@@ -3,13 +3,13 @@ class Apidocs::V1::ExperimentsApidocs
 
   swagger_path '/study_definitions/{study_definition_id}/protocol_definitions/{protocol_definition_id}/experiments' do
     operation :get do
-      key :summary, 'All Eeeturns all study definitions from the system that the user has access to'
+      key :summary, 'Returns all experiment results from the system to which the user has access'
       key :operationId, 'findExperiments'
       key :produces, [
         'application/json'
       ]
       key :tags, [
-        'study_results'
+        'Experiment', 'Study Results'
       ]
       parameter do
         key :name, :authorization
@@ -22,19 +22,19 @@ class Apidocs::V1::ExperimentsApidocs
       parameter do
         key :name, :study_definition_id
         key :in, :path
-        key :description, 'Study definition id which this phase definition is added to'
+        key :description, 'Study definition id of the experiment results to return'
         key :required, true
         key :type, :string
       end
       parameter do
         key :name, :protocol_definition_id
         key :in, :path
-        key :description, 'Protocol definition id which this phase definition is added to'
+        key :description, 'Protocol definition id of the experiment results to return'
         key :required, true
         key :type, :string
       end
       response 200 do
-        key :description, 'experiments response'
+        key :description, 'Array of experiment objects matching study/protocol ids'
         schema do
           key :type, :array
           items do
@@ -58,7 +58,7 @@ class Apidocs::V1::ExperimentsApidocs
         'application/json'
       ]
       key :tags, [
-        'study_results'
+        'Experiment', 'Study Results'
       ]
       parameter do
         key :name, :authorization
@@ -71,7 +71,7 @@ class Apidocs::V1::ExperimentsApidocs
       parameter do
         key :name, :experiment
         key :in, :body
-        key :description, 'Phase definition to add to the store'
+        key :description, 'Exeriment result to add to the store'
         key :required, true
         schema do
           key :'$ref', :ExperimentInput
@@ -80,19 +80,19 @@ class Apidocs::V1::ExperimentsApidocs
       parameter do
         key :name, :study_definition_id
         key :in, :path
-        key :description, 'Study definition id which this phase definition is added to'
+        key :description, 'Study definition id which this experiment result is added to'
         key :required, true
         key :type, :string
       end
       parameter do
         key :name, :protocol_definition_id
         key :in, :path
-        key :description, 'Protocol definition id which this phase definition is added to'
+        key :description, 'Protocol definition id which this experiment result is added to'
         key :required, true
         key :type, :string
       end
       response 201 do
-        key :description, 'phase definition response'
+        key :description, 'Newly-created experiment result object'
         schema do
           key :'$ref', :Experiment
         end
@@ -108,11 +108,11 @@ class Apidocs::V1::ExperimentsApidocs
 
   swagger_path '/study_definitions/{study_definition_id}/protocol_definitions/{protocol_definition_id}/experiments/{id}' do
     operation :put do
-      key :description, 'Updates an experiment'
-      key :summary, 'Updates an experiment'
+      key :description, 'Updates an experiment result'
+      key :summary, 'Updates an experiment result'
       key :operationId, 'updateExperiment'
       key :tags, [
-        'study_results'
+        'Experiment', 'Study Results'
       ]
       parameter do
         key :name, :authorization
@@ -125,15 +125,15 @@ class Apidocs::V1::ExperimentsApidocs
       parameter do
         key :name, :id
         key :in, :path
-        key :description, 'ID of phase definition to fetch'
+        key :description, 'ID of experiment result to update'
         key :required, true
         key :type, :integer
         key :format, :int64
       end
       parameter do
-        key :name, :study_definition
+        key :name, :experiment
         key :in, :body
-        key :description, 'Phase Definition Object to update'
+        key :description, 'Experiment result object to update'
         key :required, true
         schema do
           key :'$ref', :Experiment
@@ -141,7 +141,7 @@ class Apidocs::V1::ExperimentsApidocs
       end
 
       response 200 do
-        key :description, 'Phase Definition Object'
+        key :description, 'Updated experiment result object'
         schema do
           key :'$ref', :Experiment
         end
@@ -161,14 +161,14 @@ class Apidocs::V1::ExperimentsApidocs
     end
   end
 
-  # Delete Phase Definition Object
+  # Delete Experiment result Object
   swagger_path '/study_definitions/{study_definition_id}/protocol_definitions/{protocol_definition_id}/experiments/{id}' do
     operation :delete do
       key :description, 'Deletes an experiment'
       key :summary, 'Deletes an experiment'
       key :operationId, 'deleteExperiment'
       key :tags, [
-        'study_results'
+        'Experiment', 'Study Results'
       ]
       parameter do
         key :name, :authorization

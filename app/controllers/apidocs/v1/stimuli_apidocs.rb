@@ -4,13 +4,13 @@ class Apidocs::V1::StimuliApidocs
   swagger_path '/study_definitions/{study_definition_id}/protocol_definitions/{protocol_definition_id}/phase_definitions/{phase_definition_id}/trial_definitions/{trial_definition_id}/stimuli' do
     operation :get do
       key :summary, 'All Stimulus Definitions'
-      key :description, 'Returns all study definitions from the system that the user has access to'
+      key :description, 'Returns all stimuli for the given study/protocol/phase/trial to which the user has access'
       key :operationId, 'findStimuli'
       key :produces, [
         'application/json'
       ]
       key :tags, [
-        'stimuli'
+        'Stimulus', 'Study Creation'
       ]
       parameter do
         key :name, :authorization
@@ -21,7 +21,7 @@ class Apidocs::V1::StimuliApidocs
         key :default, 'Bearer PASTE_ACCESS_TOKEN_HERE'
       end
       response 200 do
-        key :description, 'stimuli response'
+        key :description, 'Array of Stimulus objects matching the query'
         schema do
           key :type, :array
           items do
@@ -45,7 +45,7 @@ class Apidocs::V1::StimuliApidocs
         'application/json'
       ]
       key :tags, [
-        'stimuli'
+        'Stimulus', 'Study Creation'
       ]
       parameter do
         key :name, :authorization
@@ -114,7 +114,7 @@ class Apidocs::V1::StimuliApidocs
       key :summary, 'Updates a Stimulus Definition'
       key :operationId, 'updateStimulus'
       key :tags, [
-        'stimuli'
+        'Stimulus', 'Study Creation'
       ]
       parameter do
         key :name, :authorization
@@ -170,7 +170,7 @@ class Apidocs::V1::StimuliApidocs
       key :summary, 'Deletes a Stimulus Definition'
       key :operationId, 'deleteStimulus'
       key :tags, [
-        'stimuli'
+        'Stimulus', 'Study Creation'
       ]
       parameter do
         key :name, :authorization

@@ -10,7 +10,7 @@ class Apidocs::V1::StagesApidocs
         'application/json'
       ]
       key :tags, [
-        'study_results'
+        'Stage', 'Study Results'
       ]
       parameter do
         key :name, :authorization
@@ -66,7 +66,7 @@ class Apidocs::V1::StagesApidocs
         'application/json'
       ]
       key :tags, [
-        'study_results'
+        'Stage', 'Study Results'
       ]
       parameter do
         key :name, :authorization
@@ -128,7 +128,7 @@ class Apidocs::V1::StagesApidocs
       key :summary, 'Updates a stage result'
       key :operationId, 'updateStage'
       key :tags, [
-        'study_results'
+        'Stage', 'Study Results'
       ]
       parameter do
         key :name, :authorization
@@ -196,7 +196,7 @@ class Apidocs::V1::StagesApidocs
       key :summary, 'Deletes a stage result'
       key :operationId, 'deleteStage'
       key :tags, [
-        'study_results'
+        'Stage', 'Study Results'
       ]
       parameter do
         key :name, :authorization

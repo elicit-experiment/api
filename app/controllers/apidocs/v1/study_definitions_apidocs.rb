@@ -4,13 +4,13 @@ class Apidocs::V1::StudyDefinitionsApidocs
   swagger_path '/study_definitions' do
     operation :get do
       key :summary, 'All Study Definitions'
-      key :description, 'Returns all study definitions from the system that the user has access to'
+      key :description, 'Returns all study definitions to which the user has access'
       key :operationId, 'findStudyDefinitions'
       key :produces, [
         'application/json'
       ]
       key :tags, [
-        'study_definitions'
+        'Study Definition', 'Study Creation'
       ]
       parameter do
         key :name, :authorization
@@ -21,7 +21,7 @@ class Apidocs::V1::StudyDefinitionsApidocs
         key :default, 'Bearer PASTE_ACCESS_TOKEN_HERE'
       end
       response 200 do
-        key :description, 'study_definitions response'
+        key :description, 'Array of StudyDefintiion objects matching the query'
         schema do
           key :type, :array
           items do
@@ -45,7 +45,7 @@ class Apidocs::V1::StudyDefinitionsApidocs
         'application/json'
       ]
       key :tags, [
-        'study_definitions'
+        'Study Definition', 'Study Creation'
       ]
       parameter do
         key :name, :authorization
@@ -86,7 +86,7 @@ class Apidocs::V1::StudyDefinitionsApidocs
       key :summary, 'Updates a Study Definition'
       key :operationId, 'updateStudyDefinition'
       key :tags, [
-        'study_definitions'
+        'Study Definition', 'Study Creation'
       ]
       parameter do
         key :name, :authorization
@@ -142,7 +142,7 @@ class Apidocs::V1::StudyDefinitionsApidocs
       key :summary, 'Deletes a Study Definition'
       key :operationId, 'deleteStudyDefinition'
       key :tags, [
-        'study_definitions'
+        'Study Definition', 'Study Creation'
       ]
       parameter do
         key :name, :authorization
@@ -182,23 +182,7 @@ class Apidocs::V1::StudyDefinitionsApidocs
   swagger_schema :StudyDefinitionInput do
     key :required, [:study_definition]
     property :study_definition do
-      key :'$ref', :StudyDefinitionInputBody
+      key :'$ref', :StudyDefinition
     end
   end
-
-  swagger_schema :StudyDefinitionInputBody do
-    key :required, [:principal_investigator_user_id, :title]
-    property :id do
-      key :type, :integer
-      key :format, :int64
-    end
-    property :title do
-      key :type, :string
-    end
-    property :principal_investigator_user_id do
-      key :type, :integer
-      key :format, :int64
-    end
-  end
-
 end

@@ -3,11 +3,11 @@ class Apidocs::V1::UsersApidocs
 
   swagger_path '/users' do
     operation :get do
-      key :description, 'Returns a List of Users'
-      key :summary, 'Returns a List of Users'
+      key :description, 'Returns a list of users'
+      key :summary, 'Returns a list of all users in the system'
       key :operationId, 'findUsers'
       key :tags, [
-        'users'
+        'Users'
       ]
       parameter do
         key :name, :authorization
@@ -18,7 +18,7 @@ class Apidocs::V1::UsersApidocs
         key :default, 'Bearer PASTE_ACCESS_TOKEN_HERE'
       end
       response 200 do
-        key :description, 'User Object'
+        key :description, 'Array of user objects matching the query'
         schema do
           key :type, :array
           items do
@@ -41,7 +41,7 @@ class Apidocs::V1::UsersApidocs
       key :description, 'Creates new User'
       key :summary, 'Creates new User'
       key :tags, [
-        'users'
+        'Users'
       ]
       response 200 do
         key :description, 'User Object'
@@ -82,7 +82,7 @@ class Apidocs::V1::UsersApidocs
       key :description, 'Updates Authenticated User'
       key :summary, 'Updates Authenticated User'
       key :tags, [
-        'users'
+        'Users'
       ]
       response 200 do
         key :description, 'User Object'
@@ -120,10 +120,10 @@ class Apidocs::V1::UsersApidocs
 
   swagger_path '/users/{id}' do
     operation :get do
-      key :description, "Returns User's Profile"
-      key :summary, "Returns User's Profile"
+      key :description, "Returns a specific user object"
+      key :summary, "Returns specific user object"
       key :tags, [
-        'users'
+        'Users'
       ]
       response 200 do
         key :description, 'User Object'
@@ -160,11 +160,11 @@ class Apidocs::V1::UsersApidocs
 
   swagger_path '/users/current' do
     operation :get do
-      key :description, "Returns Authenticated User's Profile"
-      key :summary, "Returns Authenticated User's Profile"
+      key :description, "Returns authenticated user's user object"
+      key :summary, "Returns the authenticated (i.e. the user whose access token is making the request) user's user object"
       key :operationId, 'getCurrentUser'
       key :tags, [
-        'users', 'Authentication'
+        'Users', 'Authentication'
       ]
       response 200 do
         key :description, 'User Object'
@@ -188,6 +188,7 @@ class Apidocs::V1::UsersApidocs
       end
     end
   end
+  
   # -----------------------
   # SCHEMAS
   # -----------------------

@@ -4,13 +4,13 @@ class Apidocs::V1::TrialDefinitionsApidocs
   swagger_path '/study_definitions/{study_definition_id}/protocol_definitions/{protocol_definition_id}/phase_definitions/{phase_definition_id}/trial_definitions' do
     operation :get do
       key :summary, 'All Trial Definitions'
-      key :description, 'Returns all study definitions from the system that the user has access to'
+      key :description, 'Returns all trial definitions for the given study/protocol/phase to which the user has access'
       key :operationId, 'findTrialDefinitions'
       key :produces, [
         'application/json'
       ]
       key :tags, [
-        'trial_definitions'
+        'Trial Definition', 'Study Creation'
       ]
       parameter do
         key :name, :authorization
@@ -21,7 +21,7 @@ class Apidocs::V1::TrialDefinitionsApidocs
         key :default, 'Bearer PASTE_ACCESS_TOKEN_HERE'
       end
       response 200 do
-        key :description, 'trial_definitions response'
+        key :description, 'Array of TrialDefinition objects matching the query'
         schema do
           key :type, :array
           items do
@@ -45,7 +45,7 @@ class Apidocs::V1::TrialDefinitionsApidocs
         'application/json'
       ]
       key :tags, [
-        'trial_definitions'
+        'Trial Definition', 'Study Creation'
       ]
       parameter do
         key :name, :authorization
@@ -86,7 +86,7 @@ class Apidocs::V1::TrialDefinitionsApidocs
         key :type, :string
       end
       response 201 do
-        key :description, 'trial definition response'
+        key :description, 'Newly-created trial definition'
         schema do
           key :'$ref', :TrialDefinition
         end
@@ -107,7 +107,7 @@ class Apidocs::V1::TrialDefinitionsApidocs
       key :summary, 'Updates a Trial Definition'
       key :operationId, 'updateTrialDefinition'
       key :tags, [
-        'trial_definitions'
+        'Trial Definition', 'Study Creation'
       ]
       parameter do
         key :name, :authorization
@@ -126,9 +126,9 @@ class Apidocs::V1::TrialDefinitionsApidocs
         key :format, :int64
       end
       parameter do
-        key :name, :study_definition
+        key :name, :trial_definition
         key :in, :body
-        key :description, 'Trial Definition Object to update'
+        key :description, 'Trial Definition object to update'
         key :required, true
         schema do
           key :'$ref', :TrialDefinition
@@ -163,7 +163,7 @@ class Apidocs::V1::TrialDefinitionsApidocs
       key :summary, 'Deletes a Trial Definition'
       key :operationId, 'deleteTrialDefinition'
       key :tags, [
-        'trial_definitions'
+        'Trial Definition', 'Study Creation'
       ]
       parameter do
         key :name, :authorization
@@ -203,22 +203,7 @@ class Apidocs::V1::TrialDefinitionsApidocs
   swagger_schema :TrialDefinitionInput do
     key :required, [:trial_definition]
     property :trial_definition do
-      key :'$ref', :TrialDefinitionInputBody
+      key :'$ref', :TrialDefinition
     end
   end
-
-  swagger_schema :TrialDefinitionInputBody do
-    key :required, [:definition_data, :name]
-    property :id do
-      key :type, :integer
-      key :format, :int64
-    end
-    property :name do
-      key :type, :string
-    end
-    property :definition_data do
-      key :type, :string
-    end
-  end
-
 end

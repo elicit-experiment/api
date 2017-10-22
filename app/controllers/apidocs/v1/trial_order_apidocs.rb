@@ -11,7 +11,7 @@ class Apidocs::V1::TrialOrderApidocs
         'application/json'
       ]
       key :tags, [
-        'trial_order'
+        'Trial Order', 'Study Creation'
       ]
       parameter do
         key :name, :authorization
@@ -33,21 +33,21 @@ class Apidocs::V1::TrialOrderApidocs
       parameter do
         key :name, :study_definition_id
         key :in, :path
-        key :description, 'Study order id which this trial order is added to'
+        key :description, 'Study definition id which this trial order is added to'
         key :required, true
         key :type, :string
       end
       parameter do
         key :name, :protocol_definition_id
         key :in, :path
-        key :description, 'Protocol order id which this trial order is added to'
+        key :description, 'Protocol definition id which this trial order is added to'
         key :required, true
         key :type, :string
       end
       parameter do
         key :name, :phase_definition_id
         key :in, :path
-        key :description, 'Phase order id which this trial order is added to'
+        key :description, 'Phase definition id which this trial order is added to'
         key :required, true
         key :type, :string
       end
@@ -73,7 +73,7 @@ class Apidocs::V1::TrialOrderApidocs
       key :summary, 'Updates a Trial Order'
       key :operationId, 'updateTrialOrder'
       key :tags, [
-        'trial_order'
+        'Trial Order', 'Study Creation'
       ]
       parameter do
         key :name, :authorization
@@ -125,22 +125,7 @@ class Apidocs::V1::TrialOrderApidocs
   swagger_schema :TrialOrderInput do
     key :required, [:trial_order]
     property :trial_order do
-      key :'$ref', :TrialOrderInputBody
+      key :'$ref', :TrialOrder
     end
   end
-
-  swagger_schema :TrialOrderInputBody do
-    key :required, [:sequence_data, :name]
-    property :id do
-      key :type, :integer
-      key :format, :int64
-    end
-    property :name do
-      key :type, :string
-    end
-    property :sequence_data do
-      key :type, :string
-    end
-  end
-
 end

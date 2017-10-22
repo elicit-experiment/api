@@ -4,13 +4,13 @@ class Apidocs::V1::PhaseDefinitionsApidocs
   swagger_path '/study_definitions/{study_definition_id}/protocol_definitions/{protocol_definition_id}/phase_definitions' do
     operation :get do
       key :summary, 'All Phase Definitions'
-      key :description, 'Returns all study definitions from the system that the user has access to'
+      key :description, 'Returns all study definitions from the system to which the user has access'
       key :operationId, 'findPhaseDefinitions'
       key :produces, [
         'application/json'
       ]
       key :tags, [
-        'phase_definitions'
+        'Phase Definition', 'Study Creation'
       ]
       parameter do
         key :name, :authorization
@@ -21,7 +21,7 @@ class Apidocs::V1::PhaseDefinitionsApidocs
         key :default, 'Bearer PASTE_ACCESS_TOKEN_HERE'
       end
       response 200 do
-        key :description, 'phase_definitions response'
+        key :description, 'Array of PhaseDefinition objects matching the query'
         schema do
           key :type, :array
           items do
@@ -45,7 +45,7 @@ class Apidocs::V1::PhaseDefinitionsApidocs
         'application/json'
       ]
       key :tags, [
-        'phase_definitions'
+        'Phase Definition', 'Study Creation'
       ]
       parameter do
         key :name, :authorization
@@ -100,7 +100,7 @@ class Apidocs::V1::PhaseDefinitionsApidocs
       key :summary, 'Updates a Phase Definition'
       key :operationId, 'updatePhaseDefinition'
       key :tags, [
-        'phase_definitions'
+        'Phase Definition', 'Study Creation'
       ]
       parameter do
         key :name, :authorization
@@ -121,7 +121,7 @@ class Apidocs::V1::PhaseDefinitionsApidocs
       parameter do
         key :name, :study_definition
         key :in, :body
-        key :description, 'Phase Definition Object to update'
+        key :description, 'Phase Definition object to update'
         key :required, true
         schema do
           key :'$ref', :PhaseDefinition
@@ -129,7 +129,7 @@ class Apidocs::V1::PhaseDefinitionsApidocs
       end
 
       response 200 do
-        key :description, 'Phase Definition Object'
+        key :description, 'Updated Phase Definition object'
         schema do
           key :'$ref', :PhaseDefinition
         end
@@ -156,7 +156,7 @@ class Apidocs::V1::PhaseDefinitionsApidocs
       key :summary, 'Deletes a Phase Definition'
       key :operationId, 'deletePhaseDefinition'
       key :tags, [
-        'phase_definitions'
+        'Phase Definition', 'Study Creation'
       ]
       parameter do
         key :name, :authorization
@@ -169,14 +169,14 @@ class Apidocs::V1::PhaseDefinitionsApidocs
       parameter do
         key :name, :id
         key :in, :path
-        key :description, 'ID of study definition to delete'
+        key :description, 'ID of phase definition to delete'
         key :required, true
         key :type, :integer
         key :format, :int64
       end
 
       response 204 do
-        key :description, 'Successful Response (No Content)'
+        key :description, 'Successful Response; phase defnition deleted (No Content)'
       end
       response 401 do
         key :description, 'Unauthorized Request'
@@ -196,22 +196,7 @@ class Apidocs::V1::PhaseDefinitionsApidocs
   swagger_schema :PhaseDefinitionInput do
     key :required, [:phase_definition]
     property :phase_definition do
-      key :'$ref', :PhaseDefinitionInputBody
+      key :'$ref', :PhaseDefinition
     end
   end
-
-  swagger_schema :PhaseDefinitionInputBody do
-    key :required, [:definition_data, :name]
-    property :id do
-      key :type, :integer
-      key :format, :int64
-    end
-    property :name do
-      key :type, :string
-    end
-    property :definition_data do
-      key :type, :string
-    end
-  end
-
 end

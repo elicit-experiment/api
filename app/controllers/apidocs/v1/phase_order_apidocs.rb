@@ -10,7 +10,7 @@ class Apidocs::V1::PhaseOrderApidocs
         'application/json'
       ]
       key :tags, [
-        'phase_order'
+        'Phase Order', 'Study Creation'
       ]
       parameter do
         key :name, :authorization
@@ -32,19 +32,19 @@ class Apidocs::V1::PhaseOrderApidocs
       parameter do
         key :name, :study_definition_id
         key :in, :path
-        key :description, 'Study order id which this phase order is added to'
+        key :description, 'Study definition id which this phase order is added to'
         key :required, true
         key :type, :string
       end
       parameter do
         key :name, :protocol_definition_id
         key :in, :path
-        key :description, 'Protocol order id which this phase order is added to'
+        key :description, 'Protocol definition id which this phase order is added to'
         key :required, true
         key :type, :string
       end
       response 201 do
-        key :description, 'phase order response'
+        key :description, 'Newly created PhaseOrder object'
         schema do
           key :'$ref', :PhaseOrder
         end
@@ -65,7 +65,7 @@ class Apidocs::V1::PhaseOrderApidocs
       key :summary, 'Updates a Phase Order'
       key :operationId, 'updatePhaseOrder'
       key :tags, [
-        'phase_order'
+        'Phase Order', 'Study Creation'
       ]
       parameter do
         key :name, :authorization
@@ -78,7 +78,7 @@ class Apidocs::V1::PhaseOrderApidocs
       parameter do
         key :name, :phase_order
         key :in, :body
-        key :description, 'Phase Order Object to update'
+        key :description, 'Phase Order object to update'
         key :required, true
         schema do
           key :'$ref', :PhaseOrder
@@ -86,7 +86,7 @@ class Apidocs::V1::PhaseOrderApidocs
       end
 
       response 200 do
-        key :description, 'Phase Order Object'
+        key :description, 'Updated Phase Order object'
         schema do
           key :'$ref', :PhaseOrder
         end
@@ -109,22 +109,7 @@ class Apidocs::V1::PhaseOrderApidocs
   swagger_schema :PhaseOrderInput do
     key :required, [:phase_order]
     property :phase_order do
-      key :'$ref', :PhaseOrderInputBody
+      key :'$ref', :PhaseOrder
     end
   end
-
-  swagger_schema :PhaseOrderInputBody do
-    key :required, [:sequence_data, :name]
-    property :id do
-      key :type, :integer
-      key :format, :int64
-    end
-    property :name do
-      key :type, :string
-    end
-    property :sequence_data do
-      key :type, :string
-    end
-  end
-
 end

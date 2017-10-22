@@ -11,7 +11,7 @@ module Apidocs::V1
     swagger_path '/oauth/token' do
       operation :post do
         key :description, 'Authenticate user credentials and returns an access token'
-        key :summary, 'Authenticate a User OR Client App and Creates Access Token'
+        key :summary, 'Authenticate a user OR client app and creates access token'
         key :operationId, 'getAuthToken'
         key :tags, [
           'Authentication'
@@ -28,7 +28,7 @@ module Apidocs::V1
         end
 
         response 200 do
-          key :description, 'access token'
+          key :description, 'Access token'
           schema do
             key :'$ref', :AccessToken
           end
@@ -59,7 +59,7 @@ module Apidocs::V1
         key :default, Rails.configuration.swagger_default_client_secret
       end
       property :grant_type do
-        key :description, "OAuth grant type, valid values: 'password' (for username/password login), 'client_credentials' (for initial client app authentication)"
+        key :description, "OAuth grant type, valid values: 'password' (for username/password login), 'client_credentials' (for initial client app authentication) and 'refresh_token' for token refresh."
         key :type, :string
         key :default, 'password'
       end

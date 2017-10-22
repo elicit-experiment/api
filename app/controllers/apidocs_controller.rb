@@ -16,55 +16,63 @@ class ApidocsController < ActionController::Base
       end
     end
     tag do
-      key :name, 'study_definitions'
-      key :description, 'Study Definition Operations'
+      key :name, 'Study Creation'
+      key :description, 'Operations to define studies'
       externalDocs do
         key :description, 'Find more info here'
         key :url, 'https://'
       end
     end
     tag do
-      key :name, 'protocol_definitions'
-      key :description, 'Protocol Definition Operations'
+      key :name, 'Study Definition'
+      key :description, 'Study Definition operations'
       externalDocs do
         key :description, 'Find more info here'
         key :url, 'https://'
       end
     end
     tag do
-      key :name, 'phase_definitions'
-      key :description, 'Phase Definition Operations'
+      key :name, 'Protocol Definition'
+      key :description, 'Protocol Definition operations'
       externalDocs do
         key :description, 'Find more info here'
         key :url, 'https://'
       end
     end
     tag do
-      key :name, 'phase_order'
-      key :description, 'Phase Order Operations'
+      key :name, 'Phase Definition'
+      key :description, 'Phase Definition operations'
       externalDocs do
         key :description, 'Find more info here'
         key :url, 'https://'
       end
     end
     tag do
-      key :name, 'trial_definitions'
-      key :description, 'Trial Definition Operations'
+      key :name, 'Phase Order'
+      key :description, 'Phase Order operations'
       externalDocs do
         key :description, 'Find more info here'
         key :url, 'https://'
       end
     end
     tag do
-      key :name, 'trial_order'
-      key :description, 'Trial Order Operations'
+      key :name, 'Trial Definition'
+      key :description, 'Trial Definition operations'
       externalDocs do
         key :description, 'Find more info here'
         key :url, 'https://'
       end
     end
     tag do
-      key :name, 'components'
+      key :name, 'Trial Order'
+      key :description, 'Trial Order operations'
+      externalDocs do
+        key :description, 'Find more info here'
+        key :url, 'https://'
+      end
+    end
+    tag do
+      key :name, 'Component'
       key :description, 'Operations on components'
       externalDocs do
         key :description, 'Find more info here'
@@ -72,7 +80,7 @@ class ApidocsController < ActionController::Base
       end
     end
     tag do
-      key :name, 'stimuli'
+      key :name, 'Stimulus'
       key :description, 'Operations on Stimuli'
       externalDocs do
         key :description, 'Find more info here'
@@ -80,8 +88,8 @@ class ApidocsController < ActionController::Base
       end
     end
     tag do
-      key :name, 'users'
-      key :description, 'User Operations'
+      key :name, 'Users'
+      key :description, 'User operations'
       externalDocs do
         key :description, 'Find more info here'
         key :url, 'https://'
@@ -89,15 +97,47 @@ class ApidocsController < ActionController::Base
     end
     tag do
       key :name, 'Authentication'
-      key :description, 'Authentication Operations'
+      key :description, 'Authentication operations'
       externalDocs do
         key :description, 'Find more info here'
         key :url, 'https://'
       end
     end
     tag do
-      key :name, 'study_results'
+      key :name, 'Study Results'
       key :description, 'Operations for getting the results of studies'
+      externalDocs do
+        key :description, 'Find more info here'
+        key :url, 'https://'
+      end
+    end
+    tag do
+      key :name, 'Study Result'
+      key :description, 'Operations for StudyResult objects'
+      externalDocs do
+        key :description, 'Find more info here'
+        key :url, 'https://'
+      end
+    end
+    tag do
+      key :name, 'Experiment'
+      key :description, 'Operations on Experiment objects'
+      externalDocs do
+        key :description, 'Find more info here'
+        key :url, 'https://'
+      end
+    end
+    tag do
+      key :name, 'Stage'
+      key :description, 'Operations on Stage objects'
+      externalDocs do
+        key :description, 'Find more info here'
+        key :url, 'https://'
+      end
+    end
+    tag do
+      key :name, 'Data Point'
+      key :description, 'Operations on Data Point objects'
       externalDocs do
         key :description, 'Find more info here'
         key :url, 'https://'
@@ -111,6 +151,7 @@ class ApidocsController < ActionController::Base
 
   # A list of all classes that have swagger_* declarations.
   SWAGGERED_CLASSES = [
+    # Definition of studies
     Apidocs::V1::StudyDefinitionsApidocs,
     Apidocs::V1::ProtocolDefinitionsApidocs,
     Apidocs::V1::PhaseDefinitionsApidocs,
@@ -119,15 +160,6 @@ class ApidocsController < ActionController::Base
     Apidocs::V1::TrialOrderApidocs,
     Apidocs::V1::ComponentsApidocs,
     Apidocs::V1::StimuliApidocs,
-    Apidocs::V1::UsersApidocs,
-    Apidocs::V1::ProtocolUsersApidocs,
-    Apidocs::V1::AuthenticationApidocs,
-
-    Apidocs::V1::StudyResultsApidocs,
-    Apidocs::V1::ExperimentsApidocs,
-    Apidocs::V1::StagesApidocs,
-    Apidocs::V1::DataPointsApidocs,
-
     StudyDefinition,
     ProtocolDefinition,
     PhaseDefinition,
@@ -136,7 +168,20 @@ class ApidocsController < ActionController::Base
     TrialOrder,
     Component,
     Stimulus,
+
+    # Results of studies
+    Apidocs::V1::StudyResultsApidocs,
+    Apidocs::V1::ExperimentsApidocs,
+    Apidocs::V1::StagesApidocs,
+    Apidocs::V1::DataPointsApidocs,
+
+    # API infrastructure
     ElicitError,
+
+    # Users & Auth
+    Apidocs::V1::UsersApidocs,
+    Apidocs::V1::AuthenticationApidocs,
+    Apidocs::V1::ProtocolUsersApidocs,
     User,
     ProtocolUser,
     self,

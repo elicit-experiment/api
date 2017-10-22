@@ -4,13 +4,13 @@ class Apidocs::V1::StudyResultsApidocs
   swagger_path '/study_definitions/{study_definition_id}/study_results' do
     operation :get do
       key :summary, 'All study results'
-      key :description, 'Returns all study results from the system that the user has access to'
+      key :description, 'Returns all study results from the system to which the user has access'
       key :operationId, 'findStudyResults'
       key :produces, [
         'application/json'
       ]
       key :tags, [
-        'study_results'
+        'Study Result', 'Study Results'
       ]
       parameter do
         key :name, :authorization
@@ -52,7 +52,7 @@ class Apidocs::V1::StudyResultsApidocs
         'application/json'
       ]
       key :tags, [
-        'study_results'
+        'Study Result', 'Study Results'
       ]
       parameter do
         key :name, :authorization
@@ -100,7 +100,7 @@ class Apidocs::V1::StudyResultsApidocs
       key :summary, 'Updates a Protocol Definition'
       key :operationId, 'updateStudyResult'
       key :tags, [
-        'study_results'
+        'Study Result', 'Study Results'
       ]
       parameter do
         key :name, :authorization
@@ -156,7 +156,7 @@ class Apidocs::V1::StudyResultsApidocs
       key :summary, 'Deletes a Protocol Definition'
       key :operationId, 'deleteStudyResult'
       key :tags, [
-        'study_results'
+        'Study Result', 'Study Results'
       ]
       parameter do
         key :name, :authorization

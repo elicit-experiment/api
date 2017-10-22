@@ -3,14 +3,14 @@ class Apidocs::V1::DataPointsApidocs
 
   swagger_path '/study_definitions/{study_definition_id}/protocol_definitions/{protocol_definition_id}/data_points' do
     operation :get do
-      key :summary, 'All data points'
-      key :description, 'Returns all data points from the study/protcol/phase/trial that the user has access to'
+      key :summary, 'Query data points'
+      key :description, 'Returns all data points from the study/protcol/phase/trial to which the user has access'
       key :operationId, 'queryDataPoints'
       key :produces, [
         'application/json'
       ]
       key :tags, [
-        'study_results'
+        'Data Point', 'Study Results'
       ]
       parameter do
         key :name, :authorization
@@ -23,33 +23,33 @@ class Apidocs::V1::DataPointsApidocs
       parameter do
         key :name, :study_definition_id
         key :in, :path
-        key :description, 'Study definition id which this data_point is added to'
+        key :description, 'Study definition id for the queries data points'
         key :required, true
         key :type, :integer
       end
       parameter do
         key :name, :protocol_definition_id
         key :in, :path
-        key :description, 'Protocol definition id which this data_point is added to'
+        key :description, 'Protocol definition id for the queries data points'
         key :required, true
         key :type, :integer
       end
       parameter do
         key :name, :phase_definition_id
         key :in, :query
-        key :description, 'Phase definition id which this data_point is added to'
+        key :description, 'Phase definition id for the queries data points'
         key :required, false
         key :type, :integer
       end
       parameter do
         key :name, :trial_definition_id
         key :in, :query
-        key :description, 'Trial definition id which this data_point is added to'
+        key :description, 'Trial definition id for the queries data points'
         key :required, false
         key :type, :integer
       end
       response 200 do
-        key :description, 'data_points response'
+        key :description, 'Results of query: all DataPoint objects matching query parameters'
         schema do
           key :type, :array
           items do
@@ -70,13 +70,13 @@ class Apidocs::V1::DataPointsApidocs
   swagger_path '/study_definitions/{study_definition_id}/protocol_definitions/{protocol_definition_id}/phase_definitions/{phase_definition_id}/trial_definitions/{trial_definition_id}/data_points' do
     operation :get do
       key :summary, 'All data points'
-      key :description, 'Returns all data points from the study/protcol/phase/trial that the user has access to'
+      key :description, 'Returns all data points from the study/protcol/phase/trial to which the user has access'
       key :operationId, 'findDataPoints'
       key :produces, [
         'application/json'
       ]
       key :tags, [
-        'study_results'
+        'Data Point', 'Study Results'
       ]
       parameter do
         key :name, :authorization
@@ -89,33 +89,33 @@ class Apidocs::V1::DataPointsApidocs
       parameter do
         key :name, :study_definition_id
         key :in, :path
-        key :description, 'Study definition id which this data_point is added to'
+        key :description, 'Study definition id to query the datapoints'
         key :required, true
         key :type, :string
       end
       parameter do
         key :name, :protocol_definition_id
         key :in, :path
-        key :description, 'Protocol definition id which this data_point is added to'
+        key :description, 'Protocol definition id to query the datapoints'
         key :required, true
         key :type, :string
       end
       parameter do
         key :name, :phase_definition_id
         key :in, :path
-        key :description, 'Phase definition id which this data_point is added to'
+        key :description, 'Phase definition id to query the datapoints'
         key :required, true
         key :type, :string
       end
       parameter do
         key :name, :trial_definition_id
         key :in, :path
-        key :description, 'Trial definition id which this data_point is added to'
+        key :description, 'Trial definition id to query the datapoints'
         key :required, true
         key :type, :string
       end
       response 200 do
-        key :description, 'data_points response'
+        key :description, 'List of DataPoints for the given study/protocol/phase/trial combination'
         schema do
           key :type, :array
           items do
@@ -124,7 +124,7 @@ class Apidocs::V1::DataPointsApidocs
         end
       end
       response :default do
-        key :description, 'unexpected error'
+        key :description, 'Unexpected error'
         schema do
           key :'$ref', :ElicitError
         end
@@ -139,7 +139,7 @@ class Apidocs::V1::DataPointsApidocs
         'application/json'
       ]
       key :tags, [
-        'study_results'
+        'Data Point', 'Study Results'
       ]
       parameter do
         key :name, :authorization
@@ -161,39 +161,39 @@ class Apidocs::V1::DataPointsApidocs
       parameter do
         key :name, :study_definition_id
         key :in, :path
-        key :description, 'Study definition id which this data_point is added to'
+        key :description, 'Study definition id for the new data point'
         key :required, true
         key :type, :string
       end
       parameter do
         key :name, :protocol_definition_id
         key :in, :path
-        key :description, 'Protocol definition id which this data_point is added to'
+        key :description, 'Protocol definition id for the new data point'
         key :required, true
         key :type, :string
       end
       parameter do
         key :name, :phase_definition_id
         key :in, :path
-        key :description, 'Phase definition id which this data_point is added to'
+        key :description, 'Phase definition id for the new data point'
         key :required, true
         key :type, :string
       end
       parameter do
         key :name, :trial_definition_id
         key :in, :path
-        key :description, 'Trial definition id which this data_point is added to'
+        key :description, 'Trial definition id for the new data point'
         key :required, true
         key :type, :string
       end
       response 201 do
-        key :description, 'data_point response'
+        key :description, 'Newly-created data point object'
         schema do
           key :'$ref', :DataPoint
         end
       end
       response :default do
-        key :description, 'unexpected error'
+        key :description, 'Unexpected error'
         schema do
           key :'$ref', :ElicitError
         end
@@ -208,7 +208,7 @@ class Apidocs::V1::DataPointsApidocs
       key :summary, 'Updates a DataPoint Definition'
       key :operationId, 'updateDataPoint'
       key :tags, [
-        'study_results'
+        'Data Point', 'Study Results'
       ]
       parameter do
         key :name, :authorization
@@ -229,28 +229,28 @@ class Apidocs::V1::DataPointsApidocs
       parameter do
         key :name, :study_definition_id
         key :in, :path
-        key :description, 'Study definition id which this data_point is added to'
+        key :description, 'Study definition id of the datapoint to update'
         key :required, true
         key :type, :string
       end
       parameter do
         key :name, :protocol_definition_id
         key :in, :path
-        key :description, 'Protocol definition id which this data_point is added to'
+        key :description, 'Protocol definition id of the datapoint to update'
         key :required, true
         key :type, :string
       end
       parameter do
         key :name, :phase_definition_id
         key :in, :path
-        key :description, 'Phase definition id which this data_point is added to'
+        key :description, 'Phase definition id of the datapoint to update'
         key :required, true
         key :type, :string
       end
       parameter do
         key :name, :trial_definition_id
         key :in, :path
-        key :description, 'Trial definition id which this data_point is added to'
+        key :description, 'Trial definition id of the datapoint to update'
         key :required, true
         key :type, :string
       end
@@ -282,7 +282,7 @@ class Apidocs::V1::DataPointsApidocs
       key :summary, 'Deletes a DataPoint Definition'
       key :operationId, 'deleteDataPoint'
       key :tags, [
-        'study_results'
+        'Data Point', 'Study Results'
       ]
       parameter do
         key :name, :authorization
@@ -295,7 +295,7 @@ class Apidocs::V1::DataPointsApidocs
       parameter do
         key :name, :id
         key :in, :path
-        key :description, 'ID of study definition to delete'
+        key :description, 'ID of data point to delete'
         key :required, true
         key :type, :integer
         key :format, :int64
@@ -303,33 +303,33 @@ class Apidocs::V1::DataPointsApidocs
       parameter do
         key :name, :study_definition_id
         key :in, :path
-        key :description, 'Study definition id which this data_point is added to'
+        key :description, 'Study definition id of the data point to delete'
         key :required, true
         key :type, :string
       end
       parameter do
         key :name, :protocol_definition_id
         key :in, :path
-        key :description, 'Protocol definition id which this data_point is added to'
+        key :description, 'Protocol definition of the data point to delete'
         key :required, true
         key :type, :string
       end
       parameter do
         key :name, :phase_definition_id
         key :in, :path
-        key :description, 'Phase definition id which this data_point is added to'
+        key :description, 'Phase definition id of the data point to delete'
         key :required, true
         key :type, :string
       end
       parameter do
         key :name, :trial_definition_id
         key :in, :path
-        key :description, 'Trial definition id which this data_point is added to'
+        key :description, 'Trial definition id of the data point to delete'
         key :required, true
         key :type, :string
       end
       response 204 do
-        key :description, 'Successful Response (No Content)'
+        key :description, 'Successful Response; data point deleted (No Content)'
       end
       response 401 do
         key :description, 'Unauthorized Request'
