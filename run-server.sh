@@ -7,7 +7,7 @@ export SECRET_KEY_BASE=$SECRET_KEY_BASE
 
 cp -R public/* /var/www/app/public/
 
-RAILS_ENV=production PRECOMPILE=1 bundle exec rake db:create
+RAILS_ENV=production PRECOMPILE=1 bundle exec rake db:setup
 RAILS_ENV=production PRECOMPILE=1 bundle exec rake db:migrate
 
 # The default command that gets ran will be to start the Puma server.

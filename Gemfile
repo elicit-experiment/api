@@ -12,13 +12,12 @@ gem 'rails', '~> 5.1.0'
 gem 'webpacker'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
-# Use mysql2 as the database instead of sqlite3
-#gem 'mysql2'
 # Use Puma as the app server
 gem 'puma', '~> 3.0'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
+gem 'uglifier'
 
 # for respond_to
 gem 'responders'

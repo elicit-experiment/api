@@ -143,7 +143,7 @@ class ApidocsController < ActionController::Base
         key :url, 'https://'
       end
     end
-    key :host, 'localhost:3000'
+    key :host, ENV['API_URL']
     key :basePath, '/api/v1'
     key :consumes, ['application/json']
     key :produces, ['application/json']

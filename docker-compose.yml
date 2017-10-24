@@ -1,6 +1,7 @@
 version: '2'
 services:
   app-api:
+    container_name: api
     depends_on:
       - 'postgres'
       - 'redis'
@@ -14,6 +15,7 @@ services:
       - "3000"
 
   app-frontend:
+    container_name: frontend
     build:
         context: ../experiment-frontend
         args:
@@ -22,6 +24,7 @@ services:
       - /var/www/frontend/public:/var/www/frontend/public
 
   web:
+    container_name: web
     build: revproxy
     volumes:
       - /var/www/app/public:/var/www/app/public
@@ -33,6 +36,7 @@ services:
       - "8080:8080"
 
   redis:
+    container_name: redis
     image: 'redis:3.2-alpine'
     command: redis-server --requirepass ${REDIS_PASSWORD}
     ports:
@@ -41,10 +45,12 @@ services:
       - 'redis:/data'
 
   postgres:
+    container_name: postgres
     image: 'postgres:9.6-alpine'
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     ports:
       - '5432:5432'
     volumes:

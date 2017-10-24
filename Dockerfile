@@ -48,12 +48,13 @@ COPY .postcssrc.yml .
 COPY bin bin
 #RUN bundle exec rails webpacker:install
 
-RUN RAILS_ENV=production bin/webpack
-# fake DB per https://iprog.com/posting/2013/07/errors-when-precompiling-assets-in-rails-4-0
-#RUN RAILS_ENV=production PRECOMPILE=1 DATABASE_URL=postgresql://user:pass@127.0.0.1/dbname bundle exec rake assets:precompile
+#RUN RAILS_ENV=production bin/webpack
 
 # Copy the main application.
 COPY . .
+
+# fake DB per https://iprog.com/posting/2013/07/errors-when-precompiling-assets-in-rails-4-0
+RUN RAILS_ENV=production PRECOMPILE=1 DATABASE_URL=postgresql://user:pass@127.0.0.1/dbname bundle exec rake assets:precompile
 
 RUN RAILS_ENV=test PRECOMPILE=1 bundle exec rake db:drop
 RUN RAILS_ENV=test PRECOMPILE=1 bundle exec rake db:create
