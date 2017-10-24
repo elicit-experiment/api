@@ -15,7 +15,7 @@ services:
 
   app-frontend:
     build:
-        context: ../elicit/experiment-frontend
+        context: ../experiment-frontend
         args:
           - API_URL=${API_URL}
     volumes:

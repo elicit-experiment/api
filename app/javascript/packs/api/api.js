@@ -1,7 +1,7 @@
 import $ from 'jquery'
 import _ from 'lodash'
 
-const api_root = 'http://localhost:3000/api/v1'
+const api_root = '/api/v1'
 const public_client_id = 'admin_public'
 const public_client_secret = 'czZCaGRSa3F0MzpnWDFmQmF0M2JW'
 const default_headers = {
