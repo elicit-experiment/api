@@ -1,4 +1,16 @@
 frontend
 revproxy
 ./Gemfile.lock
+README.md
+README.rdoc
+.git
+Gemfile.lock
+LICENSE
+tmp/
+log/
+db/*.sqlite3
+node_modules
+vendor/assets/components/
+public/assets/
+
 

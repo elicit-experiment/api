@@ -16,9 +16,21 @@ RUN npm install gulp-compass
 # Enable installing gems from git repos
 RUN apt-get install git
 
-RUN git clone https://github.com/cosound/Cockpit.Experiments.Web.git
+# to handle running as a normal user
+#RUN dnf -y install sudo
 
-WORKDIR Cockpit.Experiments.Web
+# run as a non-root user (Issue#57)
+RUN adduser elicituser
+# && \
+#    echo "elicituser ALL=(root) NOPASSWD:ALL" >> /etc/sudoers
+
+USER elicituser
+
+RUN mkdir /experiment-frontend
+
+COPY . /experiment-frontend
+
+WORKDIR /experiment-frontend
 
 RUN sed -i'' -E "s/(\s+portalPath\: ).*/\1\"http:\/\/$API_URL\"/g" gulpfile.js 
 
@@ -27,7 +39,5 @@ RUN cat gulpfile.js | grep portalPath
 RUN npm install
 
 RUN gulp build
-
-COPY ./run.sh .
 
 CMD ["/bin/bash", "./run.sh"]

@@ -72,3 +72,7 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 gem 'activemodel-serializers-xml'
 # To be able to parse XML post_params in your application
 gem 'actionpack-xml_parser'
+
+group :production do
+  gem 'pg'
+end

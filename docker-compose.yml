@@ -1,22 +1,26 @@
 version: '2'
 services:
   app-api:
+    depends_on:
+      - 'postgres'
+      - 'redis'
     build: .
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
       - /var/www/app/public:/var/www/app/public
     expose:
       - "3000"
+
   app-frontend:
     build:
-        context: frontend
+        context: ../elicit/experiment-frontend
         args:
-          - API_URL=docker.local
-          - API_URL=cogsys-devel.compute.dtu.dk
-    environment:
-      - API_URL=docker.local
-      - API_URL=cogsys-devel.compute.dtu.dk
+          - API_URL=${API_URL}
     volumes:
       - /var/www/frontend/public:/var/www/frontend/public
+
   web:
     build: revproxy
     volumes:
@@ -27,3 +31,25 @@ services:
     ports:
       - "80:80"
       - "8080:8080"
+
+  redis:
+    image: 'redis:3.2-alpine'
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    ports:
+      - '6379:6379'
+    volumes:
+      - 'redis:/data'
+
+  postgres:
+    image: 'postgres:9.6-alpine'
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - '5432:5432'
+    volumes:
+      - 'postgres:/var/lib/postgresql/data'
+
+volumes:
+  redis:
+  postgres:

@@ -33,5 +33,13 @@ test:
   database: db/test.sqlite3
 
 production:
-  <<: *default
-  database: db/production.sqlite3
+#  <<: *default
+#  database: db/production.sqlite3
+  adapter: postgresql
+  encoding: unicode
+  database: elicit_production
+  pool: 5
+  username: <%= ENV['POSTGRES_USER'] %>
+  password: <%= ENV['POSTGRES_PASSWORD'] %>
+  host: postgres
+  port: 5432

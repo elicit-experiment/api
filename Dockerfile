@@ -35,18 +35,30 @@ COPY package.json .
 RUN npm install
 RUN node --version
  
+EXPOSE 3000
+
+# Copy only the pieces needed for webpack, since it can take a long time to run this and we don't want 
+# extraneous changes to cause an unecessary rebuild.
+RUN mkdir -p app/javascript
+COPY app/javascript app/javascript
+COPY config config
+COPY .babelrc .
+COPY .bowerrc .
+COPY .postcssrc.yml .
+COPY bin bin
+#RUN bundle exec rails webpacker:install
+
+RUN RAILS_ENV=production bin/webpack
+# fake DB per https://iprog.com/posting/2013/07/errors-when-precompiling-assets-in-rails-4-0
+#RUN RAILS_ENV=production PRECOMPILE=1 DATABASE_URL=postgresql://user:pass@127.0.0.1/dbname bundle exec rake assets:precompile
+
 # Copy the main application.
 COPY . .
 
-EXPOSE 3000
-
-RUN RAILS_ENV=production PRECOMPILE=1 bundle exec rake db:create
-RUN RAILS_ENV=production PRECOMPILE=1 bundle exec rake db:migrate
-RUN RAILS_ENV=production bin/webpack
-RUN RAILS_ENV=production PRECOMPILE=1 bundle exec rake assets:precompile
-
-RUN RAILS_ENV=test PRECOMPILE=1 bundle exec rake db:migrate
-#RUN RAILS_ENV=test PRECOMPILE=1 bundle exec rails test
+RUN RAILS_ENV=test PRECOMPILE=1 bundle exec rake db:drop
+RUN RAILS_ENV=test PRECOMPILE=1 bundle exec rake db:create
+RUN RAILS_ENV=test PRECOMPILE=1 bundle exec rake db:setup
+RUN RAILS_ENV=test PRECOMPILE=1 bundle exec rails test
 
 # generate cookie key
 RUN PRECOMPILE=1 bundle exec rake secret > ~/secret-key-base.txt
