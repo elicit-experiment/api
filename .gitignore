@@ -23,3 +23,7 @@
 .byebug_history
 /public/packs
 /node_modules
+
+/public/assets/swagger_ui*
+/public/assets/doorkeeper*
+/public/assets/.sprockets*
