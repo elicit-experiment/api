@@ -75,3 +75,7 @@ gem 'actionpack-xml_parser'
 group :production do
   gem 'pg'
 end
+
+gem 'lograge', '~> 0.4'
+gem 'logstash-event'
+

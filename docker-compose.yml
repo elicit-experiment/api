@@ -20,6 +20,7 @@ services:
         context: ../experiment-frontend
         args:
           - API_URL=${API_URL}
+          - API_SCHEME=${API_SCHEME}
     volumes:
       - /var/www/frontend/public:/var/www/frontend/public
 
@@ -29,11 +30,12 @@ services:
     volumes:
       - /var/www/app/public:/var/www/app/public
       - /var/www/frontend/public:/var/www/frontend/public
+      - ./certs:/certs
     links:
       - app-api
     ports:
       - "80:8080"
-      - "8443:443"
+      - "443:8443"
       - "8080:8081"
 
   redis:

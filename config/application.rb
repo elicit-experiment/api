@@ -17,5 +17,18 @@ module ElicitApi
     config.autoload_paths << "#{Rails.root}/app/services"
 
     config.elicit = config_for(:elicit_config)
+
+
+    log_level = String(ENV['LOG_LEVEL'] || "info").upcase
+    config.logger = Logger.new(STDOUT)
+    config.logger.level = Logger.const_get(log_level)
+    config.log_level = log_level
+
+    config.lograge.enabled = true
+
+#    config.lograge.custom_options = lambda do |event|
+#    #        params = event.payload[:params].reject { |k| %w(controller action).include?(k) }
+#    #        { "params" => params }
+#    #    end
   end
 end
