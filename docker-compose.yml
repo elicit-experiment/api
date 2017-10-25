@@ -20,6 +20,7 @@ services:
         context: ../experiment-frontend
         args:
           - API_URL=${API_URL}
+          - ELICIT_LANDING_URL=${ELICIT_URL}/participant
     volumes:
       - /var/www/frontend/public:/var/www/frontend/public
 

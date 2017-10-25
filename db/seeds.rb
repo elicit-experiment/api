@@ -11,7 +11,7 @@ OauthApplication.create!([
 ])
 
 User.create!([
-{ :email => 'admin@elicit.com', :password => 'password', :password_confirmation => 'password', :role => 'admin', :anonymous => false, :sign_in_count => 0 },
+{ :email => 'admin@elicit.dk', :password => 'password', :password_confirmation => 'password', :role => 'admin', :anonymous => false, :sign_in_count => 0 },
 { :email => 'subject1@elicit.com', :password => 'abcd12_', :password_confirmation => 'abcd12_', :role => 'registered_user', :anonymous => false, :sign_in_count => 0 },
 { :email => 'subject2@elicit.com', :password => 'abcd12_', :password_confirmation => 'abcd12_', :role => 'registered_user', :anonymous => false, :sign_in_count => 0 },
 { :email => 'subject3@elicit.com', :password => 'abcd12_', :password_confirmation => 'abcd12_', :role => 'registered_user', :anonymous => false, :sign_in_count => 0 },

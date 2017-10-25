@@ -30,4 +30,4 @@ local_env: &local_env
     port: 80
 
 production:
-  <<: &prod_env
+  <<: *prod_env
