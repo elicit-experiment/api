@@ -2,7 +2,7 @@ default: &default
   participant_frontend:   
     host: localhost
     port: 5504
-  elicit_portal:   
+  elicit_portal:
     host: localhost
     port: 3000
 
@@ -12,5 +12,22 @@ development:
 test:
   <<: *default
 
+prod_env: &prod_env
+  participant_frontend:   
+    host: experiment-elicit.compute.dtu.dk
+    port: 8080
+  elicit_portal:
+    host: elicit.compute.dtu.dk
+    port: 80
+
+
+local_env: &local_env
+  participant_frontend:   
+    host: docker.local
+    port: 8080
+  elicit_portal:
+    host: docker.local
+    port: 80
+
 production:
-  <<: *default
+  <<: &prod_env

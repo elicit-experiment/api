@@ -56,7 +56,8 @@ const RawRootRoutes = (props) => {
         }
       } } >
       </Route>
-      <Route exact path="/participant" render={ routeProps => {
+      {["/participant", "/", ""].map(path =>
+      <Route exact path={path} render={ routeProps => {
         var token_status = _tokenStatus(props)
         if (token_status == 'user') {
           return <ParticipantApp {...props} />
@@ -67,6 +68,7 @@ const RawRootRoutes = (props) => {
         }
       } } >
       </Route>
+      ) }
       </div>
   );
 };
