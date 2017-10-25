@@ -1,6 +1,6 @@
 //Import React and Dependencies
 import React from 'react';
-import { Route, IndexRoute } from 'react-router-dom';
+import { Route, IndexRoute, Redirect } from 'react-router-dom';
 import { BrowserRouter } from 'react-router-dom'
 import history from './history.js'
 import { connect } from 'react-redux';
@@ -45,7 +45,7 @@ const RawRootRoutes = (props) => {
 
   return (
       <div>
-      <Route exact path="/admin" render={ routeProps => {
+      <Route exact path="/admin" name="admin_overview" render={ routeProps => {
         var token_status = _tokenStatus(props)
         if (token_status == 'user') {
           return <AdminApp {...props} />
@@ -57,7 +57,7 @@ const RawRootRoutes = (props) => {
       } } >
       </Route>
       {["/participant", "/", ""].map(path =>
-      <Route exact path={path} render={ routeProps => {
+      <Route exact path={path} name="participant_overview" render={ routeProps => {
         var token_status = _tokenStatus(props)
         if (token_status == 'user') {
           return <ParticipantApp {...props} />
@@ -69,6 +69,7 @@ const RawRootRoutes = (props) => {
       } } >
       </Route>
       ) }
+          <Redirect from="/" to="participant_overview" />
       </div>
   );
 };

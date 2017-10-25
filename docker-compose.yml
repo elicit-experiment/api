@@ -32,9 +32,9 @@ services:
     links:
       - app-api
     ports:
-      - "80:80"
-      - "443:443"
-      - "8080:8080"
+      - "80:8080"
+      - "8443:443"
+      - "8080:8081"
 
   redis:
     container_name: redis
@@ -72,3 +72,4 @@ services:
 volumes:
   redis:
   postgres:
+  certs:

@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { Switch, Route, BrowserRouter } from 'react-router-dom'
+import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom'
 import { Link } from 'react-router-dom'
 import ParticipantStudyList from './ParticipantStudyList'
 import { withRouter } from 'react-router'
@@ -14,7 +14,6 @@ import {
 
 class Header extends React.Component {
   render() {
-    console.dir(this.props.current_user)
     let username = (this.props.current_user.data.email) ? this.props.current_user.data.email : "none"
     return (
   <nav className="nav navbar navbar-default navbar-fixed-top">
@@ -29,7 +28,7 @@ class Header extends React.Component {
       <div className="collapse navbar-collapse">
         <ul id="admin-nav" className="nav navbar-nav">
           <li><Link to='/'>Home</Link></li>
-          <li><Link to='/Participant'>Participant</Link></li>
+          <li><Link to='/participant'>Participant</Link></li>
         </ul>
 
         <ul className="nav navbar-nav navbar-right">
@@ -63,8 +62,9 @@ class ParticipantApp extends React.Component {
       <Header {...this.props} ></Header>
       <div id="wrap" className="admin-app-container container">
         <Switch>
-          <Route exact path='/participant' render={routeProps => <ParticipantStudyList {...routeProps} {...this.props} /> } />
-          <Route path='/participant/studies/:study_id' render={routeProps => <TakeStudy {...routeProps} {...this.props}  /> } />
+          <Redirect from="/" to="participant_overview" />
+          <Route exact path='/participant' name="participant_overview" render={routeProps => <ParticipantStudyList {...routeProps} {...this.props} /> } />
+          <Route path='/participant/studies/:study_id' name="protocol_detail" render={routeProps => <TakeStudy {...routeProps} {...this.props}  /> } />
         </Switch>
       </div>
       <footer id="footer" className="navbar navbar-fixed-bottom admin-footer">
@@ -80,8 +80,8 @@ class ParticipantApp extends React.Component {
     console.log("ParticipantApp MOUNT")
     const {dispatch} = this.props;
 
-    dispatch(elicitApi.actions.studies());  // TODO: should be "my studies"
-    dispatch(elicitApi.actions.current_user());
+    // don't dispatch these simultaneously; there will be problems if we try and refresh the token
+    dispatch(elicitApi.actions.studies()).then(() => {dispatch(elicitApi.actions.current_user())} );
   }
 }
 
