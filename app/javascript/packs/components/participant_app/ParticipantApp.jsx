@@ -62,7 +62,7 @@ class ParticipantApp extends React.Component {
       <Header {...this.props} ></Header>
       <div id="wrap" className="admin-app-container container">
         <Switch>
-          <Redirect from="/" to="participant_overview" />
+          <Route exact path='/' name="participant_overview" render={routeProps => <ParticipantStudyList {...routeProps} {...this.props} /> } />
           <Route exact path='/participant' name="participant_overview" render={routeProps => <ParticipantStudyList {...routeProps} {...this.props} /> } />
           <Route path='/participant/studies/:study_id' name="protocol_detail" render={routeProps => <TakeStudy {...routeProps} {...this.props}  /> } />
         </Switch>
