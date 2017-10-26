@@ -14,11 +14,11 @@ test:
 
 prod_env: &prod_env
   participant_frontend:   
-    host: experiment-elicit.compute.dtu.dk
+    host: experiment-elicit.<%= ENV['SITE_SUFFIX'] %>
     port: 443
     scheme: https
   elicit_portal:
-    host: elicit.compute.dtu.dk
+    host: elicit.<%= ENV['SITE_SUFFIX'] %>
     port: 443
     scheme: https
 

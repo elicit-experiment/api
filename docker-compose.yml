@@ -5,10 +5,14 @@ services:
     depends_on:
       - 'postgres'
       - 'redis'
-    build: .
+    build:
+        context: .
+        args:
+          - SITE_SUFFIX=${SITE_SUFFIX}
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - SITE_SUFFIX=${SITE_SUFFIX}
     volumes:
       - /var/www/app/public:/var/www/app/public
     expose:
@@ -27,7 +31,10 @@ services:
 
   web:
     container_name: web
-    build: revproxy
+    build:
+        context: revproxy
+        args:
+          - SITE_SUFFIX=${SITE_SUFFIX}
     volumes:
       - /var/www/app/public:/var/www/app/public
       - /var/www/frontend/public:/var/www/frontend/public

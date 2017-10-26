@@ -1,5 +1,7 @@
-frontend
-revproxy
+frontend/
+revproxy/
+notes/
+doc/
 ./Gemfile.lock
 README.md
 README.rdoc
@@ -8,8 +10,11 @@ Gemfile.lock
 LICENSE
 tmp/
 log/
+certs/
 db/*.sqlite3
-node_modules
+*.taskpaper
+testApp_*
+node_modules/
 vendor/assets/components/
 public/assets/
 

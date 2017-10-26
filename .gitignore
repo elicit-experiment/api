@@ -24,6 +24,13 @@
 /public/packs
 /node_modules
 
+# certs
+/certs
+
+testApp_*
+
+.env
+
 /public/assets/swagger_ui*
 /public/assets/doorkeeper*
 /public/assets/.sprockets*

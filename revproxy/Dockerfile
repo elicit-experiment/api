@@ -1,5 +1,7 @@
 # Base image:
 FROM nginx
+
+ARG SITE_SUFFIX
  
 # Install dependencies
 RUN apt-get update -qq && apt-get -y install apache2-utils
@@ -13,9 +15,9 @@ RUN mkdir -p /var/www/log/
 # substitute variable references in the Nginx config template for real values from the environment
 # put the final config in its place
 RUN mkdir -p /etc/nginx/conf.d/sites/
-RUN envsubst '$RAILS_ROOT' < /tmp/default.conf > /etc/nginx/conf.d/default.conf
-RUN envsubst '$RAILS_ROOT' < /tmp/api.conf > /etc/nginx/conf.d/sites/api.conf
-RUN envsubst '$RAILS_ROOT' < /tmp/experiment.conf > /etc/nginx/conf.d/sites/experiment.conf
+RUN envsubst '${RAILS_ROOT} ${SITE_SUFFIX}' < /tmp/default.conf > /etc/nginx/conf.d/default.conf
+RUN envsubst '${RAILS_ROOT} ${SITE_SUFFIX}' < /tmp/api.conf > /etc/nginx/conf.d/sites/api.conf
+RUN envsubst '${RAILS_ROOT} ${SITE_SUFFIX}' < /tmp/experiment.conf > /etc/nginx/conf.d/sites/experiment.conf
  
 EXPOSE 80
 

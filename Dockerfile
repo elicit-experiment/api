@@ -1,5 +1,7 @@
 # Base image:
 FROM ruby:2.3.4
+
+ARG SITE_SUFFIX
  
 RUN cat /etc/os-release
 
