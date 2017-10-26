@@ -10,7 +10,7 @@ module Api::V1
       session_params = {
         :user_id => current_user.id,
         :session_guid => session_guid,
-        :url => "http://#{Rails.configuration.elicit['participant_frontend']['host']}:#{Rails.configuration.elicit['participant_frontend']['port']}/?session_guid=#{session_guid}#Experiment/#{protocol_definition_id}",
+        :url => "#{Rails.configuration.elicit['participant_frontend']['scheme']}://#{Rails.configuration.elicit['participant_frontend']['host']}:#{Rails.configuration.elicit['participant_frontend']['port']}/?session_guid=#{session_guid}#Experiment/#{protocol_definition_id}",
         :expires_at => Date.today + 1.day
       }
       session = Chaos::ChaosSession.new(session_params)

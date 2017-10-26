@@ -15,10 +15,12 @@ test:
 prod_env: &prod_env
   participant_frontend:   
     host: experiment-elicit.compute.dtu.dk
-    port: 8080
+    port: 443
+    scheme: https
   elicit_portal:
     host: elicit.compute.dtu.dk
-    port: 80
+    port: 443
+    scheme: https
 
 
 local_env: &local_env

@@ -21,7 +21,7 @@ services:
         args:
           - API_URL=${API_URL}
           - API_SCHEME=${API_SCHEME}
-          - ELICIT_LANDING_URL=${ELICIT_URL}/participant
+          - ELICIT_LANDING_URL=${ELICIT_URL}\/participant
     volumes:
       - /var/www/frontend/public:/var/www/frontend/public
 
