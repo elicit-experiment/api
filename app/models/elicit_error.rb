@@ -1,9 +1,16 @@
 class ElicitError < StandardError
+
   attr_accessor :code, :message
+
   def initialize(message, code=500)
     self.code = code
-    self.error_message = message
+    self.message = message
     super(message)
+  end
+
+  def to_json(options = nil)
+    x = { :message => self.message, :code => Rack::Utils::SYMBOL_TO_STATUS_CODE[self.code] }
+    ActiveSupport::JSON.encode(x, options)
   end
 
   include Swagger::Blocks

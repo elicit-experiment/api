@@ -9,8 +9,6 @@ module Api::V1
       plural_resource_name = "@#{resource_name.pluralize}"
       resources = StudyDefinition.includes(:protocol_definitions).joins(:principal_investigator)
 
-      ap StudyDefinition.includes(:protocol_definitions).all
-      ap ProtocolDefinition.where({:study_definition_id => 1}).all
       if not page_params.nil?
         resources = resources.page(page_params[:page])
                                   .per(page_params[:page_size])

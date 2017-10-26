@@ -7,6 +7,13 @@ module Api::V1
 
     respond_to :json
 
+    rescue_from ElicitError, :with => :render_elicit_error
+
+    def render_elicit_error(e)
+      render json: e, status: e.code
+      true
+    end
+
     # Returns the resource from the created instance variable
     # @return [Object]
     def get_resource

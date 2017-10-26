@@ -12,23 +12,26 @@ User & Auth:
 - link-only email users
 
 Study:
-- publish design
-- Associating users with studies
-- 
+- Design to enable publishing
+- Associate users with studies
+- Enforce user permissions to access studies
+- Redesign Participant page
+- Implement Phase & Trial orders
 
 Client Examples:
 - Create pure Python examples (i.e. component dictionaries in Native Python)
 - Create script to extract results
 
 Deployment:
-- Create Docker containers with Postgresql and the rails apps
+- Create Docker containers with Postgresql and the rails apps  @done(2017-10-26)
  
 Cleanup:
 - Clean up chaos sessions
 - Link back to Elicit when survey is complete
+- Figure out how much of the old experiment xml cruft actually needs to be passed to the frontend (i.e. Outputs, etc..)
 
 Bugs:
-- entering invalid creds on login causes you to dump to a blank screen
+- Entering invalid creds on login causes you to dump to a blank screen
 
 To Create Items:
 	- To create a task, type a dash followed by a space.
