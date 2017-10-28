@@ -5,8 +5,9 @@ module StudyResult
 
   class Experiment < ApplicationRecord
     belongs_to :study_definition, :class_name => "StudyDefinition", :foreign_key => "study_definition_id"
-    belongs_to :protocol_definition, :class_name => "ProtocolDefinition", :foreign_key => "protocol_definition_id"
-    belongs_to :user, :class_name => "User", :foreign_key => "user_id"
+    has_one :protocol_definition, :class_name => "ProtocolDefinition", :foreign_key => "protocol_definition_id", :through => :protocol_user
+    has_one :user, :class_name => "User", :foreign_key => "user_id", :through => :protocol_user
+    belongs_to :protocol_user, :class_name => "ProtocolUser", :foreign_key => "protocol_user_id"
 
     has_many :study_result_stages, :dependent => :delete_all
 

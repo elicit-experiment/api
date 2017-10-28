@@ -1,7 +1,8 @@
 //Import React and Dependencies
 import React from 'react';
-import { Route, IndexRoute, Redirect } from 'react-router-dom';
+import { Route, IndexRoute, Redirect, Switch } from 'react-router-dom';
 import { BrowserRouter } from 'react-router-dom'
+import {withRouter} from 'react-router-dom';
 import history from './history.js'
 import { connect } from 'react-redux';
 import { Provider } from 'react-redux';
@@ -19,7 +20,7 @@ import { clientToken, userToken, currentUser } from './reducers/selector';
 
 
 //Define Root Component and Router
-const RawRootRoutes = (props) => {
+const RawRootRoutes = withRouter((props) => {
   const store = props.store
 
 
@@ -41,58 +42,43 @@ const RawRootRoutes = (props) => {
     return token_status    
   }
 
-  console.dir(`ROOT RERENDERING ${_tokenStatus(props)}`)
-
-  return (
-      <div>
-      <Route exact path="/admin" name="admin_overview" render={ routeProps => {
-        var token_status = _tokenStatus(props)
-        if (token_status == 'user') {
-          return <AdminApp {...props} />
-        } else if (token_status == 'client') {
-          return <LoginSignUpContainer></LoginSignUpContainer>
-        } else {
-          return <div>Loading...</div>          
-        }
-      } } >
-      </Route>
-      {["/participant", "/"].map(path =>
-      <Route exact path={path} name="participant" render={ routeProps => {
-        var token_status = _tokenStatus(props)
-        if (token_status == 'user') {
-          return <ParticipantApp {...props} />
-        } else if (token_status == 'client') {
-          return <LoginSignUpContainer></LoginSignUpContainer>
-        } else {
-          return <div>Loading...</div>          
-        }
-      } } >
-      </Route>
-      ) }
-      </div>
-  );
-};
+  let token_status = _tokenStatus(props)
+  console.dir(`ROOT RERENDERING ${token_status}`)
+  if (token_status) {
+    return (
+      <Switch>
+        <Route exact path="/admin" render={ routeProps => { return <AdminApp {...props} token_status={token_status}/>} }> </Route>
+        <Route exact path="/participant" render={ routeProps => { return <ParticipantApp {...props} token_status={token_status}/>} }> </Route>
+        <Route exact path="/login" render={ routeProps => { return <LoginSignUpContainer {...props} token_status={token_status}/>} }> </Route>
+        <Redirect from="*" to="/participant"/>
+      </Switch>
+    )
+  } else {
+    // TODO: have a timeout here
+    return <div>Loading...</div>    
+  }
+});
 
 
 const mapStateToProps = (state) => ( {
   clientToken: clientToken(state),
   userToken: userToken(state),
-//    currentUser: currentUser(state),
+  currentUser: currentUser(state),
 })
 
 const mapDispatchToProps = (dispatch) => ({
 });
 
-const RootRoutes = connect(
+const RootRoutes = withRouter(connect(
     mapStateToProps,
     mapDispatchToProps
-)(RawRootRoutes);
+)(RawRootRoutes));
 
 const Root = (props) => {
   return (
 <Provider store={props.store}>
     <BrowserRouter history={history}>
-      <RootRoutes {...props} />
+      <RootRoutes history={history} {...props} />
     </BrowserRouter>
 </Provider>
   );

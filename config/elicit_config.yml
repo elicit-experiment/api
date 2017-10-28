@@ -2,9 +2,11 @@ default: &default
   participant_frontend:   
     host: localhost
     port: 5504
+    scheme: http
   elicit_portal:
     host: localhost
     port: 3000
+    scheme: http
 
 development:
   <<: *default

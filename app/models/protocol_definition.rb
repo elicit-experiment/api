@@ -14,6 +14,12 @@ class ProtocolDefinition < ApplicationRecord
     property :name do
       key :type, :string
     end
+    property :summary do
+      key :type, :string
+    end
+    property :description do
+      key :type, :string
+    end
     property :definition_data do
       key :type, :string
     end

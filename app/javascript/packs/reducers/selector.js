@@ -5,11 +5,19 @@ export const clientToken = (state) => {
 };
 
 export const userToken = (state) => {
-  console.dir(`userToken ${state}`)
+  console.dir(state.tokens.userToken)
   const ct = state ? state.tokens.userToken : undefined;
   return ct
 };
 
+export const userTokenState = (state) => {
+  if (!state.tokens) return undefined;
+  console.dir(state.tokens.userTokenState)
+  const ct = state ? state.tokens.userTokenState : undefined;
+  return ct
+};
+
 export const currentUser = (state) => {
-  return state ? state.users.currentUser : undefined;
+  console.dir(state.current_user)
+  return state ? state.current_user : undefined;
 };

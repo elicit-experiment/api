@@ -11,7 +11,7 @@ export const RECEIVE_USER_TOKEN = "RECEIVE_USER_TOKEN";
 export const RESET_USER_TOKEN = "RESET_USER_TOKEN";
 export const LOGOUT_USER = "LOGOUT_USER";
 export const CLIENT_TOKEN_IS_LOADING = 'CLIENT_TOKEN_IS_LOADING';
-export const USER_TOKEN_IS_LOADING = 'USER_TOKEN_IS_LOADING';
+export const USER_TOKEN_STATE = 'USER_TOKEN_STATE';
 
 export function clientTokenIsLoading(bool) {
   return {
@@ -22,8 +22,19 @@ export function clientTokenIsLoading(bool) {
 
 export function userTokenIsLoading(bool) {
   return {
-    type: USER_TOKEN_IS_LOADING,
-    userTokenIsLoading: bool
+    type: USER_TOKEN_STATE,
+    userTokenState: {
+      isLoading: bool,
+      error: false,
+      error_message: false
+    }
+  };
+}
+
+export function userTokenState(state) {
+  return {
+    type: USER_TOKEN_STATE,
+    userTokenState: state
   };
 }
 
@@ -49,20 +60,35 @@ export const receiveClientToken = (clientToken) => ({
   clientToken
 });
 
-export const logInUser = (credentials) => {
+export const logInUser = (credentials, asyncDoneCallback) => {
   return (dispatch) => {
     dispatch(userTokenIsLoading(true))
+    dispatch(userTokenState({
+      isLoading: true,
+      error: false,
+      error_message: ""
+    }))
 
     const gotData = (data) => {
       dispatch(userTokenIsLoading(false));
+      dispatch(userTokenState({
+        isLoading: false,
+        error: false,
+        error_message: ""
+      }))
       dispatch(receiveUserToken(data))
     }
 
     const error = (e) => {
       console.log("error in tokens middleware:", e)
+      dispatch(userTokenState({
+        isLoading: false,
+        error: true,
+        error_message: e
+      }))
     }
 
-    fetchUserToken(credentials).then(gotData).catch(error);
+    fetchUserToken(credentials).then(gotData).then(asyncDoneCallback).catch(error);
   };
 }
 

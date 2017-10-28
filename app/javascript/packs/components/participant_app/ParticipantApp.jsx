@@ -2,45 +2,17 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom'
 import { Link } from 'react-router-dom'
-import ParticipantStudyList from './ParticipantStudyList'
+import ParticipantProtocolList from './ParticipantProtocolList'
 import { withRouter } from 'react-router'
 import pathToRegexp from 'path-to-regexp'
 import { Provider, connect } from "react-redux";
 import elicitApi from "../../api/elicit-api.js"; 
+import Header from "../nav/Header"
 
 import {
   logoutUser
 } from "../../actions/tokens_actions"
 
-class Header extends React.Component {
-  render() {
-    let username = (this.props.current_user.data.email) ? this.props.current_user.data.email : "none"
-    return (
-  <nav className="nav navbar navbar-default navbar-fixed-top">
-      <div className="navbar-header">
-        <button type="button" className="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-          <span className="icon-bar"></span>
-          <span className="icon-bar"></span>
-          <span className="icon-bar"></span>
-        </button>
-        <a className="navbar-brand" href="#">CogSci</a>
-      </div>
-      <div className="collapse navbar-collapse">
-        <ul id="admin-nav" className="nav navbar-nav">
-          <li><Link to='/'>Home</Link></li>
-          <li><Link to='/participant'>Participant</Link></li>
-        </ul>
-
-        <ul className="nav navbar-nav navbar-right">
-          <li><a onClick={ (e) => { this.props.dispatch(logoutUser()) } }>{username}</a></li>
-          <li><a onClick={ (e) => { this.props.dispatch(logoutUser()) } }>Logout</a></li>
-          <li>&nbsp;</li>
-        </ul>
-      </div>
-  </nav>
-)
-  }
-}
 
 
 const AppRoutes = {
@@ -53,17 +25,22 @@ const AppRoutes = {
 
 class ParticipantApp extends React.Component {
   constructor(props){
+    console.log("ParticipantApp CONSTRUCT")
     super(props);
   }
 
   render() {
+      if (this.props.token_status != 'user') {
+        return <Redirect to='/login'></Redirect>
+      }
+
       return(
     <div>
       <Header {...this.props} ></Header>
       <div id="wrap" className="admin-app-container container">
         <Switch>
-          <Route exact path='/' name="participant_overview" render={routeProps => <ParticipantStudyList {...routeProps} {...this.props} /> } />
-          <Route exact path='/participant' name="participant_overview" render={routeProps => <ParticipantStudyList {...routeProps} {...this.props} /> } />
+          <Route exact path='/' name="participant_overview" render={routeProps => <ParticipantProtocolList {...routeProps} {...this.props} /> } />
+          <Route exact path='/participant' name="participant_overview" render={routeProps => <ParticipantProtocolList {...routeProps} {...this.props} /> } />
           <Route path='/participant/studies/:study_id' name="protocol_detail" render={routeProps => <TakeStudy {...routeProps} {...this.props}  /> } />
         </Switch>
       </div>
@@ -81,14 +58,13 @@ class ParticipantApp extends React.Component {
     const {dispatch} = this.props;
 
     // don't dispatch these simultaneously; there will be problems if we try and refresh the token
-    dispatch(elicitApi.actions.studies()).then(() => {dispatch(elicitApi.actions.current_user())} );
+    dispatch(elicitApi.actions.eligeable_protocols()).then(() => {dispatch(elicitApi.actions.current_user())} );
   }
 }
 
 const mapStateToProps = (state) => ({
-  studies: state.studies,
   current_user: state.current_user,
-  study_definition: state.study_definition,
+  eligeable_protocols: state.eligeable_protocols,
   userToken: state.tokens.userToken
 });
 const connectedParticipantApp = connect(mapStateToProps)(ParticipantApp)

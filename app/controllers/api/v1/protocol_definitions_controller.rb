@@ -15,6 +15,11 @@ module Api::V1
       }
       session = Chaos::ChaosSession.new(session_params)
 
+
+      protocol_user = ProtocolUser.where({
+        :user_id => current_user.id,
+        :protocol_definition_id => protocol_definition_id}).first!
+
       study_result = StudyResult::StudyResult.find_or_create_by({
         :user_id => current_user.id,
         :study_definition_id => study_definition_id})
@@ -22,9 +27,8 @@ module Api::V1
       study_result.save!
 
       experiment = StudyResult::Experiment.find_or_create_by({
-        :user_id => current_user.id,
         :study_definition_id => study_definition_id,
-        :protocol_definition_id => protocol_definition_id})
+        :protocol_user_id => protocol_user.id })
 
       experiment.save!
  
@@ -59,7 +63,7 @@ module Api::V1
     def protocol_definition_params
       params.require(:study_definition_id)
       permit_json_params(params[:protocol_definition], :protocol_definition) do
-        params.require(:protocol_definition).permit(:definition_data).merge(:study_definition_id => params[:study_definition_id])
+        params.require(:protocol_definition).permit([:definition_data, :type, :name, :summary, :description]).merge(:study_definition_id => params[:study_definition_id])
       end
     end
   end

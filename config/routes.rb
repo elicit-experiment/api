@@ -25,6 +25,7 @@ Rails.application.routes.draw do
   # API
   namespace :api do
     namespace :v1 do
+      get 'participant/eligeable_protocols' => "participant#eligeable_protocols"
       resources :study_definitions, defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index] do
         resources :study_results, :controller => "study_results", defaults: { format: 'json' }, only: [:show, :destroy, :create, :index]
         resources :protocol_definitions, :controller => "protocol_definitions", defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index] do
@@ -74,6 +75,10 @@ Rails.application.routes.draw do
 
   get '/admin'  => 'admin#index'
   get '/participant'  => 'admin#index'
+  get '/login'  => 'admin#index'
   match '/admin/*remainder' => 'admin#index', via: :all
   match '/participant/*remainder' => 'admin#index', via: :all
+  match '/login/*remainder' => 'admin#index', via: :all
+
+  match '/*path' => 'admin#index', via: :all
 end

@@ -6,6 +6,12 @@ Issues:
 	- token refresh @done(2017-10-17)
 	- 
 
+Participant:
+- Add info about in-progress experiments
+
+Study:
+- Redesign 
+
 User & Auth:
 - Password reset
 - email confirmation
@@ -13,9 +19,9 @@ User & Auth:
 
 Study:
 - Design to enable publishing
-- Associate users with studies
-- Enforce user permissions to access studies
-- Redesign Participant page
+- Associate users with studies @done(2017-10-28)
+- Enforce user permissions to access studies @done(2017-10-28)
+- Redesign Participant page @done(2017-10-28)
 - Implement Phase & Trial orders
 
 Client Examples:
@@ -29,9 +35,16 @@ Cleanup:
 - Clean up chaos sessions
 - Link back to Elicit when survey is complete
 - Figure out how much of the old experiment xml cruft actually needs to be passed to the frontend (i.e. Outputs, etc..)
+- fixup headers in admin and participant @done(2017-10-28)
+- rename admin_controller
 
 Bugs:
 - Entering invalid creds on login causes you to dump to a blank screen
+- Participant/admin should be chosen after login based on account role @done(2017-10-28)
+- 
+
+Fit and Finish:
+- Handle situation where 'loading' in ElicitRoot times out
 
 To Create Items:
 	- To create a task, type a dash followed by a space.

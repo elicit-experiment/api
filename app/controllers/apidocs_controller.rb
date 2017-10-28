@@ -24,6 +24,14 @@ class ApidocsController < ActionController::Base
       end
     end
     tag do
+      key :name, 'Study Participation'
+      key :description, 'Operations to participate in studies'
+      externalDocs do
+        key :description, 'Find more info here'
+        key :url, 'https://'
+      end
+    end
+    tag do
       key :name, 'Study Definition'
       key :description, 'Study Definition operations'
       externalDocs do
@@ -174,6 +182,9 @@ class ApidocsController < ActionController::Base
     Apidocs::V1::ExperimentsApidocs,
     Apidocs::V1::StagesApidocs,
     Apidocs::V1::DataPointsApidocs,
+
+    # Participating in Studies
+    Apidocs::V1::ParticipantApidocs,
 
     # API infrastructure
     ElicitError,

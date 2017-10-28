@@ -22,39 +22,6 @@
   background-color: #f1f1f1;
 } 
 
-
-.new-study {
- text-align:center;
- font-size: 36px; 
-}
-
-.study {
-  height: 140px;
-  -webkit-transition: 0.5s;
-  -moz-transition: 0.5s;
-  -o-transition: 0.5s;
-  visibility: hidden; 
-}
-
-.study-summary {
-  height: 140px;
-  -webkit-transition: 0.5s;
-  -moz-transition: 0.5s;
-  -o-transition: 0.5s;
-  visibility: hidden; 
-}
-
-.study-detail {
-  -webkit-transition: 0.5s;
-  -moz-transition: 0.5s;
-  -o-transition: 0.5s;
-}
-
-
-.study-summary.show {
-  visibility: visible; 
-}
-
 .fade-apear {
   opacity: 1;
   height: 100%;
@@ -96,21 +63,48 @@
   transition: all 300ms ease-in-out;
 }
 
+h1 {
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
 
-.remove-study {
-  display:block;
-  position:absolute;
-  right:6px;
-  top:20px;  
+
+// Study List
+
+.new-study {
+ text-align:center;
+ font-size: 36px; 
+}
+
+.study {
+  height: 140px;
+  -webkit-transition: 0.5s;
+  -moz-transition: 0.5s;
+  -o-transition: 0.5s;
+  visibility: hidden; 
+}
+
+.study-summary {
+  height: 140px;
+  -webkit-transition: 0.5s;
+  -moz-transition: 0.5s;
+  -o-transition: 0.5s;
+  visibility: hidden; 
+}
+
+.study-detail {
+  -webkit-transition: 0.5s;
+  -moz-transition: 0.5s;
+  -o-transition: 0.5s;
+}
+
+
+.study-summary.show {
+  visibility: visible; 
 }
 
 .study-wrapper {
   position: relative;
-}
-
-h1 {
-  padding-top: 5px;
-  padding-bottom: 5px;
 }
 
 .study-info-row {
@@ -124,6 +118,53 @@ h1 {
   padding-left:0px;
 }
 
+.remove-study {
+  display:block;
+  position:absolute;
+  right:6px;
+  top:20px;  
+}
+
+// Participant List
+
+.protocol-summary {
+  -webkit-transition: 0.5s;
+  -moz-transition: 0.5s;
+  -o-transition: 0.5s;
+  visibility: hidden; 
+}
+
+.protocol-summary.show {
+  visibility: visible; 
+}
+
+.protocol-wrapper {
+  position: relative;
+}
+
+.protocol-info-row {
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+}
+
+.protocol-info-protocols-count {
+  text-align:left;
+  margin-left:0px;
+  padding-left:0px;
+}
+
+.protocol-description-text {
+ font-size: 12px; 
+  padding-bottom:15px; 
+}
+
+.protocol-summary-text {
+  padding-bottom:15px; 
+  font-size: 14px; 
+}
+
+
+// Main page background
 
 .elicit-title {
   font-size: 20vw;

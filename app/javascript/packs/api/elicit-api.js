@@ -175,7 +175,7 @@ const current_user = {
 
 const take_protocol = {
   take_protocol: {
-    url: `${api_root}/study_definitions/:study_definition_id/protocol_definitions/:protocol_definition_id//take`,
+    url: `${api_root}/study_definitions/:study_definition_id/protocol_definitions/:protocol_definition_id/take`,
     options: {
       headers: _.extend({}, default_headers)
     },
@@ -193,6 +193,19 @@ const take_protocol = {
       }) {
         window.location.href = data.url
       }
+    ],
+  }
+}
+
+const eligeable_protocol = {
+  eligeable_protocols: {
+    url: `${api_root}/participant/eligeable_protocols`,
+    transformer: transformers.array,
+    options: {
+      headers: _.extend({}, default_headers)
+    },
+    prefetch: [
+      refreshTokenIfExpired
     ],
   }
 }
@@ -220,6 +233,7 @@ user_entity.user.postfetch.push(function({
 const api = reduxApi(_.extend({},
   current_user,
   take_protocol,
+  eligeable_protocol,
   make_entity_def('study_definition', 'studies', 'study_definitions'),
   user_entity)).use("options", (url, params, getState) => {
   const {

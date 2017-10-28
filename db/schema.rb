@@ -106,6 +106,8 @@ ActiveRecord::Schema.define(version: 20170829210919) do
     t.string "name"
     t.integer "version"
     t.string "type"
+    t.string "summary"
+    t.string "description"
     t.string "definition_data"
     t.integer "study_definition_id", null: false
     t.datetime "created_at", null: false
@@ -114,13 +116,17 @@ ActiveRecord::Schema.define(version: 20170829210919) do
   end
 
   create_table "protocol_users", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.integer "protocol_definition_id", null: false
+    t.references "user", foreign_key: true
+    t.references "protocol_definition", foreign_key: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["protocol_definition_id"], name: "index_protocol_definition_id"
     t.index ["user_id"], name: "index_user_id"
   end
+
+  add_foreign_key "protocol_users", "users", column: "user_id"
+  add_foreign_key "protocol_users", "protocol_definitions", column: "protocol_definition_id"
+
 
   create_table "stimuli", force: :cascade do |t|
     t.string "definition_data"
@@ -179,12 +185,13 @@ ActiveRecord::Schema.define(version: 20170829210919) do
 
   create_table "study_result_experiments", force: :cascade do |t|
     t.integer "study_definition_id", null: false
-    t.integer "protocol_definition_id", null: false
-    t.integer "user_id", null: false
+    t.references "protocol_user", foreign_key: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "completed_at"
   end
+
+  add_foreign_key "study_result_experiments", "protocol_users", column: "protocol_user_id"
 
   create_table "study_result_stages", force: :cascade do |t|
     t.integer "study_definition_id", null: false
