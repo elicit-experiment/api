@@ -9,8 +9,9 @@ class PhaseOrder < ApplicationRecord
       key :type, :integer
       key :format, :int64
     end
-    property :name do
-      key :type, :string
+    property :user_id do
+      key :type, :integer
+      key :format, :int64
     end
     property :sequence_data do
       key :type, :string

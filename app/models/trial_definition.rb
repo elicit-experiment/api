@@ -13,9 +13,6 @@ class TrialDefinition < ApplicationRecord
       key :type, :integer
       key :format, :int64
     end
-    property :name do
-      key :type, :string
-    end
     property :definition_data do
       key :type, :string
     end
