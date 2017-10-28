@@ -6,8 +6,8 @@ Rails.application.routes.draw do
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
-  #root of site
-  root 'admin#index'
+  # root of site
+  root 'client_app#index'
 
   # routes to enable the CHAOS protocol used by the clients
 	  scope :v6 do
@@ -71,14 +71,14 @@ Rails.application.routes.draw do
     end
   end
 
-  ## Admin app pages -- just load the client app
+  ## Client app pages -- just load the client app
 
-  get '/admin'  => 'admin#index'
-  get '/participant'  => 'admin#index'
-  get '/login'  => 'admin#index'
-  match '/admin/*remainder' => 'admin#index', via: :all
-  match '/participant/*remainder' => 'admin#index', via: :all
-  match '/login/*remainder' => 'admin#index', via: :all
+  get '/admin'  => 'client_app#index'
+  get '/participant'  => 'client_app#index'
+  get '/login'  => 'client_app#index'
+  match '/client_app/*remainder' => 'client_app#index', via: :all
+  match '/participant/*remainder' => 'client_app#index', via: :all
+  match '/login/*remainder' => 'client_app#index', via: :all
 
-  match '/*path' => 'admin#index', via: :all
+  match '/*path' => 'client_app#index', via: :all
 end
