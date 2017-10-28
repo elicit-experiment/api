@@ -5,8 +5,6 @@ import PropTypes from 'prop-types'
 import { Fade } from '../effects/Fade'
 import InlineEdit from 'react-edit-inline';
 import update from 'react-addons-update'
-import Dropdown from '../DropDown'
-import { Link } from 'react-router-dom'
 import pathToRegexp from 'path-to-regexp'
 import elicitApi from "../../api/elicit-api.js"; 
 import ParticipantProtocol from "./ParticipantProtocol"

@@ -8,9 +8,8 @@ Issues:
 
 Participant:
 - Add info about in-progress experiments
-
-Study:
-- Redesign 
+	- Add experiment info to protocol users payload so participant app can access it @done(2017-10-28)
+	- Render experiment information to users
 
 User & Auth:
 - Password reset
@@ -19,10 +18,13 @@ User & Auth:
 
 Study:
 - Design to enable publishing
+	- Add protocol/active to data model @done(2017-10-28)
+	- Add affordance to enable/disable protocol
 - Associate users with studies @done(2017-10-28)
 - Enforce user permissions to access studies @done(2017-10-28)
 - Redesign Participant page @done(2017-10-28)
 - Implement Phase & Trial orders
+- Implement Phase & Trial users
 
 Client Examples:
 - Create pure Python examples (i.e. component dictionaries in Native Python)
@@ -36,7 +38,7 @@ Cleanup:
 - Link back to Elicit when survey is complete
 - Figure out how much of the old experiment xml cruft actually needs to be passed to the frontend (i.e. Outputs, etc..)
 - fixup headers in admin and participant @done(2017-10-28)
-- rename admin_controller
+- rename admin_controller @done(2017-10-28)
 
 Bugs:
 - Entering invalid creds on login causes you to dump to a blank screen

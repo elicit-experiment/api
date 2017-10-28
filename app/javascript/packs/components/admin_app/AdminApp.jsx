@@ -8,8 +8,8 @@ import EditStudy from './EditStudy'
 import {withRouter} from 'react-router'
 import pathToRegexp from 'path-to-regexp'
 import { Provider, connect } from "react-redux";
-import elicitApi from "../api/elicit-api.js"; 
-import Header from "./nav/Header"
+import elicitApi from "../../api/elicit-api.js"; 
+import Header from "../nav/Header"
 
 const AppRoutes = {
   edit_study: {

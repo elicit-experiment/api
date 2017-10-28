@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { Provider } from 'react-redux';
 
 // Import Components
-import { AdminApp } from './components/AdminApp'
+import { AdminApp } from './components/admin_app/AdminApp'
 import { ParticipantApp } from './components/participant_app/ParticipantApp'
 import LoginSignUpContainer from './components/login_signup/LoginSignUpContainer'
 

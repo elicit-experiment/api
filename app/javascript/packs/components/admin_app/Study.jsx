@@ -3,11 +3,11 @@ import ReactDOM from 'react-dom'
 import PropTypes from 'prop-types'
 import InlineEdit from 'react-edit-inline'
 import update from 'react-addons-update'
-import Dropdown from './DropDown'
+import Dropdown from '../ui_elements/DropDown'
 import { AppRoutes } from './AdminApp'
 import { Link } from 'react-router-dom'
 import pathToRegexp from 'path-to-regexp'
-import elicitApi from '../api/elicit-api.js'
+import elicitApi from '../../api/elicit-api.js'
 import { connect } from "react-redux";
 
 const ProtocolInfoLink = (props) => (

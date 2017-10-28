@@ -3,7 +3,7 @@ import ReactDataGrid from 'react-data-grid'
 const { Editors, Toolbar, Formatters } = require('react-data-grid-addons');
 const { AutoComplete: AutoCompleteEditor, DropDownEditor } = Editors;
 const { ImageFormatter } = Formatters;
-import UserConstants from '../constants/UserConstants'
+import UserConstants from '../../constants/UserConstants'
 import update from 'react-addons-update'
 
 class UserList extends React.Component {
