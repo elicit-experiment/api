@@ -43,16 +43,13 @@ class LoginSignUpContainer extends React.Component {
       $('#pleaseWaitDialog').modal('hide')      
     }
   }
-  componentDidUnmount() {
-    // just in case we don't hide the modal completely in time.
-  }
-
   render() {
-    if (this.props.token_status == 'user' && this.props.currentUser) {
+    if (this.props.token_status == 'user' && this.props.currentUser && this.props.currentUser.sync) {
       $('#pleaseWaitDialog').modal('hide')
-      console.log('HIDE!')
-      $('.modal-backdrop').remove();
-      if (this.props.currentUser.role == 'admin') {
+      console.log('Loaded current user!')
+      $('.modal-backdrop').remove()
+      console.dir(this.props.currentUser)
+      if (this.props.currentUser.data.role == 'admin') {
         return <Redirect to="/admin"/>
       } else {
         return <Redirect to="/participant"/>

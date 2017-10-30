@@ -32,9 +32,9 @@ Client Examples:
 
 Deployment:
 - Create Docker containers with Postgresql and the rails apps  @done(2017-10-26)
- 
+
 Cleanup:
-- Clean up chaos sessions
+- Clean up old chaos sessions
 - Link back to Elicit when survey is complete
 - Figure out how much of the old experiment xml cruft actually needs to be passed to the frontend (i.e. Outputs, etc..)
 - fixup headers in admin and participant @done(2017-10-28)
