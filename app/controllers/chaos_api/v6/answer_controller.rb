@@ -25,12 +25,11 @@ module ChaosApi::V6
 
       new_datapoints = output["Events"].map do |event|
         StudyResult::DataPoint.new({
-          :study_definition_id => study_definition_id,
-          :protocol_definition_id => @component.protocol_definition_id,
+          :stage_id => @chaos_session.stage.id,
+          :protocol_user_id => @chaos_session.protocol_user_id,
           :phase_definition_id => @component.phase_definition_id,
           :trial_definition_id => @component.trial_definition_id,
           :component_id => @component.id,
-          :user_id => @chaos_session.user_id,
           :point_type => event["Type"],
           :kind => event["EventId"],
           :value => event["Data"],
@@ -41,15 +40,14 @@ module ChaosApi::V6
 
       output.delete("Events")
 
-      state = StudyResult::DataPoint.find_or_create_by({
-          :study_definition_id => study_definition_id,
-          :protocol_definition_id => @component.protocol_definition_id,
+      state = StudyResult::DataPoint.where({
+          :stage_id => @chaos_session.stage.id,
+          :protocol_user_id => @chaos_session.protocol_user_id,
           :phase_definition_id => @component.phase_definition_id,
           :trial_definition_id => @component.trial_definition_id,
           :component_id => @component.id,
-          :user_id => @chaos_session.user_id,
           :point_type => "State"
-        })
+        }).first_or_initialize
 
       state.value = output.to_json
       state.datetime = DateTime.now

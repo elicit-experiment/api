@@ -1,7 +1,7 @@
 class Apidocs::V1::ExperimentsApidocs
   include Swagger::Blocks
 
-  swagger_path '/study_definitions/{study_definition_id}/protocol_definitions/{protocol_definition_id}/experiments' do
+  swagger_path '/study_results/{study_results_id}/experiments' do
     operation :get do
       key :summary, 'Returns all experiment results from the system to which the user has access'
       key :operationId, 'findExperiments'
@@ -20,17 +20,17 @@ class Apidocs::V1::ExperimentsApidocs
         key :default, 'Bearer PASTE_ACCESS_TOKEN_HERE'
       end
       parameter do
-        key :name, :study_definition_id
+        key :name, :study_results_id
         key :in, :path
-        key :description, 'Study definition id of the experiment results to return'
+        key :description, 'Study results id of the experiment results to return'
         key :required, true
         key :type, :string
       end
       parameter do
-        key :name, :protocol_definition_id
-        key :in, :path
+        key :name, :protocol_user_id
+        key :in, :query
         key :description, 'Protocol definition id of the experiment results to return'
-        key :required, true
+        key :required, false
         key :type, :string
       end
       response 200 do
@@ -78,16 +78,9 @@ class Apidocs::V1::ExperimentsApidocs
         end
       end
       parameter do
-        key :name, :study_definition_id
+        key :name, :study_results_id
         key :in, :path
-        key :description, 'Study definition id which this experiment result is added to'
-        key :required, true
-        key :type, :string
-      end
-      parameter do
-        key :name, :protocol_definition_id
-        key :in, :path
-        key :description, 'Protocol definition id which this experiment result is added to'
+        key :description, 'Study results id of the experiment results to return'
         key :required, true
         key :type, :string
       end
@@ -106,7 +99,7 @@ class Apidocs::V1::ExperimentsApidocs
     end
   end
 
-  swagger_path '/study_definitions/{study_definition_id}/protocol_definitions/{protocol_definition_id}/experiments/{id}' do
+  swagger_path '/study_results/{study_results_id}/experiments/{experiment_id}' do
     operation :put do
       key :description, 'Updates an experiment result'
       key :summary, 'Updates an experiment result'
@@ -123,12 +116,18 @@ class Apidocs::V1::ExperimentsApidocs
         key :default, 'Bearer PASTE_ACCESS_TOKEN_HERE'
       end
       parameter do
-        key :name, :id
+        key :name, :study_results_id
         key :in, :path
-        key :description, 'ID of experiment result to update'
+        key :description, 'Study results id of the experiment results to return'
         key :required, true
-        key :type, :integer
-        key :format, :int64
+        key :type, :string
+      end
+      parameter do
+        key :name, :experiment_id
+        key :in, :path
+        key :description, 'Experiment id of the experiment to update'
+        key :required, true
+        key :type, :string
       end
       parameter do
         key :name, :experiment
@@ -162,7 +161,7 @@ class Apidocs::V1::ExperimentsApidocs
   end
 
   # Delete Experiment result Object
-  swagger_path '/study_definitions/{study_definition_id}/protocol_definitions/{protocol_definition_id}/experiments/{id}' do
+  swagger_path '/study_results/{study_results_id}/experiments/{experiment_id}' do
     operation :delete do
       key :description, 'Deletes an experiment'
       key :summary, 'Deletes an experiment'
@@ -179,12 +178,18 @@ class Apidocs::V1::ExperimentsApidocs
         key :default, 'Bearer PASTE_ACCESS_TOKEN_HERE'
       end
       parameter do
-        key :name, :id
+        key :name, :study_results_id
         key :in, :path
-        key :description, 'ID of study definition to delete'
+        key :description, 'Study results id of the experiment results to return'
         key :required, true
-        key :type, :integer
-        key :format, :int64
+        key :type, :string
+      end
+      parameter do
+        key :name, :experiment_id
+        key :in, :path
+        key :description, 'Experiment id of the experiment to delete'
+        key :required, true
+        key :type, :string
       end
 
       response 204 do
@@ -213,22 +218,25 @@ class Apidocs::V1::ExperimentsApidocs
   end
 
   swagger_schema :Experiment do
-    key :required, [:study_definition_id, :protocol_definition_id, :user_id]
     property :id do
       key :type, :integer
       key :format, :int64
-    end
-    property :study_definition_id do
+    end 
+    property :study_result_id do
       key :type, :integer
       key :format, :int64
     end
-    property :protocol_definition_id do
+    property :protocol_user_id do
       key :type, :integer
       key :format, :int64
     end
-    property :user_id do
+    property :current_stage_id do
       key :type, :integer
       key :format, :int64
+    end
+    property :started_at do
+      key :type, :string
+      key :format, :datetime
     end
     property :completed_at do
       key :type, :string

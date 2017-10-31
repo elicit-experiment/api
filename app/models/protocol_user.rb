@@ -15,9 +15,11 @@ class ProtocolUser < ApplicationRecord
     end
     property :user_id do
       key :type, :integer
+      key :format, :int64
     end
     property :protocol_definition_id do
       key :type, :integer
+      key :format, :int64
     end
   end
 end

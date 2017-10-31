@@ -20,7 +20,8 @@ class ChaosExperimentService
       :protocol_definition_id => @protocol_definition.id}).first unless protocol_definition
   end
 
-  def make_experiment(stage)
+  def make_experiment(experiment)
+    stage = experiment.current_stage
     {
     Name: @study_definition.title,
     Css: "",
@@ -40,7 +41,7 @@ class ChaosExperimentService
     }
   end
 
-  def make_slide(trial_no = 0, user_id = nil)
+  def make_slide(trial_no = 0, protocol_user_id = nil)
     @phases = PhaseDefinition.where({:study_definition_id => @study_definition.id, :protocol_definition_id => @protocol_definition.id}).entries
     @phase_order = PhaseOrder.where({:study_definition_id => @study_definition.id, :protocol_definition_id => @protocol_definition.id}).entries
     
@@ -66,8 +67,8 @@ class ChaosExperimentService
 
     chaos_trial = @components.select{|c| (c.phase_definition_id == phase.id) and (c.trial_definition_id == trial.id) }.map do |c|
       outputs = {}
-      if (user_id != nil)
-        data_points = StudyResult::DataPoint.where({:component_id => c.id, :user_id => user_id })
+      if (protocol_user_id != nil)
+        data_points = StudyResult::DataPoint.where({:component_id => c.id, :protocol_user_id => protocol_user_id })
         events = data_points.entries.select{ |d| !(d.point_type.eql? "State") }.map do |data_point|
           {
             "Type" => data_point.point_type,

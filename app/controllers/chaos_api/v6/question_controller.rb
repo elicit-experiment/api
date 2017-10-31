@@ -20,7 +20,7 @@ module ChaosApi::V6
       @response.Body["FoundCount"] = @experiment_n.css("Experiment>Trials").children.count
       @response.Body["StartIndex"] = trial_index
 
-      @response = ChaosExperimentService.new(@study_definition).make_slide(trial_index, @chaos_session.user_id)
+      @response = ChaosExperimentService.new(@study_definition).make_slide(trial_index, @chaos_session.protocol_user_id)
 
       Rails.logger.info("XML response #{@results.count} SD response #{@response.Body[:Results].count}")
       # compare the prototype generation with the new created one

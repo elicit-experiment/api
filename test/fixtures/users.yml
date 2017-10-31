@@ -4,9 +4,9 @@ one:
   id: 1
   email: MyString
   anonymous: 
-  role: MyString
+  role: admin
 
 two:
   email: MyString
   anonymous: 
-  role: MyString
+  role: registered_user

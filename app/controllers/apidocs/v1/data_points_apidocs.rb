@@ -1,11 +1,11 @@
 class Apidocs::V1::DataPointsApidocs
   include Swagger::Blocks
 
-  swagger_path '/study_definitions/{study_definition_id}/protocol_definitions/{protocol_definition_id}/data_points' do
+  swagger_path '/study_results/{study_results_id}/data_points' do
     operation :get do
       key :summary, 'Query data points'
-      key :description, 'Returns all data points from the study/protcol/phase/trial to which the user has access'
-      key :operationId, 'queryDataPoints'
+      key :description, 'Returns all data points from the study/protocol/phase/trial to which the user has access'
+      key :operationId, 'findDataPoints'
       key :produces, [
         'application/json'
       ]
@@ -21,17 +21,17 @@ class Apidocs::V1::DataPointsApidocs
         key :default, 'Bearer PASTE_ACCESS_TOKEN_HERE'
       end
       parameter do
-        key :name, :study_definition_id
+        key :name, :study_results_id
         key :in, :path
-        key :description, 'Study definition id for the queries data points'
+        key :description, 'Study results id of the experiment results to return'
         key :required, true
-        key :type, :integer
+        key :type, :string
       end
       parameter do
-        key :name, :protocol_definition_id
-        key :in, :path
-        key :description, 'Protocol definition id for the queries data points'
-        key :required, true
+        key :name, :protocol_user_id
+        key :in, :query
+        key :description, 'Protocol user id for the queries data points'
+        key :required, false
         key :type, :integer
       end
       parameter do
@@ -45,6 +45,13 @@ class Apidocs::V1::DataPointsApidocs
         key :name, :trial_definition_id
         key :in, :query
         key :description, 'Trial definition id for the queries data points'
+        key :required, false
+        key :type, :integer
+      end
+      parameter do
+        key :name, :component_id
+        key :in, :query
+        key :description, 'Component definition id for the queries data points'
         key :required, false
         key :type, :integer
       end
@@ -67,69 +74,7 @@ class Apidocs::V1::DataPointsApidocs
   end
 
 
-  swagger_path '/study_definitions/{study_definition_id}/protocol_definitions/{protocol_definition_id}/phase_definitions/{phase_definition_id}/trial_definitions/{trial_definition_id}/data_points' do
-    operation :get do
-      key :summary, 'All data points'
-      key :description, 'Returns all data points from the study/protcol/phase/trial to which the user has access'
-      key :operationId, 'findDataPoints'
-      key :produces, [
-        'application/json'
-      ]
-      key :tags, [
-        'Data Point', 'Study Results'
-      ]
-      parameter do
-        key :name, :authorization
-        key :in, :header
-        key :description, "Authenticated Users's access token"
-        key :required, true
-        key :type, :string
-        key :default, 'Bearer PASTE_ACCESS_TOKEN_HERE'
-      end
-      parameter do
-        key :name, :study_definition_id
-        key :in, :path
-        key :description, 'Study definition id to query the datapoints'
-        key :required, true
-        key :type, :string
-      end
-      parameter do
-        key :name, :protocol_definition_id
-        key :in, :path
-        key :description, 'Protocol definition id to query the datapoints'
-        key :required, true
-        key :type, :string
-      end
-      parameter do
-        key :name, :phase_definition_id
-        key :in, :path
-        key :description, 'Phase definition id to query the datapoints'
-        key :required, true
-        key :type, :string
-      end
-      parameter do
-        key :name, :trial_definition_id
-        key :in, :path
-        key :description, 'Trial definition id to query the datapoints'
-        key :required, true
-        key :type, :string
-      end
-      response 200 do
-        key :description, 'List of DataPoints for the given study/protocol/phase/trial combination'
-        schema do
-          key :type, :array
-          items do
-            key :'$ref', :DataPoint
-          end
-        end
-      end
-      response :default do
-        key :description, 'Unexpected error'
-        schema do
-          key :'$ref', :ElicitError
-        end
-      end
-    end
+  swagger_path '/study_results/{study_results_id}/data_points' do
 
     operation :post do
       key :summary, 'New DataPoint'
@@ -159,33 +104,13 @@ class Apidocs::V1::DataPointsApidocs
         end
       end
       parameter do
-        key :name, :study_definition_id
+        key :name, :study_results_id
         key :in, :path
-        key :description, 'Study definition id for the new data point'
+        key :description, 'Study results id of the experiment results to return'
         key :required, true
         key :type, :string
       end
-      parameter do
-        key :name, :protocol_definition_id
-        key :in, :path
-        key :description, 'Protocol definition id for the new data point'
-        key :required, true
-        key :type, :string
-      end
-      parameter do
-        key :name, :phase_definition_id
-        key :in, :path
-        key :description, 'Phase definition id for the new data point'
-        key :required, true
-        key :type, :string
-      end
-      parameter do
-        key :name, :trial_definition_id
-        key :in, :path
-        key :description, 'Trial definition id for the new data point'
-        key :required, true
-        key :type, :string
-      end
+
       response 201 do
         key :description, 'Newly-created data point object'
         schema do
@@ -202,7 +127,7 @@ class Apidocs::V1::DataPointsApidocs
   end
 
   # Update DataPoint Definition Object
-  swagger_path '/study_definitions/{study_definition_id}/protocol_definitions/{protocol_definition_id}/phase_definitions/{phase_definition_id}/trial_definitions/{trial_definition_id}/data_points/{id}' do
+  swagger_path '/study_results/{study_results_id}/trial_definitions/{trial_definition_id}/data_points/{id}' do
     operation :put do
       key :description, 'Updates a DataPoint Definition'
       key :summary, 'Updates a DataPoint Definition'
@@ -227,30 +152,9 @@ class Apidocs::V1::DataPointsApidocs
         key :format, :int64
       end
       parameter do
-        key :name, :study_definition_id
+        key :name, :study_results_id
         key :in, :path
-        key :description, 'Study definition id of the datapoint to update'
-        key :required, true
-        key :type, :string
-      end
-      parameter do
-        key :name, :protocol_definition_id
-        key :in, :path
-        key :description, 'Protocol definition id of the datapoint to update'
-        key :required, true
-        key :type, :string
-      end
-      parameter do
-        key :name, :phase_definition_id
-        key :in, :path
-        key :description, 'Phase definition id of the datapoint to update'
-        key :required, true
-        key :type, :string
-      end
-      parameter do
-        key :name, :trial_definition_id
-        key :in, :path
-        key :description, 'Trial definition id of the datapoint to update'
+        key :description, 'Study results id of the experiment results to return'
         key :required, true
         key :type, :string
       end
@@ -276,7 +180,7 @@ class Apidocs::V1::DataPointsApidocs
   end
 
   # Delete DataPoint Definition Object
-  swagger_path '/study_definitions/{study_definition_id}/protocol_definitions/{protocol_definition_id}/phase_definitions/{phase_definition_id}/trial_definitions/{trial_definition_id}/data_points/{id}' do
+  swagger_path '/study_results/{study_results_id}/trial_definitions/{trial_definition_id}/data_points/{id}' do
     operation :delete do
       key :description, 'Deletes a DataPoint Definition'
       key :summary, 'Deletes a DataPoint Definition'
@@ -293,6 +197,13 @@ class Apidocs::V1::DataPointsApidocs
         key :default, 'Bearer PASTE_ACCESS_TOKEN_HERE'
       end
       parameter do
+        key :name, :study_results_id
+        key :in, :path
+        key :description, 'Study results id of the experiment results to return'
+        key :required, true
+        key :type, :string
+      end
+      parameter do
         key :name, :id
         key :in, :path
         key :description, 'ID of data point to delete'
@@ -300,34 +211,7 @@ class Apidocs::V1::DataPointsApidocs
         key :type, :integer
         key :format, :int64
       end
-      parameter do
-        key :name, :study_definition_id
-        key :in, :path
-        key :description, 'Study definition id of the data point to delete'
-        key :required, true
-        key :type, :string
-      end
-      parameter do
-        key :name, :protocol_definition_id
-        key :in, :path
-        key :description, 'Protocol definition of the data point to delete'
-        key :required, true
-        key :type, :string
-      end
-      parameter do
-        key :name, :phase_definition_id
-        key :in, :path
-        key :description, 'Phase definition id of the data point to delete'
-        key :required, true
-        key :type, :string
-      end
-      parameter do
-        key :name, :trial_definition_id
-        key :in, :path
-        key :description, 'Trial definition id of the data point to delete'
-        key :required, true
-        key :type, :string
-      end
+
       response 204 do
         key :description, 'Successful Response; data point deleted (No Content)'
       end
@@ -354,15 +238,40 @@ class Apidocs::V1::DataPointsApidocs
   end
 
   swagger_schema :DataPoint do
-    key :required, [:definition_data, :name]
-    property :id do
+    key :required, [:stage_id, :protocol_user_id, :phase_definition_id, :trial_definition_id, :component_id]
+    property :stage_id do
       key :type, :integer
       key :format, :int64
     end
-    property :name do
+    property :protocol_user_id do
+      key :type, :integer
+      key :format, :int64
+    end
+    property :phase_definition_id do
+      key :type, :integer
+      key :format, :int64
+    end
+    property :trial_definition_id do
+      key :type, :integer
+      key :format, :int64
+    end
+    property :component_id do
+      key :type, :integer
+      key :format, :int64
+    end
+    property :kind do
       key :type, :string
     end
-    property :definition_data do
+    property :point_type do
+      key :type, :string
+    end
+    property :value do
+      key :type, :string
+    end
+    property :method do
+      key :type, :string
+    end
+    property :datetime do
       key :type, :string
     end
   end

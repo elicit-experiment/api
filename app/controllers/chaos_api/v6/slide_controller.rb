@@ -14,13 +14,20 @@ module ChaosApi::V6
       @sessionGUID = params[:sessionGUID]
       @response = ChaosResponse.new([])
 
-      @chaos_session = Chaos::ChaosSession.where({:session_guid => @sessionGUID}).includes([:experiment, :phase_definition, :stage]).first
+      @chaos_session = Chaos::ChaosSession.where({:session_guid => @sessionGUID}).includes([:experiment, :phase_definition, :experiment, :stage]).first
 
       @protocol_definition = ProtocolDefinition.find(@protocol_id)
 
       @chaos_session.stage.last_completed_trial = @slideIndex
 
-      @chaos_session.stage.save!
+      if @chaos_session.stage.last_completed_trial == @chaos_session.stage.num_trials
+        Rails.logger.info "Stage completed"
+        @chaos_session.stage.completed_at = DateTime.now
+        @chaos_session.stage.save!
+        @chaos_session.next_stage
+      else
+        @chaos_session.stage.save!
+        end
 
       @response = ChaosResponse.new([])
 

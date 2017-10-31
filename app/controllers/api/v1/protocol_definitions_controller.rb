@@ -7,50 +7,43 @@ module Api::V1
       session_guid = SecureRandom.uuid
       study_definition_id = params[:study_definition_id]
       protocol_definition_id = params[:protocol_definition_id]
-      session_params = {
-        :user_id => current_user.id,
-        :session_guid => session_guid,
-        :url => "#{Rails.configuration.elicit['participant_frontend']['scheme']}://#{Rails.configuration.elicit['participant_frontend']['host']}:#{Rails.configuration.elicit['participant_frontend']['port']}/?session_guid=#{session_guid}#Experiment/#{protocol_definition_id}",
-        :expires_at => Date.today + 1.day
-      }
-      session = Chaos::ChaosSession.new(session_params)
-
 
       protocol_user = ProtocolUser.where({
         :user_id => current_user.id,
         :protocol_definition_id => protocol_definition_id}).first!
 
-      study_result = StudyResult::StudyResult.find_or_create_by({
+      session_params = {
         :user_id => current_user.id,
-        :study_definition_id => study_definition_id})
-
-      study_result.save!
-
-      experiment = StudyResult::Experiment.find_or_create_by({
-        :study_definition_id => study_definition_id,
-        :protocol_user_id => protocol_user.id })
-
-      experiment.save!
- 
-      # TODO: figure out how to find the first stage 
-      start_phase = PhaseDefinition.where({
-        :study_definition_id => study_definition_id,
-        :protocol_definition_id => protocol_definition_id}).first!
-
-      stage = StudyResult::Stage.find_or_create_by({
-        :user_id => current_user.id,
+        :session_guid => session_guid,
+        :url => "#{Rails.configuration.elicit['participant_frontend']['scheme']}://#{Rails.configuration.elicit['participant_frontend']['host']}:#{Rails.configuration.elicit['participant_frontend']['port']}/?session_guid=#{session_guid}#Experiment/#{protocol_definition_id}",
+        :expires_at => Date.today + 1.day,
         :study_definition_id => study_definition_id,
         :protocol_definition_id => protocol_definition_id,
-        :phase_definition_id => start_phase.id})
+        :protocol_user_id => protocol_user.id,
+      }
+      session = Chaos::ChaosSession.new(session_params)
 
-      stage.save!
+      study_result = StudyResult::StudyResult.where({
+        :user_id => current_user.id,
+        :study_definition_id => study_definition_id}).first
 
-      session.study_definition_id = study_definition_id
-      session.protocol_definition_id = protocol_definition_id
-      session.phase_definition_id = start_phase.id
-      session.experiment_id = experiment.id
-      session.stage_id = stage.id
- 
+      if nil
+#        StudyResult::Experiment.where({
+#          :study_result_id => study_result.id,
+#          :protocol_user_id => protocol_user.id}).destroy_all
+
+        StudyResult::StudyResult.where({
+          :user_id => current_user.id,
+          :study_definition_id => study_definition_id}).destroy_all
+        StudyResult::Stage.where({
+          :protocol_user_id => protocol_user.id }).destroy_all
+      end
+
+
+      session.populate current_user.id
+
+      Rails.logger.info "Taking session #{session.ai}"
+
       if session.save
         respond_with session
       else

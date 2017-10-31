@@ -12,15 +12,43 @@
 
 ActiveRecord::Schema.define(version: 20170829210919) do
 
+  #
+  # Users
+  #
+
+  create_table "users", force: :cascade do |t|
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at"
+    t.datetime "remember_created_at"
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at"
+    t.datetime "last_sign_in_at"
+    t.string "current_sign_in_ip"
+    t.string "last_sign_in_ip"
+    t.string "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
+    t.string "unconfirmed_email"
+    t.boolean "anonymous"
+    t.string "role"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
     #
     # Chaos interop.
     # 
+
   create_table "chaos_sessions", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "session_guid", null: false
     t.integer "study_definition_id"
     t.integer "protocol_definition_id"
     t.integer "phase_definition_id"
+    t.integer "protocol_user_id"
+    t.integer "study_result_id"
     t.integer "experiment_id"
     t.integer "stage_id"
     t.string "url", null: false
@@ -101,100 +129,72 @@ ActiveRecord::Schema.define(version: 20170829210919) do
     t.string "description"
     t.string "definition_data"
     t.boolean "active", default: false, null: false
-    t.references "study_definition", foreign_key: true
+    t.references "study_definition", foreign_key: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    #t.index ["study_definition_id"], name: "index_protocol_definitions_on_study_definition_id"
   end
-
-  add_foreign_key "protocol_definitions", "study", column: "study_definition_id"
 
   create_table "protocol_users", force: :cascade do |t|
-    t.references "user", foreign_key: true
-    t.references "protocol_definition", foreign_key: true
+    t.references "user", foreign_key: true, null: false
+    t.references "protocol_definition", foreign_key: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["protocol_definition_id"], name: "index_protocol_definition_id"
-    t.index ["user_id"], name: "index_user_id"
   end
-
-  add_foreign_key "protocol_users", "users", column: "user_id"
-  add_foreign_key "protocol_users", "protocol_definitions", column: "protocol_definition_id"
 
   create_table "phase_definitions", force: :cascade do |t|
     t.string "definition_data"
-    t.references "study_definition", foreign_key: true
-    t.references "protocol_definition", foreign_key: true
+    t.references "study_definition", foreign_key: true, null: false
+    t.references "protocol_definition", foreign_key: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    #t.index ["protocol_definition_id"], name: "index_phase_definitions_on_protocol_definition_id"
-    #t.index ["study_definition_id"], name: "index_phase_definitions_on_study_definition_id"
   end
 
   create_table "phase_orders", force: :cascade do |t|
     t.string "sequence_data"
-    t.references "study_definition", foreign_key: true
-    t.references "protocol_definition", foreign_key: true
+    t.references "study_definition", foreign_key: true, null: false
+    t.references "protocol_definition", foreign_key: true, null: false
     t.references "user", foreign_key: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    #t.index ["protocol_definition_id"], name: "index_phase_orders_on_protocol_definition_id"
-    #t.index ["study_definition_id"], name: "index_phase_orders_on_study_definition_id"
-    #t.index ["user_id"], name: "index_phase_orders_on_user_id"
   end
 
   create_table "trial_definitions", force: :cascade do |t|
     t.string "definition_data"
-    t.references "study_definition", foreign_key: true
-    t.references "protocol_definition", foreign_key: true
-    t.references "phase_definition", foreign_key: true
+    t.references "study_definition", foreign_key: true, null: false
+    t.references "protocol_definition", foreign_key: true, null: false
+    t.references "phase_definition", foreign_key: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    #t.index ["phase_definition_id"], name: "index_trial_definitions_on_phase_definition_id"
-    #t.index ["protocol_definition_id"], name: "index_trial_definitions_on_protocol_definition_id"
-    #t.index ["study_definition_id"], name: "index_trial_definitions_on_study_definition_id"
   end
 
   create_table "trial_orders", force: :cascade do |t|
     t.string "sequence_data"
-    t.references "study_definition", foreign_key: true
-    t.references "protocol_definition", foreign_key: true
-    t.references "phase_definition", foreign_key: true
-    t.references "user", foreign_key: true
+    t.references "study_definition", foreign_key: true, null: false
+    t.references "protocol_definition", foreign_key: true, null: false
+    t.references "phase_definition", foreign_key: true, null: false
+    t.references "user", foreign_key: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    #t.index ["phase_definition_id"], name: "index_trial_orders_on_phase_definition_id"
-    #t.index ["protocol_definition_id"], name: "index_trial_orders_on_protocol_definition_id"
-    #t.index ["study_definition_id"], name: "index_trial_orders_on_study_definition_id"
-    #t.index ["user_id"], name: "index_trial_orders_on_user_id"
   end
 
   create_table "stimuli", force: :cascade do |t|
     t.string "definition_data"
-    t.references "study_definition", foreign_key: true
-    t.references "protocol_definition", foreign_key: true
-    t.references "phase_definition", foreign_key: true
-    t.references "trial_definition", foreign_key: true
+    t.references "study_definition", foreign_key: true, null: false
+    t.references "protocol_definition", foreign_key: true, null: false
+    t.references "phase_definition", foreign_key: true, null: false
+    t.references "trial_definition", foreign_key: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    #t.index ["phase_definition_id"], name: "index_stimuli_on_phase_definition_id"
-    #t.index ["protocol_definition_id"], name: "index_stimuli_on_protocol_definition_id"
-    #t.index ["study_definition_id"], name: "index_stimuli_on_study_definition_id"
-    #t.index ["trial_definition_id"], name: "index_stimuli_on_trial_definition_id"
   end
 
   create_table "components", force: :cascade do |t|
     t.string "definition_data"
-    t.references "study_definition", foreign_key: true
-    t.references "protocol_definition", foreign_key: true
-    t.references "phase_definition", foreign_key: true
-    t.references "trial_definition", foreign_key: true
+    t.references "study_definition", foreign_key: true, null: false
+    t.references "protocol_definition", foreign_key: true, null: false
+    t.references "phase_definition", foreign_key: true, null: false
+    t.references "trial_definition", foreign_key: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    #t.index ["phase_definition_id"], name: "index_components_on_phase_definition_id"
-    #t.index ["protocol_definition_id"], name: "index_components_on_protocol_definition_id"
-    #t.index ["study_definition_id"], name: "index_components_on_study_definition_id"
-    #t.index ["trial_definition_id"], name: "index_components_on_trial_definition_id"
   end
 
 
@@ -211,6 +211,33 @@ ActiveRecord::Schema.define(version: 20170829210919) do
     t.datetime "completed_at"
   end
 
+  create_table "study_result_experiments", force: :cascade do |t|
+    t.integer "study_result_id", null: false
+    t.references "protocol_user", foreign_key: true, null: false
+    t.integer "current_stage_id", null: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "completed_at"
+  end
+
+  add_foreign_key "study_result_experiments", "study_result_study_results", column: "study_result_id"
+
+  create_table "study_result_stages", force: :cascade do |t|
+    t.integer "experiment_id", null: false
+    t.references "protocol_user", foreign_key: true, null: false
+    t.references "phase_definition", foreign_key: true, null: false
+    t.integer "last_completed_trial", null: true
+    t.integer "current_trial"
+    t.integer "num_trials"
+    t.integer "context_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "completed_at"
+  end
+
+  add_foreign_key "study_result_stages", "study_result_experiments", column: "experiment_id"
+  add_foreign_key "study_result_experiments", "study_result_stages", column: "current_stage_id"
+
   create_table "study_result_contexts", force: :cascade do |t|
     t.datetime "datetime"
     t.text "context_type"
@@ -220,12 +247,11 @@ ActiveRecord::Schema.define(version: 20170829210919) do
   end
 
   create_table "study_result_data_points", force: :cascade do |t|
-    t.references "study_definition", foreign_key: true
-    t.references "protocol_definition", foreign_key: true
+    t.integer "stage_id", null: false
+    t.references "protocol_user", foreign_key: true
     t.references "phase_definition", foreign_key: true
     t.references "trial_definition", foreign_key: true
     t.references "component", foreign_key: true
-    t.references "user", foreign_key: true
     t.string "kind"
     t.string "point_type"
     t.string "value"
@@ -235,53 +261,5 @@ ActiveRecord::Schema.define(version: 20170829210919) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "study_result_experiments", force: :cascade do |t|
-    t.references "study_definition", foreign_key: true
-    t.references "protocol_user", foreign_key: true
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "completed_at"
-  end
-
-  add_foreign_key "study_result_experiments", "protocol_users", column: "protocol_user_id"
-
-  create_table "study_result_stages", force: :cascade do |t|
-    t.references "study_definition", foreign_key: true
-    t.references "protocol_definition", foreign_key: true
-    t.references "phase_definition", foreign_key: true
-    t.integer "last_completed_trial"
-    t.integer "num_trials"
-    t.integer "user_id", null: false
-    t.integer "context_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "completed_at"
-  end
-
-
-  #
-  # Users
-  #
-
-  create_table "users", force: :cascade do |t|
-    t.string "email", default: "", null: false
-    t.string "encrypted_password", default: "", null: false
-    t.string "reset_password_token"
-    t.datetime "reset_password_sent_at"
-    t.datetime "remember_created_at"
-    t.integer "sign_in_count", default: 0, null: false
-    t.datetime "current_sign_in_at"
-    t.datetime "last_sign_in_at"
-    t.string "current_sign_in_ip"
-    t.string "last_sign_in_ip"
-    t.string "confirmation_token"
-    t.datetime "confirmed_at"
-    t.datetime "confirmation_sent_at"
-    t.string "unconfirmed_email"
-    t.boolean "anonymous"
-    t.string "role"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
+  add_foreign_key "study_result_data_points", "study_result_stages", column: "stage_id"
 end

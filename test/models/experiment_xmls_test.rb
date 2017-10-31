@@ -62,12 +62,12 @@ class ExperimentXmlTest < ActiveSupport::TestCase
         end
         assert_equal x.count, expected.count
         x.each_with_index do |act, i|
-          puts "ACTUAL #{i}"
-          ap act, { sort_keys: true, indent: 2 }
-          puts "EXPECTED #{i}"
-          ap expected[i], { sort_keys: true, indent: 2 }
-          puts "DIFF #{i}"
-          ap act.diff(expected[i]), { sort_keys: true, indent: 2 }
+          #puts "ACTUAL #{i}"
+          #ap act, { sort_keys: true, indent: 2 }
+          #puts "EXPECTED #{i}"
+          #ap expected[i], { sort_keys: true, indent: 2 }
+          #puts "DIFF #{i}"
+          #ap act.diff(expected[i]), { sort_keys: true, indent: 2 }
           assert_equal act, expected[i]
         end
       end

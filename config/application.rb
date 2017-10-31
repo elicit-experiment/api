@@ -20,10 +20,12 @@ module ElicitApi
 
 
     log_level = String(ENV['LOG_LEVEL'] || "info").upcase
-    config.logger = Logger.new(STDOUT)
-    config.logger.level = Logger.const_get(log_level)
-    config.log_level = log_level
+    logger = ActiveSupport::Logger.new(STDOUT)
+    logger.formatter = config.log_formatter
+    logger.level = Logger.const_get(log_level)
+    config.logger = ActiveSupport::TaggedLogging.new(logger)
 
+    config.log_level = log_level
     config.lograge.enabled = true
 
 #    config.lograge.custom_options = lambda do |event|

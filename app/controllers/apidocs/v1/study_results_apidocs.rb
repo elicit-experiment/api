@@ -1,7 +1,7 @@
 class Apidocs::V1::StudyResultsApidocs
   include Swagger::Blocks
 
-  swagger_path '/study_definitions/{study_definition_id}/study_results' do
+  swagger_path '/study_results' do
     operation :get do
       key :summary, 'All study results'
       key :description, 'Returns all study results from the system to which the user has access'
@@ -22,8 +22,8 @@ class Apidocs::V1::StudyResultsApidocs
       end
       parameter do
         key :name, :study_definition_id
-        key :in, :path
-        key :description, 'Study definition id which this protocol definition is added to'
+        key :in, :query
+        key :description, 'Study definition id for these results'
         key :required, true
         key :type, :string
       end
@@ -45,8 +45,8 @@ class Apidocs::V1::StudyResultsApidocs
     end
 
     operation :post do
-      key :summary, 'New Protocol Definition'
-      key :description, 'Creates a new protocol definition'
+      key :summary, 'New Study Result'
+      key :description, 'Creates a study result'
       key :operationId, 'addStudyResult'
       key :produces, [
         'application/json'
@@ -73,13 +73,13 @@ class Apidocs::V1::StudyResultsApidocs
       end
       parameter do
         key :name, :study_definition_id
-        key :in, :path
-        key :description, 'Study definition id which this protocol definition is added to'
+        key :in, :query
+        key :description, 'Study definition id which this study result is added to'
         key :required, true
         key :type, :string
       end
       response 201 do
-        key :description, 'protocol definition response'
+        key :description, 'study result response'
         schema do
           key :'$ref', :StudyResult
         end
@@ -93,11 +93,11 @@ class Apidocs::V1::StudyResultsApidocs
     end
   end
 
-  # Update Protocol Definition Object
-  swagger_path '/study_definitions/{study_definition_id}/study_results/{id}' do
+  # Update Study Result Object
+  swagger_path '/study_results/{id}' do
     operation :put do
-      key :description, 'Updates a Protocol Definition'
-      key :summary, 'Updates a Protocol Definition'
+      key :description, 'Updates a Study Result'
+      key :summary, 'Updates a Study Result'
       key :operationId, 'updateStudyResult'
       key :tags, [
         'Study Result', 'Study Results'
@@ -113,7 +113,7 @@ class Apidocs::V1::StudyResultsApidocs
       parameter do
         key :name, :id
         key :in, :path
-        key :description, 'ID of protocol definition to fetch'
+        key :description, 'ID of study result to fetch'
         key :required, true
         key :type, :integer
         key :format, :int64
@@ -121,7 +121,7 @@ class Apidocs::V1::StudyResultsApidocs
       parameter do
         key :name, :study_definition
         key :in, :body
-        key :description, 'Protocol Definition Object to update'
+        key :description, 'Study Result Object to update'
         key :required, true
         schema do
           key :'$ref', :StudyResult
@@ -129,7 +129,7 @@ class Apidocs::V1::StudyResultsApidocs
       end
 
       response 200 do
-        key :description, 'Protocol Definition Object'
+        key :description, 'Study Result Object'
         schema do
           key :'$ref', :StudyResult
         end
@@ -149,11 +149,11 @@ class Apidocs::V1::StudyResultsApidocs
     end
   end
 
-  # Delete Protocol Definition Object
-  swagger_path '/study_definitions/{study_definition_id}/study_results/{id}' do
+  # Delete Study Result Object
+  swagger_path '/study_results/{id}' do
     operation :delete do
-      key :description, 'Deletes a Protocol Definition'
-      key :summary, 'Deletes a Protocol Definition'
+      key :description, 'Deletes a Study Result'
+      key :summary, 'Deletes a Study Result'
       key :operationId, 'deleteStudyResult'
       key :tags, [
         'Study Result', 'Study Results'

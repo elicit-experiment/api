@@ -1,7 +1,7 @@
 class Apidocs::V1::StagesApidocs
   include Swagger::Blocks
 
-  swagger_path '/study_definitions/{study_definition_id}/protocol_definitions/{protocol_definition_id}/phase_definitions/{phase_definition_id}/stages' do
+  swagger_path '/study_results/{study_results_id}/stages' do
     operation :get do
       key :summary, 'All stages'
       key :description, 'Returns all stage results the user has access to'
@@ -21,24 +21,24 @@ class Apidocs::V1::StagesApidocs
         key :default, 'Bearer PASTE_ACCESS_TOKEN_HERE'
       end
       parameter do
-        key :name, :study_definition_id
+        key :name, :study_results_id
         key :in, :path
-        key :description, 'Study definition id which this phase definition is added to'
+        key :description, 'Study results id of the experiment results to return'
         key :required, true
         key :type, :string
       end
       parameter do
-        key :name, :protocol_definition_id
-        key :in, :path
-        key :description, 'Protocol definition id which this phase definition is added to'
+        key :name, :experiment_id
+        key :in, :query
+        key :description, 'ID for the experiment whose stages to return'
         key :required, true
         key :type, :string
       end
       parameter do
         key :name, :phase_definition_id
-        key :in, :path
-        key :description, 'Phase definition id which this trial definition is added to'
-        key :required, true
+        key :in, :query
+        key :description, 'ID for the phase definition whose stages to return'
+        key :required, false
         key :type, :string
       end
       response 200 do
@@ -86,24 +86,24 @@ class Apidocs::V1::StagesApidocs
         end
       end
       parameter do
-        key :name, :study_definition_id
+        key :name, :study_results_id
         key :in, :path
-        key :description, 'Study definition id which this trial definition is added to'
+        key :description, 'Study results id of the experiment results to return'
         key :required, true
         key :type, :string
       end
       parameter do
-        key :name, :protocol_definition_id
-        key :in, :path
-        key :description, 'Protocol definition id which this trial definition is added to'
+        key :name, :experiment_id
+        key :in, :query
+        key :description, 'ID for the experiment whose stages to return'
         key :required, true
         key :type, :string
       end
       parameter do
         key :name, :phase_definition_id
-        key :in, :path
-        key :description, 'Phase definition id which this trial definition is added to'
-        key :required, true
+        key :in, :query
+        key :description, 'ID for the phase definition whose stages to return'
+        key :required, false
         key :type, :string
       end
       response 201 do
@@ -122,7 +122,7 @@ class Apidocs::V1::StagesApidocs
   end
 
   # Update Trial Definition Object
-  swagger_path '/study_definitions/{study_definition_id}/protocol_definitions/{protocol_definition_id}/phase_definitions/{phase_definition_id}/stages/{id}' do
+  swagger_path '/study_results/{study_results_id}/stages/{id}' do
     operation :put do
       key :description, 'Updates a stage result'
       key :summary, 'Updates a stage result'
@@ -139,6 +139,13 @@ class Apidocs::V1::StagesApidocs
         key :default, 'Bearer PASTE_ACCESS_TOKEN_HERE'
       end
       parameter do
+        key :name, :study_results_id
+        key :in, :path
+        key :description, 'Study results id of the experiment results to return'
+        key :required, true
+        key :type, :string
+      end
+      parameter do
         key :name, :id
         key :in, :path
         key :description, 'ID of trial definition to fetch'
@@ -146,28 +153,6 @@ class Apidocs::V1::StagesApidocs
         key :type, :integer
         key :format, :int64
       end
-      parameter do
-        key :name, :study_definition_id
-        key :in, :path
-        key :description, 'Study definition id which this phase definition is added to'
-        key :required, true
-        key :type, :string
-      end
-      parameter do
-        key :name, :protocol_definition_id
-        key :in, :path
-        key :description, 'Protocol definition id which this phase definition is added to'
-        key :required, true
-        key :type, :string
-      end
-      parameter do
-        key :name, :phase_definition_id
-        key :in, :path
-        key :description, 'Phase definition id which this trial definition is added to'
-        key :required, true
-        key :type, :string
-      end
-
       response 200 do
         key :description, 'Trial Definition Object'
         schema do
@@ -190,7 +175,7 @@ class Apidocs::V1::StagesApidocs
   end
 
   # Delete Trial Definition Object
-  swagger_path '/study_definitions/{study_definition_id}/protocol_definitions/{protocol_definition_id}/phase_definitions/{phase_definition_id}/stages/{id}' do
+  swagger_path '/study_results/{study_results_id}/stages/{id}' do
     operation :delete do
       key :description, 'Deletes a stage result'
       key :summary, 'Deletes a stage result'
@@ -207,33 +192,19 @@ class Apidocs::V1::StagesApidocs
         key :default, 'Bearer PASTE_ACCESS_TOKEN_HERE'
       end
       parameter do
+        key :name, :study_results_id
+        key :in, :path
+        key :description, 'Study results id of the experiment results to return'
+        key :required, true
+        key :type, :string
+      end
+      parameter do
         key :name, :id
         key :in, :path
-        key :description, 'ID of study definition to delete'
+        key :description, 'ID of trial definition to fetch'
         key :required, true
         key :type, :integer
         key :format, :int64
-      end
-      parameter do
-        key :name, :study_definition_id
-        key :in, :path
-        key :description, 'Study definition id which this phase definition is added to'
-        key :required, true
-        key :type, :string
-      end
-      parameter do
-        key :name, :protocol_definition_id
-        key :in, :path
-        key :description, 'Protocol definition id which this phase definition is added to'
-        key :required, true
-        key :type, :string
-      end
-      parameter do
-        key :name, :phase_definition_id
-        key :in, :path
-        key :description, 'Phase definition id which this trial definition is added to'
-        key :required, true
-        key :type, :string
       end
 
       response 204 do
@@ -262,20 +233,16 @@ class Apidocs::V1::StagesApidocs
   end
 
   swagger_schema :Stage do
-    key :required, [:definition_data, :name]
+    key :required, [:experiment_id, :phase_definition_id, :id]
     property :id do
       key :type, :integer
       key :format, :int64
     end
-    property :study_definition_id do
+    property :experiment_id do
       key :type, :integer
       key :format, :int64
     end
-    property :protocol_definition_id do
-      key :type, :integer
-      key :format, :int64
-    end
-    property :user_id do
+    property :phase_definition_id do
       key :type, :integer
       key :format, :int64
     end
@@ -288,6 +255,10 @@ class Apidocs::V1::StagesApidocs
       key :format, :int64
     end
     property :num_trials do
+      key :type, :integer
+      key :format, :int64
+    end
+    property :current_trial do
       key :type, :integer
       key :format, :int64
     end

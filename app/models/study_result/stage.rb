@@ -4,44 +4,10 @@ module StudyResult
   end
 
   class Stage < ApplicationRecord
-    belongs_to :study_definition, :class_name => "StudyDefinition", :foreign_key => "study_definition_id"
-    belongs_to :protocol_definition, :class_name => "ProtocolDefinition", :foreign_key => "protocol_definition_id"
+    belongs_to :experiment, :class_name => "StudyResult::Experiment", :foreign_key => "experiment_id"
+    belongs_to :protocol_user, :class_name => "ProtocolUser", :foreign_key => "protocol_user_id"
     belongs_to :phase_definition, :class_name => "PhaseDefinition", :foreign_key => "phase_definition_id"
-    belongs_to :user, :class_name => "User", :foreign_key => "user_id"
 
-    has_many :study_result_data_points, :dependent => :delete_all
-
-    include Swagger::Blocks
-
-    swagger_schema :Experiment do
-      property :id do
-        key :type, :integer
-        key :format, :int64
-      end
-      property :user_id do
-        key :type, :integer
-        key :format, :int64
-      end
-      property :study_definition_id do
-        key :type, :integer
-        key :format, :int64
-      end
-      property :protocol_definition_id do
-        key :type, :integer
-        key :format, :int64
-      end
-      property :phase_definition_id do
-        key :type, :integer
-        key :format, :int64
-      end
-      property :started_at do
-        key :type, :string
-        key :format, :datetime
-      end
-      property :completed_at do
-        key :type, :string
-        key :format, :datetime
-      end
-    end
+    has_many :data_points, :class_name => "StudyResult::DataPoint", :dependent => :delete_all
   end
 end
