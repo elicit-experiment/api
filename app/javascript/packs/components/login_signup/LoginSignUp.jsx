@@ -62,14 +62,32 @@ class LogInSignUp extends React.Component {
 
   // Generates the HTML for the login form
   logInForm() {
+
+    let data_dismiss = this.state.dismissable ? "modal" : ""
+
+    var error = <div></div>
+    if (this.props.userTokenState && this.props.userTokenState.error) {
+      var error_text="";
+      switch (this.props.userTokenState.error_code) {
+        case 401:
+          error_text = "Invalid user and/or password."
+          break
+        default:
+          error_text = "An unknown error occurred.  Please try later."
+          break;
+      }
+      error = <div className="login-error">{error_text}</div>
+    }
+
     return(
-      <div className="modal fade" id="logInModal" role="dialog">
+      <div className="modal fade" data-backdrop="static" id="logInModal" role="dialog">
         <div className="modal-dialog">
 
           <div className="modal-content">
             <div className="modal-header" style={{padding:"35px 50px"}}>
               {this.dismissButton()}
               <h4><span className="glyphicon glyphicon-lock"></span> Login</h4>
+              {error}
             </div>
             <div className="modal-body" style={{padding:"40px 50px"}}>
               <form role="form" onSubmit={this.logInUser()}>
@@ -96,7 +114,6 @@ class LogInSignUp extends React.Component {
               </form>
             </div>
             <div className="modal-footer">
-              <button type="submit" className="btn btn-danger btn-default pull-left" data-dismiss="modal"><span className="glyphicon glyphicon-remove"></span> Cancel</button>
               <p>Not a member? <a href="#" onClick={this.toggleLogIn}>Sign Up</a></p>
               <p>Forgot <a href="#">Password?</a></p>
             </div>

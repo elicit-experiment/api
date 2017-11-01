@@ -41,7 +41,7 @@ Cleanup:
 - rename admin_controller @done(2017-10-28)
 
 Bugs:
-- Entering invalid creds on login causes you to dump to a blank screen
+- Entering invalid creds on login causes you to dump to a blank screen @done(2017-11-01)
 - Participant/admin should be chosen after login based on account role @done(2017-10-28)
 - 
 

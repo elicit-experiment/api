@@ -39,8 +39,10 @@ class LoginSignUpContainer extends React.Component {
   componentDidUpdate() {
     if (this.props.userTokenState && this.props.userTokenState.isLoading) {
       $('#pleaseWaitDialog').modal('show')
+      $('#logInModal').modal('hide')
     } else {
       $('#pleaseWaitDialog').modal('hide')      
+      $('#logInModal').modal('show')
     }
   }
   render() {
@@ -77,7 +79,7 @@ class LoginSignUpContainer extends React.Component {
   </div>
 </div></div>
     } else {
-      dialog = <LoginSignUp {...this.props}></LoginSignUp>
+      dialog = <LoginSignUp {...this.props} dismissable={false}></LoginSignUp>
     }
 
     return <div>

@@ -66,6 +66,7 @@ export const logInUser = (credentials, asyncDoneCallback) => {
     dispatch(userTokenState({
       isLoading: true,
       error: false,
+      error_code: 0,
       error_message: ""
     }))
 
@@ -74,17 +75,19 @@ export const logInUser = (credentials, asyncDoneCallback) => {
       dispatch(userTokenState({
         isLoading: false,
         error: false,
+        error_code: 0,
         error_message: ""
       }))
       dispatch(receiveUserToken(data))
     }
 
     const error = (e) => {
-      console.log("error in tokens middleware:", e)
+      console.dir(e)
       dispatch(userTokenState({
         isLoading: false,
         error: true,
-        error_message: e
+        error_code: e.status,
+        error_message: e.statusText
       }))
     }
 

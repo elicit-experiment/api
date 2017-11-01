@@ -14,7 +14,7 @@ const handleResponse = (response) => {
     return response.json();
   }
   console.dir(response)
-  throw new Error(`Network response was not ok: ${response.status} ${response.statusText}`);
+  throw response;
 }
 
 const fetchToken = (request, headers = {}) => (

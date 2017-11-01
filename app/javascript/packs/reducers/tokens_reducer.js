@@ -21,6 +21,7 @@ const TokensReducer = (state = {
   userTokenState: {
     isLoading: false,
     error: false,
+    error_code: 0,
     error_message: false
   }
 }, action) => {
