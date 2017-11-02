@@ -4071,6 +4071,15 @@ react-api@^1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/react-api/-/react-api-1.0.5.tgz#9f8ca031423477cac266d6468eb1051ab875bfa0"
 
+react-bootstrap-toggle@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/react-bootstrap-toggle/-/react-bootstrap-toggle-2.1.1.tgz#0060060c7c679256f547e1f3e5ac85cfc269d2a6"
+  dependencies:
+    classnames "^2.2.5"
+    prop-types "^15.5.10"
+    react "^15.4.2"
+    react-dom "^15.4.2"
+
 react-data-grid-addons@^2.0.54:
   version "2.0.54"
   resolved "https://registry.yarnpkg.com/react-data-grid-addons/-/react-data-grid-addons-2.0.54.tgz#fae0f8d98599e87ccc23ab4912acb01473873657"
@@ -4080,6 +4089,15 @@ react-data-grid-addons@^2.0.54:
 react-data-grid@^2.0.54:
   version "2.0.54"
   resolved "https://registry.yarnpkg.com/react-data-grid/-/react-data-grid-2.0.54.tgz#c953cafa1e9da5cd97eb04564d86e3d93e2ca0bf"
+
+react-dom@^15.4.2:
+  version "15.6.2"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.6.2.tgz#41cfadf693b757faf2708443a1d1fd5a02bef730"
+  dependencies:
+    fbjs "^0.8.9"
+    loose-envify "^1.1.0"
+    object-assign "^4.1.0"
+    prop-types "^15.5.10"
 
 react-dom@^15.6.1:
   version "15.6.1"
@@ -4136,6 +4154,16 @@ react-transition-group@^2.2.0:
     loose-envify "^1.3.1"
     prop-types "^15.5.8"
     warning "^3.0.0"
+
+react@^15.4.2:
+  version "15.6.2"
+  resolved "https://registry.yarnpkg.com/react/-/react-15.6.2.tgz#dba0434ab439cfe82f108f0f511663908179aa72"
+  dependencies:
+    create-react-class "^15.6.0"
+    fbjs "^0.8.9"
+    loose-envify "^1.1.0"
+    object-assign "^4.1.0"
+    prop-types "^15.5.10"
 
 react@^15.6.1:
   version "15.6.1"
