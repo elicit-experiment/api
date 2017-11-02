@@ -2,8 +2,10 @@ class PhaseDefinition < ApplicationRecord
   belongs_to :study_definition, :class_name => "StudyDefinition", :foreign_key => "study_definition_id"
   belongs_to :protocol_definition, :class_name => "ProtocolDefinition", :foreign_key => "protocol_definition_id"
 
-  has_many :trial_definitions, :dependent => :delete_all
-  has_many :trial_orders, :dependent => :delete_all
+  has_many :trial_definitions, :dependent => :destroy
+  has_many :trial_orders, :dependent => :destroy
+
+  has_many :stage, :class_name => "StudyResult::Stage", :dependent => :destroy
 
   include Swagger::Blocks
 

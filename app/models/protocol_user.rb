@@ -3,7 +3,7 @@ class ProtocolUser < ApplicationRecord
   has_one :study_definition, :through => :protocol_definition
   belongs_to :user, :class_name => "User", :foreign_key => "user_id"
 
-  has_one :experiment, :class_name => "StudyResult::Experiment"
+  has_one :experiment, :class_name => "StudyResult::Experiment", :dependent => :destroy
 
 
   include Swagger::Blocks
