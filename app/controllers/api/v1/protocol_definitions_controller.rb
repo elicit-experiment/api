@@ -10,7 +10,12 @@ module Api::V1
 
       protocol_user = ProtocolUser.where({
         :user_id => current_user.id,
-        :protocol_definition_id => protocol_definition_id}).first!
+        :protocol_definition_id => protocol_definition_id}).includes(:protocol_definition).first!
+
+      unless protocol_user.protocol_definition.active
+        render json: ElicitError.new("Cannot take protocol that isn't active.", :bad_request), status: :bad_request
+        return
+      end
 
       session_params = {
         :user_id => current_user.id,
@@ -26,19 +31,6 @@ module Api::V1
       study_result = StudyResult::StudyResult.where({
         :user_id => current_user.id,
         :study_definition_id => study_definition_id}).first
-
-      if nil
-#        StudyResult::Experiment.where({
-#          :study_result_id => study_result.id,
-#          :protocol_user_id => protocol_user.id}).destroy_all
-
-        StudyResult::StudyResult.where({
-          :user_id => current_user.id,
-          :study_definition_id => study_definition_id}).destroy_all
-        StudyResult::Stage.where({
-          :protocol_user_id => protocol_user.id }).destroy_all
-      end
-
 
       session.populate current_user.id
 
