@@ -1,6 +1,8 @@
 import $ from 'jquery'
 import _ from 'lodash'
 
+window.jQuery = $
+
 import React from 'react'
 import ReactDOM from 'react-dom'
 

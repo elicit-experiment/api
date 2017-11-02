@@ -1,144 +1,171 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import PropTypes from 'prop-types'
-import InlineEdit from 'react-edit-inline'
-import update from 'react-addons-update'
-import Dropdown from '../ui_elements/DropDown'
-import { AppRoutes } from './AdminApp'
-import { Link } from 'react-router-dom'
-import pathToRegexp from 'path-to-regexp'
-import elicitApi from '../../api/elicit-api.js'
+import React from "react";
+import ReactDOM from "react-dom";
+import PropTypes from "prop-types";
+import InlineEdit from "react-edit-inline";
+import update from "react-addons-update";
+import Dropdown from "../ui_elements/DropDown";
+import { AppRoutes } from "./AdminApp";
+import { Link } from "react-router-dom";
+import pathToRegexp from "path-to-regexp";
+import elicitApi from "../../api/elicit-api.js";
 import { connect } from "react-redux";
+import $ from "jquery";
+import Toggle from "react-bootstrap-toggle";
 
-const ProtocolInfoLink = (props) => (
+const ProtocolInfoLink = props => (
   <div className="row study-info-row">
     <b className="col-xs-2">Protocols:</b>
     <div className="col-xs-2">
-      <Link to={ `/admin/studies/${props.study.id}` } className="active">
-          <i className="glyphicon glyphicon-edit" aria-hidden="true"></i> Edit
+      <Link to={`/admin/studies/${props.study.id}`} className="active">
+        <i className="glyphicon glyphicon-edit" aria-hidden="true" /> Edit
       </Link>
     </div>
-    <b className="col-xs-1 study-info-protocols-count">{(props.study_protocols || []).length}</b>
+    <b className="col-xs-1 study-info-protocols-count">
+      {(props.protocols || []).length}
+    </b>
   </div>
-)
+);
 
-
-class NewProtocol extends React.Component {
-  constructor(props){
+class Protocol extends React.Component {
+  constructor(props) {
     super(props);
+    this.state = {
+      active: props.protocol.active
+    };
+  }
+  onToggle() {
+    this.setState({ active: !this.state.active });
   }
   render() {
-   return (
-  <div className='row'>
-    <div className='well col-xs-12 glyphicon glyphicon-plus' onClick={(e) => {
-        const {dispatch} = this.props;
-        const new_study_def = { study_id: props.study.id, sequence_no: props.sequence_no, protocol_id: props.default_protocol_id }
+    return (
+      <div className="row well " key={this.props.protocol.id}>
+        <div
+          className="protocol-row protocol-header-row"
+          key={"t" + this.props.protocol.id}
+        >
+          <div className="col-xs-1">
+            <b>{this.props.protocol.id}</b>
+          </div>
+          <div className="col-xs-6">
+            <b>{this.props.protocol.name}</b>
+          </div>
+          <div className="col-xs-3">
+            <button type="button" className="btn btn-primary">
+              Phases &nbsp; <span className="badge badge-secondary">{this.props.protocol.phase_definitions.length}</span>
+            </button>
+          </div>
+          <div className="col-xs-2">
+            <Toggle
+              onClick={this.onToggle.bind(this)}
+              on={<span>Active</span>}
+              off={<span>Inactive</span>}
+              size="md"
+              offstyle="danger"
+              onstyle="success"
+              active={this.state.active}
+            />
+          </div>
+        </div>
 
-        dispatch(elicitApi.actions.protocol_definition(new_study_def));
-    }
-  }></div>
-  </div>)
+        <div className="protocol-row " key={"d" + this.props.protocol.id}>
+          <div className="col-xs-12">{this.props.protocol.description}</div>
+        </div>
+      </div>
+    );
   }
 }
 
+class ProtocolEdit extends React.Component {
+  render() {
+    let protocol_list = this.props.protocols.map((protocol, i) => {
+      return <Protocol protocol={protocol} key={protocol.id} />;
+    });
 
-const ProtocolEdit = (props) => {
-
-  var protocols = props.protocols.map(_.clone)
-  let sequences = [0].concat(props.study_protocols.map((p) => p.sequence_no))
-  let new_sequence_no = (Math.max.apply(Math, sequences)) + 1
-  protocols.push({Name: "+ Create new protocol", id: "new"})
-  let protocol_list = props.study_protocols.map( (sp, i) => {
     return (
-      <div className='row well ' key={sp.sequence_no}>
-        <div className='col-xs-4'>
-          <b>
-            {protocols[sp.protocol_id].Type}
-          </b>
-        </div>
-         <div className='col-xs-8'>
-              <Dropdown id='protocolDropDown'
-                    options={protocols} 
-                    value={sp.protocol_id}
-                    labelField='Name'
-                    valueField='id'
-                    onChange={this.dropDownOnChange} />
-         </div>
-       </div>
-    )
-  })
-
-  console.log(new_sequence_no)
-
-  return (  
-  <div className="row study-info-row"  key={'new-protocol'}>
-    <b className="col-xs-2">Protocols:</b>
-    <div className="col-xs-8">
-    {protocol_list}
-    <NewProtocol {...props} sequence_no={new_sequence_no} default_protocol_id={props.protocols[0].id}/>
-    </div>
-  </div>
-)
+      <div className="row study-info-row" key={"new-protocol"}>
+        <b className="col-xs-2">Protocols:</b>
+        <div className="col-xs-10">{protocol_list}</div>
+      </div>
+    );
+  }
 }
 
-
 class Study extends React.Component {
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.titleChanged = this.titleChanged.bind(this)
-    this.deleteStudy = this.deleteItem.bind(this)
+    this.titleChanged = this.titleChanged.bind(this);
+    this.deleteStudy = this.deleteItem.bind(this);
     this.state = {
-        title: this.props.study.title,
-        users: this.props.users,
-        studies: this.props.studies
-    }
+      title: this.props.study.title,
+      users: this.props.users,
+      studies: this.props.studies
+    };
+  }
+
+  componentDidUpdate() {
+    $('[data-toggle="tooltip"]').tooltip();
+    console.log("tooltip!");
   }
 
   titleChanged(data) {
-      const newData = update(this.props.study, {
-        title: {$set: data.title},
-      });
-      const {dispatch} = this.props;
-      let body = {study_definition: newData}
-      console.dir(body)
-      console.dir(elicitApi.actions)
-      dispatch(elicitApi.actions.study_definition.patch({id: this.props.study.id}, { body: JSON.stringify(body) }))
-      this.setState({...data})
-  } 
+    const newData = update(this.props.study, {
+      title: { $set: data.title }
+    });
+    const { dispatch } = this.props;
+    let body = { study_definition: newData };
+    console.dir(body);
+    console.dir(elicitApi.actions);
+    dispatch(
+      elicitApi.actions.study_definition.patch(
+        { id: this.props.study.id },
+        { body: JSON.stringify(body) }
+      )
+    );
+    this.setState({ ...data });
+  }
 
   validateTitle(text) {
-    return (text.length > 0 && text.length < 64);
+    return text.length > 0 && text.length < 64;
   }
 
-  dropDownOnChange(x) {
-  }
+  dropDownOnChange(x) {}
 
   render() {
     var protocols_row, study_class;
-    let study_protocols = (this.props.study_protocols || []).filter((sp) => sp.study_id === this.props.study.id )
-    if (this.props.edit_protocols) {
-      protocols_row = <ProtocolEdit study={this.props.study} study_protocols={study_protocols} protocols={this.props.protocols} />
-      study_class = 'well show study-detail'
+    if (true || this.props.edit_protocols) {
+      protocols_row = (
+        <ProtocolEdit
+          study={this.props.study}
+          protocols={this.props.study.protocol_definitions}
+        />
+      );
+      study_class = "well show study-detail";
     } else {
-      protocols_row = <ProtocolInfoLink study={this.props.study} study_protocols={study_protocols} />
-      study_class = 'well show study-summary'
+      protocols_row = (
+        <ProtocolInfoLink
+          study={this.props.study}
+          protocols={this.props.study.protocol_definitions}
+        />
+      );
+      study_class = "well show study-summary";
     }
     return (
-      <div className='study-wrapper' key={this.props.study.id}>
+      <div className="study-wrapper" key={this.props.study.id}>
         <div className={study_class} data-studyId={this.props.study.id}>
           <div className="row study-info-row">
             <b className="col-xs-2">Title:</b>
-            <div className='col-xs-5'>
-              {this.props.study.id} — <InlineEdit
+            <div className="col-xs-5">
+              {this.props.study.id} —{" "}
+              <InlineEdit
                 validate={this.customValidateTitle}
                 activeClassName="editing col-xs-5xx"
-                className='col-xs-5xx'
+                className="col-xs-5xx"
                 text={this.state.title}
                 paramName="title"
                 change={this.titleChanged}
                 style={{
                   minWidth: 150,
-                  display: 'inline-block',
+                  display: "inline-block",
                   margin: 0,
                   padding: 0,
                   fontSize: 15,
@@ -150,28 +177,48 @@ class Study extends React.Component {
           </div>
           <div className="row study-info-row">
             <b className="col-xs-2">PI:</b>
-            <div className='col-xs-5'>
-            <b>{this.props.study.principal_investigator.email}</b>
+            <div className="col-xs-5">
+              <b>{this.props.study.principal_investigator.email}</b>
+            </div>
+          </div>
+          <div className="row study-info-row">
+            <b className="col-xs-2">Description:</b>
+            <div className="col-xs-10">
+              <b>{this.props.study.description}</b>
             </div>
           </div>
           {protocols_row}
-          <button className='remove-study' onClick={this.deleteStudy}> &times; </button>
+          <button className="remove-study" onClick={this.deleteStudy}>
+            {" "}
+            &times;{" "}
+          </button>
+          <div className="row study-info-row">
+            <div className="col-xs-2" />
+            <div className="col-xs-5">
+              <button
+                onClick={this.deleteStudy}
+                className="active btn btn-danger"
+              >
+                Delete Study
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-    )
+    );
   }
 
   deleteItem(itm) {
-    console.dir(itm)
-    console.dir(this.props.study)
-    const {dispatch} = this.props;
-    console.dir(elicitApi.actions)
-    dispatch(elicitApi.actions.study_definition.delete({id: this.props.study.id}));
+    console.dir(itm);
+    console.dir(this.props.study);
+    const { dispatch } = this.props;
+    console.dir(elicitApi.actions);
+    dispatch(
+      elicitApi.actions.study_definition.delete({ id: this.props.study.id })
+    );
   }
 }
 
-const mapStateToProps = (state) => ({
-});
+const mapStateToProps = state => ({});
 
 export default connect(mapStateToProps)(Study);
-

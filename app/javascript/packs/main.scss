@@ -77,7 +77,6 @@ h1 {
 }
 
 .study {
-  height: 140px;
   -webkit-transition: 0.5s;
   -moz-transition: 0.5s;
   -o-transition: 0.5s;
@@ -85,7 +84,6 @@ h1 {
 }
 
 .study-summary {
-  height: 140px;
   -webkit-transition: 0.5s;
   -moz-transition: 0.5s;
   -o-transition: 0.5s;
@@ -123,6 +121,10 @@ h1 {
   position:absolute;
   right:6px;
   top:20px;  
+}
+
+.protocol-header-row {
+  margin-bottom: 10px;
 }
 
 // Participant List
@@ -185,3 +187,11 @@ h1 {
 .login-error {
   color: red
 }
+
+// Global
+
+.protocol-row {
+  display: flex;
+  align-items: center;
+}
+

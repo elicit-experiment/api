@@ -3,8 +3,8 @@ class TrialDefinition < ApplicationRecord
   belongs_to :protocol_definition, :class_name => "ProtocolDefinition", :foreign_key => "protocol_definition_id"
   belongs_to :phase_definition, :class_name => "PhaseDefinition", :foreign_key => "phase_definition_id"
 
-  has_many :components, :dependent => :delete_all
-  has_many :stimuli, :dependent => :delete_all
+  has_many :components, :dependent => :destroy
+  has_many :stimuli, :dependent => :destroy
 
   include Swagger::Blocks
 
