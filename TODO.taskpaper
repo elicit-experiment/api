@@ -24,7 +24,7 @@ Study:
 - Design to enable publishing
 	- Add protocol/active to data model @done(2017-10-28)
 	- Add affordance to enable/disable protocol  @done(2017-11-01)
-	- PUT disable active value to service
+	- PUT disable active value to service @done(2017-11-02)
 	- Enforce only active protocols can be started
 	- eligeable_protocols only returns active protocols
 - Associate users with studies @done(2017-10-28)

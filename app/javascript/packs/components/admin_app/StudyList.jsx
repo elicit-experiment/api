@@ -35,7 +35,7 @@ class StudyList extends React.Component {
       return(
         <Fade key={study.id} appear={true} >
         <div>
-        <Study study={study} users={this.props.users} study_protocols={this.props.study_protocols} key={study.id}> </Study>
+        <Study study={study} users={this.props.users} protocol_definitions={this.props.protocol_definitions} key={study.id}> </Study>
         </div>
         </Fade>
       )

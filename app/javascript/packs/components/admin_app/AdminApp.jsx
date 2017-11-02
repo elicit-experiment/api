@@ -38,7 +38,7 @@ class AdminApp extends React.Component {
       <Header {...this.props} ></Header>
       <div id="wrap" className="admin-app-container container">
         <Switch>
-          <Route exact path='/admin/studies' render={routeProps => <StudyManagement {...routeProps} studies={this.props.studies} /> } />
+          <Route exact path='/admin/studies' render={routeProps => <StudyManagement {...routeProps} {...this.props} /> } />
           <Route exact path='/admin' render={routeProps => <StudyManagement {...routeProps} {...this.props} /> } />
           <Route path='/admin/studies/:study_id' render={routeProps => <EditStudy {...routeProps} users={this.state.users} studies={this.state.studies} protocols={this.state.protocols} study_protocols={this.state.study_protocols} /> } />
           <Route path='/admin/users' component={UserManagement}/>
@@ -57,28 +57,15 @@ class AdminApp extends React.Component {
     console.log("AdminApp MOUNT")
     const {dispatch} = this.props;
 
-    // don't dispatch these simultaneously; there will be problems if we try and refresh the token
-    dispatch(elicitApi.actions.studies()).then(() => {dispatch(elicitApi.actions.current_user())} );
-  }
-
-  handleChangedEvent = (event) => {
-    let s = {
-      studies: StudyStore.getList().list, 
-      users: UserStore.getList().list,
-      protocols: ProtocolStore.getList().list,
-      study_protocols: StudyProtocolStore.getList().list,
-    }
-    console.dir(s)
-    this.setState(s)
+    dispatch(elicitApi.actions.studies());
   }
 }
 
 const mapStateToProps = (state) => ({
-  studies: state.studies,
   current_user: state.current_user,
-  study_definition: state.study_definition,
   userToken: state.tokens.userToken
 });
-const connectedAdminApp = connect(mapStateToProps)(AdminApp)
+
+const connectedAdminApp = connect( mapStateToProps )(AdminApp)
 
 export { Header as Header, connectedAdminApp as AdminApp, AppRoutes };

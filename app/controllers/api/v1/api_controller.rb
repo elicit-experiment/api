@@ -65,7 +65,7 @@ module Api::V1
     def index
       plural_resource_name = "@#{resource_name.pluralize}"
       if not query_params.nil?
-        resources = resource_class.where(query_params)
+        resources = resource_class.where(query_params).include(query_includes)
       end
       if not search_param.nil?
         resources = resource_class.full_text_search(search_param)
@@ -81,7 +81,7 @@ module Api::V1
                                   .per(page_params[:page_size])
       end
       instance_variable_set(plural_resource_name, resources)
-      respond_with instance_variable_get(plural_resource_name)
+      respond_with instance_variable_get(plural_resource_name),  :includes => response_includes
     end
 
     # GET /api/{plural_resource_name}/:id
@@ -92,7 +92,8 @@ module Api::V1
     # PATCH/PUT /api/{plural_resource_name}/1
     def update
       if get_resource.update(resource_params)
-        render json: get_resource, status: :ok
+        render json: get_resource, :include => response_includes, status: :ok
+#         respond_with get_resource, :includes => response_includes, status: :ok
       else
         render json: get_resource.errors, status: :unprocessable_entity
       end
@@ -110,6 +111,16 @@ module Api::V1
     # @return [Class]
     def resource_class
       @resource_class ||= resource_name.classify.constantize
+    end
+
+    # The includes for the query
+    def query_includes
+      {}
+    end
+
+    # The includes for the (JSON) response
+    def response_includes
+      []
     end
 
     # Only allow a trusted parameter "white list" through.

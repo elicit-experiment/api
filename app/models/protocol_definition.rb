@@ -5,6 +5,10 @@ class ProtocolDefinition < ApplicationRecord
   has_many :protocol_users, :dependent => :destroy
   has_many :phase_orders, :dependent => :destroy
 
+  def principal_investigator_user_id
+    study_definition.principal_investigator_user_id
+  end
+
   include Swagger::Blocks
 
   swagger_schema :ProtocolDefinition do

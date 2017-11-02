@@ -100,14 +100,22 @@ const make_entity_def = (singular, plural, endpoint) => {
         };
       }
       if (action.type === `@@redux-api@${plural}_update_${singular}`) {
+        if (state.data.findIndex((el) => (el.id === action.id)) == -1) {
+          // append if it doesn't exist
+          console.dir(action)
+          return {...state,
+            data: state.data.concat(action.updates[0])
+          };
+        }
+        let newData = state.data.map((item) => {
+          if (item.id === action.id) {
+            return action.updates[0]
+          } else {
+            return item
+          }
+        })
         return {...state,
-          data: state.data.map((item) => {
-            if (item.id === action.id) {
-              return action.updates[0]
-            } else {
-              return item
-            }
-          })
+          data: newData
         };
       }
       return state;
@@ -235,6 +243,7 @@ const api = reduxApi(_.extend({},
   take_protocol,
   eligeable_protocol,
   make_entity_def('study_definition', 'studies', 'study_definitions'),
+  make_entity_def('protocol_definition', 'protocol_definitions', '/study_definitions/:study_definition_id/protocol_definitions'),
   user_entity)).use("options", (url, params, getState) => {
   const {
     tokens: {

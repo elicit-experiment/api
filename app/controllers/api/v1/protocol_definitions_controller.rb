@@ -52,11 +52,18 @@ module Api::V1
     end
 
     private
+    def query_includes
+      [:phase_definitions]
+    end
+
+    def response_includes
+      [:phase_definitions]
+    end
 
     def protocol_definition_params
       params.require(:study_definition_id)
       permit_json_params(params[:protocol_definition], :protocol_definition) do
-        params.require(:protocol_definition).permit([:definition_data, :type, :name, :summary, :description]).merge(:study_definition_id => params[:study_definition_id])
+        params.require(:protocol_definition).permit([:definition_data, :type, :name, :summary, :description, :active]).merge(:study_definition_id => params[:study_definition_id])
       end
     end
   end
