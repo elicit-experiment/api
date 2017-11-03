@@ -19,7 +19,7 @@ class ParticipantProtocolList extends React.Component {
       return(
         <Fade key={protocol_user.protocol_definition.id} appear={true} >
         <div>
-        <ParticipantProtocol protocol={protocol_user.protocol_definition} study={protocol_user.study_definition} users={this.props.users} key={protocol_user.protocol_definition.id}> </ParticipantProtocol>
+        <ParticipantProtocol protocol={protocol_user.protocol_definition} study={protocol_user.study_definition} users={this.props.users} experiment={protocol_user.experiment} key={protocol_user.protocol_definition.id}> </ParticipantProtocol>
         </div>
         </Fade>
       )

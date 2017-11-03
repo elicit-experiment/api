@@ -8,6 +8,7 @@ import pathToRegexp from 'path-to-regexp'
 import elicitApi from '../../api/elicit-api.js'
 import { connect } from "react-redux";
 import elicitConfig from '../../ElicitConfig.js'
+import FormattedDate from '../ui_elements/FormattedDate.jsx'
 
 const TakeProtocolLink = (props) => {
   return (
@@ -67,6 +68,24 @@ class ParticipantProtocol extends React.Component {
   }
 
   render() {
+    var experiment = <div><b>Not Started</b></div>
+    console.dir(this.props)
+    if (this.props.experiment) {
+      const exp = this.props.experiment
+      var exp_text = ""
+      if (exp.completed_at) {
+        exp_text = <b><span>Completed on <FormattedDate date={exp.completed_at}></FormattedDate></span></b>
+      } else {
+        const current_status = "Completed " + exp.current_stage.last_completed_trial + "/" + exp.current_stage.num_trials + " slides."
+        exp_text = <div><span className="started-experiment">Started on <FormattedDate date={exp.completed_at}></FormattedDate></span><div>{current_status}</div></div>
+      }
+      experiment = <div className='row'>
+            <div className='col-xs-12 '>
+              {exp_text}
+            </div>
+          </div>
+
+    } 
     return (
       <div className='protocols-wrapper col-xs-10' key={this.props.protocol.id}>
         <div className='well show protocol-summary' data-protocol_id={this.props.protocol.id}>
@@ -87,6 +106,7 @@ class ParticipantProtocol extends React.Component {
               {this.props.protocol.description}
             </div>
           </div>
+          {experiment}
           <div className='row'>
             <div className="col-xs-7">
             </div>

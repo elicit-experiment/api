@@ -9,7 +9,7 @@ Issues:
 Participant:
 - Add info about in-progress experiments
 	- Add experiment info to protocol users payload so participant app can access it @done(2017-10-28)
-	- Render experiment information to users
+	- Render experiment information to users @done(2017-11-03)
 
 User & Auth:
 - Password reset
@@ -21,7 +21,7 @@ Database:
 - 
 
 Study:
-- Design to enable publishing
+- Design to enable publishing @done(2017-11-02)
 	- Add protocol/active to data model @done(2017-10-28)
 	- Add affordance to enable/disable protocol  @done(2017-11-01)
 	- PUT disable active value to service @done(2017-11-02)
@@ -52,8 +52,12 @@ Bugs:
 - Participant/admin should be chosen after login based on account role @done(2017-10-28)
 - 
 
+Media Upload:
+- Figure out design
+
 Fit and Finish:
 - Handle situation where 'loading' in ElicitRoot times out
+- Have an scary dialog when deleting a study
 
 To Create Items:
 	- To create a task, type a dash followed by a space.
