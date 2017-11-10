@@ -32,12 +32,11 @@ class ChaosExperimentService
     LockQuestion: @study_definition.lock_question == 1,
     EnablePrevious: @study_definition.enable_previous == 1,
     NoOfTrials: stage.num_trials,
-    #TrialsCompleted: @study_definition.trials_completed,
+    TrialsCompleted: stage.trials_completed,
     FooterLabel: @study_definition.footer_label,
     RedirectOnCloseUrl: @study_definition.redirect_close_on_url,
-    CurrentSlideIndex: stage.last_completed_trial,
+    CurrentSlideIndex: (stage.current_trial),
     Fullname: "Questionnaire, 1.0"
-    #Trials: chaos_trials
     }
   end
 
@@ -53,9 +52,9 @@ class ChaosExperimentService
     @trial_order = TrialOrder.where({:study_definition_id => @study_definition.id, :protocol_definition_id => @protocol_definition.id, :phase_definition_id => @phase.id}).entries
 
     if @trial_order.empty?
-      @trial_order = TrialOrder.default_order(@trials)
+      @trial_sequence = TrialOrder.default_order(@trials)
     else
-      @trial_order = @trial_order.first.sequence_data.split(',').map(&:to_i)
+      @trial_sequence = @trial_order.first.sequence_data.split(',').map(&:to_i)
     end
 
     @components = Component.where({:study_definition_id => @study_definition.id, :protocol_definition_id => @protocol_definition.id, :phase_definition_id => @phase.id}).entries
@@ -63,7 +62,11 @@ class ChaosExperimentService
 
     phase = @phases.first
 
-    trial = @trials[@trial_order[trial_no]]
+    trial = @trials.detect{ |trial| trial.id == @trial_sequence[trial_no] }
+
+    unless trial
+      Rails.logger.error "Trial order #{@trial_order.ai} sequence #{@trial_sequence.ai} contains invalid ids #{@trials.ai}"
+    end
 
     chaos_trial = @components.select{|c| (c.phase_definition_id == phase.id) and (c.trial_definition_id == trial.id) }.map do |c|
       outputs = {}
@@ -113,7 +116,9 @@ class ChaosExperimentService
     #ap @components
 
     response = ChaosResponse.new(chaos_trial)
-    response.Body["FoundCount"] = @trial_order.count
+
+    # These are necessary to set the counts up for "Slide N/M" in the Chaos frontend
+    response.Body["FoundCount"] = @trial_sequence.count
     response.Body["StartIndex"] = trial_no
 
     response

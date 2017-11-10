@@ -33,9 +33,13 @@ Study:
 - Implement Phase & Trial orders
 - Implement Phase & Trial users
 
+Investigator trial run:
+- Get design requirements from Jens
+- Add Test-only flags session and other data structures
+
 Client Examples:
 - Create pure Python examples (i.e. component dictionaries in Native Python)
-- Create script to extract results
+- Create script to extract results  @done(2017-11-07)
 
 Deployment:
 - Create Docker containers with Postgresql and the rails apps  @done(2017-10-26)
@@ -44,6 +48,7 @@ Cleanup:
 - Clean up old chaos sessions
 - Link back to Elicit when survey is complete
 - Figure out how much of the old experiment xml cruft actually needs to be passed to the frontend (i.e. Outputs, etc..)
+- Don't turn off https verification except locally
 - fixup headers in admin and participant @done(2017-10-28)
 - rename admin_controller @done(2017-10-28)
 

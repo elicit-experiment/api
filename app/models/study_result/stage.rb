@@ -9,5 +9,9 @@ module StudyResult
     belongs_to :phase_definition, :class_name => "PhaseDefinition", :foreign_key => "phase_definition_id"
 
     has_many :data_points, :class_name => "StudyResult::DataPoint", :dependent => :delete_all
+
+    def trials_completed
+      (self.last_completed_trial || -1) + 1
+    end
   end
 end

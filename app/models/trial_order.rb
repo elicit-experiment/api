@@ -3,8 +3,8 @@ class TrialOrder < ApplicationRecord
   belongs_to :protocol_definition, :class_name => "ProtocolDefinition", :foreign_key => "protocol_definition_id"
   belongs_to :phase_definition, :class_name => "PhaseDefinition", :foreign_key => "phase_definition_id"
 
-  def self.default_order(trials)
-    (0..trials.count).to_a
+  def self.default_sequence(trials)
+    trials.map(&:id).sort
   end
 
   include Swagger::Blocks

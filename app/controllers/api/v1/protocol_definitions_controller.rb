@@ -28,11 +28,7 @@ module Api::V1
       }
       session = Chaos::ChaosSession.new(session_params)
 
-      study_result = StudyResult::StudyResult.where({
-        :user_id => current_user.id,
-        :study_definition_id => study_definition_id}).first
-
-      session.populate current_user.id
+      session.populate
 
       Rails.logger.info "Taking session #{session.ai}"
 

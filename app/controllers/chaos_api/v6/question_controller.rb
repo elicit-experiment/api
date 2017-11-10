@@ -12,6 +12,9 @@ module ChaosApi::V6
       @study_definition = StudyDefinition.find(params[:id])
       experiment_id = @study_definition.data
 
+      @chaos_session.stage.current_trial = trial_index
+      @chaos_session.stage.save!
+
       @response = ChaosExperimentService.new(@study_definition).make_slide(trial_index, @chaos_session.protocol_user_id)
 
       # compare to version generated from experiment xml, if it exists
@@ -31,8 +34,11 @@ module ChaosApi::V6
         @results.each_with_index do |r, i| 
   #        ap i
           core_model = @response.Body[:Results][i]
-  #        ap core_model.deep_diff(r)
+          Rails.logger.info("DIFF:")
+          ap core_model.deep_diff(r)
         end
+      else
+        Rails.logger.warn("Did not find experiment.xml for #{experiment_id}")
       end
 
       respond_to do |format|

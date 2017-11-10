@@ -8,9 +8,9 @@ module Chaos
     belongs_to :experiment, :class_name => "StudyResult::Experiment", :foreign_key => "experiment_id"
     belongs_to :stage, :class_name => "StudyResult::Stage", :foreign_key => "stage_id"
 
-    def populate(current_user_id)
+    def populate()
       study_result = StudyResult::StudyResult.where({
-        :user_id => current_user_id,
+        :user_id => self.user_id,
         :study_definition_id => study_definition_id}).first_or_initialize
 
       study_result.save!
@@ -48,13 +48,30 @@ module Chaos
         :study_definition_id => study_definition_id,
         :protocol_definition_id => protocol_definition_id})
 
-      # TODO: bring in PhaseOrder
+      phase_order = PhaseOrder.where({
+        :study_definition_id => study_definition_id,
+        :protocol_definition_id => protocol_definition_id,
+        :user_id => protocol_user.user_id }).first
+
+      phase_sequence = PhaseOrder.default_sequence(phases)
+
+      if phase_order != nil
+        custom_phase_sequence = phase_order.sequence_data.split(',').map(&:to_i)
+        custom_phases = custom_phase_sequence.map{ |phase_id| phases.detect{ |phase| phase.id == phase_id} }
+        unless (custom_phases.all?)
+          Rails.logger.error "Phase order #{phase_order.id} sequence #{custom_phase_sequence.ai} contains invalid ids #{custom_phases.ai}"
+        else
+          phase_sequence = custom_phase_sequence
+        end
+      end
 
       completed_phase_id_set = Set.new completed_stages.map(&:phase_definition_id)
 
-      next_phases = phases.reject{ |phase| completed_phase_id_set.include? phase.id }
+      next_phase_ids = phase_sequence.reject{ |phase_id| completed_phase_id_set.include? phase_id }
 
-      next_phase = next_phases.first
+      next_phase_id = next_phase_ids.first
+
+      next_phase = phases.detect{ |phase| phase.id == next_phase_id}
 
       Rails.logger.info "Next Phase: #{next_phase.ai}"
 

@@ -76,7 +76,7 @@ class ParticipantProtocol extends React.Component {
       if (exp.completed_at) {
         exp_text = <b><span>Completed on <FormattedDate date={exp.completed_at}></FormattedDate></span></b>
       } else {
-        const current_status = "Completed " + (exp.current_stage.last_completed_trial || 0) + "/" + (exp.current_stage.num_trials || 0) + " slides."
+        const current_status = "Completed " + (exp.current_stage.last_completed_trial == undefined ? 0 : 1)  + "/" + (exp.current_stage.num_trials || 0) + " slides."
         exp_text = <div><span className="started-experiment">Started on <FormattedDate date={exp.completed_at}></FormattedDate></span><div>{current_status}</div></div>
       }
       experiment = <div className='row'>
