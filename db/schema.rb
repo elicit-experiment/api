@@ -215,6 +215,8 @@ ActiveRecord::Schema.define(version: 20170829210919) do
     t.integer "study_result_id", null: false
     t.references "protocol_user", foreign_key: true, null: false
     t.integer "current_stage_id", null: true
+    t.integer "num_stages_completed", null: true
+    t.integer "num_stages_remaining", null: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "completed_at"

@@ -18,7 +18,10 @@ module Chaos
 
       experiment = StudyResult::Experiment.where({
         :study_result_id => study_result.id,
-        :protocol_user_id => protocol_user.id }).first_or_initialize
+        :protocol_user_id => protocol_user.id }).first_or_initialize do |e|
+        # we need to have a real experiment with an ID for later
+        e.save!
+      end
  
       if !experiment.current_stage
         experiment, stage = next_stage(experiment)
@@ -37,12 +40,11 @@ module Chaos
         :study_result_id => study_result_id,
         :protocol_user_id => protocol_user.id }).first_or_initialize if experiment.nil?
 
-      ap experiment
-      experiment.save!
-
       completed_stages = StudyResult::Stage.where({
         :experiment_id => experiment.id,
         :protocol_user_id => experiment.protocol_user_id }).where.not({:completed_at => nil})
+
+      experiment.num_stages_completed = completed_stages.count
 
       phases = PhaseDefinition.where({
         :study_definition_id => study_definition_id,
@@ -68,6 +70,8 @@ module Chaos
       completed_phase_id_set = Set.new completed_stages.map(&:phase_definition_id)
 
       next_phase_ids = phase_sequence.reject{ |phase_id| completed_phase_id_set.include? phase_id }
+
+      experiment.num_stages_remaining = next_phase_ids.count
 
       next_phase_id = next_phase_ids.first
 
@@ -102,6 +106,7 @@ module Chaos
       else
         self.stage_id = nil
         experiment.current_stage_id = nil
+        experiment.completed_at = DateTime.now
         self.phase_definition_id = nil
       end
 

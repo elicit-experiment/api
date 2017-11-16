@@ -9,6 +9,7 @@ import elicitApi from '../../api/elicit-api.js'
 import { connect } from "react-redux";
 import elicitConfig from '../../ElicitConfig.js'
 import FormattedDate from '../ui_elements/FormattedDate.jsx'
+import { ExperimentDetails } from "./ExperimentDetails.jsx"
 
 const TakeProtocolLink = (props) => {
   return (
@@ -68,24 +69,10 @@ class ParticipantProtocol extends React.Component {
   }
 
   render() {
-    var experiment = <div><b>Not Started</b></div>
-    console.dir(this.props)
-    if (this.props.experiment) {
-      const exp = this.props.experiment
-      var exp_text = ""
-      if (exp.completed_at) {
-        exp_text = <b><span>Completed on <FormattedDate date={exp.completed_at}></FormattedDate></span></b>
-      } else {
-        const current_status = "Completed " + (exp.current_stage.last_completed_trial == undefined ? 0 : 1)  + "/" + (exp.current_stage.num_trials || 0) + " slides."
-        exp_text = <div><span className="started-experiment">Started on <FormattedDate date={exp.completed_at}></FormattedDate></span><div>{current_status}</div></div>
-      }
-      experiment = <div className='row'>
-            <div className='col-xs-12 '>
-              {exp_text}
-            </div>
-          </div>
-
-    } 
+    var take_protocol = ""
+    if (!this.props.experiment || !this.props.experiment.completed_at) {
+      take_protocol = <TakeProtocolLink study_id={this.props.study.id} protocol_id={this.props.protocol.id} take_protocol={this.props.take_protocol}/>
+    }
     return (
       <div className='protocols-wrapper col-xs-10' key={this.props.protocol.id}>
         <div className='well show protocol-summary' data-protocol_id={this.props.protocol.id}>
@@ -93,6 +80,9 @@ class ParticipantProtocol extends React.Component {
             <b className="col-xs-2">Protocol:</b>
             <div className='col-xs-5'>
               #{this.props.protocol.id} — {this.props.protocol.name}
+            </div>
+            <div className="col-xs-offset-3 col-xs-2">
+              <button  className="active btn btn-link" onClick={this.handleShowModal.bind(this)}><span>Study</span>&nbsp;<span className="glyphicon glyphicon-info-sign" aria-hidden="true"></span></button>
             </div>
           </div>
           <div className='row'>
@@ -102,19 +92,16 @@ class ParticipantProtocol extends React.Component {
             </div>
           </div>
           <div className='row'>
-            <div className='col-xs-12 protocol-description-text'>
+            <div className='col-xs-offset-1 col-xs-10 protocol-description-text'>
               {this.props.protocol.description}
             </div>
           </div>
-          {experiment}
+          <ExperimentDetails experiment={this.props.experiment} />
           <div className='row'>
-            <div className="col-xs-7">
-            </div>
-            <div className="col-xs-2">
-              <button  className="active btn btn-link" onClick={this.handleShowModal.bind(this)}><span>Study</span>&nbsp;<span className="glyphicon glyphicon-info-sign" aria-hidden="true"></span></button>
+            <div className="col-xs-9">
             </div>
             <div className="col-xs-3">
-              <TakeProtocolLink study_id={this.props.study.id} protocol_id={this.props.protocol.id} take_protocol={this.props.take_protocol}/>
+              {take_protocol}
             </div>
           </div>
         </div>

@@ -27,7 +27,7 @@ module ChaosApi::V6
         @chaos_session.next_stage
       else
         @chaos_session.stage.save!
-        end
+      end
 
       @response = ChaosResponse.new([])
 
