@@ -6,8 +6,11 @@ Issues:
 	- token refresh @done(2017-10-17)
 	- 
 
+Verify all components
+
+
 Participant:
-- Add info about in-progress experiments
+- Add info about in-progress experiments @done(2017-11-22)
 	- Add experiment info to protocol users payload so participant app can access it @done(2017-10-28)
 	- Render experiment information to users @done(2017-11-03)
 
@@ -30,7 +33,7 @@ Study:
 - Associate users with studies @done(2017-10-28)
 - Enforce user permissions to access studies @done(2017-10-28)
 - Redesign Participant page @done(2017-10-28)
-- Implement Phase & Trial orders
+- Implement Phase & Trial orders @done(2017-11-22)
 - Implement Phase & Trial users
 
 Investigator trial run:
@@ -55,7 +58,9 @@ Cleanup:
 Bugs:
 - Entering invalid creds on login causes you to dump to a blank screen @done(2017-11-01)
 - Participant/admin should be chosen after login based on account role @done(2017-10-28)
-- 
+- Rendering the page for the first time does not allow scrolling @done(2017-11-22)
+* Going to the participant page once you load it even as admin @done(2017-11-22)
+
 
 Media Upload:
 - Figure out design

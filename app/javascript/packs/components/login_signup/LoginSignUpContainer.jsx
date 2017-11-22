@@ -65,7 +65,7 @@ class LoginSignUpContainer extends React.Component {
     }
 
     if (this.showLoginSignup() && (this.state.loginSignup === 'hidden')) {
-\      $('#logInModal').modal('show')
+      $('#logInModal').modal('show')
     } else if (!this.showLoginSignup() && (this.state.loginSignup === 'shown')) {
       $('#logInModal').modal('hide')
     }
