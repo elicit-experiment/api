@@ -7,13 +7,8 @@ import { withRouter } from 'react-router'
 import pathToRegexp from 'path-to-regexp'
 import { Provider, connect } from "react-redux";
 import elicitApi from "../../api/elicit-api.js"; 
-import Header from "../nav/Header"
-
-import {
-  logoutUser
-} from "../../actions/tokens_actions"
-
-
+import HeaderContainer from "../nav/HeaderContainer"
+import { tokenStatus } from '../../reducers/selector';
 
 const AppRoutes = {
   take_study: {
@@ -21,8 +16,6 @@ const AppRoutes = {
     //toPath: pathToRegexp.compile('/admin/studies/:study_id')
   }
 }
-
-
 class ParticipantApp extends React.Component {
   constructor(props){
     console.log("ParticipantApp CONSTRUCT")
@@ -30,19 +23,15 @@ class ParticipantApp extends React.Component {
   }
 
   render() {
-      if (this.props.token_status != 'user') {
+      if (this.props.tokenStatus != 'user') {
         return <Redirect to='/login'></Redirect>
       }
 
       return(
     <div>
-      <Header {...this.props} ></Header>
+      <HeaderContainer></HeaderContainer>
       <div id="wrap" className="admin-app-container container">
-        <Switch>
-          <Route exact path='/' name="participant_overview" render={routeProps => <ParticipantProtocolList {...routeProps} {...this.props} /> } />
-          <Route exact path='/participant' name="participant_overview" render={routeProps => <ParticipantProtocolList {...routeProps} {...this.props} /> } />
-          <Route path='/participant/studies/:study_id' name="protocol_detail" render={routeProps => <TakeStudy {...routeProps} {...this.props}  /> } />
-        </Switch>
+        <ParticipantProtocolList {...this.props} />
       </div>
       <footer id="footer" className="navbar navbar-fixed-bottom admin-footer">
         <div className="container">
@@ -52,21 +41,20 @@ class ParticipantApp extends React.Component {
     </div>
   )
   }
-
-  componentDidMount() {
-    console.log("ParticipantApp MOUNT")
-    const {dispatch} = this.props;
-
-    // don't dispatch these simultaneously; there will be problems if we try and refresh the token
-    dispatch(elicitApi.actions.eligeable_protocols()).then(() => {dispatch(elicitApi.actions.current_user())} );
-  }
 }
 
 const mapStateToProps = (state) => ({
   current_user: state.current_user,
   eligeable_protocols: state.eligeable_protocols,
-  userToken: state.tokens.userToken
+  userToken: state.tokens.userToken,
+  tokenStatus: tokenStatus(state),
 });
-const connectedParticipantApp = connect(mapStateToProps)(ParticipantApp)
 
-export { Header as Header, connectedParticipantApp as ParticipantApp, AppRoutes };
+const mapDispatchToProps = (dispatch) => ({
+  loadEligeableProtocols: () => dispatch(elicitApi.actions.eligeable_protocols()),
+  loadCurrentUser: () => dispatch(elicitApi.actions.current_user())
+});
+
+const connectedParticipantApp = connect(mapStateToProps, mapDispatchToProps)(ParticipantApp)
+
+export { connectedParticipantApp as ParticipantApp, AppRoutes };

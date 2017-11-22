@@ -49,8 +49,6 @@ class _Protocol extends React.Component {
   updateProtocol(newData) {
     const { dispatch } = this.props;
     let body = { protocol_definition: newData };
-    console.dir(body);
-    console.dir(elicitApi.actions);
     dispatch(
       elicitApi.actions.protocol_definition.patch({
           study_definition_id: this.props.protocol.study_definition_id,
@@ -219,7 +217,7 @@ class Study extends React.Component {
           <div className="row study-info-row">
             <b className="col-xs-2">Description:</b>
             <div className="col-xs-10">
-              <b>{this.props.study.description}</b>
+              {this.props.study.description}
             </div>
           </div>
           {protocols_row}

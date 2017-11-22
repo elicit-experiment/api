@@ -17,9 +17,8 @@ const TokensReducer = (state = {
   userToken: undefined,
   currentUser: undefined,
   clientTokenIsLoading: false,
-  userTokenIsLoading: false,
   userTokenState: {
-    isLoading: false,
+    loading: false,
     error: false,
     error_code: 0,
     error_message: false

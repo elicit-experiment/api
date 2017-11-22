@@ -74,7 +74,7 @@ class ParticipantProtocol extends React.Component {
       take_protocol = <TakeProtocolLink study_id={this.props.study.id} protocol_id={this.props.protocol.id} take_protocol={this.props.take_protocol}/>
     }
     return (
-      <div className='protocols-wrapper col-xs-10' key={this.props.protocol.id}>
+      <div className='protocols-wrapper row' key={this.props.protocol.id}>
         <div className='well show protocol-summary' data-protocol_id={this.props.protocol.id}>
           <div className='row'>
             <b className="col-xs-2">Protocol:</b>
@@ -82,7 +82,10 @@ class ParticipantProtocol extends React.Component {
               #{this.props.protocol.id} — {this.props.protocol.name}
             </div>
             <div className="col-xs-offset-3 col-xs-2">
-              <button  className="active btn btn-link" onClick={this.handleShowModal.bind(this)}><span>Study</span>&nbsp;<span className="glyphicon glyphicon-info-sign" aria-hidden="true"></span></button>
+              <button  className="active btn btn-link" onClick={this.handleShowModal.bind(this)}>
+                  <span>Study</span>&nbsp;
+                  <span className="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+              </button>
             </div>
           </div>
           <div className='row'>
@@ -105,7 +108,10 @@ class ParticipantProtocol extends React.Component {
             </div>
           </div>
         </div>
-        {this.state.view.showModal ? <Modal title={`Study ${this.props.study.id} Details`} subtitle={this.props.study.title} body={this.props.study.description} handleHideModal={this.handleHideModal.bind(this)}/> : null}
+        {this.state.view.showModal ? <Modal title={`Study ${this.props.study.id} Details`}
+                                            subtitle={this.props.study.title}
+                                            body={this.props.study.description}
+                                            handleHideModal={this.handleHideModal.bind(this)}/> : null}
       </div>
     )
   }

@@ -34,9 +34,9 @@ class StudyList extends React.Component {
     var studies = this.props.studies.data.map( (study, i) => {
       return(
         <Fade key={study.id} appear={true} >
-        <div>
-        <Study study={study} users={this.props.users} protocol_definitions={this.props.protocol_definitions} key={study.id}> </Study>
-        </div>
+          <div>
+            <Study study={study} users={this.props.users} protocol_definitions={this.props.protocol_definitions} key={study.id}> </Study>
+          </div>
         </Fade>
       )
     })
@@ -48,6 +48,14 @@ class StudyList extends React.Component {
         {studies}
       </TransitionGroup>
     </div>)
+  }
+
+  componentDidMount() {
+    console.log("StudyList MOUNT")
+
+    if (!this.props.studies.sync && !this.props.studies.loading) {
+      this.props.loadStudies()
+    }
   }
 }
 

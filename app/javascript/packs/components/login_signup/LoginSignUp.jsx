@@ -80,7 +80,7 @@ class LogInSignUp extends React.Component {
     }
 
     return(
-      <div className="modal fade" data-backdrop="static" id="logInModal" role="dialog">
+      <div className="modal fade" data-backdrop="static" id="logInModal" role="dialog" aria-hidden={String(this.props.hidden)}>
         <div className="modal-dialog">
 
           <div className="modal-content">

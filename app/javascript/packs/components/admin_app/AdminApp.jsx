@@ -9,7 +9,8 @@ import {withRouter} from 'react-router'
 import pathToRegexp from 'path-to-regexp'
 import { Provider, connect } from "react-redux";
 import elicitApi from "../../api/elicit-api.js"; 
-import Header from "../nav/Header"
+import HeaderContainer from "../nav/HeaderContainer"
+import { tokenStatus } from '../../reducers/selector';
 
 const AppRoutes = {
   edit_study: {
@@ -24,25 +25,28 @@ class AdminApp extends React.Component {
   }
 
   render() {
-      if (this.props.token_status != 'user') {
+      if (this.props.tokenStatus !== 'user') {
         return <Redirect to='/login'></Redirect>
       }
 
-      if (this.props.current_user.data.role != 'admin') {
+      if (!this.props.current_user.sync) {
+        if (!this.props.current_user.loading) {
+          this.props.loadCurrentUser()
+        }
+        return <div>Loading...</div>
+      }
+
+      if (this.props.current_user.data.role !== 'admin') {
         console.log('user is not an admin')
+        console.log(this.props.current_user)
         return <Redirect to='/participant'></Redirect>
       }
 
       return(
     <div>
-      <Header {...this.props} ></Header>
+      <HeaderContainer></HeaderContainer>
       <div id="wrap" className="admin-app-container container">
-        <Switch>
-          <Route exact path='/admin/studies' render={routeProps => <StudyManagement {...routeProps} {...this.props} /> } />
-          <Route exact path='/admin' render={routeProps => <StudyManagement {...routeProps} {...this.props} /> } />
-          <Route path='/admin/studies/:study_id' render={routeProps => <EditStudy {...routeProps} users={this.state.users} studies={this.state.studies} protocols={this.state.protocols} study_protocols={this.state.study_protocols} /> } />
-          <Route path='/admin/users' component={UserManagement}/>
-        </Switch>
+        <StudyManagement {...this.props} />
       </div>
       <footer id="footer" className="navbar navbar-fixed-bottom admin-footer">
         <div className="container">
@@ -55,17 +59,20 @@ class AdminApp extends React.Component {
 
   componentDidMount() {
     console.log("AdminApp MOUNT")
-    const {dispatch} = this.props;
-
-    dispatch(elicitApi.actions.studies());
   }
 }
 
 const mapStateToProps = (state) => ({
   current_user: state.current_user,
-  userToken: state.tokens.userToken
+  userToken: state.tokens.userToken,
+  tokenStatus: tokenStatus(state),
 });
 
-const connectedAdminApp = connect( mapStateToProps )(AdminApp)
+const mapDispatchToProps = (dispatch) => ({
+  loadStudies: () => dispatch(elicitApi.actions.studies()),
+  loadCurrentUser: () => dispatch(elicitApi.actions.current_user())
+});
 
-export { Header as Header, connectedAdminApp as AdminApp, AppRoutes };
+const connectedAdminApp = connect( mapStateToProps, mapDispatchToProps )(AdminApp)
+
+export { connectedAdminApp as AdminApp, AppRoutes };

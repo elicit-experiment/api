@@ -24,7 +24,7 @@ export function userTokenIsLoading(bool) {
   return {
     type: USER_TOKEN_STATE,
     userTokenState: {
-      isLoading: bool,
+      loading: bool,
       error: false,
       error_message: false
     }
@@ -43,8 +43,8 @@ export const requestClientToken = (asyncDoneCallback) => {
     dispatch(clientTokenIsLoading(true));
 
     const processSuccess = (data) => {
-      dispatch(clientTokenIsLoading(false))
       dispatch(receiveClientToken(data))
+      dispatch(clientTokenIsLoading(false))
     }
 
     const error = (e) => {
@@ -64,7 +64,7 @@ export const logInUser = (credentials, asyncDoneCallback) => {
   return (dispatch) => {
     dispatch(userTokenIsLoading(true))
     dispatch(userTokenState({
-      isLoading: true,
+      loading: true,
       error: false,
       error_code: 0,
       error_message: ""
@@ -73,7 +73,7 @@ export const logInUser = (credentials, asyncDoneCallback) => {
     const gotData = (data) => {
       dispatch(userTokenIsLoading(false));
       dispatch(userTokenState({
-        isLoading: false,
+        loading: false,
         error: false,
         error_code: 0,
         error_message: ""
@@ -84,7 +84,7 @@ export const logInUser = (credentials, asyncDoneCallback) => {
     const error = (e) => {
       console.dir(e)
       dispatch(userTokenState({
-        isLoading: false,
+        loading: false,
         error: true,
         error_code: e.status,
         error_message: e.statusText

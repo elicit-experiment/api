@@ -16,8 +16,9 @@ export class ExperimentDetails extends React.Component {
   }
 
   render() {
-    console.dir(this.props.experiment);
-    if (!this.props.experiment) {
+    const exp = this.props.experiment;
+
+    if (!exp) {
       return (
         <div>
           <div className="row">
@@ -27,8 +28,6 @@ export class ExperimentDetails extends React.Component {
         </div>
       );
     }
-
-    const exp = this.props.experiment;
 
     if (exp.completed_at) {
       return (
