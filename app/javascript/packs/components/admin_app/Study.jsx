@@ -65,13 +65,16 @@ class _Protocol extends React.Component {
           className="protocol-row protocol-header-row"
           key={"t" + this.props.protocol.id}
         >
-          <div className="col-xs-1">
-            <b>{this.props.protocol.id}</b>
-          </div>
-          <div className="col-xs-6">
-            <b>{this.props.protocol.name}</b>
+          <div className="col-xs-5">
+            <b>{this.props.protocol.id}  —{" "}
+            {this.props.protocol.name}</b>
           </div>
           <div className="col-xs-3">
+            <Link to={`/admin/studies/${this.props.study.id}/protocols/${this.props.protocol.id}`} className="active btn btn-primary">
+              Preview Protocol
+            </Link>
+          </div>
+          <div className="col-xs-2">
             <button type="button" className="btn btn-primary">
               Phases &nbsp; <span className="badge badge-secondary">{this.props.protocol.phase_definitions.length}</span>
             </button>
@@ -112,7 +115,7 @@ class ProtocolEdit extends React.Component {
       if (protocol_def && (protocol_def.length > 0)) {
         protocol = protocol_def[0]
       }
-      return <Protocol protocol={protocol} key={protocol.id} />;
+      return <Protocol protocol={protocol} study={this.props.study} key={protocol.id} />;
     });
 
     return (
@@ -242,10 +245,7 @@ class Study extends React.Component {
   }
 
   deleteItem(itm) {
-    console.dir(itm);
-    console.dir(this.props.study);
     const { dispatch } = this.props;
-    console.dir(elicitApi.actions);
     dispatch(
       elicitApi.actions.study_definition.delete({ id: this.props.study.id })
     );

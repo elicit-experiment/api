@@ -40,12 +40,16 @@ module Api::V1
     end
 
     private
+    def query_params
+      {:study_definition_id => params[:study_definition_id]}
+    end
+
     def query_includes
-      [:phase_definitions]
+      { :phase_definitions => :trial_definitions }
     end
 
     def response_includes
-      [:phase_definitions]
+      { :phase_definitions => {:include => :trial_definitions } }
     end
 
     def protocol_definition_params

@@ -44,13 +44,15 @@ ActiveRecord::Schema.define(version: 20170829210919) do
   create_table "chaos_sessions", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "session_guid", null: false
-    t.integer "study_definition_id"
-    t.integer "protocol_definition_id"
+    t.integer "study_definition_id", null: false
+    t.integer "protocol_definition_id", null: false
     t.integer "phase_definition_id"
+    t.integer "trial_definition_id"
     t.integer "protocol_user_id"
     t.integer "study_result_id"
     t.integer "experiment_id"
     t.integer "stage_id"
+    t.boolean "preview"
     t.string "url", null: false
     t.datetime "expires_at", null: false
     t.datetime "created_at", null: false
@@ -192,7 +194,7 @@ ActiveRecord::Schema.define(version: 20170829210919) do
     t.references "study_definition", foreign_key: true, null: false
     t.references "protocol_definition", foreign_key: true, null: false
     t.references "phase_definition", foreign_key: true, null: false
-    t.references "trial_definition", foreign_key: true, null: false
+    t.references "trial_definition", foreign_key: true, null: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

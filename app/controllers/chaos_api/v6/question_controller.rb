@@ -12,10 +12,12 @@ module ChaosApi::V6
       @study_definition = StudyDefinition.find(params[:id])
       experiment_id = @study_definition.data
 
-      @chaos_session.stage.current_trial = trial_index
-      @chaos_session.stage.save!
+      unless @chaos_session.preview
+        @chaos_session.stage.current_trial = trial_index
+        @chaos_session.stage.save!
+      end
 
-      @response = ChaosExperimentService.new(@study_definition).make_slide(trial_index, @chaos_session.protocol_user_id)
+      @response = ChaosExperimentService.new(@study_definition).make_slide(trial_index)
 
       # compare to version generated from experiment xml, if it exists
       ExperimentXmls.instance.refresh

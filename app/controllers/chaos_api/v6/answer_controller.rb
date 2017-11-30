@@ -9,17 +9,26 @@ module ChaosApi::V6
     def create
       @response = ChaosResponse.new([])
 
+      sessionGUID = params[:sessionGUID]
+
+      @chaos_session = Chaos::ChaosSession.where({:session_guid => sessionGUID}).first
+
+      if @chaos_session.preview
+        respond_to do |format|
+          format.xml { render :xml => '' }
+          format.json { render :json => @response.to_json }
+        end
+
+        return
+      end
+
       questionId = params[:questionId].split(':')
       study_definition_id = questionId[0].to_i
       component_definition_id = questionId[1].to_i
 
       @component = Component.find(component_definition_id)
 
-      sessionGUID = params[:sessionGUID]
-
       @study_definition = StudyDefinition.find(study_definition_id)
-
-      @chaos_session = Chaos::ChaosSession.where({:session_guid => sessionGUID}).first
 
       output = JSON.parse(params[:output])
 

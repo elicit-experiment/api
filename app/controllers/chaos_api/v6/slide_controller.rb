@@ -16,6 +16,15 @@ module ChaosApi::V6
 
       @chaos_session = Chaos::ChaosSession.where({:session_guid => @sessionGUID}).includes([:experiment, :phase_definition, :experiment, :stage]).first
 
+      if @chaos_session.preview
+        respond_to do |format|
+          format.xml { render :xml => '' }
+          format.json { render :json => @response.to_json }
+        end
+
+        return
+      end
+
       @protocol_definition = ProtocolDefinition.find(@protocol_id)
 
       @chaos_session.stage.last_completed_trial = @slideIndex

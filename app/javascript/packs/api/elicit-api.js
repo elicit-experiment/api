@@ -137,8 +137,12 @@ const make_entity_def = (singular, plural, endpoint) => {
         request,
         response
       }) {
-        if (!request || !request.params) {
+        if (!request) {
           debugger;
+        }
+        if (!request.params) {
+          console.warn(`no request params for ${plural} ${singular}`)
+          return
         }
         if (request.params.method === "POST") {
           dispatch({
@@ -244,6 +248,7 @@ const api = reduxApi(_.extend({},
   eligeable_protocol,
   make_entity_def('study_definition', 'studies', 'study_definitions'),
   make_entity_def('protocol_definition', 'protocol_definitions', '/study_definitions/:study_definition_id/protocol_definitions'),
+  make_entity_def('phase_definitions', 'phase_definitions', '/study_definitions/:study_definition_id/protocol_definitions/:protocol_definition_id/phase_definitions'),
   user_entity)).use("options", (url, params, getState) => {
   const {
     tokens: {

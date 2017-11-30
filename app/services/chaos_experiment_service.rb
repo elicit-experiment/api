@@ -11,7 +11,7 @@ class ChaosExperimentService
 
   def initialize(study_definition, protocol_definition = nil, phase_definition = nil)
     @study_definition = study_definition
-    @protocol_definition_definition = protocol_definition
+    @protocol_definition = protocol_definition
     @phase_definition = phase_definition
     @protocol_definition = ProtocolDefinition.where({
       :study_definition_id => @study_definition.id}).first unless protocol_definition
@@ -37,6 +37,39 @@ class ChaosExperimentService
     RedirectOnCloseUrl: @study_definition.redirect_close_on_url,
     CurrentSlideIndex: (stage.current_trial),
     Fullname: "Questionnaire, 1.0"
+    }
+  end
+
+  def make_preview_experiment(trial_definition_id)
+
+    trial_params = {:study_definition_id => @study_definition.id,
+                    :protocol_definition_id => @protocol_definition.id,
+                    :phase_definition_id => @phase_definition.id}
+    ap trial_params
+    trials = TrialDefinition.where(trial_params)
+    trial_ids = trials.map { |t| t.id }
+    num_trials = trials.count
+
+    ap trials
+    current_trial_idx = trial_ids.index(trial_definition_id)
+
+    trials_completed = current_trial_idx ? (current_trial_idx-1) : nil
+
+    {
+        Name: @study_definition.title,
+        Css: "",
+        Version: @study_definition.version,
+        #ExperimentDescription: @study_definition.description,
+        CreatedBy: @study_definition.principal_investigator_user_id.to_s,
+        #Data: @study_definition.data,
+        LockQuestion: @study_definition.lock_question == 1,
+        EnablePrevious: @study_definition.enable_previous == 1,
+        NoOfTrials: num_trials,
+        TrialsCompleted: trials_completed,
+        FooterLabel: @study_definition.footer_label,
+        RedirectOnCloseUrl: @study_definition.redirect_close_on_url,
+        CurrentSlideIndex: current_trial_idx,
+        Fullname: "Questionnaire, 1.0"
     }
   end
 

@@ -49,7 +49,7 @@ const RawRootRoutes = (props) => {
   if (token_status) {
     return (
       <Switch>
-        <Route exact path="/admin" component={AdminApp} token_status={token_status}> </Route>
+        <Route path="/admin" component={AdminApp} token_status={token_status}> </Route>
         <Route exact path="/participant" component={ParticipantApp} token_status={token_status}> </Route>
         <Route exact path="/login" component={LoginSignUpContainer} token_status={token_status}> </Route>
         <Redirect from="*" to="/participant"/>

@@ -51,7 +51,11 @@ Rails.application.routes.draw do
 
   scope :api do
     scope :v1 do
-      scope :results do
+      get 'study_definitions/:study_definition_id/protocol_definitions/:protocol_definition_id/preview' => "protocol_preview#take"
+      scope :study_definitions do
+        scope :protocol_definitions do
+          get 'preview' => "protocol_preview#take"
+        end
       end
     end
   end

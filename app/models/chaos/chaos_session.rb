@@ -33,7 +33,7 @@ module Chaos
 
       self.experiment_id = experiment.id
       self.stage_id = stage ? stage.id : nil
-     end
+    end
 
     def next_stage(experiment = nil)
       experiment = StudyResult::Experiment.where({

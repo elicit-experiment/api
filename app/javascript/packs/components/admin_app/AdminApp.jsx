@@ -12,6 +12,8 @@ import elicitApi from "../../api/elicit-api.js";
 import HeaderContainer from "../nav/HeaderContainer"
 import { tokenStatus } from '../../reducers/selector';
 
+import ProtocolPreviewContainer from "./ProtocolPreviewContainer"
+
 const AppRoutes = {
   edit_study: {
     route: '/admin/studies/:study_id',
@@ -42,11 +44,13 @@ class AdminApp extends React.Component {
         return <Redirect to='/participant'></Redirect>
       }
 
+      console.log(`${this.props.match.url}/studies/:study_id/protocols/:protocol_id`)
       return(
     <div>
       <HeaderContainer></HeaderContainer>
       <div id="wrap" className="admin-app-container container">
-        <StudyManagement {...this.props} />
+        <Route path={`${this.props.match.url}/studies/:study_id/protocols/:protocol_id`} component={ProtocolPreviewContainer}/>
+        <Route exact path={`${this.props.match.url}`} component={StudyManagement}/>
       </div>
       <footer id="footer" className="navbar navbar-fixed-bottom admin-footer">
         <div className="container">

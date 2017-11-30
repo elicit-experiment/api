@@ -8,13 +8,24 @@ class Component < ApplicationRecord
 
  include Swagger::Blocks
 
+  swagger_schema :ComponentDefinition do
+    property :Inputs do
+      key :type, :array
+    end
+    property :Outputs do
+      key :type, :array
+    end
+  end
   swagger_schema :Component do
     property :id do
       key :type, :integer
       key :format, :int64
     end
-    property :definition_data do
+    property :name do
       key :type, :string
+    end
+    property :definition_data do
+        key :type, :string
     end
   end
 end

@@ -1,6 +1,8 @@
 import React from 'react'
 import StudyList from './StudyList'
 import { connect } from "react-redux"
+import {tokenStatus} from "../../reducers/selector";
+import elicitApi from "../../api/elicit-api";
 
 const StudyManagement = (props) => (
   <div>
@@ -14,4 +16,9 @@ const mapStateToProps = (state) => ({
   protocol_definitions: state.protocol_definitions,
 });
 
-export default connect(mapStateToProps)(StudyManagement)
+const mapDispatchToProps = (dispatch) => ({
+  loadStudies: () => dispatch(elicitApi.actions.studies()),
+  loadCurrentUser: () => dispatch(elicitApi.actions.current_user())
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(StudyManagement)

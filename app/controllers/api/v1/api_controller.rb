@@ -65,7 +65,8 @@ module Api::V1
     def index
       plural_resource_name = "@#{resource_name.pluralize}"
       if not query_params.nil?
-        resources = resource_class.where(query_params).include(query_includes)
+        resources = resource_class.includes(query_includes).where(query_params)
+        ap resources.all
       end
       if not search_param.nil?
         resources = resource_class.full_text_search(search_param)
@@ -81,7 +82,7 @@ module Api::V1
                                   .per(page_params[:page_size])
       end
       instance_variable_set(plural_resource_name, resources)
-      respond_with instance_variable_get(plural_resource_name),  :includes => response_includes
+      respond_with instance_variable_get(plural_resource_name),  :include => response_includes
     end
 
     # GET /api/{plural_resource_name}/:id
