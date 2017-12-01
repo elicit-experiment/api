@@ -6,8 +6,8 @@ Issues:
 	- token refresh @done(2017-10-17)
 	- 
 
-Verify all components
-
+Verify all components:
+- Investigate JSON schema
 
 Participant:
 - Add info about in-progress experiments @done(2017-11-22)
@@ -49,9 +49,9 @@ Deployment:
 
 Cleanup:
 - Clean up old chaos sessions
-- Link back to Elicit when survey is complete
+- Link back to Elicit when survey is complete @done(2017-11-30)
 - Figure out how much of the old experiment xml cruft actually needs to be passed to the frontend (i.e. Outputs, etc..)
-- Don't turn off https verification except locally
+- Don't turn off https verification except locally @done(2017-11-30)
 - fixup headers in admin and participant @done(2017-10-28)
 - rename admin_controller @done(2017-10-28)
 
@@ -60,13 +60,18 @@ Bugs:
 - Participant/admin should be chosen after login based on account role @done(2017-10-28)
 - Rendering the page for the first time does not allow scrolling @done(2017-11-22)
 * Going to the participant page once you load it even as admin @done(2017-11-22)
+- "Logout" should be "login" when there is no current user.  Or maybe nuke the token if there is a non-200, non network response from /users/current?
 
 Chaos Frontend Bugs:
 -  There is another one with the tagging components that don’t seem to work if you set tags that the user should use and then add some as user input. You cannot remove them or add them correctly.
 - Click on textbox group, go back, doesn’t go to new one
 - CSS -> lines sticking out
-- OneDScale -> doesn’t show something when you press on the 1D scale; was a circle now a square
-Position in the metadata is not defined, then no marker. If marker is defined, it’s already positioned.
+- OneDScale -> doesn’t show something when you press on the 1D scale; was a circle now a square; Position in the metadata is not defined, then no marker. If marker is defined, it’s already positioned.
+
+Study Preview:
+- Create preview mode  @done(2017-11-30)
+- Create preview Index page @done(2017-11-30)
+- [BUG] Logout when returning from preview?
 
 Media Upload:
 - Figure out design
@@ -79,6 +84,3 @@ Fit and Finish:
 Future Optimization:
 - Use redis to cache models https://medium.com/@LuisOsnet/model-caching-using-redis-and-rails-5-4666b7e8031f
 - 
-
-Physiological:
-- Add groups to datamodel

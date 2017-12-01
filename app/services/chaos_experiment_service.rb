@@ -14,10 +14,14 @@ class ChaosExperimentService
     @protocol_definition = protocol_definition
     @phase_definition = phase_definition
     @protocol_definition = ProtocolDefinition.where({
-      :study_definition_id => @study_definition.id}).first unless protocol_definition
+      :study_definition_id => @study_definition.id}).first unless @protocol_definition
+    if @protocol_definition.nil?
+      Rails.logger.error "No protocols for study #{study_definition.ai}"
+      # TODO: we should handle malformed studies by erroring appropriately
+    end
     @phase_definition = PhaseDefinition.where({
       :study_definition_id => @study_definition.id,
-      :protocol_definition_id => @protocol_definition.id}).first unless protocol_definition
+      :protocol_definition_id => @protocol_definition.id}).first unless @phase_definition
   end
 
   def make_experiment(experiment)

@@ -9,7 +9,14 @@ module ChaosApi::V6
 
       @chaos_session = Chaos::ChaosSession.where({:session_guid => sessionGUID}).first
 
-      @study_definition = StudyDefinition.find(params[:id])
+      @study_definition = @chaos_session.study_definition
+      @protocol_definition = ProtocolDefinition.find(params[:id])
+
+      if params[:id] != @chaos_session.protocol_definition.id
+        Rails.logger.error("ID parameter doesn't match protocol ID for session. #{params[:id]} != #{@chaos_session.protocol_definition.id}")
+        # TODO: return an error in this case
+      end
+
       experiment_id = @study_definition.data
 
       unless @chaos_session.preview
@@ -17,7 +24,8 @@ module ChaosApi::V6
         @chaos_session.stage.save!
       end
 
-      @response = ChaosExperimentService.new(@study_definition).make_slide(trial_index)
+      @response = ChaosExperimentService.new(@study_definition,
+                                             @protocol_definition).make_slide(trial_index)
 
       # compare to version generated from experiment xml, if it exists
       ExperimentXmls.instance.refresh

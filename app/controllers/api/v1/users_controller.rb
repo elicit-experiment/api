@@ -2,6 +2,7 @@ module Api::V1
   class UsersController < Devise::RegistrationsController
 
     include ElicitErrors
+
     before_action -> { doorkeeper_authorize! :public }, only: [:update, :index]
     before_action only: [:new, :create] do |controller| # access to register api requires authenticated client token
 #      doorkeeper_authorize! :public unless controller.request.format.html?
@@ -13,6 +14,7 @@ module Api::V1
 
     respond_to :json
 
+    rescue_from ElicitError, :with => :render_elicit_error
 
     def create
       build_resource(sign_up_params)
