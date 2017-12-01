@@ -10,24 +10,21 @@ import elicitApi from "../../api/elicit-api.js";
 import HeaderContainer from "../nav/HeaderContainer"
 import { tokenStatus } from '../../reducers/selector';
 
-const AppRoutes = {
-  take_study: {
-    route: '/participant/studies/:study_id',
-    //toPath: pathToRegexp.compile('/admin/studies/:study_id')
-  }
-}
 class ParticipantApp extends React.Component {
-  constructor(props){
-    console.log("ParticipantApp CONSTRUCT")
-    super(props);
-  }
-
   render() {
-      if (this.props.tokenStatus != 'user') {
-        return <Redirect to='/login'></Redirect>
-      }
+    if (this.props.tokenStatus != 'user') {
+      return <Redirect to='/login'></Redirect>
+    }
 
-      return(
+    if (!this.props.current_user.sync) {
+      if (!this.props.current_user.loading) {
+        console.log("No current user!")
+        window.setTimeout(this.props.loadCurrentUser, 50)
+      }
+      return <div>Loading...</div>
+    }
+
+    return(
     <div>
       <HeaderContainer></HeaderContainer>
       <div id="wrap" className="admin-app-container container">
@@ -57,4 +54,4 @@ const mapDispatchToProps = (dispatch) => ({
 
 const connectedParticipantApp = connect(mapStateToProps, mapDispatchToProps)(ParticipantApp)
 
-export { connectedParticipantApp as ParticipantApp, AppRoutes };
+export { connectedParticipantApp as ParticipantApp };

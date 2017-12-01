@@ -9,7 +9,8 @@ import _ from 'lodash'
 
 import {
   resetUserToken,
-  logInUser
+  logInUser,
+  logoutUser
 } from "../actions/tokens_actions"
 
 const api_root = '/api/v1'
@@ -256,7 +257,6 @@ const api = reduxApi(_.extend({},
       userToken
     }
   } = getState();
-  console.log('adding headers...')
     // Add token to header request
   if (userToken && userToken.access_token) {
     return {
@@ -278,14 +278,20 @@ const api = reduxApi(_.extend({},
     if (data !== undefined) {
       return data
     }
+
     if (err && (err.error == 'invalid_token')) {
       store.dispatch(resetUserToken())
       return data
     }
+
+    if (err.code == 401) { // if we get a permission denied, then just logout
+      store.dispatch(logoutUser())
+    }
+
     if (err) {
-      // this is necessary because just returning the (undefiend) data 
+      // this is necessary because just returning the (undefined) data
       // will still cause the postfetch hook to run.
-      throw "bad";
+      throw err;
     }
     return data;
   }).use("fetch", adapterFetch(fetch));

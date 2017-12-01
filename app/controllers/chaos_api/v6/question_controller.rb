@@ -12,7 +12,7 @@ module ChaosApi::V6
       @study_definition = @chaos_session.study_definition
       @protocol_definition = ProtocolDefinition.find(params[:id])
 
-      if params[:id] != @chaos_session.protocol_definition.id
+      if params[:id].to_i != @chaos_session.protocol_definition.id.to_i
         Rails.logger.error("ID parameter doesn't match protocol ID for session. #{params[:id]} != #{@chaos_session.protocol_definition.id}")
         # TODO: return an error in this case
       end

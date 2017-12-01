@@ -14,13 +14,6 @@ import { tokenStatus } from '../../reducers/selector';
 
 import ProtocolPreviewContainer from "./ProtocolPreviewContainer"
 
-const AppRoutes = {
-  edit_study: {
-    route: '/admin/studies/:study_id',
-    //toPath: pathToRegexp.compile('/admin/studies/:study_id')
-  }
-}
-
 class AdminApp extends React.Component {
   constructor(props){
     super(props);
@@ -33,7 +26,8 @@ class AdminApp extends React.Component {
 
       if (!this.props.current_user.sync) {
         if (!this.props.current_user.loading) {
-          this.props.loadCurrentUser()
+          console.log("No current user!")
+          window.setTimeout(this.props.loadCurrentUser, 50)
         }
         return <div>Loading...</div>
       }
@@ -62,7 +56,6 @@ class AdminApp extends React.Component {
   }
 
   componentDidMount() {
-    console.log("AdminApp MOUNT")
   }
 }
 
@@ -79,4 +72,4 @@ const mapDispatchToProps = (dispatch) => ({
 
 const connectedAdminApp = connect( mapStateToProps, mapDispatchToProps )(AdminApp)
 
-export { connectedAdminApp as AdminApp, AppRoutes };
+export { connectedAdminApp as AdminApp };
