@@ -198,3 +198,22 @@ h1 {
   align-items: center;
 }
 
+
+// nAV
+
+.nav > li > button {
+  position: relative;
+  display: block;
+  padding: 10px 15px;
+}
+
+.nav > li > button:hover {
+  text-decoration: none;e
+}
+
+@media (min-width: 768px) {
+  .navbar-nav > li > button {
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+}

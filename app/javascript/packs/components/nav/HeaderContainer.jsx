@@ -13,13 +13,13 @@ import { logoutUser } from '../../actions/tokens_actions';
 class HeaderContainer extends React.Component {
   render() {
     return <Header {...this.props}
-                   current_user_role={this.props.currentUser.data.role}
-                   current_user_email={this.props.currentUser.data.email}/>
+                   current_user_role={this.props.current_user.data.role}
+                   current_user_email={this.props.current_user.data.email}/>
   }
 }
 
 const mapStateToProps = (state) => ( {
-  currentUser: currentUser(state),
+  current_user: currentUser(state),
 })
 
 const mapDispatchToProps = (dispatch) => ({

@@ -11,9 +11,9 @@ import PropTypes from 'prop-types';
 
 class Header extends React.Component {
   render() {
-    console.dir(this.props)
     var admin = ""
-    if (this.current_user_role == 'admin') {
+
+    if (this.props.current_user_role == 'admin') {
       admin = <li><Link to='/admin'>Admin</Link></li>
     }
 
@@ -34,12 +34,12 @@ class Header extends React.Component {
             </ul>
 
             <ul className="nav navbar-nav navbar-right">
-              <li><a onClick={(e) => {
+              <li><button type="button" className="btn btn-link" onClick={(e) => {
                 this.props.logoutUser()
-              }}>{this.props.current_user_email}</a></li>
-              <li><a onClick={(e) => {
+              }}>{this.props.current_user_email}</button></li>
+              <li><button type="button" className="btn btn-link" onClick={(e) => {
                 this.props.logoutUser()
-              }}>Logout</a></li>
+              }}>Logout</button></li>
               <li>&nbsp;</li>
             </ul>
           </div>
