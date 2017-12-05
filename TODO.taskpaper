@@ -79,7 +79,7 @@ Study Preview:
 - Add Test-only flags session and other data structures @done(2017-12-05)
 - Create preview mode  @done(2017-11-30)
 - Create preview Index page @done(2017-11-30)
-- [BUG] Logout when returning from preview?
+- [BUG] Logout when returning from preview? @done(2017-12-05)
 
 Client Examples:
 - Create pure Python examples (i.e. component dictionaries in Native Python)

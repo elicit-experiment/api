@@ -57,6 +57,13 @@ class ChaosExperimentService
     ap trials
     current_trial_idx = trial_ids.index(trial_definition_id)
 
+    ap Rails.configuration.elicit
+    url = Rails.configuration.elicit['elicit_portal']['scheme'] + "://" +
+        Rails.configuration.elicit['elicit_portal']['host'] + ":" +
+        Rails.configuration.elicit['elicit_portal']['port'].to_s + "/admin/studies/" +
+        @study_definition.id.to_s + "/protocols/" +
+        @protocol_definition.id.to_s
+
     trials_completed = current_trial_idx ? (current_trial_idx-1) : nil
 
     {
@@ -71,20 +78,24 @@ class ChaosExperimentService
         NoOfTrials: num_trials,
         TrialsCompleted: trials_completed,
         FooterLabel: @study_definition.footer_label,
-        RedirectOnCloseUrl: @study_definition.redirect_close_on_url,
+        RedirectOnCloseUrl: url,
         CurrentSlideIndex: current_trial_idx,
         Fullname: "Questionnaire, 1.0"
     }
   end
 
   def make_slide(trial_no = 0, protocol_user_id = nil)
-    @phases = PhaseDefinition.where({:study_definition_id => @study_definition.id, :protocol_definition_id => @protocol_definition.id}).entries
-    @phase_order = PhaseOrder.where({:study_definition_id => @study_definition.id, :protocol_definition_id => @protocol_definition.id}).entries
+    @phases = PhaseDefinition.where({:study_definition_id => @study_definition.id,
+                                     :protocol_definition_id => @protocol_definition.id}).order(:id).entries
+    @phase_order = PhaseOrder.where({:study_definition_id => @study_definition.id,
+                                     :protocol_definition_id => @protocol_definition.id}).entries
     
     # TODO: Figure out how to integrate phase orders into the Chaos frontend
     @phase = @phases.first
 
-    @trials = TrialDefinition.where({:study_definition_id => @study_definition.id, :protocol_definition_id => @protocol_definition.id, :phase_definition_id => @phase.id}).entries
+    @trials = TrialDefinition.where({:study_definition_id => @study_definition.id,
+                                     :protocol_definition_id => @protocol_definition.id,
+                                     :phase_definition_id => @phase.id}).order(:id).entries
 
     @trial_order = TrialOrder.where({:study_definition_id => @study_definition.id, :protocol_definition_id => @protocol_definition.id, :phase_definition_id => @phase.id}).entries
 
@@ -94,8 +105,12 @@ class ChaosExperimentService
       @trial_sequence = @trial_order.first.sequence_data.split(',').map(&:to_i)
     end
 
-    @components = Component.where({:study_definition_id => @study_definition.id, :protocol_definition_id => @protocol_definition.id, :phase_definition_id => @phase.id}).entries
-    @stimuli = Stimulus.where({:study_definition_id => @study_definition.id, :protocol_definition_id => @protocol_definition.id, :phase_definition_id => @phase.id}).entries
+    @components = Component.where({:study_definition_id => @study_definition.id,
+                                   :protocol_definition_id => @protocol_definition.id,
+                                   :phase_definition_id => @phase.id}).order(:id).entries
+    @stimuli = Stimulus.where({:study_definition_id => @study_definition.id,
+                               :protocol_definition_id => @protocol_definition.id,
+                               :phase_definition_id => @phase.id}).order(:id).entries
 
     phase = @phases.first
 

@@ -7,7 +7,7 @@ module Api::V1
 
     def index
       plural_resource_name = "@#{resource_name.pluralize}"
-      resources = StudyDefinition.includes(query_includes).joins(:principal_investigator)
+      resources = StudyDefinition.includes(query_includes).joins(:principal_investigator).order({:created_at => :desc})
 
       if not page_params.nil?
         resources = resources.page(page_params[:page])

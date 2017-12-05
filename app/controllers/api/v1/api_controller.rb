@@ -60,7 +60,7 @@ module Api::V1
     def index
       plural_resource_name = "@#{resource_name.pluralize}"
       if not query_params.nil?
-        resources = resource_class.includes(query_includes).where(query_params)
+        resources = resource_class.includes(query_includes).where(query_params).order(order_params)
         ap resources.all
       end
       if not search_param.nil?
@@ -117,6 +117,10 @@ module Api::V1
     # The includes for the (JSON) response
     def response_includes
       []
+    end
+
+    def order_params
+      {:created_at => :desc}
     end
 
     # Only allow a trusted parameter "white list" through.
