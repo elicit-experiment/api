@@ -6,7 +6,7 @@ export default class ProfilePage extends Component {
   }
   render() {
     return (
-        <div id="wrap" className="admin-app-container container">
+        <div id="wrap" className="page-container container">
           <div className="row">
             <div className="col-offset-xs-1 col-xs-11">
               <h2>Profile for {this.props.current_user.email}</h2>

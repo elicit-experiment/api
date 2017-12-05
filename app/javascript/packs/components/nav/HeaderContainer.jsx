@@ -1,6 +1,9 @@
+//Import React and Dependencies
 import React from 'react'
 import ReactDOM from 'react-dom'
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
+
+// Import Components
 import Header from "./Header.jsx"
 
 // Import Selectors
@@ -16,7 +19,7 @@ class HeaderContainer extends React.Component {
                    current_user_role={this.props.current_user.data.role}
                    current_user_email={this.props.current_user.data.email}/>
   }
-  componentDidMount() {
+  componentWillMount() {
     this.props.syncCurrentUser()
   }
 }

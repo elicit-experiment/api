@@ -8,6 +8,14 @@ export default class AboutPage extends Component {
   }
 
   render() {
-    return (<div dangerouslySetInnerHTML={htmlDoc} />)
+    return (
+        <div id="wrap" className="page-container container">
+          <div className="row">
+            <div className="col-offset-xs-1 col-xs-11">
+              <div dangerouslySetInnerHTML={htmlDoc}/>
+            </div>
+          </div>
+        </div>
+  )
   }
 }
