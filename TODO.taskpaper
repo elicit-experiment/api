@@ -1,3 +1,23 @@
+Add About Page:
+- Add About Page @done(2017-12-05)
+
+Redesign Landing Page:
+- Introductory text 
+- Shortened (?) Participant list.
+
+User Profile:
+- Create user profile page and link to clicking on user name in navbar
+
+Chaos Frontend Bugs:
+-  There is another one with the tagging components that don’t seem to work if you set tags that the user should use and then add some as user input. You cannot remove them or add them correctly.
+- Click on textbox group, go back, doesn’t go to new one [experiment_definitions_xml\errors]
+- CSS -> lines sticking out @done(2017-12-01)
+- OneDScale -> doesn’t show something when you press on the 1D scale; was a circle now a square; Position in the metadata is not defined, then no marker. If marker is defined, it’s already positioned. @done(2017-12-01)
+
+Verify all components:
+- Investigate JSON schema
+
+
 Issues:
 	- Sign-in doesn't redirect  @done(2017-09-18)
 	- `respond_with` error: `RuntimeError: In order to use respond_with, first you need to declare the formats your controller responds to in the class level.`  @done(2017-09-10)
@@ -5,9 +25,6 @@ Issues:
 	- logout  @done(2017-10-17)
 	- token refresh @done(2017-10-17)
 	- 
-
-Verify all components:
-- Investigate JSON schema
 
 Participant:
 - Add info about in-progress experiments @done(2017-11-22)
@@ -20,6 +37,21 @@ User & Auth:
 - link-only email users
 - Add Investigator role
 
+Consent:
+- Update datamodel to contain consent document and user acceptance
+- Update UI to allow users to consent to the studies
+	- * password reset (needed)
+	* role(s) (readonly) (needed)
+	* delete account? (needed)
+	* consent stuff?
+	- A list of the studies you participated in, read only. (nice to have) with linking consents you gave
+
+Open-Ended Studies:
+- Add datamodel attributes to allow anonymous & open-ended participation
+- Create new ProtocolUsers when adding a new participant
+
+Queries:
+- Design queries with Jens
 
 Database:
 - Add counters: http://api.rubyonrails.org/classes/ActiveRecord/Associations/ClassMethods.html
@@ -38,9 +70,12 @@ Study:
 - Implement Phase & Trial orders @done(2017-11-22)
 - Implement Phase & Trial users
 
-Investigator trial run:
-- Get design requirements from Jens
-- Add Test-only flags session and other data structures
+Study Preview:
+- Get design requirements from Jens @done(2017-12-05)
+- Add Test-only flags session and other data structures @done(2017-12-05)
+- Create preview mode  @done(2017-11-30)
+- Create preview Index page @done(2017-11-30)
+- [BUG] Logout when returning from preview?
 
 Client Examples:
 - Create pure Python examples (i.e. component dictionaries in Native Python)
@@ -62,23 +97,10 @@ Bugs:
 - Participant/admin should be chosen after login based on account role @done(2017-10-28)
 - Rendering the page for the first time does not allow scrolling @done(2017-11-22)
 * Going to the participant page once you load it even as admin @done(2017-11-22)
-- "Logout" should be "login" when there is no current user.  Or maybe nuke the token if there is a non-200, non network response from /users/current?
+- "Logout" should be "login" when there is no current user.  Or maybe nuke the token if there is a non-200, non network response from /users/current? @done(2017-12-05)
 - When you press logout or the email address, the cursor is not a hand, but a marking icon. @done(2017-12-03)
 - Admin header button doesn't work @done(2017-12-03)
 
-Chaos Frontend Bugs:
--  There is another one with the tagging components that don’t seem to work if you set tags that the user should use and then add some as user input. You cannot remove them or add them correctly.
-- Click on textbox group, go back, doesn’t go to new one [experiment_definitions_xml\errors]
-- CSS -> lines sticking out @done(2017-12-01)
-- OneDScale -> doesn’t show something when you press on the 1D scale; was a circle now a square; Position in the metadata is not defined, then no marker. If marker is defined, it’s already positioned. @done(2017-12-01)
-
-Study Preview:
-- Create preview mode  @done(2017-11-30)
-- Create preview Index page @done(2017-11-30)
-- [BUG] Logout when returning from preview?
-
-User Profile:
-- Create user profile page and link to clicking on user name in navbar
 
 Media Upload:
 - Figure out design
@@ -86,23 +108,6 @@ Media Upload:
 Fit and Finish:
 - Handle situation where 'loading' in ElicitRoot times out
 - Have an scary dialog when deleting a study
-
-Consent:
-- Update datamodel to contain consent document and user acceptance
-- Update UI to allow users to consent to the studies
-	- * password reset (needed)
-	* role(s) (readonly) (needed)
-	* delete account? (needed)
-	* consent stuff?
-	- A list of the studies you participated in, read only. (nice to have) with linking consents you gave
-
-Add About Page:
-- Add About Page
-
-Redesign Landing Page:
-- Introductory text 
-- Shortened (?) Participant list.
-- 
 
 Future Optimization:
 - Use redis to cache models https://medium.com/@LuisOsnet/model-caching-using-redis-and-rails-5-4666b7e8031f

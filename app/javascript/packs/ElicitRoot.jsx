@@ -11,6 +11,7 @@ import { Provider } from 'react-redux';
 import { AdminApp } from './components/admin_app/AdminApp'
 import { ParticipantApp } from './components/participant_app/ParticipantApp'
 import LoginSignUpContainer from './components/login_signup/LoginSignUpContainer'
+import AboutPageContainer from './components/about_page/AboutPageContainer'
 
 // Import Actions
 import { requestClientToken, receiveClientToken, receiveUserToken } from './actions/tokens_actions';
@@ -52,6 +53,7 @@ const RawRootRoutes = (props) => {
         <Route path="/admin" component={AdminApp} token_status={token_status}> </Route>
         <Route exact path="/participant" component={ParticipantApp} token_status={token_status}> </Route>
         <Route exact path="/login" component={LoginSignUpContainer} token_status={token_status}> </Route>
+        <Route exact path="/about" component={AboutPageContainer} token_status={token_status}> </Route>
         <Redirect from="*" to="/participant"/>
       </Switch>
     )

@@ -8,8 +8,9 @@ import EditStudy from './EditStudy'
 import {withRouter} from 'react-router'
 import pathToRegexp from 'path-to-regexp'
 import { Provider, connect } from "react-redux";
-import elicitApi from "../../api/elicit-api.js"; 
-import HeaderContainer from "../nav/HeaderContainer"
+import elicitApi from "../../api/elicit-api.js";
+import HeaderContainer  from "../nav/HeaderContainer.jsx"
+import FooterContainer from "../nav/FooterContainer.jsx"
 import { tokenStatus } from '../../reducers/selector';
 
 import ProtocolPreviewContainer from "./ProtocolPreviewContainer"
@@ -46,11 +47,7 @@ class AdminApp extends React.Component {
         <Route path={`${this.props.match.url}/studies/:study_id/protocols/:protocol_id`} component={ProtocolPreviewContainer}/>
         <Route exact path={`${this.props.match.url}`} component={StudyManagement}/>
       </div>
-      <footer id="footer" className="navbar navbar-fixed-bottom admin-footer">
-        <div className="container">
-          <p className="text-muted credit">DTU</p>
-        </div>
-      </footer>
+      <FooterContainer></FooterContainer>
     </div>
   )
   }

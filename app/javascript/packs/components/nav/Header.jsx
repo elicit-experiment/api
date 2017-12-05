@@ -17,6 +17,27 @@ class Header extends React.Component {
       admin = <li><Link to='/admin'>Admin</Link></li>
     }
 
+    var loginLogout = ""
+    var userName = ""
+
+    if (this.props.current_user_role === undefined) {
+      loginLogout = <li><a href="/login">Login</a></li>
+      userName = <li><a href="/login">none</a></li>
+    } else {
+      userName = <li>
+        <button type="button" className="btn btn-link" onClick={(e) => {
+          this.props.logoutUser()
+        }}>{this.props.current_user_email}</button>
+      </li>
+
+      loginLogout = <li>
+        <button type="button" className="btn btn-link" onClick={(e) => {
+          this.props.logoutUser()
+        }}>Logout
+        </button>
+      </li>
+    }
+
     return (
         <nav className="nav navbar navbar-default navbar-fixed-top">
           <div className="navbar-header">
@@ -31,15 +52,12 @@ class Header extends React.Component {
             <ul id="admin-nav" className="nav navbar-nav">
               {admin}
               <li><Link to='/participant'>Participant</Link></li>
+              <li><Link to='/about'>About</Link></li>
             </ul>
 
             <ul className="nav navbar-nav navbar-right">
-              <li><button type="button" className="btn btn-link" onClick={(e) => {
-                this.props.logoutUser()
-              }}>{this.props.current_user_email}</button></li>
-              <li><button type="button" className="btn btn-link" onClick={(e) => {
-                this.props.logoutUser()
-              }}>Logout</button></li>
+              {userName}
+              {loginLogout}
               <li>&nbsp;</li>
             </ul>
           </div>
@@ -49,14 +67,14 @@ class Header extends React.Component {
 }
 
 Header.propTypes = {
-  current_user_role: React.PropTypes.string.isRequired,
-  current_user_email: React.PropTypes.string.isRequired,
+  current_user_role: React.PropTypes.string,
+  current_user_email: React.PropTypes.string,
   logoutUser: React.PropTypes.func.isRequired
 };
 
 Header.defaultProps = {
-  current_user_role: 'none',
-  current_user_email: 'none',
+  current_user_role: undefined,
+  current_user_email: undefined,
   logoutUser: () => {
   }
 };

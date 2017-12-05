@@ -8,6 +8,7 @@ import pathToRegexp from 'path-to-regexp'
 import { Provider, connect } from "react-redux";
 import elicitApi from "../../api/elicit-api.js"; 
 import HeaderContainer from "../nav/HeaderContainer"
+import FooterContainer from "../nav/FooterContainer"
 import { tokenStatus } from '../../reducers/selector';
 
 class ParticipantApp extends React.Component {
@@ -30,11 +31,7 @@ class ParticipantApp extends React.Component {
       <div id="wrap" className="admin-app-container container">
         <ParticipantProtocolList {...this.props} />
       </div>
-      <footer id="footer" className="navbar navbar-fixed-bottom admin-footer">
-        <div className="container">
-          <p className="text-muted credit">DTU</p>
-        </div>
-      </footer>
+      <FooterContainer></FooterContainer>
     </div>
   )
   }
