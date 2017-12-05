@@ -3,11 +3,14 @@ Add About Page:
 
 Redesign Landing Page:
 - Introductory text  @done(2017-12-05)
-- [Temp] Link to login if not logged in
-- Shortened (?) Participant list showing both authed and un-aunthed protocols.
+- [Temp] Link to login if not logged in @done(2017-12-05)
+- Shortened (?) Participant list showing both authed and un-auth'ed protocols.
 
 User Profile:
-- Create user profile page and link to clicking on user name in navbar
+- Create user profile page and link to clicking on user name in navbar @done(2017-12-05)
+- Add Delete Account functionality
+- Add Reset Password functionality
+- Add list of participated studies
 
 Chaos Frontend Bugs:
 -  There is another one with the tagging components that don’t seem to work if you set tags that the user should use and then add some as user input. You cannot remove them or add them correctly.
