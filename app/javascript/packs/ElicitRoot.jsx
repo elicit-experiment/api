@@ -13,6 +13,7 @@ import { ParticipantApp } from './components/participant_app/ParticipantApp'
 import LoginSignUpContainer from './components/login_signup/LoginSignUpContainer.jsx'
 import AboutPageContainer from './components/about_page/AboutPageContainer.jsx'
 import FrontPageContainer from './components/front_page/FrontPageContainer.jsx'
+import ProfilePageContainer from './components/profile_page/ProfilePageContainer.jsx'
 
 // Import Actions
 import { requestClientToken, receiveClientToken, receiveUserToken } from './actions/tokens_actions';
@@ -50,11 +51,12 @@ const RawRootRoutes = (props) => {
   if (token_status) {
     return (
       <Switch>
-        <Route exact path="/" component={FrontPageContainer} token_status={token_status}> </Route>
-        <Route path="/admin" component={AdminApp} token_status={token_status}> </Route>
-        <Route exact path="/participant" component={ParticipantApp} token_status={token_status}> </Route>
-        <Route exact path="/login" component={LoginSignUpContainer} token_status={token_status}> </Route>
-        <Route exact path="/about" component={AboutPageContainer} token_status={token_status}> </Route>
+        <Route exact path="/" component={FrontPageContainer}/>
+        <Route path="/admin" component={AdminApp}/>
+        <Route exact path="/participant" component={ParticipantApp}/>
+        <Route exact path="/login" component={LoginSignUpContainer}/>
+        <Route exact path="/about" component={AboutPageContainer}/>
+        <Route exact path="/profile" component={ProfilePageContainer}/>
         <Redirect from="*" to="/"/>
       </Switch>
     )

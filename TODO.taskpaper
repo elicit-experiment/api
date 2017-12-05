@@ -2,8 +2,9 @@ Add About Page:
 - Add About Page @done(2017-12-05)
 
 Redesign Landing Page:
-- Introductory text 
-- Shortened (?) Participant list.
+- Introductory text  @done(2017-12-05)
+- [Temp] Link to login if not logged in
+- Shortened (?) Participant list showing both authed and un-aunthed protocols.
 
 User Profile:
 - Create user profile page and link to clicking on user name in navbar
