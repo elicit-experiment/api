@@ -10,8 +10,9 @@ import { Provider } from 'react-redux';
 // Import Components
 import { AdminApp } from './components/admin_app/AdminApp'
 import { ParticipantApp } from './components/participant_app/ParticipantApp'
-import LoginSignUpContainer from './components/login_signup/LoginSignUpContainer'
-import AboutPageContainer from './components/about_page/AboutPageContainer'
+import LoginSignUpContainer from './components/login_signup/LoginSignUpContainer.jsx'
+import AboutPageContainer from './components/about_page/AboutPageContainer.jsx'
+import FrontPageContainer from './components/front_page/FrontPageContainer.jsx'
 
 // Import Actions
 import { requestClientToken, receiveClientToken, receiveUserToken } from './actions/tokens_actions';
@@ -20,7 +21,6 @@ import { requestClientToken, receiveClientToken, receiveUserToken } from './acti
 import { clientToken, userToken, currentUser } from './reducers/selector';
 
 import { logoutUser } from "./actions/tokens_actions"
-
 
 export const tokenStatus = (clientToken, userToken, requestClientToken) => {
   var token_status = 'none'
@@ -50,11 +50,12 @@ const RawRootRoutes = (props) => {
   if (token_status) {
     return (
       <Switch>
+        <Route exact path="/" component={FrontPageContainer} token_status={token_status}> </Route>
         <Route path="/admin" component={AdminApp} token_status={token_status}> </Route>
         <Route exact path="/participant" component={ParticipantApp} token_status={token_status}> </Route>
         <Route exact path="/login" component={LoginSignUpContainer} token_status={token_status}> </Route>
         <Route exact path="/about" component={AboutPageContainer} token_status={token_status}> </Route>
-        <Redirect from="*" to="/participant"/>
+        <Redirect from="*" to="/"/>
       </Switch>
     )
   } else {
