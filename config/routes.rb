@@ -30,7 +30,9 @@ Rails.application.routes.draw do
         resources :experiments, :controller => "experiments", defaults: { format: 'json' }, only: [:show, :destroy, :create, :index]
         resources :stages, :controller => "stages", defaults: { format: 'json' }, only: [:show, :destroy, :create, :index]
         resources :data_points, :controller => "data_points", defaults: { format: 'json' }, only: [:index]
+        resources :time_series, :controller => "time_series", defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index]
       end
+      resources :media_files, defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index]
       resources :study_definitions, defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index] do
         resources :protocol_definitions, :controller => "protocol_definitions", defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index] do
           get 'take' => "protocol_definitions#take"

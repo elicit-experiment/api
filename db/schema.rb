@@ -106,6 +106,16 @@ ActiveRecord::Schema.define(version: 20170829210919) do
   # Study Definition
   #
 
+  create_table "media_files", force: :cascade do |t|
+    t.string "file"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  #
+  # Study Definition
+  #
+
   create_table "study_definitions", force: :cascade do |t|
     t.string "title"
     t.string "description"
@@ -266,4 +276,19 @@ ActiveRecord::Schema.define(version: 20170829210919) do
   end
 
   add_foreign_key "study_result_data_points", "study_result_stages", column: "stage_id"
+
+  create_table "study_result_time_series", force: :cascade do |t|
+    t.integer "stage_id", null: false
+    t.integer "study_result_id", null: false
+    t.references "protocol_user", foreign_key: true
+    t.references "phase_definition", foreign_key: true
+    t.references "trial_definition", foreign_key: true
+    t.references "component", foreign_key: true
+    t.string "file"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_foreign_key "study_result_time_series", "study_result_stages", column: "stage_id"
+  add_foreign_key "study_result_time_series", "study_result_study_result", column: "study_result_id"
 end
