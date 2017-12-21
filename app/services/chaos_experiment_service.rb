@@ -49,18 +49,16 @@ class ChaosExperimentService
     trial_params = {:study_definition_id => @study_definition.id,
                     :protocol_definition_id => @protocol_definition.id,
                     :phase_definition_id => @phase_definition.id}
-    ap trial_params
     trials = TrialDefinition.where(trial_params)
     trial_ids = trials.map { |t| t.id }
     num_trials = trials.count
 
-    ap trials
     current_trial_idx = trial_ids.index(trial_definition_id)
 
-    ap Rails.configuration.elicit
-    url = Rails.configuration.elicit['elicit_portal']['scheme'] + "://" +
-        Rails.configuration.elicit['elicit_portal']['host'] + ":" +
-        Rails.configuration.elicit['elicit_portal']['port'].to_s + "/admin/studies/" +
+    elicit_config = Rails.configuration.elicit['elicit_portal']
+    url = elicit_config['scheme'] + "://" +
+        elicit_config['host'] + ":" +
+        elicit_config['port'].to_s + "/admin/studies/" +
         @study_definition.id.to_s + "/protocols/" +
         @protocol_definition.id.to_s
 

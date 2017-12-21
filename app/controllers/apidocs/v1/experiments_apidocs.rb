@@ -234,14 +234,22 @@ class Apidocs::V1::ExperimentsApidocs
       key :type, :integer
       key :format, :int64
     end
-    property :started_at do
-      key :type, :string
-      key :format, :datetime
+    property :num_stages_completed do
+      key :type, :integer
+      key :format, :int64
     end
-    property :completed_at do
-      key :type, :string
-      key :format, :datetime
+    property :num_stages_remaining do
+      key :type, :integer
+      key :format, :int64
     end
+#    property :started_at do
+#      key :type, :string
+#      key :format, :datetime
+#    end
+#    property :completed_at do
+#      key :type, :string
+#      key :format, :datetime
+#    end
   end
 
 end
