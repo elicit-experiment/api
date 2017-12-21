@@ -5,8 +5,6 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.1.0'
 gem 'webpacker'
@@ -78,4 +76,10 @@ end
 
 gem 'lograge', '~> 0.4'
 gem 'logstash-event'
+
+gem 'json-schema'
+gem 'json-schema-generator'
+
+gem 'carrierwave'
+gem 'carrierwave-base64'
 

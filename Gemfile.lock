@@ -60,6 +60,13 @@ GEM
     bcrypt (3.1.11)
     builder (3.2.3)
     byebug (9.0.6)
+    carrierwave (1.2.1)
+      activemodel (>= 4.0.0)
+      activesupport (>= 4.0.0)
+      mime-types (>= 1.16)
+    carrierwave-base64 (2.6.1)
+      carrierwave (>= 0.8.0)
+      mime-types (~> 3.0)
     choice (0.2.0)
     concurrent-ruby (1.0.5)
     devise (4.3.0)
@@ -87,6 +94,10 @@ GEM
       multi_json (>= 1.2)
     json-schema (2.8.0)
       addressable (>= 2.4)
+    json-schema-generator (0.0.9)
+      jsonpath
+    jsonpath (0.8.10)
+      multi_json
     kaminari (1.0.1)
       activesupport (>= 4.1.0)
       kaminari-actionview (= 1.0.1)
@@ -235,10 +246,14 @@ DEPENDENCIES
   apivore
   awesome_print
   byebug
+  carrierwave
+  carrierwave-base64
   devise (~> 4.3.0)
   devise-doorkeeper
   doorkeeper
   jbuilder (~> 2.5)
+  json-schema
+  json-schema-generator
   kaminari
   lograge (~> 0.4)
   logstash-event
