@@ -34,3 +34,7 @@ testApp_*
 /public/assets/swagger_ui*
 /public/assets/doorkeeper*
 /public/assets/.sprockets*
+
+# RubyMine
+/.idea/*
+
