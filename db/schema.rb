@@ -285,6 +285,7 @@ ActiveRecord::Schema.define(version: 20170829210919) do
     t.references "trial_definition", foreign_key: true
     t.references "component", foreign_key: true
     t.string "file"
+    t.string "schema"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
