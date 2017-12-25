@@ -199,7 +199,7 @@ h1 {
 }
 
 
-// nAV
+// NAV
 
 .nav > li > button {
   position: relative;
@@ -216,4 +216,14 @@ h1 {
     padding-top: 15px;
     padding-bottom: 15px;
   }
+}
+
+.navbar-brand, .elicit-title {
+  font-family: 'Leckerli One', cursive;
+  color: #333 !important;
+  font-size: 26px;
+}
+.background-logo {
+  font-family: 'Leckerli One', cursive;
+  font-size: 80vh;
 }
