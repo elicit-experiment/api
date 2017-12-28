@@ -11,6 +11,7 @@ class LogInSignUp extends React.Component {
       logInForm: true,
       dismissable: props.dismissable || false,
       email: "",
+      username: "",
       password: "",
       passwordConfirmation: "",
     };
@@ -137,12 +138,20 @@ class LogInSignUp extends React.Component {
             <div className="modal-body" style={{padding:"40px 50px"}}>
               <form role="form" onSubmit={this.signUpUser()}>
                 <div className="form-group">
+                  <label htmlFor="usremail"><span className="glyphicon glyphicon-user"></span> User Name</label>
+                  <input type="text"
+                         className="form-control"
+                         id="usremail"
+                         placeholder="Enter email"
+                         onChange={this.updateState('email')}/>
+                </div>
+                <div className="form-group">
                   <label htmlFor="usrname"><span className="glyphicon glyphicon-user"></span> Email</label>
                   <input type="text"
                          className="form-control"
                          id="usrname"
-                         placeholder="Enter email"
-                         onChange={this.updateState('email')}/>
+                         placeholder="Enter user name"
+                         onChange={this.updateState('username')}/>
                 </div>
                 <div className="form-group">
                   <label htmlFor="psw"><span className="glyphicon glyphicon-eye-open"></span> Password</label>

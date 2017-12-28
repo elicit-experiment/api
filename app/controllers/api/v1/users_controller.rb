@@ -3,6 +3,8 @@ module Api::V1
 
     include ElicitErrors
 
+    #include StudyCreation
+
     before_action -> { doorkeeper_authorize! :public }, only: [:update, :index]
     before_action only: [:new, :create] do |controller| # access to register api requires authenticated client token
 #      doorkeeper_authorize! :public unless controller.request.format.html?
@@ -23,9 +25,10 @@ module Api::V1
       if ! resource.persisted?
         clean_up_passwords resource
         set_minimum_password_length
-        render json: {user: resource.errors}
+        e = ElicitError.new("Cannot create user", :unprocessable_entity, details: resource.errors)
+        render_elicit_error e
       else
-        render json: resource
+        render json: resource, status: :created
       end
     end
 
@@ -50,13 +53,18 @@ module Api::V1
     end
 
     def show
-      @user = User.find(params[:id]) || User.find_by(username: params[:id]) || User.find_by(email: params[:id]) || not_found
-      @show_activities = true
+      logger.warn "SHOW #{params[:id]}"
+      @user = User.find_by(id: params[:id]) || User.find_by(username: params[:id]) || User.find_by(email: params[:id]) || not_found
+
+      if @user
+        render json: @user, status: :ok
+      else
+        not_found
+      end
     end
 
     def show_current_user
       @user = current_resource_owner or permission_denied
-      @show_activities = true
       render json: @user
     end
 
@@ -67,7 +75,9 @@ module Api::V1
     end
 
     def user_params
-      params.require(:user).permit(:email, :password, :password_confirmation)
+      params.permit!
+      ap params
+      params.require(:user).permit(:email, :username, :password, :password_confirmation)
     end
 
     def sign_up_params

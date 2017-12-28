@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 20170829210919) do
     t.string "unconfirmed_email"
     t.boolean "anonymous"
     t.string "role"
+    t.string "username"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
