@@ -251,6 +251,20 @@ ActiveRecord::Schema.define(version: 20170829210919) do
   end
 
   add_foreign_key "study_result_stages", "study_result_experiments", column: "experiment_id"
+
+  create_table "study_result_trial_results", force: :cascade do |t|
+    t.integer "experiment_id", null: false
+    t.references "protocol_user", foreign_key: true, null: false
+    t.references "phase_definition", foreign_key: true, null: false
+    t.references "trial_definition", foreign_key: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "completed_at"
+    t.datetime "started_at"
+  end
+
+  add_foreign_key "study_result_trial_results", "study_result_experiments", column: "experiment_id"
+
   add_foreign_key "study_result_experiments", "study_result_stages", column: "current_stage_id"
 
   create_table "study_result_contexts", force: :cascade do |t|
@@ -279,8 +293,8 @@ ActiveRecord::Schema.define(version: 20170829210919) do
   add_foreign_key "study_result_data_points", "study_result_stages", column: "stage_id"
 
   create_table "study_result_time_series", force: :cascade do |t|
-    t.integer "stage_id", null: false
-    t.integer "study_result_id", null: false
+    t.integer "stage_id"
+    t.integer "study_result_id"
     t.references "protocol_user", foreign_key: true
     t.references "phase_definition", foreign_key: true
     t.references "trial_definition", foreign_key: true
