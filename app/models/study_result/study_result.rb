@@ -26,11 +26,11 @@ module StudyResult
       end
       property :started_at do
         key :type, :string
-        key :format, :datetime
+        key :format, :"date-time"
       end
       property :completed_at do
         key :type, :string
-        key :format, :datetime
+        key :format, :"date-time"
       end
     end
   end

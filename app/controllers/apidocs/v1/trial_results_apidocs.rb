@@ -236,14 +236,14 @@ class Apidocs::V1::TrialResultsApidocs
       key :type, :integer
       key :format, :int64
     end
-#    property :started_at do
-#      key :type, :string
-#      key :format, :datetime
-#    end
-#    property :completed_at do
-#      key :type, :string
-#      key :format, :datetime
-#    end
+    property :started_at do
+      key :type, :string
+      key :format, :"date-time"
+    end
+    property :completed_at do
+      key :type, :string
+      key :format, :"date-time"
+    end
   end
 
 end
