@@ -1,7 +1,7 @@
 class Apidocs::V1::StagesApidocs
   include Swagger::Blocks
 
-  swagger_path '/study_results/{study_results_id}/stages' do
+  swagger_path '/study_results/{study_result_id}/stages' do
     operation :get do
       key :summary, 'All stages'
       key :description, 'Returns all stage results the user has access to'
@@ -21,7 +21,7 @@ class Apidocs::V1::StagesApidocs
         key :default, 'Bearer PASTE_ACCESS_TOKEN_HERE'
       end
       parameter do
-        key :name, :study_results_id
+        key :name, :study_result_id
         key :in, :path
         key :description, 'Study results id of the experiment results to return'
         key :required, true
@@ -86,24 +86,10 @@ class Apidocs::V1::StagesApidocs
         end
       end
       parameter do
-        key :name, :study_results_id
+        key :name, :study_result_id
         key :in, :path
         key :description, 'Study results id of the experiment results to return'
         key :required, true
-        key :type, :string
-      end
-      parameter do
-        key :name, :experiment_id
-        key :in, :query
-        key :description, 'ID for the experiment whose stages to return'
-        key :required, true
-        key :type, :string
-      end
-      parameter do
-        key :name, :phase_definition_id
-        key :in, :query
-        key :description, 'ID for the phase definition whose stages to return'
-        key :required, false
         key :type, :string
       end
       response 201 do
@@ -122,7 +108,7 @@ class Apidocs::V1::StagesApidocs
   end
 
   # Update Trial Definition Object
-  swagger_path '/study_results/{study_results_id}/stages/{id}' do
+  swagger_path '/study_results/{study_result_id}/stages/{id}' do
     operation :put do
       key :description, 'Updates a stage result'
       key :summary, 'Updates a stage result'
@@ -139,7 +125,7 @@ class Apidocs::V1::StagesApidocs
         key :default, 'Bearer PASTE_ACCESS_TOKEN_HERE'
       end
       parameter do
-        key :name, :study_results_id
+        key :name, :study_result_id
         key :in, :path
         key :description, 'Study results id of the experiment results to return'
         key :required, true
@@ -175,7 +161,7 @@ class Apidocs::V1::StagesApidocs
   end
 
   # Delete Trial Definition Object
-  swagger_path '/study_results/{study_results_id}/stages/{id}' do
+  swagger_path '/study_results/{study_result_id}/stages/{id}' do
     operation :delete do
       key :description, 'Deletes a stage result'
       key :summary, 'Deletes a stage result'
@@ -192,7 +178,7 @@ class Apidocs::V1::StagesApidocs
         key :default, 'Bearer PASTE_ACCESS_TOKEN_HERE'
       end
       parameter do
-        key :name, :study_results_id
+        key :name, :study_result_id
         key :in, :path
         key :description, 'Study results id of the experiment results to return'
         key :required, true
@@ -233,7 +219,7 @@ class Apidocs::V1::StagesApidocs
   end
 
   swagger_schema :Stage do
-    key :required, [:experiment_id, :phase_definition_id, :id]
+    key :required, [:experiment_id, :phase_definition_id]
     property :id do
       key :type, :integer
       key :format, :int64
@@ -243,6 +229,10 @@ class Apidocs::V1::StagesApidocs
       key :format, :int64
     end
     property :phase_definition_id do
+      key :type, :integer
+      key :format, :int64
+    end
+    property :protocol_user_id do
       key :type, :integer
       key :format, :int64
     end

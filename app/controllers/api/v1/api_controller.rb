@@ -46,6 +46,8 @@ module Api::V1
       if get_resource.save
         render json: get_resource, status: :created
       else
+        e = ElicitError.new("Cannot create user", :unprocessable_entity, details: resource.errors)
+
         render json: get_resource.errors, status: :unprocessable_entity
       end
     end

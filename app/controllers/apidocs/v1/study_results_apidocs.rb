@@ -71,13 +71,6 @@ class Apidocs::V1::StudyResultsApidocs
           key :'$ref', :StudyResultInput
         end
       end
-      parameter do
-        key :name, :study_definition_id
-        key :in, :query
-        key :description, 'Study definition id which this study result is added to'
-        key :required, true
-        key :type, :string
-      end
       response 201 do
         key :description, 'study result response'
         schema do
@@ -194,7 +187,7 @@ class Apidocs::V1::StudyResultsApidocs
   end
 
   swagger_schema :StudyResultInput do
-    key :required, [:protocol_definition]
+    key :required, [:study_result]
     property :study_result do
       key :'$ref', :StudyResult
     end
@@ -207,6 +200,10 @@ class Apidocs::V1::StudyResultsApidocs
       key :format, :int64
     end
     property :study_definition_id do
+      key :type, :integer
+      key :format, :int64
+    end
+    property :user_id do
       key :type, :integer
       key :format, :int64
     end

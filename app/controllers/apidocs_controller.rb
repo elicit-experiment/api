@@ -181,6 +181,7 @@ class ApidocsController < ActionController::Base
     Apidocs::V1::StudyResultsApidocs,
     Apidocs::V1::ExperimentsApidocs,
     Apidocs::V1::StagesApidocs,
+    Apidocs::V1::TrialResultsApidocs,
     Apidocs::V1::DataPointsApidocs,
 
     # Participating in Studies

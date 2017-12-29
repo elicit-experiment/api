@@ -1,7 +1,7 @@
 class Apidocs::V1::ExperimentsApidocs
   include Swagger::Blocks
 
-  swagger_path '/study_results/{study_results_id}/experiments' do
+  swagger_path '/study_results/{study_result_id}/experiments' do
     operation :get do
       key :summary, 'Returns all experiment results from the system to which the user has access'
       key :operationId, 'findExperiments'
@@ -20,7 +20,7 @@ class Apidocs::V1::ExperimentsApidocs
         key :default, 'Bearer PASTE_ACCESS_TOKEN_HERE'
       end
       parameter do
-        key :name, :study_results_id
+        key :name, :study_result_id
         key :in, :path
         key :description, 'Study results id of the experiment results to return'
         key :required, true
@@ -78,7 +78,7 @@ class Apidocs::V1::ExperimentsApidocs
         end
       end
       parameter do
-        key :name, :study_results_id
+        key :name, :study_result_id
         key :in, :path
         key :description, 'Study results id of the experiment results to return'
         key :required, true
@@ -99,7 +99,7 @@ class Apidocs::V1::ExperimentsApidocs
     end
   end
 
-  swagger_path '/study_results/{study_results_id}/experiments/{experiment_id}' do
+  swagger_path '/study_results/{study_result_id}/experiments/{experiment_id}' do
     operation :put do
       key :description, 'Updates an experiment result'
       key :summary, 'Updates an experiment result'
@@ -116,7 +116,7 @@ class Apidocs::V1::ExperimentsApidocs
         key :default, 'Bearer PASTE_ACCESS_TOKEN_HERE'
       end
       parameter do
-        key :name, :study_results_id
+        key :name, :study_result_id
         key :in, :path
         key :description, 'Study results id of the experiment results to return'
         key :required, true
@@ -161,7 +161,7 @@ class Apidocs::V1::ExperimentsApidocs
   end
 
   # Delete Experiment result Object
-  swagger_path '/study_results/{study_results_id}/experiments/{experiment_id}' do
+  swagger_path '/study_results/{study_result_id}/experiments/{experiment_id}' do
     operation :delete do
       key :description, 'Deletes an experiment'
       key :summary, 'Deletes an experiment'
@@ -178,7 +178,7 @@ class Apidocs::V1::ExperimentsApidocs
         key :default, 'Bearer PASTE_ACCESS_TOKEN_HERE'
       end
       parameter do
-        key :name, :study_results_id
+        key :name, :study_result_id
         key :in, :path
         key :description, 'Study results id of the experiment results to return'
         key :required, true
