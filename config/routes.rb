@@ -55,7 +55,7 @@ Rails.application.routes.draw do
     scope :v1 do
       get 'study_definitions/:study_definition_id/protocol_definitions/:protocol_definition_id/preview' => "protocol_preview#take"
       scope :study_results do
-        resources :time_series, :controller => "time_series", defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index]
+        resources :time_series, :controller => "api/v1/time_series", defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index]
       end
       scope :study_definitions do
         scope :protocol_definitions do

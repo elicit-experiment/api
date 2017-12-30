@@ -1,3 +1,3 @@
-class MediaFiles < ApplicationRecord
+class MediaFile < ApplicationRecord
   mount_uploader :file, MediaUploader
 end

@@ -293,11 +293,10 @@ ActiveRecord::Schema.define(version: 20170829210919) do
   add_foreign_key "study_result_data_points", "study_result_stages", column: "stage_id"
 
   create_table "study_result_time_series", force: :cascade do |t|
-    t.integer "stage_id"
-    t.integer "study_result_id"
-    t.references "protocol_user", foreign_key: true
+    t.integer "stage_id", null: true
+    t.references "study_definition", foreign_key: true
+    t.references "protocol_definition", foreign_key: true
     t.references "phase_definition", foreign_key: true
-    t.references "trial_definition", foreign_key: true
     t.references "component", foreign_key: true
     t.string "file"
     t.string "schema"
@@ -307,5 +306,4 @@ ActiveRecord::Schema.define(version: 20170829210919) do
   end
 
   add_foreign_key "study_result_time_series", "study_result_stages", column: "stage_id"
-  add_foreign_key "study_result_time_series", "study_result_study_result", column: "study_result_id"
 end
