@@ -183,6 +183,7 @@ class ApidocsController < ActionController::Base
     Apidocs::V1::StagesApidocs,
     Apidocs::V1::TrialResultsApidocs,
     Apidocs::V1::DataPointsApidocs,
+    Apidocs::V1::TimeSeriesApidocs,
 
     # Participating in Studies
     Apidocs::V1::ParticipantApidocs,

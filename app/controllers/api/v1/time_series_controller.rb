@@ -5,6 +5,23 @@ module Api::V1
 
     include StudyResultConcern
 
+
+    def query_params
+      {}
+    end
+
+    def show
+      time_series = get_resource
+      # TODO: send the query parameters to the schema plugin for this timeseries
+      respond_with time_series
+    end
+
+    def show_content
+      time_series = get_resource
+      # TODO: send the query parameters to the schema plugin for this timeseries
+      respond_with time_series
+    end
+
     def index
       plural_resource_name = "@#{resource_name.pluralize}"
 
