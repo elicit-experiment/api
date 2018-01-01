@@ -11,9 +11,16 @@ User Profile:
 - Add Delete Account functionality
 - Add Reset Password functionality
 - Add list of participated studies
+- validate username works in signup phase
 
 Add TrialResult:
 - Add to Chaos pipeline
+
+Physiological Tasks:
+- Add begin/end time to upload
+- Add break to interpreter to python script
+- Add Upload multipart form to Python script
+
 
 Chaos Frontend Bugs:
 - There is another one with the tagging components that don’t seem to work if you set tags that the user should use and then add some as user input. You cannot remove them or add them correctly.

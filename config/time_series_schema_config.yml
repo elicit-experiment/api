@@ -1,0 +1,13 @@
+default: &default
+
+  tobii_tsv:
+    plugin_class: TobiiParser
+
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default

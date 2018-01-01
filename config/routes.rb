@@ -57,7 +57,7 @@ Rails.application.routes.draw do
       scope :study_results do
         resources :time_series, :controller => "api/v1/time_series", defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index]
       end
-      get 'study_results/time_series/:id/content' => "api/v1/time_series#show_content", defaults: { format: 'json' }, only: [:show]
+      get 'study_results/time_series/:id/content' => "api/v1/time_series#show_content", only: [:show]
       scope :study_definitions do
         scope :protocol_definitions do
           get 'preview' => "protocol_preview#take"
