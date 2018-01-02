@@ -94,7 +94,7 @@ class LogInSignUp extends React.Component {
             <div className="modal-body" style={{padding:"40px 50px"}}>
               <form role="form" onSubmit={this.logInUser()}>
                 <div className="form-group">
-                  <label htmlFor="usrname"><span className="glyphicon glyphicon-user"></span> Email</label>
+                  <label htmlFor="usrname"><span className="glyphicon glyphicon-user glyphicon-envelope"></span> Username or Email</label>
                   <input type="text"
                          className="form-control"
                          id="email"
@@ -147,7 +147,7 @@ class LogInSignUp extends React.Component {
                          onChange={this.updateState('username')}/>
                 </div>
                 <div className="form-group">
-                  <label htmlFor="usremail"><span className="glyphicon glyphicon-mail"></span> Email</label>
+                  <label htmlFor="usremail"><span className="glyphicon glyphicon-envelope"></span> Email</label>
                   <input type="text"
                          className="form-control"
                          id="usremail"

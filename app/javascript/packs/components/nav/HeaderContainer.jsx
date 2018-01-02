@@ -17,6 +17,7 @@ class HeaderContainer extends React.Component {
   render() {
     return <Header {...this.props}
                    current_user_role={this.props.current_user.data.role}
+                   current_username={this.props.current_user.data.username}
                    current_user_email={this.props.current_user.data.email}/>
   }
   componentWillMount() {

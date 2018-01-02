@@ -24,7 +24,7 @@ class Header extends React.Component {
       loginLogout = <li><a href="/login">Login</a></li>
       userName = <li><a href="/login">none</a></li>
     } else {
-      userName = <li><a href="/profile">{this.props.current_user_email}</a></li>
+      userName = <li><a href="/profile">{this.props.current_username || this.props.current_user_email}</a></li>
 
       loginLogout = <li>
         <button type="button" className="btn btn-link" onClick={(e) => {
