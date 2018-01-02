@@ -19,6 +19,7 @@ module Api::V1
           :current_trial,
           :num_trials,
           :context_id,
+          :started_at,
           :completed_at
           ])#.merge(origin)  (we don't have study_result_id in the schema)
       end

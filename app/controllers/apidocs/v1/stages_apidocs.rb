@@ -236,6 +236,10 @@ class Apidocs::V1::StagesApidocs
       key :type, :integer
       key :format, :int64
     end
+    property :started_at do
+      key :type, :string
+      key :format, :"date-time"
+    end
     property :completed_at do
       key :type, :string
       key :format, :"date-time"

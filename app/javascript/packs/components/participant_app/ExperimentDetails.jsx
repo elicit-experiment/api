@@ -36,7 +36,7 @@ export class ExperimentDetails extends React.Component {
             <b className="col-xs-2">Status:</b>
             <div className="col-xs-10">
               <div>
-                Started on <FormattedDate date={exp.created_at} />
+                Started on <FormattedDate date={exp.started_at} />
               </div>
               <div>
                 {" "}
@@ -53,7 +53,7 @@ export class ExperimentDetails extends React.Component {
       current_stage_status = (
         <div>
           <div className="started-experiment">
-            Started on <FormattedDate date={exp.current_stage.created_at} />
+            Started on <FormattedDate date={exp.current_stage.started_at} />
           </div>
           <div>
             <p>Completed {exp.current_stage.last_completed_trial == undefined ? 0 : 1} / {exp.current_stage.num_trials || 0} slides. </p>
@@ -67,7 +67,7 @@ export class ExperimentDetails extends React.Component {
         <div className="row">
           <b className="col-xs-2">Status:</b>
           <div className="col-xs-10">
-            Started on <FormattedDate date={exp.created_at} />{" "}
+            Started on <FormattedDate date={exp.started_at} />{" "}
           </div>
         </div>
         <div className="row">

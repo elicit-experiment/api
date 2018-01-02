@@ -16,6 +16,7 @@ module Api::V1
           :current_stage_id,
           :num_stages_completed,
           :num_stages_remaining,
+          :started_at,
           :completed_at
           ]).merge(origin)
       end

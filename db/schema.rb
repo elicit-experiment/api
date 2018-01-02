@@ -232,6 +232,7 @@ ActiveRecord::Schema.define(version: 20170829210919) do
     t.integer "num_stages_remaining", null: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "started_at"
     t.datetime "completed_at"
   end
 
@@ -247,6 +248,7 @@ ActiveRecord::Schema.define(version: 20170829210919) do
     t.integer "context_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "started_at"
     t.datetime "completed_at"
   end
 
@@ -259,8 +261,8 @@ ActiveRecord::Schema.define(version: 20170829210919) do
     t.references "trial_definition", foreign_key: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.datetime "completed_at"
     t.datetime "started_at"
+    t.datetime "completed_at"
   end
 
   add_foreign_key "study_result_trial_results", "study_result_experiments", column: "experiment_id"
