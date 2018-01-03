@@ -30,9 +30,16 @@ module Api::V1
 
       parser = parser_class.new(time_series.schema_metadata)
 
+      query_params = {
+        :username => params[:username],
+        :groupname => params[:groupname],
+        :sessionname => params[:sessionname],
+        :trial_definition_id => params[:trial_definition_id]
+      }
+
       respond_to do |format|
         format.tsv do
-          csv_filename='tobii_tsv'
+          csv_filename='tobii_query.tsv'
           headers["X-Accel-Buffering"] = "no"
           headers["Cache-Control"] = "no-cache"
           headers["Content-Type"] = "text/tab-separated-values; charset=utf-8"
@@ -40,7 +47,8 @@ module Api::V1
           headers["Content-Disposition"] =
               %(attachment; filename="#{csv_filename}")
           headers["Last-Modified"] = Time.zone.now.ctime.to_s
-          self.response_body = parser.query(time_series, params[:username], params[:groupname], params[:sessionname])
+
+          self.response_body = parser.query(time_series, query_params)
           return
         end
       end
