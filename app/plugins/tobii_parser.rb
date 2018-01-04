@@ -4,9 +4,7 @@ class TobiiParser
   attr_accessor :metadata
 
   def initialize(metadata)
-    ap metadata
     @metadata = JSON.parse(metadata.gsub("'", '"'))
-    ap @metadata
   end
 
   def injest

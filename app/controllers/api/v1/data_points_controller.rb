@@ -43,5 +43,15 @@ module Api::V1
           ]).merge(origin)
       end
     end
+
+    def query_params
+      {
+          :study_result_id => params[:study_result_id],
+          :protocol_user_id => params[:protocol_user_id],
+          :phase_definition_id => params[:phase_definition_id],
+          :component_id => params[:component_id],
+          :trial_definition_id => params[:trial_definition_id],
+      }
+    end
   end
 end

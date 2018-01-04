@@ -7,6 +7,7 @@ module Chaos
     belongs_to :phase_definition, :class_name => "PhaseDefinition", :foreign_key => "phase_definition_id"
     belongs_to :experiment, :class_name => "StudyResult::Experiment", :foreign_key => "experiment_id"
     belongs_to :stage, :class_name => "StudyResult::Stage", :foreign_key => "stage_id"
+    belongs_to :trial_result, :class_name => "StudyResult::TrialResult", :foreign_key => "trial_result_id"
 
     def populate()
       study_result = StudyResult::StudyResult.where({
@@ -25,6 +26,7 @@ module Chaos
  
       if !experiment.current_stage
         experiment, stage = next_stage(experiment)
+        stage.started_at = DateTime.now
       else
         stage = experiment.current_stage
       end
@@ -103,6 +105,9 @@ module Chaos
         Rails.logger.info "#{next_stage.ai}"
         next_stage.save!
         stage = next_stage
+
+        self.phase_definition_id = next_phase.id
+        self.save!
       else
         self.stage_id = nil
         experiment.current_stage_id = nil

@@ -21,5 +21,9 @@ module Api::V1
           ]).merge(origin)
       end
     end
+
+    def query_params
+      {:study_result_id => params[:study_result_id]}
+    end
   end
 end

@@ -53,6 +53,7 @@ ActiveRecord::Schema.define(version: 20170829210919) do
     t.integer "study_result_id"
     t.integer "experiment_id"
     t.integer "stage_id"
+    t.integer "trial_result_id"
     t.boolean "preview"
     t.string "url", null: false
     t.datetime "expires_at", null: false

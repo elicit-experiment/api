@@ -68,10 +68,7 @@ module ChaosApi::V6
           :data => output["Context"]["Data"],
           })
         context.save!
-        ap context
       end
-
-      ap new_datapoints
 
       respond_to do |format|
         format.xml { render :xml => '' }

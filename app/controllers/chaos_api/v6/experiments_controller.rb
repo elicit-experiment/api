@@ -22,8 +22,6 @@ module ChaosApi::V6
                                                                                            :protocol_definition,
                                                                                            {:experiment => :current_stage}]).first
 
-      ap @chaos_session
-
       if @chaos_session.preview
         @experiment = ChaosExperimentService.new(@chaos_session.study_definition,
                                                  @chaos_session.protocol_definition,
@@ -43,9 +41,6 @@ module ChaosApi::V6
           @response = ChaosResponse.new(@results)
         end
       end
-
-      ap @chaos_session
-      ap @results
 
       respond_to do |format|
         format.html { redirect_to "#{root_url.chomp('/')}:8080/#Experiment/#{id}" }

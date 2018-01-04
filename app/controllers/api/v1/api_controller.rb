@@ -62,8 +62,9 @@ module Api::V1
     def index
       plural_resource_name = "@#{resource_name.pluralize}"
       if not query_params.nil?
-        resources = resource_class.includes(query_includes).where(query_params).order(order_params)
-        ap resources.all
+        qp = query_params
+        qp.delete_if { |k, v| v.nil? }
+        resources = resource_class.includes(query_includes).where(qp).order(order_params)
       end
       if not search_param.nil?
         resources = resource_class.full_text_search(search_param)

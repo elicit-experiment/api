@@ -15,5 +15,9 @@ module Api::V1
           ])
       end
     end
+
+    def query_params
+      {:study_definition_id => params[:study_definition_id]}
+    end
   end
 end

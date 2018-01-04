@@ -24,8 +24,26 @@ module ChaosApi::V6
         @chaos_session.stage.save!
       end
 
-      @response = ChaosExperimentService.new(@study_definition,
-                                             @protocol_definition).make_slide(trial_index)
+      svc = ChaosExperimentService.new(@study_definition,
+                                       @protocol_definition)
+      @response = svc.make_slide(trial_index)
+
+      if svc.trial_definition
+        parms = {
+            :experiment_id => @chaos_session.experiment.id,
+            :protocol_user_id => @chaos_session.protocol_user_id,
+            :phase_definition_id => svc.trial_definition.phase_definition.id,
+            :trial_definition_id => svc.trial_definition.id
+        }
+        trial_result = StudyResult::TrialResult.where(parms).first_or_initialize do |tr|
+          tr.started_at = DateTime.now unless tr.started_at
+          tr.save!
+        end
+        Rails.logger.info "START OF TRIAL: TrialResult: #{trial_result.ai}"
+        @chaos_session.trial_result_id = trial_result ? trial_result.id : nil
+        @chaos_session.save!
+      end
+
 
       # compare to version generated from experiment xml, if it exists
       ExperimentXmls.instance.refresh
@@ -42,10 +60,9 @@ module ChaosApi::V6
         Rails.logger.info("XML response #{@results.count} SD response #{@response.Body[:Results].count}")
         # compare the prototype generation with the new created one
         @results.each_with_index do |r, i| 
-  #        ap i
           core_model = @response.Body[:Results][i]
-          Rails.logger.info("DIFF:")
-          ap core_model.deep_diff(r)
+#          Rails.logger.debug("DIFF:")
+#          Rails.logger.debug(core_model.deep_diff(r).ai)
         end
       else
         Rails.logger.warn("Did not find experiment.xml for #{experiment_id}")

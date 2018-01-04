@@ -21,5 +21,12 @@ module Api::V1
                                       ])#.merge(origin) (we don't have study_result_id in the schema)
       end
     end
+
+    def query_params
+      {
+          :trial_definition_id => params[:trial_definition_id],
+          :experiment_id => params[:experiment_id],
+      }
+    end
   end
 end

@@ -76,12 +76,7 @@ module Api::V1
 
     def time_series_params
       params.permit!
-      ap params
-      self.request.env.each do |header|
-        logger.warn "HEADER KEY: #{header[0]}"
-        logger.warn "HEADER VAL: #{header[1]}"
-      end
-      x = permit_json_params(params[:time_series], :time_series) do
+      permit_json_params(params[:time_series], :time_series) do
         time_series_params = params.require(:time_series)
         pep = time_series_params.permit([:file,
                                          :study_definition_id,
@@ -94,8 +89,6 @@ module Api::V1
                                         ])
         pep
       end
-      ap x
-      x
     end
   end
 end

@@ -7,12 +7,14 @@ class ChaosExperimentService
   attr_accessor :study_definition
   attr_accessor :protocol_definition
   attr_accessor :phase_definition
+  attr_accessor :trial_definition
   attr_accessor :study_result
 
   def initialize(study_definition, protocol_definition = nil, phase_definition = nil)
     @study_definition = study_definition
     @protocol_definition = protocol_definition
     @phase_definition = phase_definition
+    @trial_definition = nil
     @protocol_definition = ProtocolDefinition.where({
       :study_definition_id => @study_definition.id}).first unless @protocol_definition
     if @protocol_definition.nil?
@@ -82,12 +84,12 @@ class ChaosExperimentService
     }
   end
 
-  def make_slide(trial_no = 0, protocol_user_id = nil)
+  def trial_for_slide_index(trial_no = 0)
     @phases = PhaseDefinition.where({:study_definition_id => @study_definition.id,
                                      :protocol_definition_id => @protocol_definition.id}).order(:id).entries
     @phase_order = PhaseOrder.where({:study_definition_id => @study_definition.id,
                                      :protocol_definition_id => @protocol_definition.id}).entries
-    
+
     # TODO: Figure out how to integrate phase orders into the Chaos frontend
     @phase = @phases.first
 
@@ -95,7 +97,9 @@ class ChaosExperimentService
                                      :protocol_definition_id => @protocol_definition.id,
                                      :phase_definition_id => @phase.id}).order(:id).entries
 
-    @trial_order = TrialOrder.where({:study_definition_id => @study_definition.id, :protocol_definition_id => @protocol_definition.id, :phase_definition_id => @phase.id}).entries
+    @trial_order = TrialOrder.where({:study_definition_id => @study_definition.id,
+                                     :protocol_definition_id => @protocol_definition.id,
+                                     :phase_definition_id => @phase.id}).entries
 
     if @trial_order.empty?
       @trial_sequence = TrialOrder.default_order(@trials)
@@ -110,15 +114,21 @@ class ChaosExperimentService
                                :protocol_definition_id => @protocol_definition.id,
                                :phase_definition_id => @phase.id}).order(:id).entries
 
-    phase = @phases.first
+    @trial_definition = @trials.detect{ |trial| trial.id == @trial_sequence[trial_no] }
 
-    trial = @trials.detect{ |trial| trial.id == @trial_sequence[trial_no] }
-
-    unless trial
-      Rails.logger.error "Trial order #{@trial_order.ai} sequence #{@trial_sequence.ai} contains invalid ids #{@trials.ai}"
+    unless @trial_definition
+      Rails.logger.error "Trial order #{@trial_order.ai} sequence #{@trial_sequence.ai} contains invalid ids #{@trials.ai} for trial index #{trial_no}"
     end
 
-    chaos_trial = @components.select{|c| (c.phase_definition_id == phase.id) and (c.trial_definition_id == trial.id) }.map do |c|
+    @trial_definition
+  end
+
+  def make_slide(trial_no = 0, protocol_user_id = nil)
+    trial_for_slide_index(trial_no)
+
+    phase = @phases.first
+
+    chaos_trial = @components.select{|c| (c.phase_definition_id == phase.id) and (c.trial_definition_id == @trial_definition.id) }.map do |c|
       outputs = {}
       if (protocol_user_id != nil)
         data_points = StudyResult::DataPoint.where({:component_id => c.id, :protocol_user_id => protocol_user_id })
@@ -133,7 +143,6 @@ class ChaosExperimentService
         end
         state = data_points.entries.select{ |d| d.point_type.eql? "State" }.first
         if (state)
-          ap state
           outputs = JSON.parse(state.value)
         end
       end
