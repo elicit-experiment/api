@@ -15,9 +15,11 @@ module ElicitApi
 
     config.autoload_paths << "#{Rails.root}/lib"
     config.autoload_paths << "#{Rails.root}/app/services"
+    config.autoload_paths << "#{Rails.root}/app/plugins"
 
     config.elicit = config_for(:elicit_config)
 
+    config.time_series_schema = config_for(:time_series_schema_config)
 
     log_level = String(ENV['LOG_LEVEL'] || "info").upcase
     logger = ActiveSupport::Logger.new(STDOUT)

@@ -3,7 +3,7 @@ module ElicitErrors
       raise ElicitError.new(message, :not_found)
     end
 
-    def unprocessable_entity(message = "object not found")
+    def unprocessable_entity(message = "invalid operation")
       raise ElicitError.new(message, :unprocessable_entity)
     end
 

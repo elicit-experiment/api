@@ -1,15 +1,16 @@
-class Apidocs::V1::ExperimentsApidocs
+class Apidocs::V1::TrialResultsApidocs
   include Swagger::Blocks
 
-  swagger_path '/study_results/{study_result_id}/experiments' do
+  swagger_path '/study_results/{study_result_id}/trial_results' do
     operation :get do
-      key :summary, 'Returns all experiment results from the system to which the user has access'
-      key :operationId, 'findExperiments'
+      key :summary, 'All TrialResults'
+      key :description, 'Returns all TrialResult results the user has access to'
+      key :operationId, 'findTrialResults'
       key :produces, [
-        'application/json'
+          'application/json'
       ]
       key :tags, [
-        'Experiment', 'Study Results'
+          'TrialResult', 'Study Results'
       ]
       parameter do
         key :name, :authorization
@@ -27,18 +28,25 @@ class Apidocs::V1::ExperimentsApidocs
         key :type, :string
       end
       parameter do
-        key :name, :protocol_user_id
+        key :name, :experiment_id
         key :in, :query
-        key :description, 'Protocol definition id of the experiment results to return'
+        key :description, 'ID for the experiment whose TrialResults to return'
+        key :required, true
+        key :type, :string
+      end
+      parameter do
+        key :name, :phase_definition_id
+        key :in, :query
+        key :description, 'ID for the phase definition whose TrialResults to return'
         key :required, false
         key :type, :string
       end
       response 200 do
-        key :description, 'Array of experiment objects matching study/protocol ids'
+        key :description, 'TrialResults response'
         schema do
           key :type, :array
           items do
-            key :'$ref', :Experiment
+            key :'$ref', :TrialResult
           end
         end
       end
@@ -51,14 +59,14 @@ class Apidocs::V1::ExperimentsApidocs
     end
 
     operation :post do
-      key :summary, 'New experiment result'
-      key :description, 'Creates a new experiment'
-      key :operationId, 'addExperiment'
+      key :summary, 'New TrialResult'
+      key :description, 'Creates a new TrialResult'
+      key :operationId, 'addTrialResult'
       key :produces, [
-        'application/json'
+          'application/json'
       ]
       key :tags, [
-        'Experiment', 'Study Results'
+          'TrialResult', 'Study Results'
       ]
       parameter do
         key :name, :authorization
@@ -69,12 +77,12 @@ class Apidocs::V1::ExperimentsApidocs
         key :default, 'Bearer PASTE_ACCESS_TOKEN_HERE'
       end
       parameter do
-        key :name, :experiment
+        key :name, :trial_result
         key :in, :body
-        key :description, 'Exeriment result to add to the store'
+        key :description, 'Trial definition to add to the store'
         key :required, true
         schema do
-          key :'$ref', :ExperimentInput
+          key :'$ref', :TrialResultInput
         end
       end
       parameter do
@@ -85,9 +93,9 @@ class Apidocs::V1::ExperimentsApidocs
         key :type, :string
       end
       response 201 do
-        key :description, 'Newly-created experiment result object'
+        key :description, 'trial definition response'
         schema do
-          key :'$ref', :Experiment
+          key :'$ref', :TrialResult
         end
       end
       response :default do
@@ -99,13 +107,14 @@ class Apidocs::V1::ExperimentsApidocs
     end
   end
 
-  swagger_path '/study_results/{study_result_id}/experiments/{experiment_id}' do
+  # Update Trial Definition Object
+  swagger_path '/study_results/{study_result_id}/trial_results/{id}' do
     operation :put do
-      key :description, 'Updates an experiment result'
-      key :summary, 'Updates an experiment result'
-      key :operationId, 'updateExperiment'
+      key :description, 'Updates a TrialResult result'
+      key :summary, 'Updates a TrialResult result'
+      key :operationId, 'updateTrialResult'
       key :tags, [
-        'Experiment', 'Study Results'
+          'TrialResult', 'Study Results'
       ]
       parameter do
         key :name, :authorization
@@ -123,26 +132,17 @@ class Apidocs::V1::ExperimentsApidocs
         key :type, :string
       end
       parameter do
-        key :name, :experiment_id
+        key :name, :id
         key :in, :path
-        key :description, 'Experiment id of the experiment to update'
+        key :description, 'ID of trial definition to fetch'
         key :required, true
-        key :type, :string
+        key :type, :integer
+        key :format, :int64
       end
-      parameter do
-        key :name, :experiment
-        key :in, :body
-        key :description, 'Experiment result object to update'
-        key :required, true
-        schema do
-          key :'$ref', :Experiment
-        end
-      end
-
       response 200 do
-        key :description, 'Updated experiment result object'
+        key :description, 'Trial Definition Object'
         schema do
-          key :'$ref', :Experiment
+          key :'$ref', :TrialResult
         end
       end
       response 401 do
@@ -160,14 +160,14 @@ class Apidocs::V1::ExperimentsApidocs
     end
   end
 
-  # Delete Experiment result Object
-  swagger_path '/study_results/{study_result_id}/experiments/{experiment_id}' do
+  # Delete Trial Definition Object
+  swagger_path '/study_results/{study_result_id}/trial_results/{id}' do
     operation :delete do
-      key :description, 'Deletes an experiment'
-      key :summary, 'Deletes an experiment'
-      key :operationId, 'deleteExperiment'
+      key :description, 'Deletes a TrialResult result'
+      key :summary, 'Deletes a TrialResult result'
+      key :operationId, 'deleteTrialResult'
       key :tags, [
-        'Experiment', 'Study Results'
+          'TrialResult', 'Study Results'
       ]
       parameter do
         key :name, :authorization
@@ -185,11 +185,12 @@ class Apidocs::V1::ExperimentsApidocs
         key :type, :string
       end
       parameter do
-        key :name, :experiment_id
+        key :name, :id
         key :in, :path
-        key :description, 'Experiment id of the experiment to delete'
+        key :description, 'ID of trial definition to fetch'
         key :required, true
-        key :type, :string
+        key :type, :integer
+        key :format, :int64
       end
 
       response 204 do
@@ -210,35 +211,28 @@ class Apidocs::V1::ExperimentsApidocs
     end
   end
 
-  swagger_schema :ExperimentInput do
-    key :required, [:experiment]
-    property :experiment do
-      key :'$ref', :Experiment
+  swagger_schema :TrialResultInput do
+    key :required, [:trial_result]
+    property :trial_result do
+      key :'$ref', :TrialResult
     end
   end
 
-  swagger_schema :Experiment do
+  swagger_schema :TrialResult do
+    key :required, [:experiment_id, :phase_definition_id, :trial_definition_id]
     property :id do
       key :type, :integer
       key :format, :int64
-    end 
-    property :study_result_id do
+    end
+    property :experiment_id do
       key :type, :integer
       key :format, :int64
     end
-    property :protocol_user_id do
+    property :phase_definition_id do
       key :type, :integer
       key :format, :int64
     end
-    property :current_stage_id do
-      key :type, :integer
-      key :format, :int64
-    end
-    property :num_stages_completed do
-      key :type, :integer
-      key :format, :int64
-    end
-    property :num_stages_remaining do
+    property :trial_definition_id do
       key :type, :integer
       key :format, :int64
     end

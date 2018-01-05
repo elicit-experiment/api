@@ -35,6 +35,8 @@ testApp_*
 /public/assets/doorkeeper*
 /public/assets/.sprockets*
 
+/public/uploads/*
+
 # RubyMine
 /.idea/*
 

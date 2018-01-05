@@ -14,7 +14,8 @@ module ChaosApi::V6
       @sessionGUID = params[:sessionGUID]
       @response = ChaosResponse.new([])
 
-      @chaos_session = Chaos::ChaosSession.where({:session_guid => @sessionGUID}).includes([:experiment, :phase_definition, :experiment, :stage]).first
+      inc = [:experiment, :protocol_user, :study_definition, :phase_definition, :experiment, :stage]
+      @chaos_session = Chaos::ChaosSession.where({:session_guid => @sessionGUID}).includes(inc).first
 
       if @chaos_session.preview
         respond_to do |format|
@@ -23,6 +24,25 @@ module ChaosApi::V6
         end
 
         return
+      end
+
+      svc = ChaosExperimentService.new(@chaos_session.study_definition,
+                                       @chaos_session.protocol_definition,
+                                       @chaos_session.phase_definition)
+      @trial_definition = svc.trial_for_slide_index(@slideIndex.to_i)
+
+      if @trial_definition
+        parms = {
+            :experiment_id => @chaos_session.experiment_id,
+            :protocol_user_id => @chaos_session.protocol_user_id,
+            :phase_definition_id => @chaos_session.phase_definition_id,
+            :trial_definition_id => @trial_definition.id
+        }
+
+        trial_result = StudyResult::TrialResult.find_by(parms)
+        trial_result.completed_at = DateTime.now
+        Rails.logger.info "END OF TRIAL: TrialResult: #{trial_result.ai}"
+        trial_result.save!
       end
 
       @protocol_definition = ProtocolDefinition.find(@protocol_id)

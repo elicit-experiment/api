@@ -33,6 +33,7 @@ ActiveRecord::Schema.define(version: 20170829210919) do
     t.string "unconfirmed_email"
     t.boolean "anonymous"
     t.string "role"
+    t.string "username"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -52,6 +53,7 @@ ActiveRecord::Schema.define(version: 20170829210919) do
     t.integer "study_result_id"
     t.integer "experiment_id"
     t.integer "stage_id"
+    t.integer "trial_result_id"
     t.boolean "preview"
     t.string "url", null: false
     t.datetime "expires_at", null: false
@@ -100,6 +102,16 @@ ActiveRecord::Schema.define(version: 20170829210919) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
+  end
+
+  #
+  # Study Definition
+  #
+
+  create_table "media_files", force: :cascade do |t|
+    t.string "file"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   #
@@ -221,6 +233,7 @@ ActiveRecord::Schema.define(version: 20170829210919) do
     t.integer "num_stages_remaining", null: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "started_at"
     t.datetime "completed_at"
   end
 
@@ -236,10 +249,25 @@ ActiveRecord::Schema.define(version: 20170829210919) do
     t.integer "context_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "started_at"
     t.datetime "completed_at"
   end
 
   add_foreign_key "study_result_stages", "study_result_experiments", column: "experiment_id"
+
+  create_table "study_result_trial_results", force: :cascade do |t|
+    t.integer "experiment_id", null: false
+    t.references "protocol_user", foreign_key: true, null: false
+    t.references "phase_definition", foreign_key: true, null: false
+    t.references "trial_definition", foreign_key: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.datetime "started_at"
+    t.datetime "completed_at"
+  end
+
+  add_foreign_key "study_result_trial_results", "study_result_experiments", column: "experiment_id"
+
   add_foreign_key "study_result_experiments", "study_result_stages", column: "current_stage_id"
 
   create_table "study_result_contexts", force: :cascade do |t|
@@ -266,4 +294,19 @@ ActiveRecord::Schema.define(version: 20170829210919) do
   end
 
   add_foreign_key "study_result_data_points", "study_result_stages", column: "stage_id"
+
+  create_table "study_result_time_series", force: :cascade do |t|
+    t.integer "stage_id", null: true
+    t.references "study_definition", foreign_key: true
+    t.references "protocol_definition", foreign_key: true
+    t.references "phase_definition", foreign_key: true
+    t.references "component", foreign_key: true
+    t.string "file"
+    t.string "schema"
+    t.string "schema_metadata"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_foreign_key "study_result_time_series", "study_result_stages", column: "stage_id"
 end

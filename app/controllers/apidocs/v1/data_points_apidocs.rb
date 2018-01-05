@@ -1,7 +1,7 @@
 class Apidocs::V1::DataPointsApidocs
   include Swagger::Blocks
 
-  swagger_path '/study_results/{study_results_id}/data_points' do
+  swagger_path '/study_results/{study_result_id}/data_points' do
     operation :get do
       key :summary, 'Query data points'
       key :description, 'Returns all data points from the study/protocol/phase/trial to which the user has access'
@@ -21,7 +21,7 @@ class Apidocs::V1::DataPointsApidocs
         key :default, 'Bearer PASTE_ACCESS_TOKEN_HERE'
       end
       parameter do
-        key :name, :study_results_id
+        key :name, :study_result_id
         key :in, :path
         key :description, 'Study results id of the experiment results to return'
         key :required, true
@@ -74,7 +74,7 @@ class Apidocs::V1::DataPointsApidocs
   end
 
 
-  swagger_path '/study_results/{study_results_id}/data_points' do
+  swagger_path '/study_results/{study_result_id}/data_points' do
 
     operation :post do
       key :summary, 'New DataPoint'
@@ -104,7 +104,7 @@ class Apidocs::V1::DataPointsApidocs
         end
       end
       parameter do
-        key :name, :study_results_id
+        key :name, :study_result_id
         key :in, :path
         key :description, 'Study results id of the experiment results to return'
         key :required, true
@@ -127,7 +127,7 @@ class Apidocs::V1::DataPointsApidocs
   end
 
   # Update DataPoint Definition Object
-  swagger_path '/study_results/{study_results_id}/trial_definitions/{trial_definition_id}/data_points/{id}' do
+  swagger_path '/study_results/{study_result_id}/trial_definitions/{trial_definition_id}/data_points/{id}' do
     operation :put do
       key :description, 'Updates a DataPoint Definition'
       key :summary, 'Updates a DataPoint Definition'
@@ -152,7 +152,7 @@ class Apidocs::V1::DataPointsApidocs
         key :format, :int64
       end
       parameter do
-        key :name, :study_results_id
+        key :name, :study_result_id
         key :in, :path
         key :description, 'Study results id of the experiment results to return'
         key :required, true
@@ -180,7 +180,7 @@ class Apidocs::V1::DataPointsApidocs
   end
 
   # Delete DataPoint Definition Object
-  swagger_path '/study_results/{study_results_id}/trial_definitions/{trial_definition_id}/data_points/{id}' do
+  swagger_path '/study_results/{study_result_id}/trial_definitions/{trial_definition_id}/data_points/{id}' do
     operation :delete do
       key :description, 'Deletes a DataPoint Definition'
       key :summary, 'Deletes a DataPoint Definition'
@@ -197,7 +197,7 @@ class Apidocs::V1::DataPointsApidocs
         key :default, 'Bearer PASTE_ACCESS_TOKEN_HERE'
       end
       parameter do
-        key :name, :study_results_id
+        key :name, :study_result_id
         key :in, :path
         key :description, 'Study results id of the experiment results to return'
         key :required, true

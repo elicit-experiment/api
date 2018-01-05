@@ -155,7 +155,6 @@ const mapDispatchToProps = (dispatch) => ({
   logInUser: (data) => dispatch(logInUser(data, () => { }))
 });
 
-
 export default connect(
     mapStateToProps,
     mapDispatchToProps

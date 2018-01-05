@@ -40,10 +40,11 @@ class Apidocs::V1::UsersApidocs
     operation :post do
       key :description, 'Creates new User'
       key :summary, 'Creates new User'
+      key :operationId, 'addUser'
       key :tags, [
         'Users'
       ]
-      response 200 do
+      response 201 do
         key :description, 'User Object'
         schema do
           key :'$ref', :UserResponseObject
@@ -64,7 +65,7 @@ class Apidocs::V1::UsersApidocs
         key :description, 'User Object to create'
         key :required, true
         schema do
-          key :'$ref', :UserObject
+          key :'$ref', :UserInput
         end
       end
 
@@ -81,6 +82,7 @@ class Apidocs::V1::UsersApidocs
     operation :put do
       key :description, 'Updates Authenticated User'
       key :summary, 'Updates Authenticated User'
+      key :operationId, 'updateUser'
       key :tags, [
         'Users'
       ]
@@ -105,7 +107,7 @@ class Apidocs::V1::UsersApidocs
         key :description, 'User object containing attributes to update'
         key :required, true
         schema do
-          key :'$ref', :UserObject
+          key :'$ref', :User
         end
       end
 
@@ -122,6 +124,7 @@ class Apidocs::V1::UsersApidocs
     operation :get do
       key :description, "Returns a specific user object"
       key :summary, "Returns specific user object"
+      key :operationId, 'findUser'
       key :tags, [
         'Users'
       ]
@@ -144,8 +147,7 @@ class Apidocs::V1::UsersApidocs
         key :in, :path
         key :description, "User's ID"
         key :required, true
-        key :type, :integer
-        key :format, :int64
+        key :type, :string
       end
       response :default do
         key :description, 'Returned when an unexpected error occurs'
@@ -192,24 +194,7 @@ class Apidocs::V1::UsersApidocs
   # -----------------------
   # SCHEMAS
   # -----------------------
-  swagger_schema :UserObject do
-    property :user do
-      key :required, [:email, :password]
-      property :username do
-        key :type, :string
-      end
-      property :email do
-        key :type, :string
-      end
-      property :password do
-        key :type, :string
-        key :example, 'specify password'
-      end
-      property :password_confirmation do
-        key :type, :string
-      end
-    end
-  end
+
 
   swagger_schema :UserResponseObject do
     property :id do
@@ -220,5 +205,11 @@ class Apidocs::V1::UsersApidocs
     end
   end
 
+  swagger_schema :UserInput do
+    key :required, [:user]
+    property :user do
+      key :'$ref', :UserDefinition
+    end
+  end
 
 end

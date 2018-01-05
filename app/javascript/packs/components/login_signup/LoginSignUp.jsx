@@ -11,6 +11,7 @@ class LogInSignUp extends React.Component {
       logInForm: true,
       dismissable: props.dismissable || false,
       email: "",
+      username: "",
       password: "",
       passwordConfirmation: "",
     };
@@ -37,9 +38,10 @@ class LogInSignUp extends React.Component {
     return (e) => {
       e.preventDefault();
       let credentials = { email: this.state.email,
+                          username: this.state.username,
                           password: this.state.password,
                           password_confirmation: this.state.passwordConfirmation };
-      this.props.createUser({user: credentials});
+      this.props.createUser({user: credentials}).then(()=>{this.props.loginUser(credentials)});
       $("#signUpModal").modal('hide');
     };
   }
@@ -92,7 +94,7 @@ class LogInSignUp extends React.Component {
             <div className="modal-body" style={{padding:"40px 50px"}}>
               <form role="form" onSubmit={this.logInUser()}>
                 <div className="form-group">
-                  <label htmlFor="usrname"><span className="glyphicon glyphicon-user"></span> Email</label>
+                  <label htmlFor="usrname"><span className="glyphicon glyphicon-user glyphicon-envelope"></span> Username or Email</label>
                   <input type="text"
                          className="form-control"
                          id="email"
@@ -137,10 +139,18 @@ class LogInSignUp extends React.Component {
             <div className="modal-body" style={{padding:"40px 50px"}}>
               <form role="form" onSubmit={this.signUpUser()}>
                 <div className="form-group">
-                  <label htmlFor="usrname"><span className="glyphicon glyphicon-user"></span> Email</label>
+                  <label htmlFor="usrname"><span className="glyphicon glyphicon-user"></span> User Name</label>
                   <input type="text"
                          className="form-control"
                          id="usrname"
+                         placeholder="Entername"
+                         onChange={this.updateState('username')}/>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="usremail"><span className="glyphicon glyphicon-envelope"></span> Email</label>
+                  <input type="text"
+                         className="form-control"
+                         id="usremail"
                          placeholder="Enter email"
                          onChange={this.updateState('email')}/>
                 </div>
@@ -156,7 +166,7 @@ class LogInSignUp extends React.Component {
                   <label htmlFor="psw"><span className="glyphicon glyphicon-eye-open"></span> Confirm Password</label>
                   <input type="password"
                          className="form-control"
-                         id="psw"
+                         id="pswConf"
                          placeholder="Re-enter password"
                          onChange={this.updateState('passwordConfirmation')}/>
                 </div>

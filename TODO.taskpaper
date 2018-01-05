@@ -11,9 +11,19 @@ User Profile:
 - Add Delete Account functionality
 - Add Reset Password functionality
 - Add list of participated studies
+- validate username works in signup phase
+
+Add TrialResult:
+- Add to Chaos pipeline
+
+Physiological Tasks:
+- Add begin/end time to upload
+- Add break to interpreter to python script
+- Add Upload multipart form to Python script
+
 
 Chaos Frontend Bugs:
--  There is another one with the tagging components that don’t seem to work if you set tags that the user should use and then add some as user input. You cannot remove them or add them correctly.
+- There is another one with the tagging components that don’t seem to work if you set tags that the user should use and then add some as user input. You cannot remove them or add them correctly.
 - Click on textbox group, go back, doesn’t go to new one [experiment_definitions_xml\errors]
 - CSS -> lines sticking out @done(2017-12-01)
 - OneDScale -> doesn’t show something when you press on the 1D scale; was a circle now a square; Position in the metadata is not defined, then no marker. If marker is defined, it’s already positioned. @done(2017-12-01)
