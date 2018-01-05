@@ -25,7 +25,7 @@ class TimeSeriesUploader < CarrierWave::Uploader::Base
     Rails.logger.info("filename #{@filename} #{file_suffix} #{file_gzip}")
 
     if gzip_content ^ file_gzip
-      logger.error "MIME type #{@file.content_type} doesn't match file extension #{filename}!"
+      Rails.logger.error "MIME type #{@file.content_type} doesn't match file extension #{filename}!"
       return
     end
 
