@@ -151,8 +151,11 @@ ActiveRecord::Schema.define(version: 20170829210919) do
   create_table "protocol_users", force: :cascade do |t|
     t.references "user", foreign_key: true, null: false
     t.references "protocol_definition", foreign_key: true, null: false
+    t.string "group_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["group_name"],
+            name: "index_protocol_users_on_group_name", using: :btree
   end
 
   create_table "phase_definitions", force: :cascade do |t|
@@ -260,6 +263,7 @@ ActiveRecord::Schema.define(version: 20170829210919) do
     t.references "protocol_user", foreign_key: true, null: false
     t.references "phase_definition", foreign_key: true, null: false
     t.references "trial_definition", foreign_key: true, null: false
+    t.string "session_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "started_at"

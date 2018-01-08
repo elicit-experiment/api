@@ -17,6 +17,9 @@ class ProtocolUser < ApplicationRecord
       key :type, :integer
       key :format, :int64
     end
+    property :group_name do
+      key :type, :string
+    end
     property :protocol_definition_id do
       key :type, :integer
       key :format, :int64

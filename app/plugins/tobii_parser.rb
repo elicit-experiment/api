@@ -1,4 +1,4 @@
-require 'CSV'
+require 'csv'
 
 class TobiiParser
   attr_accessor :metadata

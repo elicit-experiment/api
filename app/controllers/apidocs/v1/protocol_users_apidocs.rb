@@ -226,6 +226,9 @@ class Apidocs::V1::ProtocolUsersApidocs
       property :user_id do
         key :type, :integer
       end
+      property :group_name do
+        key :type, :string
+      end
       property :protocol_definition_id do
         key :type, :integer
       end
