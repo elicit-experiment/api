@@ -236,6 +236,9 @@ class Apidocs::V1::TrialResultsApidocs
       key :type, :integer
       key :format, :int64
     end
+    property :session_name do
+      key :type, :string
+    end
     property :started_at do
       key :type, :string
       key :format, :"date-time"

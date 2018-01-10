@@ -16,6 +16,7 @@ module Api::V1
                                           :protocol_user_id,
                                           :phase_definition_id,
                                           :trial_definition_id,
+                                          :session_name,
                                           :completed_at,
                                           :started_at
                                       ])#.merge(origin) (we don't have study_result_id in the schema)
