@@ -31,9 +31,9 @@ module Api::V1
       parser = parser_class.new(time_series.schema_metadata)
 
       query_params = {
-        :username => params[:username],
-        :groupname => params[:groupname],
-        :sessionname => params[:sessionname],
+        :user_name => params[:user_name],
+        :group_name => params[:group_name],
+        :session_name => params[:session_name],
         :trial_definition_id => params[:trial_definition_id]
       }
 
