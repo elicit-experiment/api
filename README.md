@@ -20,6 +20,28 @@ Ruby on Rails Web API for Cockpit experiments.
 - add the remaining models (based on the wanted database structure)
 - add security
 
+## Running Docker
+
+### 1. Set Environment
+
+```bash
+export $(grep -v '^#' .env-local | xargs)
+```
+
+### 2. Build Docker
+
+```bash
+docker-compose build
+```
+
+### 2. Run Docker
+
+```bash
+docker-compose build
+```
+
+
+
 
 ## Generating test files
 

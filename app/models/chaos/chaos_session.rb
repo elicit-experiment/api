@@ -3,11 +3,16 @@ module Chaos
     belongs_to :user, :class_name => "User", :foreign_key => "user_id"
     belongs_to :study_definition, :class_name => "StudyDefinition", :foreign_key => "study_definition_id"
     belongs_to :protocol_definition, :class_name => "ProtocolDefinition", :foreign_key => "protocol_definition_id"
-    belongs_to :protocol_user, :class_name => "ProtocolUser", :foreign_key => "protocol_user_id"
+    belongs_to :protocol_user, :class_name => "ProtocolUser", :foreign_key => "protocol_user_id", optional: true
     belongs_to :phase_definition, :class_name => "PhaseDefinition", :foreign_key => "phase_definition_id"
-    belongs_to :experiment, :class_name => "StudyResult::Experiment", :foreign_key => "experiment_id"
-    belongs_to :stage, :class_name => "StudyResult::Stage", :foreign_key => "stage_id"
-    belongs_to :trial_result, :class_name => "StudyResult::TrialResult", :foreign_key => "trial_result_id"
+    belongs_to :study_result, :class_name => "StudyResult::Studyresult", :foreign_key => "study_result_id", optional: true
+    belongs_to :experiment, :class_name => "StudyResult::Experiment", :foreign_key => "experiment_id", optional: true
+    belongs_to :stage, :class_name => "StudyResult::Stage", :foreign_key => "stage_id", optional: true
+    belongs_to :trial_result, :class_name => "StudyResult::TrialResult", :foreign_key => "trial_result_id", optional: true
+
+    def preview?
+      protocol_user.nil? || study_result.nil?
+    end
 
     def populate()
       study_result = StudyResult::StudyResult.where({

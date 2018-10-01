@@ -102,7 +102,7 @@ class ChaosExperimentService
                                      :phase_definition_id => @phase.id}).entries
 
     if @trial_order.empty?
-      @trial_sequence = TrialOrder.default_order(@trials)
+      @trial_sequence = TrialOrder.default_sequence(@trials)
     else
       @trial_sequence = @trial_order.first.sequence_data.split(',').map(&:to_i)
     end
@@ -146,29 +146,16 @@ class ChaosExperimentService
           outputs = JSON.parse(state.value)
         end
       end
-      JSON.parse(c.definition_data).map do |k,v|
-        v['Type'] = k
-        v['Id'] = "#{@study_definition.id}:#{c.id}"
-        v['Fullname'] = "Question, 1.0.0"
-        v['UserAnswer'] = nil
+      ap JSON.parse(c.definition_data)
+      chaos_component = {
+          'Type': 'NewComponent',
+          'Id':"#{@study_definition.id}:#{c.id}",
+          'Fullname':  "NewComponent, 1.0.0".freeze,
+          'UserAnswer': nil,
+          'Component': JSON.parse(c.definition_data)
+      }
 
-        if v["Outputs"]
-          output = v["Outputs"]
-          output.delete('Validation')
-          output = {} unless k.eql? "Monitor"
-          output = Denilize.denilize(output)
-          v["Output"] = output
-        end
-
-        if v["Inputs"]
-          input = v["Inputs"]
-          v["Input"] = [input]
-        end
-        
-        v["Output"] = outputs
-        v.delete("Inputs")
-        v
-      end
+      chaos_component
     end.flatten
 
     #ap chaos_trial

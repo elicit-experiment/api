@@ -28,44 +28,46 @@ module ChaosApi::V6
                                        @protocol_definition)
       @response = svc.make_slide(trial_index)
 
-      if svc.trial_definition
-        parms = {
-            :experiment_id => @chaos_session.experiment.id,
-            :protocol_user_id => @chaos_session.protocol_user_id,
-            :phase_definition_id => svc.trial_definition.phase_definition.id,
-            :trial_definition_id => svc.trial_definition.id
-        }
-        trial_result = StudyResult::TrialResult.where(parms).first_or_initialize do |tr|
-          tr.started_at = DateTime.now unless tr.started_at
-          tr.save!
+      unless @chaos_session.preview?
+        if svc.trial_definition
+          parms = {
+              :experiment_id => @chaos_session.experiment.id,
+              :protocol_user_id => @chaos_session.protocol_user_id,
+              :phase_definition_id => svc.trial_definition.phase_definition.id,
+              :trial_definition_id => svc.trial_definition.id
+          }
+          trial_result = StudyResult::TrialResult.where(parms).first_or_initialize do |tr|
+            tr.started_at = DateTime.now unless tr.started_at
+            tr.save!
+          end
+          Rails.logger.info "START OF TRIAL: TrialResult: #{trial_result.ai}"
+          @chaos_session.trial_result_id = trial_result ? trial_result.id : nil
+          @chaos_session.save!
         end
-        Rails.logger.info "START OF TRIAL: TrialResult: #{trial_result.ai}"
-        @chaos_session.trial_result_id = trial_result ? trial_result.id : nil
-        @chaos_session.save!
-      end
 
 
-      # compare to version generated from experiment xml, if it exists
-      ExperimentXmls.instance.refresh
-      @experiment = ExperimentXmls.instance.experiment_by_id[experiment_id] || {}
-      @experiment_n = ExperimentXmls.instance.experiment_n_by_id[experiment_id]
-      if @experiment != nil and @experiment_n != nil then
-        @results = ExperimentXmls.get_questions(@experiment_n, trial_index)
-        @exml_response = ChaosResponse.new(@results)
-        @exml_response.Body["FoundCount"] = @experiment_n.css("Experiment>Trials").children.count
-        @exml_response.Body["StartIndex"] = trial_index
+        # compare to version generated from experiment xml, if it exists
+        ExperimentXmls.instance.refresh
+        @experiment = ExperimentXmls.instance.experiment_by_id[experiment_id] || {}
+        @experiment_n = ExperimentXmls.instance.experiment_n_by_id[experiment_id]
+        if @experiment != nil and @experiment_n != nil then
+          @results = ExperimentXmls.get_questions(@experiment_n, trial_index)
+          @exml_response = ChaosResponse.new(@results)
+          @exml_response.Body["FoundCount"] = @experiment_n.css("Experiment>Trials").children.count
+          @exml_response.Body["StartIndex"] = trial_index
 
-        @response = ChaosExperimentService.new(@study_definition).make_slide(trial_index, @chaos_session.protocol_user_id)
+          @response = ChaosExperimentService.new(@study_definition).make_slide(trial_index, @chaos_session.protocol_user_id)
 
-        Rails.logger.info("XML response #{@results.count} SD response #{@response.Body[:Results].count}")
-        # compare the prototype generation with the new created one
-        @results.each_with_index do |r, i| 
-          core_model = @response.Body[:Results][i]
+          Rails.logger.info("XML response #{@results.count} SD response #{@response.Body[:Results].count}")
+          # compare the prototype generation with the new created one
+          @results.each_with_index do |r, i|
+            core_model = @response.Body[:Results][i]
 #          Rails.logger.debug("DIFF:")
 #          Rails.logger.debug(core_model.deep_diff(r).ai)
+          end
+        else
+          Rails.logger.warn("Did not find experiment.xml for #{experiment_id}")
         end
-      else
-        Rails.logger.warn("Did not find experiment.xml for #{experiment_id}")
       end
 
       respond_to do |format|

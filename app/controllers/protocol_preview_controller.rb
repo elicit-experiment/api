@@ -18,7 +18,7 @@
       @url = "#{Rails.configuration.elicit['participant_frontend']['scheme']}://#{Rails.configuration.elicit['participant_frontend']['host']}:#{Rails.configuration.elicit['participant_frontend']['port']}/?session_guid=#{session_guid}#Experiment/#{protocol_definition_id}"
 
       session_params = {
-          :user_id => 0,#current_user.id,
+          :user_id => current_user.id,
           :session_guid => session_guid,
           :url => @url,
           :expires_at => Date.today + 1.day,
@@ -31,7 +31,7 @@
       }
       session = Chaos::ChaosSession.new(session_params)
 
-      Rails.logger.info "Taking session #{session.ai}"
+      Rails.logger.info "Taking session #{session.ai} #{session.valid?}"
 
       if session.save
         respond_with do |format|
@@ -39,6 +39,7 @@
           format.json { render :json => session.to_json }
         end
       else
+        Rails.logger.error "Failed to validate session on save: #{session.errors.full_messages}"
         render json: ElicitError.new("Failed to create session", :unprocessable_entity), status: :unprocessable_entity
       end
     end
