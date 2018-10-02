@@ -28,6 +28,14 @@ Ruby on Rails Web API for Cockpit experiments.
 export $(grep -v '^#' .env-local | xargs)
 ```
 
+OR
+
+```bash
+ln -s .env-local .env
+```
+
+(`.env` will automatically be picked up by `docker-compose`)
+
 ### 2. Build Docker
 
 ```bash
@@ -37,7 +45,7 @@ docker-compose build
 ### 2. Run Docker
 
 ```bash
-docker-compose build
+docker-compose up -d
 ```
 
 

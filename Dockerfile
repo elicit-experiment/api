@@ -1,5 +1,5 @@
 # Base image:
-FROM ruby:2.3.4
+FROM ruby:2.5.1
 
 ARG SITE_SUFFIX
  
