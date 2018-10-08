@@ -1,5 +1,5 @@
 frontend/
-revproxy/
+docker/
 notes/
 doc/
 ./Gemfile.lock

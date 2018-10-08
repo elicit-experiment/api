@@ -87,3 +87,6 @@ curl "https://dev-api.cosound.dk/v6/Question/Get?id=${guid}&index=${i}&format=js
 ```
 bundle exec erd
 ```
+
+
+DISABLE_DATABASE_ENVIRONMENT_CHECK=1 RAILS_ENV=production ./redb.sh

@@ -1,0 +1,4 @@
+[submodule "docker/experiment-frontend"]
+	path = docker/experiment-frontend
+	url = https://lab.compute.dtu.dk/elicit/experiment-frontend.git
+	branch = feature/new_components
