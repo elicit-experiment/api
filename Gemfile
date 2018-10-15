@@ -47,7 +47,7 @@ gem 'rspec-rails'
 gem 'apivore'
 
 # authentication
-gem 'devise', '~> 4.3.0'
+gem 'devise', '~> 4.4.0'
 gem 'doorkeeper'
 gem 'devise-doorkeeper'
 
