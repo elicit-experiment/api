@@ -66,6 +66,8 @@ GEM
       i18n
       rake (>= 10.0.0)
       sshkit (>= 1.9.0)
+    capistrano-git-with-submodules (2.0.3)
+      capistrano (~> 3.7)
     carrierwave (1.2.3)
       activemodel (>= 4.0.0)
       activesupport (>= 4.0.0)
@@ -274,6 +276,7 @@ DEPENDENCIES
   awesome_print
   byebug
   capistrano (~> 3.11)
+  capistrano-git-with-submodules (~> 2.0)
   carrierwave
   carrierwave-base64
   devise (~> 4.3.0)

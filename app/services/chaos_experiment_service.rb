@@ -124,7 +124,7 @@ class ChaosExperimentService
   end
 
   def make_slide(trial_no = 0, protocol_user_id = nil)
-    trial_for_slide_index(trial_no)
+    @trial_definition = trial_for_slide_index(trial_no)
 
     phase = @phases.first
 
@@ -146,13 +146,25 @@ class ChaosExperimentService
           outputs = JSON.parse(state.value)
         end
       end
-      ap JSON.parse(c.definition_data)
+
+      component_data = JSON.parse(c.definition_data)
+
+      type = 'NewComponent'
+      Rails.logger.info @trial_definition.definition_data
+      begin
+        trial_data = JSON.parse(@trial_definition.definition_data)
+        type = (trial_data['type']) if trial_data.has_key? 'type'
+      rescue JSON::ParserError => pe
+        Rails.logger.info @trial_definition.definition_data
+        Rails.logger.error pe.ai
+      end
+
       chaos_component = {
-          'Type': 'NewComponent',
+          'Type': type,
           'Id':"#{@study_definition.id}:#{c.id}",
           'Fullname':  "NewComponent, 1.0.0".freeze,
           'UserAnswer': nil,
-          'Component': JSON.parse(c.definition_data)
+          'Component': component_data
       }
 
       chaos_component

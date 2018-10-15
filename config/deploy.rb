@@ -45,7 +45,10 @@ desc 'Build Docker images'
 task :build do
   # build the actual docker image, tagging the push for the remote repo
   on roles(:app) do
-    system "docker-compose build"
+    within release_path do
+      execute "ln -s #{release_path}'/.env-prod cd '#{release_path}'/.env"
+      execute "cd '#{release_path}' && docker-compose build"
+    end
   end
 end
 
@@ -62,6 +65,9 @@ end
 namespace :deploy do
   task :restart do
     on roles(:app) do
+      execute "ln -s '#{release_path}/.env-prod' '#{release_path}/.env'"
+      execute "cd '#{release_path}' && docker-compose build"
+
       # in case the app isn't running on the other end
       execute "docker-compose down ; true"
 
