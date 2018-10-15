@@ -21,7 +21,7 @@ services:
   app-frontend:
     container_name: frontend
     build:
-        context: ../experiment-frontend
+        context: docker/experiment-frontend
         args:
           - API_URL=${API_URL}
           - API_SCHEME=${API_SCHEME}
@@ -32,7 +32,7 @@ services:
   web:
     container_name: web
     build:
-        context: revproxy
+        context: docker/revproxy
         args:
           - SITE_SUFFIX=${SITE_SUFFIX}
     volumes:
