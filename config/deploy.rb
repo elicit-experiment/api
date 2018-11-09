@@ -69,10 +69,10 @@ namespace :deploy do
       execute "cd '#{release_path}' && docker-compose build"
 
       # in case the app isn't running on the other end
-      execute "docker-compose down ; true"
+      execute "cd '#{release_path}' && docker-compose down ; true"
 
       # modify this to suit how you want to run your app
-      execute "docker-compose up -d ; true"
+      execute "cd '#{release_path}' && docker-compose up -d ; true"
     end
   end
 end

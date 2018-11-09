@@ -13,7 +13,6 @@ log/
 certs/
 db/*.sqlite3
 *.taskpaper
-testApp_*
 node_modules/
 vendor/assets/components/
 public/assets/
