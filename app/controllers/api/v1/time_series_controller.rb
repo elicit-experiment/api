@@ -24,22 +24,33 @@ module Api::V1
 
       time_series = get_resource
 
-      parser_class_name = Rails.configuration.time_series_schema[time_series.schema]['plugin_class']
-
-      parser_class = parser_class_name.classify.constantize
-
-      parser = parser_class.new(time_series.schema_metadata)
-
       query_params = {
-        :user_name => params[:user_name],
-        :group_name => params[:group_name],
-        :session_name => params[:session_name],
-        :trial_definition_id => params[:trial_definition_id]
+          :user_name => params[:user_name],
+          :group_name => params[:group_name],
+          :session_name => params[:session_name],
+          :trial_definition_id => params[:trial_definition_id]
       }
+
+      if query_params.empty?
+        parser_class_name = Rails.configuration.time_series_schema[time_series.schema]['plugin_class']
+
+        parser_class = parser_class_name.classify.constantize
+
+        parser = parser_class.new(time_series.schema_metadata)
+
+        response_body = parser.query(time_series, query_params)
+      else
+        # TODO: consider send_file here
+        # [Accelerated Rails Downloads with NGINX | mattbrictson.com](https://mattbrictson.com/accelerated-rails-downloads)
+        # file_name = Rails.root.join(time_series.file.path)
+        # send_file(file_name, :type => "text/tab-separated-values")
+
+        response_body = FileIO.open(time_series.file.path, "r")
+      end
 
       respond_to do |format|
         format.tsv do
-          csv_filename='tobii_query.tsv'
+          csv_filename='query.tsv'
           headers["X-Accel-Buffering"] = "no"
           headers["Cache-Control"] = "no-cache"
           headers["Content-Type"] = "text/tab-separated-values; charset=utf-8"
@@ -48,8 +59,7 @@ module Api::V1
               %(attachment; filename="#{csv_filename}")
           headers["Last-Modified"] = Time.zone.now.ctime.to_s
 
-          self.response_body = parser.query(time_series, query_params)
-          return
+          self.response_body = response_body
         end
       end
     end
@@ -57,7 +67,7 @@ module Api::V1
     def index
       plural_resource_name = "@#{resource_name.pluralize}"
 
-      pparams = params.permit([:study_definition_id, :protocol_definition_id, :phase_definition_id, :trial_definition_id])
+      pparams = params.permit([:stage_id, :study_definition_id, :protocol_definition_id, :phase_definition_id, :trial_definition_id])
       where_components = pparams.to_h.keys.select{ |p| (p.to_s.end_with?('_id') && !params[p].nil?) }.map { |p| { p.to_sym => params[p] }  }
 
       where = where_components.reduce(&:merge)
@@ -69,7 +79,7 @@ module Api::V1
                         .per(page_params[:page_size])
       end
       instance_variable_set(plural_resource_name, resources)
-      respond_with instance_variable_get(plural_resource_name), :include => [:user]
+      respond_with instance_variable_get(plural_resource_name)
     end
 
     private

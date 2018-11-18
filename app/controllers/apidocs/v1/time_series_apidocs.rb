@@ -1,7 +1,7 @@
 class Apidocs::V1::TimeSeriesApidocs
   include Swagger::Blocks
 
-  swagger_path '/time_series/time_series' do
+  swagger_path '/study_results/{study_result_id}/time_series' do
     operation :get do
       key :summary, 'All time series'
       key :description, 'Returns all time series from the system to which the user has access'
@@ -19,6 +19,48 @@ class Apidocs::V1::TimeSeriesApidocs
         key :required, true
         key :type, :string
         key :default, 'Bearer PASTE_ACCESS_TOKEN_HERE'
+      end
+      parameter do
+        key :name, :study_result_id
+        key :in, :path
+        key :description, 'Study results id of the experiment results to return'
+        key :required, true
+        key :type, :string
+      end
+      parameter do
+        key :name, :stage_id
+        key :in, :path
+        key :description, 'Stage results id of the experiment results to return'
+        key :required, false
+        key :type, :integer
+      end
+      parameter do
+        key :name, :protocol_user_id
+        key :in, :query
+        key :description, 'Protocol user id for the queries time series'
+        key :required, false
+        key :type, :integer
+      end
+      parameter do
+        key :name, :phase_definition_id
+        key :in, :query
+        key :description, 'Phase definition id for the queries time series'
+        key :required, false
+        key :type, :integer
+      end
+      parameter do
+        key :name, :trial_definition_id
+        key :in, :query
+        key :description, 'Trial definition id for the queries time series'
+        key :required, false
+        key :type, :integer
+      end
+      parameter do
+        key :name, :component_id
+        key :in, :query
+        key :description, 'Component definition id for the queries time series'
+        key :required, false
+        key :type, :integer
       end
       response 200 do
         key :description, 'time_series response'

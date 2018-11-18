@@ -42,18 +42,19 @@ module ChaosApi::V6
       output = JSON.parse(params[:output])
 
       new_datapoints = output["Events"].map do |event|
-        StudyResult::DataPoint.new({
-          :stage_id => @chaos_session.stage.id,
-          :protocol_user_id => @chaos_session.protocol_user_id,
-          :phase_definition_id => @component.phase_definition_id,
-          :trial_definition_id => @component.trial_definition_id,
-          :component_id => @component.id,
-          :point_type => event["Type"],
-          :kind => event["EventId"],
-          :value => event["Data"],
-          :method => event["Method"],
-          :datetime => event["DateTime"]
-          })
+        dp_params = {
+            :stage_id => @chaos_session.stage.id,
+            :protocol_user_id => @chaos_session.protocol_user_id,
+            :phase_definition_id => @component.phase_definition_id,
+            :trial_definition_id => @component.trial_definition_id,
+            :component_id => @component.id,
+            :point_type => event["Type"],
+            :kind => event["EventId"],
+            :value => event["Data"],
+            :method => event["Method"],
+            :datetime => event["DateTime"]
+        }
+        StudyResult::DataPoint.new(dp_params)
       end
 
       StudyResult::DataPoint.transaction { new_datapoints.each(&:save!) }

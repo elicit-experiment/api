@@ -10,6 +10,7 @@ class TobiiParser
   def injest
   end
 
+  # TODO: Ideally this would return an iterator
   def query(time_series, query_params)
     csv_opts = { :headers => true, :col_sep => "\t", :return_headers => true}
 

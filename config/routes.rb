@@ -32,6 +32,8 @@ Rails.application.routes.draw do
         resources :stages, :controller => "stages", defaults: { format: 'json' }, only: [:show, :destroy, :create, :index]
         resources :trial_results, :controller => "trial_results", defaults: { format: 'json' }, only: [:show, :destroy, :create, :index]
         resources :data_points, :controller => "data_points", defaults: { format: 'json' }, only: [:index]
+        resources :time_series, :controller => "time_series", defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index]
+        get 'study_results/time_series/:id/content' => "api/v1/time_series#show_content", only: [:show]
       end
       resources :media_files, defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index]
       resources :study_definitions, defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index] do
@@ -55,9 +57,6 @@ Rails.application.routes.draw do
   scope :api do
     scope :v1 do
       get 'study_definitions/:study_definition_id/protocol_definitions/:protocol_definition_id/preview' => "protocol_preview#take"
-      scope :study_results do
-        resources :time_series, :controller => "api/v1/time_series", defaults: { format: 'json' }, only: [:destroy, :show, :update, :create, :index]
-      end
       get 'study_results/time_series/:id/content' => "api/v1/time_series#show_content", only: [:show]
       scope :study_definitions do
         scope :protocol_definitions do
