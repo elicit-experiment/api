@@ -147,15 +147,19 @@ class ChaosExperimentService
         end
       end
 
-      component_data = JSON.parse(c.definition_data)
+      begin
+        component_data = JSON.parse(c.definition_data)
+      rescue JSON::ParserError => pe
+        Rails.logger.error "Failed to parse component definition data='#{c.definition_data}'"
+        Rails.logger.error pe.ai
+      end
 
       type = 'NewComponent'
-      Rails.logger.info @trial_definition.definition_data
       begin
         trial_data = JSON.parse(@trial_definition.definition_data)
         type = (trial_data['type']) if trial_data.has_key? 'type'
       rescue JSON::ParserError => pe
-        Rails.logger.info @trial_definition.definition_data
+        Rails.logger.error "Failed to parse trial definition data='#{@trial_definition.definition_data}'"
         Rails.logger.error pe.ai
       end
 

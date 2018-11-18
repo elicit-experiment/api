@@ -98,6 +98,14 @@ module Api::V1
       end
     end
 
+    def current_api_user
+      User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token && doorkeeper_token.resource_owner_id
+    end
+
+    def current_api_user_id
+      doorkeeper_token.resource_owner_id if doorkeeper_token
+    end
+
     private
 
     # The singular name for the resource class based on the controller

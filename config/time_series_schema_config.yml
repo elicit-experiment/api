@@ -3,6 +3,9 @@ default: &default
   tobii_tsv:
     plugin_class: TobiiParser
 
+  webgazer_tsv:
+    plugin_class: WebGazerParser
+
 development:
   <<: *default
 

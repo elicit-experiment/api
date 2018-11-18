@@ -1,7 +1,7 @@
 module ChaosApi::V6
   class QuestionController < ApplicationController
     include ActionController::MimeResponds
-    
+
     def show
       trial_index = (params[:index] || "0").to_i
 
@@ -14,12 +14,15 @@ module ChaosApi::V6
 
       if params[:id].to_i != @chaos_session.protocol_definition.id.to_i
         Rails.logger.error("ID parameter doesn't match protocol ID for session. #{params[:id]} != #{@chaos_session.protocol_definition.id}")
-        # TODO: return an error in this case
+        # TODO: return a json error in this case
+        head :unprocessable_entity
+        return
       end
 
       experiment_id = @study_definition.data
 
-      unless @chaos_session.preview
+      unless @chaos_session.preview?
+        logger.info "REAL SESSION"
         @chaos_session.stage.current_trial = trial_index
         @chaos_session.stage.save!
       end
@@ -36,6 +39,7 @@ module ChaosApi::V6
               :phase_definition_id => svc.trial_definition.phase_definition.id,
               :trial_definition_id => svc.trial_definition.id
           }
+          logger.info parms.ai
           trial_result = StudyResult::TrialResult.where(parms).first_or_initialize do |tr|
             tr.started_at = DateTime.now unless tr.started_at
             tr.save!

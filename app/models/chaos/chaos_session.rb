@@ -5,7 +5,7 @@ module Chaos
     belongs_to :protocol_definition, :class_name => "ProtocolDefinition", :foreign_key => "protocol_definition_id"
     belongs_to :protocol_user, :class_name => "ProtocolUser", :foreign_key => "protocol_user_id", optional: true
     belongs_to :phase_definition, :class_name => "PhaseDefinition", :foreign_key => "phase_definition_id"
-    belongs_to :study_result, :class_name => "StudyResult::Studyresult", :foreign_key => "study_result_id", optional: true
+    belongs_to :study_result, :class_name => "StudyResult::StudyResult", :foreign_key => "study_result_id", optional: true
     belongs_to :experiment, :class_name => "StudyResult::Experiment", :foreign_key => "experiment_id", optional: true
     belongs_to :stage, :class_name => "StudyResult::Stage", :foreign_key => "stage_id", optional: true
     belongs_to :trial_result, :class_name => "StudyResult::TrialResult", :foreign_key => "trial_result_id", optional: true
@@ -28,12 +28,13 @@ module Chaos
         # we need to have a real experiment with an ID for later
         e.save!
       end
- 
+
       if !experiment.current_stage
         experiment, stage = next_stage(experiment)
         stage.started_at = DateTime.now
       else
         stage = experiment.current_stage
+        self.phase_definition_id  = stage.phase_definition_id
       end
 
       stage.save! if stage
@@ -114,6 +115,7 @@ module Chaos
         self.phase_definition_id = next_phase.id
         self.save!
       else
+        Rails.logger.info "no next phase!"
         self.stage_id = nil
         experiment.current_stage_id = nil
         experiment.completed_at = DateTime.now

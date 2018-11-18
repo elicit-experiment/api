@@ -3,13 +3,15 @@ module Api::V1
 
     include StudyCreation
 
+    before_action :doorkeeper_authorize! # Requires access token for all actions
+
     def take
       session_guid = SecureRandom.uuid
       study_definition_id = params[:study_definition_id]
       protocol_definition_id = params[:protocol_definition_id]
 
       protocol_user = ProtocolUser.where({
-        :user_id => current_user.id,
+        :user_id => current_api_user_id,
         :protocol_definition_id => protocol_definition_id}).includes(:protocol_definition).first!
 
       unless protocol_user.protocol_definition.active
@@ -17,10 +19,11 @@ module Api::V1
         return
       end
 
+      pfe = Rails.configuration.elicit['participant_frontend']
       session_params = {
-        :user_id => current_user.id,
+        :user_id => current_api_user_id,
         :session_guid => session_guid,
-        :url => "#{Rails.configuration.elicit['participant_frontend']['scheme']}://#{Rails.configuration.elicit['participant_frontend']['host']}:#{Rails.configuration.elicit['participant_frontend']['port']}/?session_guid=#{session_guid}#Experiment/#{protocol_definition_id}",
+        :url => "#{pfe['scheme']}://#{pfe['host']}:#{pfe['port']}/?session_guid=#{session_guid}#Experiment/#{protocol_definition_id}",
         :expires_at => Date.today + 1.day,
         :study_definition_id => study_definition_id,
         :protocol_definition_id => protocol_definition_id,
@@ -35,6 +38,7 @@ module Api::V1
       if session.save
         respond_with session
       else
+        logger.error session.errors.ai
         render json: ElicitError.new("Failed to create session", :unprocessable_entity), status: :unprocessable_entity
       end
     end

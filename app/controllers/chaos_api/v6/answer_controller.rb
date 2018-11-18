@@ -14,6 +14,9 @@ module ChaosApi::V6
       @chaos_session = Chaos::ChaosSession.where({:session_guid => sessionGUID}).first
 
       if @chaos_session.preview
+
+        logger.info params.permit!.ai
+
         respond_to do |format|
           format.xml { render :xml => '' }
           format.json { render :json => @response.to_json }
@@ -30,6 +33,12 @@ module ChaosApi::V6
 
       @study_definition = StudyDefinition.find(study_definition_id)
 
+      if @component.nil? || @study_definition.nil?
+        logger.error "Invalid answer #{params[:questionId]}"
+        head :unprocessable_entity
+        return
+      end
+
       output = JSON.parse(params[:output])
 
       new_datapoints = output["Events"].map do |event|
@@ -44,8 +53,10 @@ module ChaosApi::V6
           :value => event["Data"],
           :method => event["Method"],
           :datetime => event["DateTime"]
-          }).save!
+          })
       end
+
+      StudyResult::DataPoint.transaction { new_datapoints.each(&:save!) }
 
       output.delete("Events")
 

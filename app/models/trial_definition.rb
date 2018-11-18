@@ -6,6 +6,8 @@ class TrialDefinition < ApplicationRecord
   has_many :components, :dependent => :destroy
   has_many :stimuli, :dependent => :destroy
 
+  has_many :data_point, :class_name => "StudyResult::DataPoint", :dependent => :destroy
+
   include Swagger::Blocks
 
   swagger_schema :TrialDefinition do

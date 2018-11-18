@@ -18,6 +18,7 @@ Rails.application.routes.draw do
 		  get 'Answer/Set' => 'chaos_api/v6/answer#create' , :defaults => { :format => 'json' }
 		  get 'Slide/Completed' => 'chaos_api/v6/slide#get' , :defaults => { :format => 'json' }
 		  match 'Answer/Set', to: 'chaos_api/v6/answer#cors_set_access_control_headers', via: :options
+      post 'time_series/:series_type' => 'chaos_api/v6/time_series#create' , :defaults => { :format => 'json' }
 
 		  get "/*" => redirect("/")
 	  end
@@ -26,7 +27,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       get 'participant/eligeable_protocols' => "participant#eligeable_protocols"
-      resources :study_results, :controller => "study_results", defaults: { format: 'json' }, only: [:show, :destroy, :create, :index] do 
+      resources :study_results, :controller => "study_results", defaults: { format: 'json' }, only: [:show, :destroy, :create, :index] do
         resources :experiments, :controller => "experiments", defaults: { format: 'json' }, only: [:show, :destroy, :create, :index]
         resources :stages, :controller => "stages", defaults: { format: 'json' }, only: [:show, :destroy, :create, :index]
         resources :trial_results, :controller => "trial_results", defaults: { format: 'json' }, only: [:show, :destroy, :create, :index]
