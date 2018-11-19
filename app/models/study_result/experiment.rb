@@ -8,6 +8,6 @@ module StudyResult
     belongs_to :current_stage, :class_name => "StudyResult::Stage", :foreign_key => "current_stage_id", optional: true
     belongs_to :study_result, :class_name => "StudyResult::StudyResult", :foreign_key => "study_result_id"
 
-    has_many :stages, :class_name => "StudyResult::Stage", :dependent => :delete_all
+    has_many :stages, :class_name => "StudyResult::Stage", :dependent => :destroy
   end
 end

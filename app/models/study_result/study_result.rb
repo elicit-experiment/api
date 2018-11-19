@@ -7,7 +7,7 @@ module StudyResult
     belongs_to :study_definition, :class_name => "StudyDefinition", :foreign_key => "study_definition_id"
     belongs_to :user, :class_name => "User", :foreign_key => "user_id"
 
-    has_many :experiments, :class_name => "StudyResult::Experiment", :dependent => :delete_all
+    has_many :experiments, :class_name => "StudyResult::Experiment", :dependent => :destroy
 
     include Swagger::Blocks
 

@@ -13,18 +13,6 @@ module ChaosApi::V6
 
       @chaos_session = Chaos::ChaosSession.where({:session_guid => sessionGUID}).first
 
-      if @chaos_session.preview
-
-        logger.info params.permit!.ai
-
-        respond_to do |format|
-          format.xml { render :xml => '' }
-          format.json { render :json => @response.to_json }
-        end
-
-        return
-      end
-
       questionId = params[:questionId].split(':')
       study_definition_id = questionId[0].to_i
       component_definition_id = questionId[1].to_i
@@ -43,7 +31,7 @@ module ChaosApi::V6
 
       new_datapoints = output["Events"].map do |event|
         dp_params = {
-            :stage_id => @chaos_session.stage.id,
+            :stage_id => @chaos_session.stage&.id,
             :protocol_user_id => @chaos_session.protocol_user_id,
             :phase_definition_id => @component.phase_definition_id,
             :trial_definition_id => @component.trial_definition_id,
@@ -57,19 +45,34 @@ module ChaosApi::V6
         StudyResult::DataPoint.new(dp_params)
       end
 
-      StudyResult::DataPoint.transaction { new_datapoints.each(&:save!) }
-
-      output.delete("Events")
-
-      state = StudyResult::DataPoint.where({
-          :stage_id => @chaos_session.stage.id,
+      state_dp_params = {
+          :stage_id => @chaos_session.stage&.id,
           :protocol_user_id => @chaos_session.protocol_user_id,
           :phase_definition_id => @component.phase_definition_id,
           :trial_definition_id => @component.trial_definition_id,
           :component_id => @component.id,
           :point_type => "State"
-        }).first_or_initialize
+      }
 
+      if @chaos_session.preview
+
+        logger.info params.permit!.ai
+        logger.info new_datapoints.ai
+        logger.info state_dp_params.ai
+
+        respond_to do |format|
+          format.xml { render :xml => '' }
+          format.json { render :json => @response.to_json }
+        end
+
+        return
+      end
+
+      StudyResult::DataPoint.transaction { new_datapoints.each(&:save!) }
+
+      state = StudyResult::DataPoint.where(state_dp_params).first_or_initialize
+
+      output.delete("Events")
       state.value = output.to_json
       state.datetime = DateTime.now
       state.save!

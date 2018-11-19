@@ -18,7 +18,7 @@ module ChaosApi::V6
       @sessionGUID = params[:sessionGUID]
       @response = ChaosResponse.new([])
 
-      inc = [:experiment, :protocol_user, :study_dedatafinition, :phase_definition, :experiment, :stage]
+      inc = [:experiment, :protocol_user, :study_definition, :phase_definition, :experiment, :stage]
       @chaos_session = Chaos::ChaosSession.where({:session_guid => @sessionGUID}).includes(inc).first
 
       if @chaos_session.preview?

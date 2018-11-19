@@ -42,16 +42,14 @@ module ChaosApi::V6
 
       time_series_params = {
           stage_id: @chaos_session.stage_id,
-          study_definition_id: @chaos_session.study_definition_id,
+          study_definition_id: study_definition_id,
           protocol_definition_id: @chaos_session.protocol_definition_id,
-          phase_definition_id: @chaos_session.phase_definition_id,
+          phase_definition_id: phase_definition_id,
           schema: @series_type + '_tsv',
           schema_metadata: nil,
       }
 
-      time_series = StudyResult::TimeSeries.first_or_initialize(time_series_params) do |ts|
-      #  ts.save!
-      end
+      time_series = StudyResult::TimeSeries.where(time_series_params).first_or_initialize
 
       append_text = @data.map do |row|
         WEBGAZER_HEADERS.map{|col| row[col]}.join("\t")
@@ -65,7 +63,12 @@ module ChaosApi::V6
         end
       end
 
-      time_series.save!
+      unless time_series.save
+        logger.info time_series_params.ai
+        logger.info time_series.ai
+        logger.info time_series.errors.full_messages.join("\n")
+      end
+
 
       respond_to do |format|
         format.xml { render :xml => '' }
