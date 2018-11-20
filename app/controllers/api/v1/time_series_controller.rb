@@ -9,6 +9,9 @@ module Api::V1
 
     respond_to :tsv, :csv
 
+    SEARCH_FIELDS = %i[stage_id study_definition_id protocol_definition_id
+                      phase_definition_id trial_definition_id]
+
     def query_params
       {}
     end
@@ -67,10 +70,8 @@ module Api::V1
     def index
       plural_resource_name = "@#{resource_name.pluralize}"
 
-      pparams = params.permit([:stage_id, :study_definition_id, :protocol_definition_id, :phase_definition_id, :trial_definition_id])
-      where_components = pparams.to_h.keys.select{ |p| (p.to_s.end_with?('_id') && !params[p].nil?) }.map { |p| { p.to_sym => params[p] }  }
-
-      where = where_components.reduce(&:merge)
+      where = search_params
+      logger.info "Search for time series with #{where.ai}"
 
       resources = StudyResult::TimeSeries.where(where)
 
@@ -83,6 +84,18 @@ module Api::V1
     end
 
     private
+
+    def search_params
+      permitted_params = params.permit(SEARCH_FIELDS)
+      logger.info "perm param #{permitted_params.to_h.ai}"
+      permitted_params.to_h.keys.reject do |p|
+        params[p].blank?
+      end.select do |p|
+        p.to_s.ends_with?('_id')
+      end.map do |p|
+        {p.to_sym => params[p]}
+      end.reduce(&:merge)
+    end
 
     def time_series_params
       params.permit!

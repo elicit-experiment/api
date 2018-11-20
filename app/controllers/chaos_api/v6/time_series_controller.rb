@@ -1,5 +1,3 @@
-require 'FileUtils'
-
 class FileIO < StringIO
   def initialize(stream, filename)
     super(stream)

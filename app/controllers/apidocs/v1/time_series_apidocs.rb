@@ -29,7 +29,7 @@ class Apidocs::V1::TimeSeriesApidocs
       end
       parameter do
         key :name, :stage_id
-        key :in, :path
+        key :in, :query
         key :description, 'Stage results id of the experiment results to return'
         key :required, false
         key :type, :integer
