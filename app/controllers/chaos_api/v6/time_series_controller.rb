@@ -57,25 +57,39 @@ module ChaosApi::V6
 
       if !time_series.file.file
         time_series.file = FileIO.new(WEBGAZER_HEADERS.map(&:to_s).join("\t") + "\n" + append_text + "\n", 'webgazer.tsv')
+        logger.info "Creating initial time series with #{@data.length} rows to #{time_series.file.path}"
       else
         open(time_series.file.path, 'a') do |f|
           f.puts append_text
         end
+        logger.info "Wrote #{@data.length} rows to #{time_series.file.path}"
       end
 
       unless time_series.save
-        logger.info time_series_params.ai
-        logger.info time_series.ai
-        logger.info time_series.errors.full_messages.join("\n")
+        logger.error 'time series failed to save!'
+        logger.error time_series_params.ai
+        logger.error time_series.ai
+        logger.error time_series.errors.full_messages.join("\n")
       end
 
+      logger.info "Saved time series #{time_series.id}"
+
       respond_to do |format|
-        format.xml { render :xml => '' }
-        format.json { render :json => @response.to_json }
+        format.xml { render :xml => '', status: :created }
+        format.json { render :json => @response.to_json, status: :created }
       end
     end
 
     private
+
+    def respond_error(msg, status = :unprocessable_entity)
+      @response = ChaosResponse.new([], msg)
+      respond_to do |format|
+        format.xml { render :xml => @response.to_xml, status: status }
+        format.json { render :json => @response.to_json, status: status }
+      end
+    end
+
 
     def post_params
       #validate POST parameters
