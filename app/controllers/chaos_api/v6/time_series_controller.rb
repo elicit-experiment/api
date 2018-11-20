@@ -69,7 +69,6 @@ module ChaosApi::V6
         logger.info time_series.errors.full_messages.join("\n")
       end
 
-
       respond_to do |format|
         format.xml { render :xml => '' }
         format.json { render :json => @response.to_json }

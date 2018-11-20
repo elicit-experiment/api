@@ -1,5 +1,5 @@
 default: &default
-  participant_frontend:   
+  participant_frontend:
     host: localhost
     port: 5504
     scheme: http
@@ -15,7 +15,7 @@ test:
   <<: *default
 
 prod_env: &prod_env
-  participant_frontend:   
+  participant_frontend:
     host: experiment-elicit.<%= ENV['SITE_SUFFIX'] %>
     port: 443
     scheme: https
@@ -26,12 +26,14 @@ prod_env: &prod_env
 
 
 local_env: &local_env
-  participant_frontend:   
-    host: docker.local
-    port: 8080
+  participant_frontend:
+    host: experiment-elicit.docker.local
+    port: 443
+    scheme: https
   elicit_portal:
-    host: docker.local
-    port: 80
+    host: elicit.docker.local
+    port: 443
+    scheme: https
 
 production:
   <<: *prod_env

@@ -1,9 +1,10 @@
 #Rails.application.config.middleware.insert_before 0, Rack::Cors, :debug => true, :logger => (-> { Rails.logger }) do
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   pfe = Rails.configuration.elicit['participant_frontend']
-  url = "#{pfe['host']}:#{pfe['port']}"
+  uri = URI("#{pfe['scheme']}://#{pfe['host']}:#{pfe['port']}")
+  puts "CORS allow origin #{uri.to_s}"
   allow do
-     origins url
+     origins uri.to_s, 'https://elicit-experiment.docker.local'
      resource '*',
       headers: :any,
       expose: %w[Origin X-Requested-With Content-Type Accept Authorization],

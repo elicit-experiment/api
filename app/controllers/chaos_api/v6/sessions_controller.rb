@@ -25,10 +25,19 @@ module ChaosApi::V6
     # POST /sessions
     # POST /sessions.json
     def create
-      qp = Rack::Utils.parse_nested_query URI(request.referer).query
-      session_guid = qp['session_guid'] 
-      session_guid_alt = request.cookies['session_guid']
-      Rails.logger.info("#{session_guid} #{session_guid_alt}")
+      # TODO: make this the "get session guid pre-action
+      referrer = request.referer
+      Rails.logger.debug "Referer: #{referrer}"
+      session_guids = {}
+      unless referrer.blank?
+        qp = Rack::Utils.parse_nested_query URI(referrer).query
+        session_guids[:referrer] = qp['session_guid']
+      end
+      session_guids[:cookie] = request.cookies['session_guid']
+      session_guids[:query_param] = params[:sessionGUID]
+      session_guid = session_guids.values.reject(&:blank?).first
+
+      Rails.logger.info("#{session_guids.ai} -> #{session_guid}")
 
       session = Chaos::ChaosSession.where({:session_guid => session_guid}).first
 
