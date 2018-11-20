@@ -2,7 +2,7 @@
 FROM ruby:2.5.1
 
 ARG SITE_SUFFIX
- 
+
 RUN cat /etc/os-release
 
 # Install dependencies
@@ -23,10 +23,10 @@ RUN apt-get install yarn
 # Set an environment variable where the Rails app is installed to inside of Docker image:
 ENV RAILS_ROOT /var/www/Cockpit.API
 RUN mkdir -p $RAILS_ROOT
- 
+
 # Set working directory, where the commands will be ran:
 WORKDIR $RAILS_ROOT
- 
+
 # Gems:
 COPY Gemfile Gemfile
 RUN gem install bundler
@@ -36,10 +36,10 @@ RUN bundle install
 COPY package.json .
 RUN npm install
 RUN node --version
- 
+
 EXPOSE 3000
 
-# Copy only the pieces needed for webpack, since it can take a long time to run this and we don't want 
+# Copy only the pieces needed for webpack, since it can take a long time to run this and we don't want
 # extraneous changes to cause an unecessary rebuild.
 RUN mkdir -p app/javascript
 COPY app/javascript app/javascript
@@ -54,6 +54,7 @@ COPY bin bin
 
 # Copy the main application.
 COPY . .
+RUN mkdir log
 
 # fake DB per https://iprog.com/posting/2013/07/errors-when-precompiling-assets-in-rails-4-0
 RUN RAILS_ENV=production PRECOMPILE=1 DATABASE_URL=postgresql://user:pass@127.0.0.1/dbname bundle exec rake assets:precompile

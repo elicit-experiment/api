@@ -1,3 +1,5 @@
+require 'FileUtils'
+
 class FileIO < StringIO
   def initialize(stream, filename)
     super(stream)
@@ -59,6 +61,12 @@ module ChaosApi::V6
         time_series.file = FileIO.new(WEBGAZER_HEADERS.map(&:to_s).join("\t") + "\n" + append_text + "\n", 'webgazer.tsv')
         logger.info "Creating initial time series with #{@data.length} rows to #{time_series.file.path}"
       else
+        unless File.exists? time_series.file.path
+          logger.warn "Time Series file doesn't exist: #{time_series.file.path}"
+          dir = File.dirname(time_series.file.path)
+          FileUtils.mkdir_p dir
+          File.open(time_series.file.path, 'w') { |file| file.write(WEBGAZER_HEADERS.map(&:to_s).join("\t") + "\n") }
+        end
         open(time_series.file.path, 'a') do |f|
           f.puts append_text
         end

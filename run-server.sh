@@ -5,7 +5,10 @@ SECRET_KEY_BASE=$SECRET_KEY_BASE
 : ${SECRET_KEY_BASE:=`cat ~/secret-key-base.txt`}
 export SECRET_KEY_BASE=$SECRET_KEY_BASE
 
-cp -R public/* /var/www/app/public/
+mv public public_init
+rm -rf /var/www/app/public/assets
+cp -R public_init/* /var/www/app/public/
+ln -s /var/www/app/public/ public
 
 # It's OK that this fails
 RAILS_ENV=production PRECOMPILE=1 bundle exec rake db:setup
