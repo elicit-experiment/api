@@ -1,13 +1,5 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import {Provider, connect} from "react-redux";
-import PropTypes from 'prop-types'
-import {Fade} from '../effects/Fade'
-import InlineEdit from 'react-edit-inline';
-import update from 'react-addons-update'
-import pathToRegexp from 'path-to-regexp'
-import elicitApi from "../../api/elicit-api.js";
-import ParticipantProtocol from "./ParticipantProtocol"
+import React from 'react';
+import ParticipantProtocol from "./ParticipantProtocol";
 
 
 class ParticipantProtocolList extends React.Component {
@@ -19,7 +11,7 @@ class ParticipantProtocolList extends React.Component {
       return (<div><h1>Loading...</h1></div>)
     }
 
-    var protocols = this.props.eligeable_protocols.data.map((protocol_user, i) => {
+    var protocols = this.props.eligeable_protocols.data.map((protocol_user) => {
       return (
           <div className="row col-xs-12" key={protocol_user.protocol_definition.id}>
             <ParticipantProtocol protocol={protocol_user.protocol_definition}
@@ -30,11 +22,11 @@ class ParticipantProtocolList extends React.Component {
             </ParticipantProtocol>
           </div>
       )
-    })
+    });
 
     return (
         <div className="row">
-          <h1 className={"row"}>You are eligeable to take {protocols.length} protocols.</h1>
+          <h1 className={"row"}>You are eligible to take {protocols.length} experiments.</h1>
           {protocols}
         </div>)
   }

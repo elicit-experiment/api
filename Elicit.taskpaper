@@ -1,3 +1,24 @@
+
+Fixes Nov 28:
+- I think on the participant page (https://elicit.compute.dtu.dk/participant), the wording should be ‘you are eligible to participate in x experiments.’ Don’t use protocol here, I think it will confuse.
+- Experiment: #9 — Learning Study Protocol: Take protocol should be renamed to ‘Participate’.
+- The summary text is not aligned.
+- Status: "You already participated in this experiment, and it does not allow any more participations."
+- Prevent users from proceeding without hitting a threshold of calibration
+- In the Webgazer help box that pops up, I think we should remove the close button and only allow people to calibrate.
+- Have you tried to see what happens when people to not have a webcam? Or they don’t allow access, then it fails?
+- The radio button groups wraps text so that it is under the button instead of only under the text field. It is a subtle thing.
+- Have dump results iterate through the participants who provided results to the study.
+- Prevent users from pausing or going back in the video or stopping.
+- Query exmaple: "Give me all eye tracking for each video".
+- Return exact length of video -- timestamp when it stops.
+- Multiple file CSV example.
+- Options the user selected. timestamp x
+
+
+
+
+
 Add About Page:
 - Add About Page @done(2017-12-05)
 
@@ -20,7 +41,6 @@ Physiological Tasks:
 - Add begin/end time to upload
 - Add break to interpreter to python script
 - Add Upload multipart form to Python script
-
 
 Chaos Frontend Bugs:
 - There is another one with the tagging components that don’t seem to work if you set tags that the user should use and then add some as user input. You cannot remove them or add them correctly.

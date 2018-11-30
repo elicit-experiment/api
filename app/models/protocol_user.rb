@@ -5,7 +5,6 @@ class ProtocolUser < ApplicationRecord
 
   has_one :experiment, :class_name => "StudyResult::Experiment", :dependent => :destroy
 
-
   include Swagger::Blocks
 
   swagger_schema :ProtocolUser do

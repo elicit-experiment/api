@@ -1,24 +1,17 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
-import PropTypes from 'prop-types'
-import InlineEdit from 'react-edit-inline'
-import update from 'react-addons-update'
-import { Link } from 'react-router-dom'
-import pathToRegexp from 'path-to-regexp'
-import elicitApi from '../../api/elicit-api.js'
+import React from 'react';
+import ReactDOM from 'react-dom';
+import elicitApi from '../../api/elicit-api.js';
 import { connect } from "react-redux";
-import elicitConfig from '../../ElicitConfig.js'
-import FormattedDate from '../ui_elements/FormattedDate.jsx'
-import { ExperimentDetails } from "./ExperimentDetails.jsx"
+import { ExperimentDetails } from "./ExperimentDetails.jsx";
 
 const TakeProtocolLink = (props) => {
   return (
-      <button onClick={ (e) => {
+      <button onClick={ () => {
         props.take_protocol({study_definition_id: props.study_id, protocol_definition_id: props.protocol_id }) } } className="active btn btn-primary">
-          Take Protocol
+          Participate
       </button>
   )
-}
+};
 
 let Modal = React.createClass({
     componentDidMount() {
@@ -69,7 +62,7 @@ class ParticipantProtocol extends React.Component {
   }
 
   render() {
-    var take_protocol = ""
+    var take_protocol = "";
     if (!this.props.experiment || !this.props.experiment.completed_at) {
       take_protocol = <TakeProtocolLink study_id={this.props.study.id} protocol_id={this.props.protocol.id} take_protocol={this.props.take_protocol}/>
     }
@@ -117,7 +110,7 @@ class ParticipantProtocol extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (/*state*/) => ({
 });
 const mapDispatchToProps = (dispatch) => ({
     take_protocol: (s) => { dispatch(elicitApi.actions.take_protocol(s)) }

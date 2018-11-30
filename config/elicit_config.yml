@@ -36,4 +36,4 @@ local_env: &local_env
     scheme: https
 
 production:
-  <<: *prod_env
+  <<: *local_env
