@@ -38,8 +38,8 @@ class EditStudy extends React.Component {
       const newData = update(this.props.study, {
         title: {$set: data.title},
       });
-      StudyStore.updateItem(newData)
-      this.setState({...data})
+      StudyStore.updateItem(newData);
+      this.setState({...data});
   }
 
   validateTitle(text) {

@@ -11,8 +11,8 @@ class ProtocolPreviewContainer extends React.Component {
     }
   }
   render() {
-    let protocol = this.props.protocol_definition.data[0]
-    console.log(`Rendering protocol ${this.state.protocol_id} with ${protocol}`)
+    let protocol = this.props.protocol_definition.data[0];
+    console.log(`Rendering protocol ${this.state.protocol_id} with ${protocol}`);
     if (protocol && (protocol.id == this.state.protocol_id)) {
       const protocol_info = <ProtocolPreview protocol={protocol} match={this.props.match}></ProtocolPreview>
       return (
@@ -24,10 +24,6 @@ class ProtocolPreviewContainer extends React.Component {
 
     }
     return <div>Loading Protocol {this.state.protocol_id} information</div>
-  }
-
-  componentWillReceiveProps(nextProps) {
-
   }
 
   ensureProtocolDefinitionLoaded() {

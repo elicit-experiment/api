@@ -1,45 +1,43 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 
-var Dropdown = React.createClass({
-
-    propTypes: {
-        id: React.PropTypes.string.isRequired,
-        options: React.PropTypes.array.isRequired,
-        value: React.PropTypes.oneOfType(
+export default class DropDown extends React.Component {
+   static propTypes = {
+        id: PropTypes.string.isRequired,
+        options: PropTypes.array.isRequired,
+        value: PropTypes.oneOfType(
             [
-                React.PropTypes.number,
-                React.PropTypes.string
+                PropTypes.number,
+                PropTypes.string
             ]
         ),
-        valueField: React.PropTypes.string,
-        labelField: React.PropTypes.string,
-        onChange: React.PropTypes.func
-    },
+        valueField: PropTypes.string,
+        labelField: PropTypes.string,
+        onChange: PropTypes.func
+    };
 
-    getDefaultProps: function() {
+    getDefaultProps() {
         return {
             value: null,
             valueField: 'value',
             labelField: 'label',
             onChange: null
         };
-    },
+    }
 
-    getInitialState: function() {
+    getInitialState() {
         var selected = this.getSelectedFromProps(this.props);
         return {
             selected: selected
         }
-    },
+    }
     
-    componentWillReceiveProps: function(nextProps) {
+    componentWillReceiveProps(nextProps) {
         var selected = this.getSelectedFromProps(nextProps);
         this.setState({
            selected: selected
         });
-    },
+    }
     
     getSelectedFromProps(props) {
         var selected;
@@ -49,9 +47,9 @@ var Dropdown = React.createClass({
             selected = props.value;
         }
         return selected;
-    },
+    }
 
-    render: function() {
+    render() {
         var self = this;
         var options = self.props.options.map(function(option) {
             return (
@@ -68,19 +66,17 @@ var Dropdown = React.createClass({
                 {options}
             </select>
         )
-    },
+    }
 
-    handleChange: function(e) {
+    handleChange(e) {
         if (this.props.onChange) {
             var change = {
               oldValue: this.state.selected,
               newValue: e.target.value
-            }
+            };
             this.props.onChange(change);
         }
         this.setState({selected: e.target.value});
     }
 
-});
-
-export default Dropdown;
+};

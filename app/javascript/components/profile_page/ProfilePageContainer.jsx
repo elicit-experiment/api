@@ -1,6 +1,5 @@
 //Import React and Dependencies
 import React from 'react'
-import ReactDOM from 'react-dom'
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom'
 
@@ -14,6 +13,8 @@ import { tokenStatus } from '../../reducers/selector';
 
 // Import API
 import elicitApi from "../../api/elicit-api.js";
+import PropTypes from "prop-types";
+import { MatchType, RequestShapeType, CurrentUserType, UserTokenType } from "types";
 
 class ProfilePageContainer extends React.Component {
   constructor(props){
@@ -63,19 +64,27 @@ class ProfilePageContainer extends React.Component {
   componentWillMount() {
     if (!this.props.current_user.sync) {
       this.setState({ loading_user: true });
-      this.props.syncCurrentUser()
-      console.log("No current user!")
-      this.userLoadingTimeout = window.setTimeout(this.timeoutLoading, 5000)
+      this.props.syncCurrentUser();
+      console.log("No current user!");
+      this.userLoadingTimeout = window.setTimeout(this.timeoutLoading, 5000);
     }
   }
 
   componentWillUnmount() {
     if (this.userLoadingTimeout) {
-      this.userLoadingTimeout = window.clearTimeout(this.userLoadingTimeout)
-      this.userLoadingTimeout = undefined
+      this.userLoadingTimeout = window.clearTimeout(this.userLoadingTimeout);
+      this.userLoadingTimeout = undefined;
     }
   }
 }
+
+ProfilePageContainer.propTypes = {
+	current_user: CurrentUserType,
+	tokenStatus: PropTypes.string.isRequired,
+	userToken: UserTokenType,
+	syncCurrentUser: PropTypes.func.isRequired,
+};
+
 
 const mapStateToProps = (state) => ({
   current_user: state.current_user,
@@ -87,5 +96,5 @@ const mapDispatchToProps = (dispatch) => ({
   syncCurrentUser: () => dispatch(elicitApi.actions.current_user.sync())
 });
 
-const ConnectedProfilePageContainer = connect(mapStateToProps, mapDispatchToProps)(ProfilePageContainer)
+const ConnectedProfilePageContainer = connect(mapStateToProps, mapDispatchToProps)(ProfilePageContainer);
 export default ConnectedProfilePageContainer;

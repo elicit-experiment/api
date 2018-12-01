@@ -10,16 +10,16 @@
 import jquery from 'jquery'
 
 // madness: https://stackoverflow.com/questions/40288268/using-jquery-and-bootstrap-with-es6-import-for-react-app
-window.$ = jquery
-window.jQuery = jquery
-window.jquery = jquery
+window.$ = jquery;
+window.jQuery = jquery;
+window.jquery = jquery;
 
 import 'bootstrap/dist/css/bootstrap'
 //let Boostrap = require('bootstrap/dist/js/bootstrap')
-let Bootstrap = require('bootstrap')
+let Bootstrap = require('bootstrap');
 
 import './main.scss'
 
-import Loader from './Loader'
+import Loader from '../Loader'
 
 document.addEventListener("DOMContentLoaded", Loader);

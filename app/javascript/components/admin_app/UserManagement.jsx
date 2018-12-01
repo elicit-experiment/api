@@ -1,16 +1,15 @@
-import React from 'react'
-import ReactDataGrid from 'react-data-grid'
-const { Editors, Toolbar, Formatters } = require('react-data-grid-addons');
-const { AutoComplete: AutoCompleteEditor, DropDownEditor } = Editors;
-const { ImageFormatter } = Formatters;
-import UserConstants from '../../constants/UserConstants'
-import update from 'react-addons-update'
+import React from 'react';
+import ReactDataGrid from 'react-data-grid';
+const { Editors, Toolbar } = require('react-data-grid-addons');
+const { DropDownEditor } = Editors;
+import UserConstants from '../../constants/UserConstants';
+import update from 'react-addons-update';
 
 class UserList extends React.Component {
   constructor(props) {
-    super(props)
-    this.rows = []
-    this.state = this.props.users || { rows: [] }
+    super(props);
+    this.rows = [];
+    this.state = this.props.users || { rows: [] };
     this._columns = [
       {
         key: 'id',
@@ -65,7 +64,7 @@ class UserList extends React.Component {
     for (let i = fromRow; i <= toRow; i++) {
       let rowToUpdate = rows[i];
       let updatedRow = /* React.addons.*/update(rowToUpdate, {$merge: updated});
-      UserStore.updateItem(updatedRow)
+      UserStore.updateItem(updatedRow);
       rows[i] = updatedRow;
     }
 
@@ -77,7 +76,7 @@ class UserList extends React.Component {
       email: 'test@example.com',
       name: 'New User',
       role: 'registered_user'
-    }
+    };
     UserStore.newItem(newRow);
 
 //    let rows = this.state.rows.slice();
@@ -121,8 +120,8 @@ class UserList extends React.Component {
   }
 
   componentDidMount() {
-    console.dir(this)
-    UserStore.loadItems()
+    console.dir(this);
+    UserStore.loadItems();
     UserStore.on('change', this.handleChangedEvent.bind(this), this);
   }
 
@@ -136,6 +135,6 @@ const UserManagement = () => (
   <div>
     <UserList users={ {rows: UserStore.getList().list } } ></UserList>
   </div>
-)
+);
 
 export default UserManagement

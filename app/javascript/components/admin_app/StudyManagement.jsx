@@ -1,14 +1,13 @@
 import React from 'react'
 import StudyList from './StudyList'
 import { connect } from "react-redux"
-import {tokenStatus} from "../../reducers/selector";
 import elicitApi from "../../api/elicit-api";
 
 const StudyManagement = (props) => (
   <div>
     <StudyList {...props} />
   </div>
-)
+);
 
 const mapStateToProps = (state) => ({
   studies: state.studies,

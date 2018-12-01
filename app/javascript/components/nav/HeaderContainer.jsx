@@ -26,7 +26,7 @@ class HeaderContainer extends React.Component {
 }
 
 const mapStateToProps = (state) => ( {
-  current_user: currentUser(state),
+  current_user: currentUser(state)
 })
 
 const mapDispatchToProps = (dispatch) => ({

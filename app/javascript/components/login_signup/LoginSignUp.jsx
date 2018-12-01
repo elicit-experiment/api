@@ -13,7 +13,7 @@ class LogInSignUp extends React.Component {
       email: "",
       username: "",
       password: "",
-      passwordConfirmation: "",
+      passwordConfirmation: ""
     };
   }
 

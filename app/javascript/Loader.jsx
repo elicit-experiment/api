@@ -33,7 +33,7 @@ const preloadedStore = {
   tokens: {
     clientToken: getToken('clientToken'),
     userToken: getToken('userToken')
-  },
+  }
 }
 
 const store = configureStore(preloadedStore);

@@ -18,7 +18,7 @@ import elicitApi from "../api/elicit-api";
 import TokensReducer from './tokens_reducer';
 
 const reducers = _.extend({
-  tokens: TokensReducer,
+  tokens: TokensReducer
 }, elicitApi.reducers)
 
 //Combine Reducers

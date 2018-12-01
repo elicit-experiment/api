@@ -3,31 +3,31 @@ import React from 'react';
 import { Route, IndexRoute, Redirect, Switch } from 'react-router-dom';
 import { BrowserRouter } from 'react-router-dom'
 import { withRouter } from 'react-router-dom';
-import history from './history.js'
+import history from './packs/history.js'
 import { connect } from 'react-redux';
 import { Provider } from 'react-redux';
 
 // Import Components
-import { AdminApp } from './components/admin_app/AdminApp'
-import { ParticipantApp } from './components/participant_app/ParticipantApp'
-import LoginSignUpContainer from './components/login_signup/LoginSignUpContainer.jsx'
-import AboutPageContainer from './components/about_page/AboutPageContainer.jsx'
-import FrontPageContainer from './components/front_page/FrontPageContainer.jsx'
-import ProfilePageContainer from './components/profile_page/ProfilePageContainer.jsx'
+import { AdminApp } from './components/admin_app/AdminApp';
+import { ParticipantApp } from './components/participant_app/ParticipantApp';
+import LoginSignUpContainer from './components/login_signup/LoginSignUpContainer.jsx';
+import AboutPageContainer from './components/about_page/AboutPageContainer.jsx';
+import FrontPageContainer from './components/front_page/FrontPageContainer.jsx';
+import ProfilePageContainer from './components/profile_page/ProfilePageContainer.jsx';
 
 // Import Actions
-import { requestClientToken, receiveClientToken, receiveUserToken } from './actions/tokens_actions';
+import { requestClientToken } from './actions/tokens_actions';
 
 // Import Selectors
-import { clientToken, userToken, currentUser } from './reducers/selector';
+import { clientToken, userToken } from './reducers/selector';
 
-import { logoutUser } from "./actions/tokens_actions"
+import { logoutUser } from "./actions/tokens_actions";
 
 export const tokenStatus = (clientToken, userToken, requestClientToken) => {
-  var token_status = 'none'
+  let token_status = 'none';
 
   if (!clientToken || !clientToken.access_token) {
-    console.log("no client token")
+    console.log("no client token");
     if (typeof requestClientToken === 'function') {
       requestClientToken()
     }
@@ -41,13 +41,13 @@ export const tokenStatus = (clientToken, userToken, requestClientToken) => {
     token_status = 'user'
   }
   return token_status
-}
+};
 
 //Define Root Component and Router
 const RawRootRoutes = (props) => {
   let token_status = tokenStatus(props.clientToken, props.userToken, props.requestClientToken)
 
-  console.dir(`ROOT RERENDERING ${token_status}`)
+  console.dir(`ROOT RERENDERING ${token_status}`);
   if (token_status) {
     return (
       <Switch>
@@ -62,7 +62,7 @@ const RawRootRoutes = (props) => {
     )
   } else {
     // TODO: have a timeout here
-    return <div>Loading...</div>    
+    return <div>Loading...</div>
   }
 };
 
@@ -70,7 +70,7 @@ const RawRootRoutes = (props) => {
 const mapStateToProps = (state) => ( {
   clientToken: clientToken(state),
   userToken: userToken(state),
-})
+});
 
 const mapDispatchToProps = (dispatch) => ({
   requestClientToken: () => dispatch(requestClientToken( () => { } )),

@@ -21,6 +21,8 @@
         "plugin:react/recommended"
     ],
     "rules": {
+        "comma-dangle": 2,
+        "no-console": 0
     },
   "globals": {
     "$": false,

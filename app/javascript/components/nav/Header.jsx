@@ -1,24 +1,17 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import {Switch, Route, BrowserRouter} from 'react-router-dom'
 import {Link} from 'react-router-dom'
-import {withRouter} from 'react-router'
-import pathToRegexp from 'path-to-regexp'
-import {Provider, connect} from "react-redux";
-import elicitApi from "../../api/elicit-api.js";
-
 import PropTypes from 'prop-types';
 
 class Header extends React.Component {
   render() {
-    var admin = ""
+    var admin = "";
 
     if (this.props.current_user_role == 'admin') {
       admin = <li><Link to='/admin'>Admin</Link></li>
     }
 
-    var loginLogout = ""
-    var userName = ""
+    var loginLogout = "";
+    var userName = "";
 
     if (this.props.current_user_role === undefined) {
       loginLogout = <li><a href="/login">Login</a></li>
@@ -63,9 +56,9 @@ class Header extends React.Component {
 }
 
 Header.propTypes = {
-  current_user_role: React.PropTypes.string,
-  current_user_email: React.PropTypes.string,
-  logoutUser: React.PropTypes.func.isRequired
+  current_user_role: PropTypes.string,
+  current_user_email:PropTypes.string,
+  logoutUser: PropTypes.func.isRequired
 };
 
 Header.defaultProps = {
