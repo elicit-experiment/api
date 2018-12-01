@@ -5,6 +5,7 @@ default: &default
   source_entry_path: packs
   public_output_path: packs
 
+  entry: a
   extensions:
     - .coffee
     - .erb

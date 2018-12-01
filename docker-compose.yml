@@ -14,7 +14,7 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - SITE_SUFFIX=${SITE_SUFFIX}
     volumes:
-      - /var/www/app/public:/var/www/app/public
+      - app_public:/var/www/app/public
     expose:
       - "3000"
 
@@ -27,7 +27,7 @@ services:
           - API_SCHEME=${API_SCHEME}
           - ELICIT_LANDING_URL=${ELICIT_URL}\/participant
     volumes:
-      - /var/www/frontend/public:/var/www/frontend/public
+      - 'fe_public:/var/www/frontend/public'
 
   web:
     container_name: web
@@ -36,8 +36,8 @@ services:
         args:
           - SITE_SUFFIX=${SITE_SUFFIX}
     volumes:
-      - /var/www/app/public:/var/www/app/public
-      - /var/www/frontend/public:/var/www/frontend/public
+      - 'app_public:/var/www/app/public'
+      - 'fe_public:/var/www/frontend/public'
       - ./certs:/certs
     links:
       - app-api
@@ -83,3 +83,5 @@ volumes:
   redis:
   postgres:
   certs:
+  fe_public:
+  app_public:

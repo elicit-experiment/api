@@ -3,6 +3,7 @@ module Chaos
     belongs_to :user, :class_name => "User", :foreign_key => "user_id"
     belongs_to :study_definition, :class_name => "StudyDefinition", :foreign_key => "study_definition_id"
     belongs_to :protocol_definition, :class_name => "ProtocolDefinition", :foreign_key => "protocol_definition_id"
+    belongs_to :phase_definition, :class_name => "PhaseDefinition", :foreign_key => "phase_definition_id"
     belongs_to :protocol_user, :class_name => "ProtocolUser", :foreign_key => "protocol_user_id", optional: true
     belongs_to :phase_definition, :class_name => "PhaseDefinition", :foreign_key => "phase_definition_id"
     belongs_to :study_result, :class_name => "StudyResult::StudyResult", :foreign_key => "study_result_id", optional: true

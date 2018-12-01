@@ -3,7 +3,6 @@ module Api::V1
     before_action :doorkeeper_authorize! # Requires access token for all actions
 
     def eligeable_protocols
-      Rails.logger.info current_api_user.ai
       protocol_users = ProtocolUser.joins(:protocol_definition)
                                    .merge(ProtocolDefinition.where(:active => true))
                                    .left_outer_joins(:experiment)
