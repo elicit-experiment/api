@@ -9,8 +9,8 @@ import pathToRegexp from 'path-to-regexp'
 import { Provider, connect } from "react-redux";
 
 // Import Containers
-import HeaderContainer from "../nav/HeaderContainer"
-import FooterContainer from "../nav/FooterContainer"
+import HeaderContainer from "../nav/HeaderContainer";
+import FooterContainer from "../nav/FooterContainer";
 
 // Import Selectors
 import { tokenStatus } from '../../reducers/selector';
@@ -26,7 +26,7 @@ class ParticipantApp extends React.Component {
 
     if (!this.props.current_user.sync) {
       if (!this.props.current_user.loading) {
-        console.log("No current user!")
+        console.log("No current user!");
         window.setTimeout(this.props.loadCurrentUser, 50)
       }
       return <div>Loading...</div>

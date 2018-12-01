@@ -85,21 +85,13 @@ class ChaosExperimentService
   end
 
   def trial_for_slide_index(trial_no = 0)
-    @phases = PhaseDefinition.where({:study_definition_id => @study_definition.id,
-                                     :protocol_definition_id => @protocol_definition.id}).order(:id).entries
-    @phase_order = PhaseOrder.where({:study_definition_id => @study_definition.id,
-                                     :protocol_definition_id => @protocol_definition.id}).entries
+    trial_query = {:study_definition_id => @study_definition.id,
+                   :protocol_definition_id => @protocol_definition.id,
+                   :phase_definition_id => @phase_definition.id}
+    @trials = TrialDefinition.where(trial_query).order(:id).entries
 
-    # TODO: Figure out how to integrate phase orders into the Chaos frontend
-    @phase = @phases.first
-
-    @trials = TrialDefinition.where({:study_definition_id => @study_definition.id,
-                                     :protocol_definition_id => @protocol_definition.id,
-                                     :phase_definition_id => @phase.id}).order(:id).entries
-
-    @trial_order = TrialOrder.where({:study_definition_id => @study_definition.id,
-                                     :protocol_definition_id => @protocol_definition.id,
-                                     :phase_definition_id => @phase.id}).entries
+    # TODO: this should depend on user, no?
+    @trial_order = TrialOrder.where(trial_query).entries
 
     if @trial_order.empty?
       @trial_sequence = TrialOrder.default_sequence(@trials)
@@ -107,12 +99,8 @@ class ChaosExperimentService
       @trial_sequence = @trial_order.first.sequence_data.split(',').map(&:to_i)
     end
 
-    @components = Component.where({:study_definition_id => @study_definition.id,
-                                   :protocol_definition_id => @protocol_definition.id,
-                                   :phase_definition_id => @phase.id}).order(:id).entries
-    @stimuli = Stimulus.where({:study_definition_id => @study_definition.id,
-                               :protocol_definition_id => @protocol_definition.id,
-                               :phase_definition_id => @phase.id}).order(:id).entries
+    @components = Component.where(trial_query).order(:id).entries
+    @stimuli = Stimulus.where(trial_query).order(:id).entries
 
     @trial_definition = @trials.detect{ |trial| trial.id == @trial_sequence[trial_no] }
 
@@ -126,7 +114,7 @@ class ChaosExperimentService
   def make_slide(trial_no = 0, protocol_user_id = nil)
     @trial_definition = trial_for_slide_index(trial_no)
 
-    phase = @phases.first
+    phase = @phase_definition
 
     chaos_trial = @components.select{|c| (c.phase_definition_id == phase.id) and (c.trial_definition_id == @trial_definition.id) }.map do |c|
       outputs = {}

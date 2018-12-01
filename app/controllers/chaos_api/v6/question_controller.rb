@@ -10,7 +10,10 @@ module ChaosApi::V6
       @chaos_session = Chaos::ChaosSession.where({:session_guid => sessionGUID}).first
 
       @study_definition = @chaos_session.study_definition
+      @phase_definition = @chaos_session.phase_definition
       @protocol_definition = ProtocolDefinition.find(params[:id])
+
+      Rails.logger.info "LOG phase: #{@phase_definition.ai}"
 
       if params[:id].to_i != @chaos_session.protocol_definition.id.to_i
         Rails.logger.error("ID parameter doesn't match protocol ID for session. #{params[:id]} != #{@chaos_session.protocol_definition.id}")
@@ -28,16 +31,21 @@ module ChaosApi::V6
       end
 
       svc = ChaosExperimentService.new(@study_definition,
-                                       @protocol_definition)
+                                       @protocol_definition,
+                                       @phase_definition)
       @response = svc.make_slide(trial_index)
 
       unless @chaos_session.preview?
-        if svc.trial_definition
+        trial_definition = svc.trial_definition
+        if trial_definition
+          if (@chaos_session.phase_definition_id != trial_definition.phase_definition.id)
+            Rails.logger.warn "Inconsistent phase definition #{@chaos_session.phase_definition_id} #{trial_definition.phase_definition.id}"
+          end
           parms = {
               :experiment_id => @chaos_session.experiment.id,
               :protocol_user_id => @chaos_session.protocol_user_id,
-              :phase_definition_id => svc.trial_definition.phase_definition.id,
-              :trial_definition_id => svc.trial_definition.id
+              :phase_definition_id => trial_definition.phase_definition.id,
+              :trial_definition_id => trial_definition.id
           }
           logger.info parms.ai
           trial_result = StudyResult::TrialResult.where(parms).first_or_initialize do |tr|

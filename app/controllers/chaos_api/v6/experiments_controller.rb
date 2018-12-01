@@ -20,22 +20,24 @@ module ChaosApi::V6
       @chaos_session = Chaos::ChaosSession.where({:session_guid => sessionGUID}).includes([:stage,
                                                                                            :study_definition,
                                                                                            :protocol_definition,
+                                                                                           :phase_definition,
                                                                                            {:experiment => :current_stage}]).first
 
+      service = ChaosExperimentService.new(@chaos_session.study_definition,
+                                           @chaos_session.protocol_definition,
+                                           @chaos_session.phase_definition)
+
       if @chaos_session.preview
-        @experiment = ChaosExperimentService.new(@chaos_session.study_definition,
-                                                 @chaos_session.protocol_definition,
-                                                 @chaos_session.phase_definition).make_preview_experiment(@chaos_session.trial_definition_id)
+        @experiment = service.make_preview_experiment(@chaos_session.trial_definition_id)
 
         @results =  [@experiment]
         @response = ChaosResponse.new(@results)
-
       else
         unless @chaos_session.experiment.current_stage
           @response = ChaosResponse.new(@results, "Experiment is already complete")
         else
-          @experiment = ChaosExperimentService.new(@chaos_session.study_definition,
-                                                   @chaos_session.protocol_definition).make_experiment(@chaos_session.experiment)
+          Rails.logger.info "Current experiment: #{@chaos_session.experiment.ai}"
+          @experiment = service.make_experiment(@chaos_session.experiment)
 
           @results =  [@experiment]
           @response = ChaosResponse.new(@results)

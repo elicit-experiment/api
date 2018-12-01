@@ -1,13 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom";
-import PropTypes from "prop-types";
-import InlineEdit from "react-edit-inline";
-import update from "react-addons-update";
-import { Link } from "react-router-dom";
-import pathToRegexp from "path-to-regexp";
-import elicitApi from "../../api/elicit-api.js";
-import { connect } from "react-redux";
-import elicitConfig from "../../ElicitConfig.js";
 import FormattedDate from "../ui_elements/FormattedDate.jsx";
 
 export class ExperimentDetails extends React.Component {
@@ -36,6 +27,9 @@ export class ExperimentDetails extends React.Component {
             <b className="col-xs-2">Status:</b>
             <div className="col-xs-10">
               <div>
+                You already participated in this experiment. Thank you!. (You can't change your answers or take it again).
+              </div>
+              <div>
                 Started on <FormattedDate date={exp.started_at || exp.created_at} />
               </div>
               <div>
@@ -48,7 +42,8 @@ export class ExperimentDetails extends React.Component {
       );
     }
 
-    var current_stage_status = "None";
+    console.dir(exp);
+    let current_stage_status = "None";
     if (exp.current_stage) {
       current_stage_status = (
         <div>
@@ -56,7 +51,7 @@ export class ExperimentDetails extends React.Component {
             Started on <FormattedDate date={exp.current_stage.started_at || exp.current_stage.created_at} />
           </div>
           <div>
-            <p>Completed {exp.current_stage.last_completed_trial == undefined ? 0 : 1} / {exp.current_stage.num_trials || 0} slides. </p>
+            <p>Completed {exp.current_stage.last_completed_trial === undefined ? 0 : 1} / {exp.current_stage.num_trials || 0} slides. </p>
           </div>
         </div>
       );

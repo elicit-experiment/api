@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import elicitApi from '../../api/elicit-api.js';
 import { connect } from "react-redux";
 import { ExperimentDetails } from "./ExperimentDetails.jsx";
@@ -13,12 +14,13 @@ const TakeProtocolLink = (props) => {
   )
 };
 
-let Modal = React.createClass({
-    componentDidMount() {
+class Modal extends React.Component {
+   componentDidMount() {
       const element = ReactDOM.findDOMNode(this);
       $(element).modal('show');
       $(element).on('hidden.bs.modal', this.props.handleHideModal);
-    },
+    }
+
     render(){
         return (
           <div className="modal fade">
@@ -40,12 +42,12 @@ let Modal = React.createClass({
             </div>
           </div>
         )
-    },
-    propTypes:{
-        handleHideModal: React.PropTypes.func.isRequired
     }
-});
 
+    static propTypes = {
+        handleHideModal: PropTypes.func.isRequired
+    }
+};
 
 class ParticipantProtocol extends React.Component {
   constructor(props){
@@ -88,7 +90,7 @@ class ParticipantProtocol extends React.Component {
             </div>
           </div>
           <div className='row'>
-            <div className='col-xs-offset-1 col-xs-10 protocol-description-text'>
+            <div className='col-xs-offset-2 col-xs-10 protocol-description-text'>
               {this.props.protocol.description}
             </div>
           </div>

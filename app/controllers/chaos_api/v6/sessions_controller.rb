@@ -25,7 +25,7 @@ module ChaosApi::V6
     # POST /sessions
     # POST /sessions.json
     def create
-      # TODO: make this the "get session guid pre-action
+      # TODO: make this the "get session guid pre-action"
       referrer = request.referer
       Rails.logger.debug "Referer: #{referrer}"
       session_guids = {}
@@ -41,7 +41,7 @@ module ChaosApi::V6
 
       session = Chaos::ChaosSession.where({:session_guid => session_guid}).first
 
-      if (session == nil)
+      if session.nil?
         @response = ChaosResponse.new(nil, "Unknown session")
         render json: @response.to_json, :status => :unprocessable_entity
       else
