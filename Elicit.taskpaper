@@ -1,13 +1,13 @@
 
 Fixes Nov 28:
-- I think on the participant page (https://elicit.compute.dtu.dk/participant), the wording should be ‘you are eligible to participate in x experiments.’ Don’t use protocol here, I think it will confuse.
-- Experiment: #9 — Learning Study Protocol: Take protocol should be renamed to ‘Participate’.
-- The summary text is not aligned.
-- Status: "You already participated in this experiment, and it does not allow any more participations."
-- Prevent users from proceeding without hitting a threshold of calibration
-- In the Webgazer help box that pops up, I think we should remove the close button and only allow people to calibrate.
+- I think on the participant page (https://elicit.compute.dtu.dk/participant), the wording should be ‘you are eligible to participate in x experiments.’ Don’t use protocol here, I think it will confuse. @done
+- Experiment: #9 — Learning Study Protocol: Take protocol should be renamed to ‘Participate’. @done
+- The summary text is not aligned. @done
+- Status: "You already participated in this experiment, and it does not allow any more participations." @done
+- Prevent users from proceeding without hitting a threshold of calibration @done
+- In the Webgazer help box that pops up, I think we should remove the close button and only allow people to calibrate. @done
 - Have you tried to see what happens when people to not have a webcam? Or they don’t allow access, then it fails?
-- The radio button groups wraps text so that it is under the button instead of only under the text field. It is a subtle thing.
+- The radio button groups wraps text so that it is under the button instead of only under the text field. It is a subtle thing. @done
 - Have dump results iterate through the participants who provided results to the study.
 - Prevent users from pausing or going back in the video or stopping.
 - Query exmaple: "Give me all eye tracking for each video".
