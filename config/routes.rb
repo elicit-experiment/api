@@ -58,6 +58,7 @@ Rails.application.routes.draw do
     scope :v1 do
       get 'study_definitions/:study_definition_id/protocol_definitions/:protocol_definition_id/preview' => "protocol_preview#take"
       get 'study_results/time_series/:id/content' => "api/v1/time_series#show_content", only: [:show]
+      get 'study_definitions/components/:id' => "api/v1/components#show", defaults: { format: 'json' }, only: [:show]
       scope :study_definitions do
         scope :protocol_definitions do
           get 'preview' => "protocol_preview#take"
