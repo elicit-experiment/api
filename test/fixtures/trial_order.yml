@@ -1,0 +1,12 @@
+---
+learning_study:
+  sequence_data: '14,15,16,17,18,19,20,21,22,23,24,25,26'
+  study_definition: learning_study
+  protocol_definition: learning_study
+  phase_definition: learning_study
+  user: subject1
+learning_study_random:
+  sequence_data: '0,0,0'
+  study_definition: learning_study
+  protocol_definition: learning_study
+  phase_definition: learning_study

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170829210919) do
+ActiveRecord::Schema.define(version: 20181210111808) do
 
   create_table "chaos_sessions", force: :cascade do |t|
     t.integer "user_id", null: false
@@ -97,6 +97,7 @@ ActiveRecord::Schema.define(version: 20170829210919) do
     t.integer "protocol_definition_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "trial_ordering"
     t.index ["protocol_definition_id"], name: "index_phase_definitions_on_protocol_definition_id"
     t.index ["study_definition_id"], name: "index_phase_definitions_on_study_definition_id"
   end
@@ -280,12 +281,23 @@ ActiveRecord::Schema.define(version: 20170829210919) do
     t.index ["study_definition_id"], name: "index_trial_definitions_on_study_definition_id"
   end
 
+  create_table "trial_order_selection_mappings", force: :cascade do |t|
+    t.integer "trial_order_id"
+    t.integer "user_id"
+    t.integer "phase_definition_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["phase_definition_id"], name: "index_trial_order_selection_mappings_on_phase_definition_id"
+    t.index ["trial_order_id"], name: "index_trial_order_selection_mappings_on_trial_order_id"
+    t.index ["user_id"], name: "index_trial_order_selection_mappings_on_user_id"
+  end
+
   create_table "trial_orders", force: :cascade do |t|
     t.string "sequence_data"
     t.integer "study_definition_id", null: false
     t.integer "protocol_definition_id", null: false
     t.integer "phase_definition_id", null: false
-    t.integer "user_id", null: false
+    t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["phase_definition_id"], name: "index_trial_orders_on_phase_definition_id"

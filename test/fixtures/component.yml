@@ -1,0 +1,22 @@
+---
+learning_study_1:
+  definition_data: "{}"
+  study_definition: learning_study
+  protocol_definition: learning_study
+  phase_definition: learning_study
+  trial_definition: learning_study_1
+learning_study_2:
+  study_definition: learning_study
+  protocol_definition: learning_study
+  phase_definition: learning_study
+  trial_definition: learning_study_2
+learning_study_3:
+  study_definition: learning_study
+  protocol_definition: learning_study
+  phase_definition: learning_study
+  trial_definition: learning_study_3
+learning_study_4:
+  study_definition: learning_study
+  protocol_definition: learning_study
+  phase_definition: learning_study
+  trial_definition: learning_study_4

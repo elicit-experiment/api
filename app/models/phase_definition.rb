@@ -4,6 +4,7 @@ class PhaseDefinition < ApplicationRecord
 
   has_many :trial_definitions, :dependent => :destroy
   has_many :trial_orders, :dependent => :destroy
+  has_many :trial_order_selection_mappings, :dependent => :destroy
 
   has_many :stage, :class_name => "StudyResult::Stage", :dependent => :destroy
 

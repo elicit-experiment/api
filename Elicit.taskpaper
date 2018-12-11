@@ -6,14 +6,17 @@ Fixes Nov 28:
 - Status: "You already participated in this experiment, and it does not allow any more participations." @done
 - Prevent users from proceeding without hitting a threshold of calibration @done
 - In the Webgazer help box that pops up, I think we should remove the close button and only allow people to calibrate. @done
-- Have you tried to see what happens when people to not have a webcam? Or they don’t allow access, then it fails?
 - The radio button groups wraps text so that it is under the button instead of only under the text field. It is a subtle thing. @done
-- Have dump results iterate through the participants who provided results to the study.
-- Prevent users from pausing or going back in the video or stopping.
-- Query exmaple: "Give me all eye tracking for each video".
+- Options the user selected. timestamp x @done
+- Have dump results iterate through the participants who provided results to the study. @done
 - Return exact length of video -- timestamp when it stops.
 - Multiple file CSV example.
-- Options the user selected. timestamp x
+- Have you tried to see what happens when people to not have a webcam? Or they don’t allow access, then it fails?
+- Prevent users from pausing or going back in the video or stopping.
+- Prevent users from restarting/continuing a quiz once they leave; add an error message
+- Add ability to create TrialOrders without a ProtocolUser
+- Add Randomized TrialOrders, and ability to bind TrialOrder to ProtocolUser at take time
+- Query example: "Give me all eye tracking for each video".
 
 
 

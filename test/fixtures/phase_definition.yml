@@ -1,0 +1,6 @@
+---
+learning_study:
+  definition_data: foo
+  study_definition: learning_study
+  protocol_definition: learning_study
+  trial_ordering:

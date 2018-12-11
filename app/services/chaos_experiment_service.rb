@@ -10,7 +10,7 @@ class ChaosExperimentService
   attr_accessor :trial_definition
   attr_accessor :study_result
 
-  def initialize(study_definition, protocol_definition = nil, phase_definition = nil)
+  def initialize(study_definition, protocol_definition = nil, phase_definition = nil, user_id = nil)
     @study_definition = study_definition
     @protocol_definition = protocol_definition
     @phase_definition = phase_definition
@@ -24,6 +24,7 @@ class ChaosExperimentService
     @phase_definition = PhaseDefinition.where({
       :study_definition_id => @study_definition.id,
       :protocol_definition_id => @protocol_definition.id}).first unless @phase_definition
+    @user_id = user_id
   end
 
   def make_experiment(experiment)
@@ -88,15 +89,39 @@ class ChaosExperimentService
     trial_query = {:study_definition_id => @study_definition.id,
                    :protocol_definition_id => @protocol_definition.id,
                    :phase_definition_id => @phase_definition.id}
+
+    # TODO: since we just need one of these, this would be better written as an offset/limit query
     @trials = TrialDefinition.where(trial_query).order(:id).entries
 
-    # TODO: this should depend on user, no?
-    @trial_order = TrialOrder.where(trial_query).entries
+    @trial_order = TrialOrder.where(trial_query.merge(:user_id => @user_id)).first
 
-    if @trial_order.empty?
+    if @trial_order.nil?
+      if @phase_definition.trial_ordering == 'RandomWithReplacement'
+        @trial_order = TrialOrder.where(trial_query.merge(:user_id => nil)).order('RANDOM()').first
+      elsif @phase_definition.trial_ordering == 'RandomWithoutReplacement'
+        @trial_order = TrialOrder
+            .where(trial_query.merge(:user_id => nil))
+            .left_joins(:trial_order_selection_mappings)
+            .where(trial_order_selection_mappings: { id: nil } ).first
+      else
+        @trial_order = TrialOrder.where(trial_query.merge(:user_id => nil)).order('RANDOM()').first
+      end
+
+      if @trial_order.nil?
+        all_trial_orders = TrialOrder.where(trial_query)
+        Rails.logger.error "Cannot find suitable non-user TrialOrder or user trial for #{@user_id} amongst #{all_trial_orders.ai}"
+        return nil
+      end
+
+      TrialOrderSelectionMapping.create!({trial_order: @trial_order,
+                                          user_id: @user_id,
+                                          phase_definition: @phase_definition})
+    end
+
+    if @trial_order.nil?
       @trial_sequence = TrialOrder.default_sequence(@trials)
     else
-      @trial_sequence = @trial_order.first.sequence_data.split(',').map(&:to_i)
+      @trial_sequence = @trial_order.sequence_data.split(',').map(&:to_i)
     end
 
     @components = Component.where(trial_query).order(:id).entries

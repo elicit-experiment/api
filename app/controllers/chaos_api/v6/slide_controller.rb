@@ -32,7 +32,8 @@ module ChaosApi::V6
 
       svc = ChaosExperimentService.new(@chaos_session.study_definition,
                                        @chaos_session.protocol_definition,
-                                       @chaos_session.phase_definition)
+                                       @chaos_session.phase_definition,
+                                       @chaos_session.user_id)
       @trial_definition = svc.trial_for_slide_index(@slideIndex.to_i)
 
       if @trial_definition

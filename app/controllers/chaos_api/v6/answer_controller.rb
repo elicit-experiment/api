@@ -37,7 +37,7 @@ module ChaosApi::V6
             :trial_definition_id => @component.trial_definition_id,
             :component_id => @component.id,
             :point_type => event["Type"],
-            :kind => event["EventId"],
+            :kind => event["EventId"] || event['Id'],
             :value => event["Data"],
             :method => event["Method"],
             :datetime => event["DateTime"]

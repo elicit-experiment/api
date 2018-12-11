@@ -1,0 +1,21 @@
+---
+learning_study_1:
+  definition_data: '{ "type": "NewComponent::WebGazerCalibrate" }'
+  study_definition: learning_study
+  protocol_definition: learning_study
+  phase_definition: learning_study
+learning_study_2:
+  definition_data: "{id:2}"
+  study_definition: learning_study
+  protocol_definition: learning_study
+  phase_definition: learning_study
+learning_study_3:
+  definition_data: "{id:3}"
+  study_definition: learning_study
+  protocol_definition: learning_study
+  phase_definition: learning_study
+learning_study_4:
+  definition_data: "{id:4}"
+  study_definition: learning_study
+  protocol_definition: learning_study
+  phase_definition: learning_study
