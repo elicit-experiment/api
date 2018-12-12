@@ -35,4 +35,4 @@ local_env: &local_env
     scheme: https
 
 production:
-  <<: *<%= (ENV.fetch('HOSTNAME') { 'local' }) == 'elicit' ? 'prod_env' : 'local_env' %>
+  <<: *<%= (ENV.fetch('SITE_SUFFIX') { 'docker.local' }) == 'compute.dtu.dk' ? 'prod_env' : 'local_env' %>
