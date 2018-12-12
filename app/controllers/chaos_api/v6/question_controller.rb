@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 module ChaosApi::V6
   class QuestionController < ApplicationController
     include ActionController::MimeResponds
 
     def show
-      trial_index = (params[:index] || "0").to_i
+      trial_index = (params[:index] || '0').to_i
 
       sessionGUID = params[:sessionGUID]
 
-      @chaos_session = Chaos::ChaosSession.where({:session_guid => sessionGUID}).first
+      @chaos_session = Chaos::ChaosSession.where(session_guid: sessionGUID).first
 
       @study_definition = @chaos_session.study_definition
       @phase_definition = @chaos_session.phase_definition
@@ -28,7 +30,7 @@ module ChaosApi::V6
         @trial_definition = TrialDefinition.find @chaos_session.trial_definition_id
         logger.info "PREVIEW SESSION #{@trial_definition.ai}"
       else
-        logger.info "REAL SESSION"
+        logger.info 'REAL SESSION'
         @chaos_session.stage.current_trial = trial_index
         @chaos_session.stage.save!
       end
@@ -42,14 +44,14 @@ module ChaosApi::V6
       unless @chaos_session.preview?
         trial_definition = svc.trial_definition
         if trial_definition
-          if (@chaos_session.phase_definition_id != trial_definition.phase_definition.id)
+          if @chaos_session.phase_definition_id != trial_definition.phase_definition.id
             Rails.logger.warn "Inconsistent phase definition #{@chaos_session.phase_definition_id} #{trial_definition.phase_definition.id}"
           end
           parms = {
-              :experiment_id => @chaos_session.experiment.id,
-              :protocol_user_id => @chaos_session.protocol_user_id,
-              :phase_definition_id => trial_definition.phase_definition.id,
-              :trial_definition_id => trial_definition.id
+            experiment_id: @chaos_session.experiment.id,
+            protocol_user_id: @chaos_session.protocol_user_id,
+            phase_definition_id: trial_definition.phase_definition.id,
+            trial_definition_id: trial_definition.id
           }
           logger.info parms.ai
           trial_result = StudyResult::TrialResult.where(parms).first_or_initialize do |tr|
@@ -63,15 +65,15 @@ module ChaosApi::V6
       end
 
       respond_to do |format|
-        format.xml { render :xml => @response.to_xml }
-        format.json { render :json => @response.to_json }
+        format.xml { render xml: @response.to_xml }
+        format.json { render json: @response.to_json }
       end
     end
 
     private
 
     def post_params
-      #validate POST parameters
+      # validate POST parameters
       params.require(:experiment).permit(:author_id, :name)
     end
   end
