@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
 ruby '2.5.1'
 
 git_source(:github) do |repo_name|
-  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
+  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?('/')
   "https://github.com/#{repo_name}.git"
 end
 
@@ -41,15 +43,15 @@ gem 'rack-cors'
 gem 'kaminari'
 
 # for api doc
+gem 'apivore'
+gem 'rspec-rails'
 gem 'swagger-blocks', '1.3.1'
 gem 'swagger_ui_engine'
-gem 'rspec-rails'
-gem 'apivore'
 
 # authentication
 gem 'devise', '~> 4.4.0'
-gem 'doorkeeper'
 gem 'devise-doorkeeper'
+gem 'doorkeeper'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -58,18 +60,17 @@ group :development, :test do
 end
 
 group :development do
-  gem 'rails-erd', require: false, group: :development
   gem 'pry'
-  gem 'spring'
+  gem 'rails-erd', require: false, group: :development
   gem 'rubocop'
+  gem 'spring'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+gem 'tzinfo-data', platforms: %i[mingw mswin x64_mingw jruby]
 
-
-#for _toxml to work. edit: replaced with activemodel-serializers-xml
-#gem 'activesupport'
+# for _toxml to work. edit: replaced with activemodel-serializers-xml
+# gem 'activesupport'
 # To continue using XML serialization in your application
 gem 'activemodel-serializers-xml'
 # To be able to parse XML post_params in your application
@@ -89,7 +90,6 @@ gem 'carrierwave'
 gem 'carrierwave-base64'
 
 group :development do
-  gem "capistrano", "~> 3.11", require: false
+  gem 'capistrano', '~> 3.11', require: false
   gem 'capistrano-git-with-submodules', '~> 2.0'
 end
-
