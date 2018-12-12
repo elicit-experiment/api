@@ -24,7 +24,6 @@ prod_env: &prod_env
     port: 443
     scheme: https
 
-
 local_env: &local_env
   participant_frontend:
     host: experiment-elicit.docker.local
@@ -36,4 +35,4 @@ local_env: &local_env
     scheme: https
 
 production:
-  <<: *local_env
+  <<: *<%= (ENV.fetch('HOSTNAME') { 'local' }) == 'elicit' ? 'prod_env' : 'local_env' %>

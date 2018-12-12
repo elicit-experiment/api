@@ -9,5 +9,6 @@ module StudyResult
     belongs_to :study_result, :class_name => "StudyResult::StudyResult", :foreign_key => "study_result_id"
 
     has_many :stages, :class_name => "StudyResult::Stage", :dependent => :destroy
+    has_many :trial_results, :class_name => "StudyResult::TrialResult", :dependent => :destroy
   end
 end

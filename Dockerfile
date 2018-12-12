@@ -20,6 +20,10 @@ RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources
 RUN apt-get update
 RUN apt-get install yarn
 
+# Install dev conveniences
+RUN apt-get install -y postgresql-client
+RUN apt-get install -y vim
+
 # Set an environment variable where the Rails app is installed to inside of Docker image:
 ENV RAILS_ROOT /var/www/Cockpit.API
 RUN mkdir -p $RAILS_ROOT

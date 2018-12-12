@@ -11,13 +11,14 @@ Fixes Nov 28:
 - Have dump results iterate through the participants who provided results to the study. @done
 - Return exact length of video -- timestamp when it stops.
 - Multiple file CSV example.
-- Have you tried to see what happens when people to not have a webcam? Or they don’t allow access, then it fails?
-- Prevent users from pausing or going back in the video or stopping.
 - Prevent users from restarting/continuing a quiz once they leave; add an error message
 - Add ability to create TrialOrders without a ProtocolUser
 - Add Randomized TrialOrders, and ability to bind TrialOrder to ProtocolUser at take time
 - Query example: "Give me all eye tracking for each video".
 
+- Have you tried to see what happens when people to not have a webcam? Or they don’t allow access, then it fails?
+- Prevent users from pausing or going back in the video or stopping.
+- HTTP support
 
 
 

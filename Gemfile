@@ -61,6 +61,7 @@ group :development do
   gem 'rails-erd', require: false, group: :development
   gem 'pry'
   gem 'spring'
+  gem 'rubocop'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

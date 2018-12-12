@@ -67,18 +67,6 @@ services:
     volumes:
       - 'postgres:/var/lib/postgresql/data'
 
-#  letsencrypt:
-#    container_name: letsencrypt
-#    build: ./components/letsencrypt
-#    expose:
-#      - "80"
-#      - "443"
-#    volumes:
-#      - letsencrypt:/etc/letsencrypt
-#      - log/letsencrypt:/var/log/letsencrypt
-#    networks:
-#      - revproxynet
-
 volumes:
   redis:
   postgres:

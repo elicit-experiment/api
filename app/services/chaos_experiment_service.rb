@@ -1,4 +1,3 @@
-
 # A CHAOS experiment is equivalent to a protocol
 class ChaosExperimentService
 
@@ -16,45 +15,47 @@ class ChaosExperimentService
     @phase_definition = phase_definition
     @trial_definition = nil
     @protocol_definition = ProtocolDefinition.where({
-      :study_definition_id => @study_definition.id}).first unless @protocol_definition
+                                                        :study_definition_id => @study_definition.id}).first unless @protocol_definition
     if @protocol_definition.nil?
       Rails.logger.error "No protocols for study #{study_definition.ai}"
       # TODO: we should handle malformed studies by erroring appropriately
     end
     @phase_definition = PhaseDefinition.where({
-      :study_definition_id => @study_definition.id,
-      :protocol_definition_id => @protocol_definition.id}).first unless @phase_definition
+                                                  :study_definition_id => @study_definition.id,
+                                                  :protocol_definition_id => @protocol_definition.id}).first unless @phase_definition
     @user_id = user_id
   end
 
   def make_experiment(experiment)
     stage = experiment.current_stage
     {
-    Name: @study_definition.title,
-    Css: "",
-    Version: @study_definition.version,
-    #ExperimentDescription: @study_definition.description,
-    CreatedBy: @study_definition.principal_investigator_user_id.to_s,
-    #Data: @study_definition.data,
-    LockQuestion: @study_definition.lock_question == 1,
-    EnablePrevious: @study_definition.enable_previous == 1,
-    NoOfTrials: stage.num_trials,
-    TrialsCompleted: stage.trials_completed,
-    FooterLabel: @study_definition.footer_label,
-    RedirectOnCloseUrl: @study_definition.redirect_close_on_url,
-    CurrentSlideIndex: (stage.current_trial),
-    Fullname: "Questionnaire, 1.0"
+        Name: @study_definition.title,
+        Css: "",
+        Version: @study_definition.version,
+        #ExperimentDescription: @study_definition.description,
+        CreatedBy: @study_definition.principal_investigator_user_id.to_s,
+        #Data: @study_definition.data,
+        LockQuestion: @study_definition.lock_question == 1,
+        EnablePrevious: @study_definition.enable_previous == 1,
+        NoOfTrials: stage.num_trials,
+        TrialsCompleted: stage.trials_completed,
+        FooterLabel: @study_definition.footer_label,
+        RedirectOnCloseUrl: @study_definition.redirect_close_on_url,
+        CurrentSlideIndex: (stage.current_trial),
+        Fullname: "Questionnaire, 1.0"
     }
   end
 
-  def make_preview_experiment(trial_definition_id)
-
+  def get_preview_trial_definitions()
     trial_params = {:study_definition_id => @study_definition.id,
                     :protocol_definition_id => @protocol_definition.id,
                     :phase_definition_id => @phase_definition.id}
-    trials = TrialDefinition.where(trial_params)
-    trial_ids = trials.map { |t| t.id }
-    num_trials = trials.count
+    TrialDefinition.where(trial_params)
+  end
+
+  def make_preview_experiment(trial_definition_id)
+    trial_ids = get_preview_trial_definitions.map {|t| t.id}
+    num_trials = trial_ids.count
 
     current_trial_idx = trial_ids.index(trial_definition_id)
 
@@ -65,7 +66,7 @@ class ChaosExperimentService
         @study_definition.id.to_s + "/protocols/" +
         @protocol_definition.id.to_s
 
-    trials_completed = current_trial_idx ? (current_trial_idx-1) : nil
+    trials_completed = current_trial_idx ? (current_trial_idx - 1) : nil
 
     {
         Name: @study_definition.title,
@@ -86,10 +87,6 @@ class ChaosExperimentService
   end
 
   def trial_for_slide_index(trial_no = 0)
-    trial_query = {:study_definition_id => @study_definition.id,
-                   :protocol_definition_id => @protocol_definition.id,
-                   :phase_definition_id => @phase_definition.id}
-
     # TODO: since we just need one of these, this would be better written as an offset/limit query
     @trials = TrialDefinition.where(trial_query).order(:id).entries
 
@@ -100,9 +97,9 @@ class ChaosExperimentService
         @trial_order = TrialOrder.where(trial_query.merge(:user_id => nil)).order('RANDOM()').first
       elsif @phase_definition.trial_ordering == 'RandomWithoutReplacement'
         @trial_order = TrialOrder
-            .where(trial_query.merge(:user_id => nil))
-            .left_joins(:trial_order_selection_mappings)
-            .where(trial_order_selection_mappings: { id: nil } ).first
+                           .where(trial_query.merge(:user_id => nil))
+                           .left_joins(:trial_order_selection_mappings)
+                           .where(trial_order_selection_mappings: {id: nil}).first
       else
         @trial_order = TrialOrder.where(trial_query.merge(:user_id => nil)).order('RANDOM()').first
       end
@@ -124,10 +121,7 @@ class ChaosExperimentService
       @trial_sequence = @trial_order.sequence_data.split(',').map(&:to_i)
     end
 
-    @components = Component.where(trial_query).order(:id).entries
-    @stimuli = Stimulus.where(trial_query).order(:id).entries
-
-    @trial_definition = @trials.detect{ |trial| trial.id == @trial_sequence[trial_no] }
+    @trial_definition = @trials.detect {|trial| trial.id == @trial_sequence[trial_no]}
 
     unless @trial_definition
       Rails.logger.error "Trial order #{@trial_order.ai} sequence #{@trial_sequence.ai} contains invalid ids #{@trials.ai} for trial index #{trial_no}"
@@ -136,26 +130,27 @@ class ChaosExperimentService
     @trial_definition
   end
 
-  def make_slide(trial_no = 0, protocol_user_id = nil)
-    @trial_definition = trial_for_slide_index(trial_no)
+  def make_slide(trial_no = 0, protocol_user_id = nil, trial_definition = nil)
+    @trial_definition = trial_definition || trial_for_slide_index(trial_no)
 
-    phase = @phase_definition
+    @components = Component.where(trial_query.merge(trial_definition_id: @trial_definition.id)).order(:id).entries
+    #@stimuli = Stimulus.where(trial_query).order(:id).entries
 
-    chaos_trial = @components.select{|c| (c.phase_definition_id == phase.id) and (c.trial_definition_id == @trial_definition.id) }.map do |c|
+    chaos_trial = @components.map do |c|
       outputs = {}
-      if (protocol_user_id != nil)
-        data_points = StudyResult::DataPoint.where({:component_id => c.id, :protocol_user_id => protocol_user_id })
-        events = data_points.entries.select{ |d| !(d.point_type.eql? "State") }.map do |data_point|
+      if protocol_user_id != nil
+        data_points = StudyResult::DataPoint.where({:component_id => c.id, :protocol_user_id => protocol_user_id})
+        events = data_points.entries.select {|d| !(d.point_type.eql? "State")}.map do |data_point|
           {
-            "Type" => data_point.point_type,
-            "EventId" => data_point.kind,
-            "Data" => data_point.value,
-            "Method" => data_point.method,
-            "DateTime" => data_point.datetime
+              'Type' => data_point.point_type,
+              'EventId' => data_point.kind,
+              'Data' => data_point.value,
+              'Method' => data_point.method,
+              'DateTime' => data_point.datetime
           } if data_point.point_type != "State"
         end
-        state = data_points.entries.select{ |d| d.point_type.eql? "State" }.first
-        if (state)
+        state = data_points.entries.select {|d| d.point_type.eql? "State"}.first
+        if state
           outputs = JSON.parse(state.value)
         end
       end
@@ -178,8 +173,8 @@ class ChaosExperimentService
 
       chaos_component = {
           'Type': type,
-          'Id':"#{@study_definition.id}:#{c.id}",
-          'Fullname':  "NewComponent, 1.0.0".freeze,
+          'Id': "#{@study_definition.id}:#{c.id}",
+          'Fullname': "NewComponent, 1.0.0".freeze,
           'UserAnswer': nil,
           'Component': component_data
       }
@@ -193,9 +188,19 @@ class ChaosExperimentService
     response = ChaosResponse.new(chaos_trial)
 
     # These are necessary to set the counts up for "Slide N/M" in the Chaos frontend
-    response.Body["FoundCount"] = @trial_sequence.count
+    response.Body["FoundCount"] = (@trial_sequence || TrialDefinition.where(trial_query)).size
     response.Body["StartIndex"] = trial_no
 
     response
+  end
+
+  private
+
+  def trial_query
+    {
+        :study_definition_id => @study_definition.id,
+        :protocol_definition_id => @protocol_definition.id,
+        :phase_definition_id => @phase_definition.id
+    }
   end
 end
