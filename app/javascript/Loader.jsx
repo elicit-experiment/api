@@ -1,7 +1,6 @@
 import $ from 'jquery'
-import _ from 'lodash'
 
-window.jQuery = $
+window.jQuery = $;
 
 import React from 'react'
 import ReactDOM from 'react-dom'
@@ -13,37 +12,37 @@ import ElicitRoot from './ElicitRoot';
 const getToken = (tok) => {
   if (sessionStorage[tok]) {
     try {
-        let token = JSON.parse(sessionStorage[tok])
-        let expire_time = token.created_at + token.expires_in
+        let token = JSON.parse(sessionStorage[tok]);
+        let expire_time = token.created_at + token.expires_in;
         if (expire_time < (new Date()).getTime()) {
-          console.log('EXPIRED!')
+          console.warn('returning expired usertoken')
         }
         return token
     } catch (e) {
-     console.warn("Bad stuff in localstorage for usertoken.")
+     console.warn("Bad stuff in localstorage for usertoken.");
      sessionStorage.removeItem(tok)
     }
   }
   return  {
-      access_token: undefined
+      access_token: undefined,
     }
-}
+};
 
 const preloadedStore = {
   tokens: {
     clientToken: getToken('clientToken'),
-    userToken: getToken('userToken')
-  }
-}
+    userToken: getToken('userToken'),
+  },
+};
 
 const store = configureStore(preloadedStore);
-console.log("Elicit App Loading...")
-console.dir(preloadedStore)
+console.log("Elicit App Loading...");
+console.dir(preloadedStore);
 
 const onload = () => {
-  var elt = document.getElementById('elicit-app')
+  var elt = document.getElementById('elicit-app');
   ReactDOM.render(<ElicitRoot store={store}></ElicitRoot>, elt);
-}
+};
 
 export default onload;
 

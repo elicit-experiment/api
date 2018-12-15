@@ -6,7 +6,7 @@ export const MatchType = PropTypes.shape({
     isExact: PropTypes.bool.isRequired,
     params: RequestShapeType.isRequired,
     path: PropTypes.string.isRequired,
-    url: PropTypes.string.isRequired
+    url: PropTypes.string.isRequired,
 }).isRequired;
 
 export const CurrentUserType = PropTypes.shape({
@@ -17,13 +17,13 @@ export const CurrentUserType = PropTypes.shape({
         id: PropTypes.number.isRequired,
         role: PropTypes.string.isRequired,
         updated_at: PropTypes.string.isRequired,
-        username: PropTypes.string.isRequired
+        username: PropTypes.string.isRequired,
     }).isRequired,
     error: PropTypes.any,
     loading: PropTypes.bool.isRequired,
     request: RequestShapeType.isRequired,
     sync: PropTypes.bool.isRequired,
-    syncing: PropTypes.bool.isRequired
+    syncing: PropTypes.bool.isRequired,
 }).isRequired;
 
 export const UserTokenType = PropTypes.shape({
@@ -32,6 +32,6 @@ export const UserTokenType = PropTypes.shape({
     expires_in: PropTypes.number.isRequired,
     refresh_token: PropTypes.string.isRequired,
     scope: PropTypes.string.isRequired,
-    token_type: PropTypes.string.isRequired
+    token_type: PropTypes.string.isRequired,
 }).isRequired;
 

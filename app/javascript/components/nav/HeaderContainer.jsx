@@ -26,12 +26,12 @@ class HeaderContainer extends React.Component {
 }
 
 const mapStateToProps = (state) => ( {
-  current_user: currentUser(state)
-})
+  current_user: currentUser(state),
+});
 
 const mapDispatchToProps = (dispatch) => ({
   logoutUser: () => dispatch(logoutUser()),
-  syncCurrentUser: () => dispatch(elicitApi.actions.current_user.sync())
+  syncCurrentUser: () => dispatch(elicitApi.actions.current_user.sync()),
 });
 
 export default connect(

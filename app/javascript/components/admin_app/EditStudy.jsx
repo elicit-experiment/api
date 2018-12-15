@@ -1,36 +1,34 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
 import _ from 'lodash'
-import InlineEdit from 'react-edit-inline';
 import update from 'react-addons-update'
 import Study from './Study'
 
 class EditStudy extends React.Component {
   constructor(props) {
     super(props);
-    this.titleChanged = this.titleChanged.bind(this)
-    this.deleteStudy = this.deleteItem.bind(this)
-    this.state = this.buildState(props)
+    this.titleChanged = this.titleChanged.bind(this);
+    this.deleteStudy = this.deleteItem.bind(this);
+    this.state = this.buildState(props);
   }
 
   componentWillReceiveProps(nextProps) {
-    let newState = this.buildState(nextProps)
+    let newState = this.buildState(nextProps);
     //if (newState.study_id !== this.state.study_id || !this.state.study) {
       this.setState(newState);
     //}
   }
 
   buildState(props) {
-    let study_id = props.match.params.study_id
-    let study = _.find(props.studies, (study) => study_id == study.id)
-    console.dir(props)
-    let study_protocols = props.study_protocols.filter((sp) => sp.study_id !== study_id )
-    console.dir(study_protocols)
+    let study_id = props.match.params.study_id;
+    let study = _.find(props.studies, (study) => study_id == study.id);
+    console.dir(props);
+    let study_protocols = props.study_protocols.filter((sp) => sp.study_id !== study_id );
+    console.dir(study_protocols);
     return {
         study_id: study_id,
         study: study,
         study_protocols: study_protocols,
-        protocols: props.protocols
+        protocols: props.protocols,
     }
   }
 
@@ -66,7 +64,7 @@ class EditStudy extends React.Component {
     }
   }
 
-  deleteItem(itm) {
+  deleteItem(/*itm*/) {
     StudyStore.removeItem(this.state.study.id)
   }
 }

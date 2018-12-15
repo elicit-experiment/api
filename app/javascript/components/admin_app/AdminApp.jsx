@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { MatchType, RequestShapeType, UserTokenType, CurrentUserType } from 'types';
+import { MatchType, UserTokenType, CurrentUserType } from 'types';
 import {Redirect, Route} from 'react-router-dom';
 import StudyManagement from './StudyManagement';
 import {connect} from "react-redux";
@@ -23,9 +23,17 @@ class AdminApp extends React.Component {
 		}
 
 		if (!this.props.current_user.sync) {
-			if (!this.props.current_user.loading) {
-				console.log("No current user!");
-				window.setTimeout(this.props.loadCurrentUser, 50);
+      if (!this.props.current_user.loading) {
+        if (!this.props.current_user.error) {
+          console.log(`reloading current user`);
+          window.setTimeout(this.props.loadCurrentUser, 50);
+        } else {
+          console.log(`No current user: ${JSON.stringify(this.props.current_user.error)}`);
+          // TODO: all 400 errors?
+          if (this.props.current_user.error.status === 401) {
+            return <Redirect to='/logout'></Redirect>
+					}
+				}
 			}
 			return <div>Loading...</div>
 		}
@@ -43,7 +51,7 @@ class AdminApp extends React.Component {
 				<HeaderContainer></HeaderContainer>
 				<div id="wrap" className="admin-app-container container">
 					<Route path={`${this.props.match.url}/studies/:study_id/protocols/:protocol_id`}
-						   component={ProtocolPreviewContainer}/>
+                           component={ProtocolPreviewContainer}/>
 					<Route exact path={`${this.props.match.url}`} component={StudyManagement}/>
 				</div>
 				<FooterContainer></FooterContainer>
@@ -77,7 +85,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
 	loadStudies: () => dispatch(elicitApi.actions.studies()),
-	loadCurrentUser: () => dispatch(elicitApi.actions.current_user())
+	loadCurrentUser: () => dispatch(elicitApi.actions.current_user()),
 });
 
 const connectedAdminApp = connect(mapStateToProps, mapDispatchToProps)(AdminApp);

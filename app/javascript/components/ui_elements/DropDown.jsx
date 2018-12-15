@@ -8,12 +8,12 @@ export default class DropDown extends React.Component {
         value: PropTypes.oneOfType(
             [
                 PropTypes.number,
-                PropTypes.string
+                PropTypes.string,
             ]
         ),
         valueField: PropTypes.string,
         labelField: PropTypes.string,
-        onChange: PropTypes.func
+        onChange: PropTypes.func,
     };
 
     getDefaultProps() {
@@ -21,21 +21,21 @@ export default class DropDown extends React.Component {
             value: null,
             valueField: 'value',
             labelField: 'label',
-            onChange: null
+            onChange: null,
         };
     }
 
     getInitialState() {
         var selected = this.getSelectedFromProps(this.props);
         return {
-            selected: selected
+            selected: selected,
         }
     }
     
     componentWillReceiveProps(nextProps) {
         var selected = this.getSelectedFromProps(nextProps);
         this.setState({
-           selected: selected
+           selected: selected,
         });
     }
     
@@ -72,11 +72,11 @@ export default class DropDown extends React.Component {
         if (this.props.onChange) {
             var change = {
               oldValue: this.state.selected,
-              newValue: e.target.value
+              newValue: e.target.value,
             };
             this.props.onChange(change);
         }
         this.setState({selected: e.target.value});
     }
 
-};
+}

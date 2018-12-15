@@ -30,4 +30,4 @@ export const tokenStatus = (state) => {
   }
 
   return token_status
-}
+};

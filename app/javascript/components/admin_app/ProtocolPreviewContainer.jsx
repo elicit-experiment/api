@@ -7,14 +7,14 @@ class ProtocolPreviewContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      protocol_id: parseInt(this.props.match.params.protocol_id)
+      protocol_id: parseInt(this.props.match.params.protocol_id),
     }
   }
   render() {
     let protocol = this.props.protocol_definition.data[0];
     console.log(`Rendering protocol ${this.state.protocol_id} with ${protocol}`);
     if (protocol && (protocol.id == this.state.protocol_id)) {
-      const protocol_info = <ProtocolPreview protocol={protocol} match={this.props.match}></ProtocolPreview>
+      const protocol_info = <ProtocolPreview protocol={protocol} match={this.props.match}></ProtocolPreview>;
       return (
           <div>
             {protocol_info}
@@ -47,7 +47,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   loadProtocolDefinition: (study_definition_id, protocol_definition_id) => dispatch(elicitApi.actions.protocol_definition({
     study_definition_id: study_definition_id,
-    protocol_definition_id: protocol_definition_id
+    protocol_definition_id: protocol_definition_id,
   })),
 });
 

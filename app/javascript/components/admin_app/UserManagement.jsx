@@ -15,21 +15,21 @@ class UserList extends React.Component {
         key: 'id',
         name: 'ID',
         width: 80,
-        resizable: true
+        resizable: true,
       },
       {
         key: 'name',
         name: 'Name',
         editable: true,
         width: 200,
-        resizable: true
+        resizable: true,
       },
       {
         key: 'email',
         name: 'Email',
         editable: true,
         width: 200,
-        resizable: true
+        resizable: true,
       },
       {
         key: 'role',
@@ -37,7 +37,7 @@ class UserList extends React.Component {
         editor: <DropDownEditor options={UserConstants.roles}/>,
         editable: true,
         width: 200,
-        resizable: true
+        resizable: true,
       },
     ];
   }
@@ -53,7 +53,7 @@ class UserList extends React.Component {
         const idx = args.idx;
         const rowIdx = args.rowIdx;
         this.grid.openCellEditor(rowIdx, idx);
-      }
+      },
     };
 
     return clonedColumns
@@ -75,7 +75,7 @@ class UserList extends React.Component {
     const newRow = {
       email: 'test@example.com',
       name: 'New User',
-      role: 'registered_user'
+      role: 'registered_user',
     };
     UserStore.newItem(newRow);
 
@@ -126,7 +126,7 @@ class UserList extends React.Component {
   }
 
   handleChangedEvent(event) {
-    let users = {rows: UserStore.getList().list }
+    let users = {rows: UserStore.getList().list };
     this.setState(users)
   }
 }

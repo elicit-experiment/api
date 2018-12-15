@@ -45,9 +45,9 @@ class Modal extends React.Component {
     }
 
     static propTypes = {
-        handleHideModal: PropTypes.func.isRequired
+        handleHideModal: PropTypes.func.isRequired,
     }
-};
+}
 
 class ParticipantProtocol extends React.Component {
   constructor(props){
@@ -115,7 +115,7 @@ class ParticipantProtocol extends React.Component {
 const mapStateToProps = (/*state*/) => ({
 });
 const mapDispatchToProps = (dispatch) => ({
-    take_protocol: (s) => { dispatch(elicitApi.actions.take_protocol(s)) }
+    take_protocol: (s) => { dispatch(elicitApi.actions.take_protocol(s)) },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ParticipantProtocol);

@@ -70,6 +70,8 @@ module ChaosApi::V6
 
       StudyResult::DataPoint.transaction { new_datapoints.each(&:save!) }
 
+      logger.info new_datapoints.ai
+
       state = StudyResult::DataPoint.where(state_dp_params).first_or_initialize
 
       output.delete("Events")

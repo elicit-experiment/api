@@ -5,7 +5,7 @@ import {
 import thunk from "redux-thunk";
 import RootReducer from '../reducers/root_reducer';
 import {
-  logger
+  logger,
 } from 'redux-logger'
 
 export var store;

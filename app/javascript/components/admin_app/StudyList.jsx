@@ -39,7 +39,7 @@ class StudyList extends React.Component {
           </div>
         </Fade>
       )
-    })
+    });
 
     return(
     <div>
@@ -51,7 +51,7 @@ class StudyList extends React.Component {
   }
 
   componentDidMount() {
-    console.log("StudyList MOUNT")
+    console.log("StudyList MOUNT");
 
     if (!this.props.studies.sync && !this.props.studies.loading) {
       this.props.loadStudies()

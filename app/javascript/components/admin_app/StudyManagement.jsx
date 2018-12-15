@@ -17,7 +17,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   loadStudies: () => dispatch(elicitApi.actions.studies()),
-  loadCurrentUser: () => dispatch(elicitApi.actions.current_user())
+  loadCurrentUser: () => dispatch(elicitApi.actions.current_user()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(StudyManagement)

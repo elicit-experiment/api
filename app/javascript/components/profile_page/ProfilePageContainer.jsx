@@ -21,8 +21,8 @@ class ProfilePageContainer extends React.Component {
     super(props);
 
     this.state = {
-      loading_user: !this.props.current_user.sync
-    }
+      loading_user: !this.props.current_user.sync,
+    };
 
     this.timeoutLoading = this.timeoutLoading.bind(this)
   }
@@ -93,7 +93,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  syncCurrentUser: () => dispatch(elicitApi.actions.current_user.sync())
+  syncCurrentUser: () => dispatch(elicitApi.actions.current_user.sync()),
 });
 
 const ConnectedProfilePageContainer = connect(mapStateToProps, mapDispatchToProps)(ProfilePageContainer);

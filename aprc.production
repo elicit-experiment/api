@@ -1,0 +1,5 @@
+# ~/.aprc file.
+AwesomePrint.defaults = {
+  :indent => 2,
+  :plain => true
+}

@@ -30,7 +30,7 @@ class _Protocol extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      active: props.protocol.active
+      active: props.protocol.active,
     };
   }
   componentWillReceiveProps(nextProps) {
@@ -38,11 +38,11 @@ class _Protocol extends React.Component {
   }
   onToggle() {
     this.setState((prevState, props) => {
-      const newActive = !prevState.active
+      const newActive = !prevState.active;
       const newData = update(this.props.protocol, {
-        active: { $set: newActive }
+        active: { $set: newActive },
       });
-      this.updateProtocol(newData)
+      this.updateProtocol(newData);
       return { count: newActive }
     })
   }
@@ -52,7 +52,7 @@ class _Protocol extends React.Component {
     dispatch(
       elicitApi.actions.protocol_definition.patch({
           study_definition_id: this.props.protocol.study_definition_id,
-          id: this.props.protocol.id
+          id: this.props.protocol.id,
          },
         { body: JSON.stringify(body) }
       )
@@ -111,7 +111,7 @@ class ProtocolEdit extends React.Component {
       // don't get updated when we patch the protocol definition, we need to check if there's
       // a protocol_definition in the protocol_definitions state which matches the id, and treat
       // that as authoritative.
-      let protocol_def = this.props.protocol_definitions.data.filter( (p) => (p.id == protocol.id) )
+      let protocol_def = this.props.protocol_definitions.data.filter( (p) => (p.id == protocol.id) );
       if (protocol_def && (protocol_def.length > 0)) {
         protocol = protocol_def[0]
       }
@@ -135,7 +135,7 @@ class Study extends React.Component {
     this.state = {
       title: this.props.study.title,
       users: this.props.users,
-      studies: this.props.studies
+      studies: this.props.studies,
     };
   }
 
@@ -145,7 +145,7 @@ class Study extends React.Component {
 
   titleChanged(data) {
     const newData = update(this.props.study, {
-      title: { $set: data.title }
+      title: { $set: data.title },
     });
     const { dispatch } = this.props;
     let body = { study_definition: newData };
@@ -206,7 +206,7 @@ class Study extends React.Component {
                   padding: 0,
                   fontSize: 15,
                   outline: 0,
-                  border: 0
+                  border: 0,
                 }}
               />
             </div>

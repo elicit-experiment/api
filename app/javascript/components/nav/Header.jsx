@@ -14,10 +14,10 @@ class Header extends React.Component {
     var userName = "";
 
     if (this.props.current_user_role === undefined) {
-      loginLogout = <li><a href="/login">Login</a></li>
+      loginLogout = <li><a href="/login">Login</a></li>;
       userName = <li><a href="/login">none</a></li>
     } else {
-      userName = <li><a href="/profile">{this.props.current_username || this.props.current_user_email}</a></li>
+      userName = <li><a href="/profile">{this.props.current_username || this.props.current_user_email}</a></li>;
 
       loginLogout = <li>
         <button type="button" className="btn btn-link" onClick={(e) => {
@@ -58,14 +58,14 @@ class Header extends React.Component {
 Header.propTypes = {
   current_user_role: PropTypes.string,
   current_user_email:PropTypes.string,
-  logoutUser: PropTypes.func.isRequired
+  logoutUser: PropTypes.func.isRequired,
 };
 
 Header.defaultProps = {
   current_user_role: undefined,
   current_user_email: undefined,
   logoutUser: () => {
-  }
+  },
 };
 
 export default Header

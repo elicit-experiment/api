@@ -22,7 +22,7 @@ class LoginSignUpContainer extends React.Component {
 
     this.state = {
       pleaseWait: 'hidden',
-      loginSignup: 'hidden'
+      loginSignup: 'hidden',
     }
   }
 
@@ -53,7 +53,7 @@ class LoginSignUpContainer extends React.Component {
   }
 
   unbindAll() {
-    $('#pleaseWaitDialog').off()
+    $('#pleaseWaitDialog').off();
     $('#logInModal').off()
   }
 
@@ -93,7 +93,7 @@ class LoginSignUpContainer extends React.Component {
     if (this.props.tokenStatus === 'user') {
       if (this.props.currentUser && this.props.currentUser.sync) {
         if ((this.state.pleaseWait === 'hidden') && (this.state.loginSignup === 'hidden')) {
-          this.unbindAll()
+          this.unbindAll();
 
           // Hack for previous issues with timing of navigation vs. modal dismissal animation
           //$('.modal-backdrop').remove()
@@ -152,7 +152,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   createUser: (new_user_def) => dispatch(elicitApi.actions.user.post({}, {body: JSON.stringify(new_user_def)})),
   getCurrentUser: () => { dispatch(elicitApi.actions.current_user()) },
-  logInUser: (data) => dispatch(logInUser(data, () => { }))
+  logInUser: (data) => dispatch(logInUser(data, () => { })),
 });
 
 export default connect(

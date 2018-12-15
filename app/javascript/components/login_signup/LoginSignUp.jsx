@@ -13,7 +13,7 @@ class LogInSignUp extends React.Component {
       email: "",
       username: "",
       password: "",
-      passwordConfirmation: ""
+      passwordConfirmation: "",
     };
   }
 
@@ -65,17 +65,17 @@ class LogInSignUp extends React.Component {
   // Generates the HTML for the login form
   logInForm() {
 
-    let data_dismiss = this.state.dismissable ? "modal" : ""
+    let data_dismiss = this.state.dismissable ? "modal" : "";
 
-    var error = <div></div>
+    var error = <div></div>;
     if (this.props.userTokenState && this.props.userTokenState.error) {
       var error_text="";
       switch (this.props.userTokenState.error_code) {
         case 401:
-          error_text = "Invalid user and/or password."
-          break
+          error_text = "Invalid user and/or password.";
+          break;
         default:
-          error_text = "An unknown error occurred.  Please try later."
+          error_text = "An unknown error occurred.  Please try later.";
           break;
       }
       error = <div className="login-error">{error_text}</div>
@@ -99,6 +99,7 @@ class LogInSignUp extends React.Component {
                          className="form-control"
                          id="email"
                          placeholder="Enter email"
+                         autoComplete="username"
                          onChange={this.updateState('email')}/>
                 </div>
                 <div className="form-group">
@@ -107,6 +108,7 @@ class LogInSignUp extends React.Component {
                          className="form-control"
                          id="psw"
                          placeholder="Enter password"
+                         autoComplete="current-password"
                          onChange={this.updateState('password')}/>
                 </div>
                 <div className="checkbox">
@@ -144,6 +146,7 @@ class LogInSignUp extends React.Component {
                          className="form-control"
                          id="usrname"
                          placeholder="Entername"
+                         autoComplete="username"
                          onChange={this.updateState('username')}/>
                 </div>
                 <div className="form-group">
@@ -160,6 +163,7 @@ class LogInSignUp extends React.Component {
                          className="form-control"
                          id="psw"
                          placeholder="Enter password"
+                         autoComplete="new-password"
                          onChange={this.updateState('password')}/>
                 </div>
                 <div className="form-group">
@@ -168,6 +172,7 @@ class LogInSignUp extends React.Component {
                          className="form-control"
                          id="pswConf"
                          placeholder="Re-enter password"
+                         autoComplete="new-password"
                          onChange={this.updateState('passwordConfirmation')}/>
                 </div>
                 <div className="checkbox">

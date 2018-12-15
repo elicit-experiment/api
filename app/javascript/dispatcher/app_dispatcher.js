@@ -1,7 +1,7 @@
 // dispatcher with actions responding to both
 // view and server actions
 import {
-  Dispatcher
+  Dispatcher,
 } from 'flux';
 
 class DispatcherClass extends Dispatcher {
@@ -9,14 +9,14 @@ class DispatcherClass extends Dispatcher {
   handleViewAction(action) {
     this.dispatch({
       source: 'VIEW_ACTION',
-      action: action
+      action: action,
     });
   }
 
   handleServerAction(action) {
     this.dispatch({
       source: 'SERVER_ACTION',
-      action: action
+      action: action,
     });
   }
 }

@@ -1,6 +1,6 @@
 export default {
   participant_frontend: {
     host: 'localhost',
-    port: '5504'
-  }
+    port: '5504',
+  },
 }

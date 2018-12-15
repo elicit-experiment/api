@@ -45,7 +45,7 @@ export const tokenStatus = (clientToken, userToken, requestClientToken) => {
 
 //Define Root Component and Router
 const RawRootRoutes = (props) => {
-  let token_status = tokenStatus(props.clientToken, props.userToken, props.requestClientToken)
+  let token_status = tokenStatus(props.clientToken, props.userToken, props.requestClientToken);
 
   console.dir(`ROOT RERENDERING ${token_status}`);
   if (token_status) {
@@ -74,7 +74,7 @@ const mapStateToProps = (state) => ( {
 
 const mapDispatchToProps = (dispatch) => ({
   requestClientToken: () => dispatch(requestClientToken( () => { } )),
-  logoutUser: () => dispatch(logoutUser())
+  logoutUser: () => dispatch(logoutUser()),
 });
 
 const RootRoutes = withRouter(connect(

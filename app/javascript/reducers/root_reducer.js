@@ -1,15 +1,11 @@
-import _ from 'lodash'
+import _ from 'lodash';
 import {
-  LOGOUT_USER
-} from '../actions/tokens_actions'
-
-import {
-  actions
-} from '../api/elicit-api'
+  LOGOUT_USER,
+} from '../actions/tokens_actions';
 
 //Import Dependencies
 import {
-  combineReducers
+  combineReducers,
 } from 'redux';
 
 import elicitApi from "../api/elicit-api";
@@ -18,8 +14,8 @@ import elicitApi from "../api/elicit-api";
 import TokensReducer from './tokens_reducer';
 
 const reducers = _.extend({
-  tokens: TokensReducer
-}, elicitApi.reducers)
+  tokens: TokensReducer,
+}, elicitApi.reducers);
 
 //Combine Reducers
 const appReducer = combineReducers(reducers);
@@ -30,16 +26,16 @@ const RootReducer = (state, action) => {
     // save routing and clientToken, but nuke everything else
     const {
       tokens: {
-        clientToken: clientToken
-      }
-    } = state
+        clientToken: clientToken,
+      },
+    } = state;
     state = {
       tokens: {
-        clientToken: clientToken
-      }
+        clientToken: clientToken,
+      },
     }
   }
   return appReducer(state, action)
-}
+};
 
 export default RootReducer;

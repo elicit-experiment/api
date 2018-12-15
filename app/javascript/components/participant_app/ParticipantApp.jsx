@@ -53,9 +53,9 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   loadEligeableProtocols: () => dispatch(elicitApi.actions.eligeable_protocols()),
-  loadCurrentUser: () => dispatch(elicitApi.actions.current_user())
+  loadCurrentUser: () => dispatch(elicitApi.actions.current_user()),
 });
 
-const connectedParticipantApp = connect(mapStateToProps, mapDispatchToProps)(ParticipantApp)
+const connectedParticipantApp = connect(mapStateToProps, mapDispatchToProps)(ParticipantApp);
 
 export { connectedParticipantApp as ParticipantApp };

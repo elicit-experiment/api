@@ -5,7 +5,7 @@ const public_client_id = 'admin_public';
 const public_client_secret = 'czZCaGRSa3F0MzpnWDFmQmF0M2JW';
 const default_headers = {
   'Accept': 'application/json',
-  'Content-Type': 'application/json'
+  'Content-Type': 'application/json',
 };
 
 const handleResponse = (response) => {
@@ -20,7 +20,7 @@ const fetchToken = (request, headers = {}) => (
   fetch(api_root + '/oauth/token', {
     method: 'POST',
     headers: _.extend(default_headers, headers),
-    body: JSON.stringify(request)
+    body: JSON.stringify(request),
   })
   .then(handleResponse)
 );
@@ -29,7 +29,7 @@ export const fetchClientToken = (/*success, error*/) => {
   let token_request = {
     client_id: public_client_id,
     client_secret: public_client_secret,
-    grant_type: 'client_credentials'
+    grant_type: 'client_credentials',
   };
   return fetchToken(token_request)
 };
@@ -38,7 +38,7 @@ export const fetchUserToken = (credentials/*, success, error*/) => {
   let token_request = _.extend({
     client_id: public_client_id,
     client_secret: public_client_secret,
-    grant_type: 'password'
+    grant_type: 'password',
   }, credentials);
   return fetchToken(token_request)
 };
@@ -49,9 +49,9 @@ export const fetchRefreshUserToken = (access_token, refresh_token/*, success, er
     client_id: public_client_id,
     client_secret: public_client_secret,
     grant_type: 'refresh_token',
-    refresh_token: refresh_token
+    refresh_token: refresh_token,
   });
   return fetchToken(token_request, {
-    Authorization: `Bearer ${access_token}`
+    Authorization: `Bearer ${access_token}`,
   })
 };

@@ -10,6 +10,9 @@ rm -rf /var/www/app/public/assets
 cp -R public_init/* /var/www/app/public/
 ln -s /var/www/app/public/ public
 
+# copy awesome print config for production
+cp ./.aprc.production ~/.aprc
+
 # It's OK that this fails
 RAILS_ENV=production PRECOMPILE=1 bundle exec rake db:setup
 
