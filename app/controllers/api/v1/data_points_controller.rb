@@ -23,11 +23,11 @@ module Api::V1
       respond_with instance_variable_get(plural_resource_name), :include => [:protocol_user]
     end
 
-    private
-
     def default_page_size
       100
     end
+
+    private
 
     def data_point_params
       params.require([:stage_id]).permit([:protocol_user_id, :phase_definition_id, :trial_definition_id, :component_id])
