@@ -29,10 +29,18 @@ module Api::V1
 
     def page_params
       if action_name == "index"
-        page = params[:page] || 1
-        page_size = params[:page_size] || 20
+        page = params[:page] || self.default_page
+        page_size = params[:page_size] || self.default_page_size
         { :page => page, :page_size => page_size}
       end
+    end
+
+    def default_page_size
+      20
+    end
+
+    def default_page
+      1
     end
 
     def eager_load_fields

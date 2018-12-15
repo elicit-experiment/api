@@ -25,6 +25,10 @@ module Api::V1
 
     private
 
+    def default_page_size
+      100
+    end
+
     def data_point_params
       params.require([:stage_id]).permit([:protocol_user_id, :phase_definition_id, :trial_definition_id, :component_id])
       permit_json_params(params[:data_point], :data_point) do
