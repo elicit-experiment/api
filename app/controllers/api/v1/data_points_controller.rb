@@ -13,14 +13,14 @@ module Api::V1
 
       where = where_components.reduce(&:merge)
 
-      resources = StudyResult::DataPoint.where(where).includes(:protocol_user)
+      resources = StudyResult::DataPoint.where(where)#.includes(:protocol_user)
 
       if not page_params.nil?
         resources = resources.page(page_params[:page])
                                   .per(page_params[:page_size])
       end
       instance_variable_set(plural_resource_name, resources)
-      respond_with instance_variable_get(plural_resource_name), :include => [:protocol_user]
+      respond_with instance_variable_get(plural_resource_name)#, :include => [:protocol_user]
     end
 
     def default_page_size

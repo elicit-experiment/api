@@ -5,6 +5,14 @@ module Api::V1
 
     include StudyResultConcern
 
+    def query_includes
+      {protocol_user: :user}
+    end
+
+    def response_includes
+      {protocol_user: {include: :user}}
+    end
+
     private
 
     def experiment_params

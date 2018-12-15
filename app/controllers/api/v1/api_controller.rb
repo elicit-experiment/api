@@ -72,11 +72,13 @@ module Api::V1
       if not query_params.nil?
         qp = query_params
         qp.delete_if { |k, v| v.nil? }
-        resources = resource_class.includes(query_includes).where(qp).order(order_params)
+        resources = resource_class.includes(self.query_includes).where(qp).order(order_params)
       end
+
       if not search_param.nil?
         resources = resource_class.full_text_search(search_param)
       end
+
       if not eager_load_fields.nil?
         eager_load_fields.each do |e|
           resources = resources.includes(*e)
@@ -88,7 +90,7 @@ module Api::V1
                                   .per(page_params[:page_size])
       end
       instance_variable_set(plural_resource_name, resources)
-      respond_with instance_variable_get(plural_resource_name),  :include => response_includes
+      respond_with instance_variable_get(plural_resource_name), :include => self.response_includes
     end
 
     # GET /api/{plural_resource_name}/:id
@@ -114,19 +116,7 @@ module Api::V1
       doorkeeper_token.resource_owner_id if doorkeeper_token
     end
 
-    private
-
-    # The singular name for the resource class based on the controller
-    # @return [String]
-    def resource_name
-      @resource_name ||= self.controller_name.singularize
-    end
-
-    # The resource class based on the controller
-    # @return [Class]
-    def resource_class
-      @resource_class ||= resource_name.classify.constantize
-    end
+    protected
 
     # The includes for the query
     def query_includes
@@ -140,6 +130,20 @@ module Api::V1
 
     def order_params
       {:created_at => :desc}
+    end
+
+    private
+
+    # The singular name for the resource class based on the controller
+    # @return [String]
+    def resource_name
+      @resource_name ||= self.controller_name.singularize
+    end
+
+    # The resource class based on the controller
+    # @return [Class]
+    def resource_class
+      @resource_class ||= resource_name.classify.constantize
     end
 
     # Only allow a trusted parameter "white list" through.
