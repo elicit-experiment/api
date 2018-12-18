@@ -24,6 +24,7 @@
     ],
     "rules": {
       "strict": 0,
+      "no-unused-vars": [2, {"args": "all", "argsIgnorePattern": "^_"}],
         "comma-dangle": [1, "always-multiline"],
         "no-console": 0
     },

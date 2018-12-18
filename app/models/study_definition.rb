@@ -40,6 +40,16 @@ class StudyDefinition < ApplicationRecord
       key :type, :integer
       key :format, :int32
     end
+    property :allow_anonymous_users do
+      key :type, :boolean
+    end
+    property :show_in_study_list do
+      key :type, :boolean
+    end
+    property :max_anonymous_users do
+      key :type, :integer
+      key :format, :int32
+    end
     property :principal_investigator_user_id do
       key :type, :integer
       key :format, :int64

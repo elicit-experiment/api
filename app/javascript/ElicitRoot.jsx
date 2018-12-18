@@ -1,8 +1,6 @@
 //Import React and Dependencies
 import React from 'react';
-import { Route, IndexRoute, Redirect, Switch } from 'react-router-dom';
-import { BrowserRouter } from 'react-router-dom'
-import { withRouter } from 'react-router-dom';
+import { Route, Redirect, Switch, BrowserRouter, withRouter } from 'react-router-dom';
 import history from './packs/history.js'
 import { connect } from 'react-redux';
 import { Provider } from 'react-redux';

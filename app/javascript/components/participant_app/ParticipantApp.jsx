@@ -1,12 +1,8 @@
 //Import React and Dependencies
-import React from 'react'
-import ReactDOM from 'react-dom'
-import { Switch, Route, BrowserRouter, Redirect } from 'react-router-dom'
-import { Link } from 'react-router-dom'
+import React from 'react';
+import { Redirect } from 'react-router-dom'
 import ParticipantProtocolList from './ParticipantProtocolList'
-import { withRouter } from 'react-router'
-import pathToRegexp from 'path-to-regexp'
-import { Provider, connect } from "react-redux";
+import { connect } from "react-redux";
 
 // Import Containers
 import HeaderContainer from "../nav/HeaderContainer";

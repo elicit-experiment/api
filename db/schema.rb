@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181210111808) do
+ActiveRecord::Schema.define(version: 20181218035443) do
 
   create_table "chaos_sessions", force: :cascade do |t|
     t.integer "user_id", null: false
@@ -29,6 +29,16 @@ ActiveRecord::Schema.define(version: 20181210111808) do
     t.datetime "expires_at", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["experiment_id"], name: "index_chaos_sessions_on_experiment_id"
+    t.index ["phase_definition_id"], name: "index_chaos_sessions_on_phase_definition_id"
+    t.index ["protocol_definition_id"], name: "index_chaos_sessions_on_protocol_definition_id"
+    t.index ["protocol_user_id"], name: "index_chaos_sessions_on_protocol_user_id"
+    t.index ["stage_id"], name: "index_chaos_sessions_on_stage_id"
+    t.index ["study_definition_id"], name: "index_chaos_sessions_on_study_definition_id"
+    t.index ["study_result_id"], name: "index_chaos_sessions_on_study_result_id"
+    t.index ["trial_definition_id"], name: "index_chaos_sessions_on_trial_definition_id"
+    t.index ["trial_result_id"], name: "index_chaos_sessions_on_trial_result_id"
+    t.index ["user_id"], name: "index_chaos_sessions_on_user_id"
   end
 
   create_table "components", force: :cascade do |t|
@@ -61,6 +71,7 @@ ActiveRecord::Schema.define(version: 20181210111808) do
     t.datetime "revoked_at"
     t.string "scopes"
     t.index ["application_id"], name: "index_oauth_access_grants_on_application_id"
+    t.index ["resource_owner_id"], name: "index_oauth_access_grants_on_resource_owner_id"
     t.index ["token"], name: "index_oauth_access_grants_on_token", unique: true
   end
 
@@ -167,7 +178,14 @@ ActiveRecord::Schema.define(version: 20181210111808) do
     t.string "redirect_close_on_url"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "AllowAnonymousUsers"
+    t.boolean "ShowInStudyList"
+    t.boolean "allow_anonymous_users"
+    t.boolean "show_in_study_list"
+    t.integer "max_anonymous_users"
+    t.index ["allow_anonymous_users"], name: "index_study_definitions_on_allow_anonymous_users"
     t.index ["principal_investigator_user_id"], name: "index_study_definitions_on_principal_investigator_user_id"
+    t.index ["show_in_study_list"], name: "index_study_definitions_on_show_in_study_list"
   end
 
   create_table "study_result_contexts", force: :cascade do |t|
@@ -194,6 +212,7 @@ ActiveRecord::Schema.define(version: 20181210111808) do
     t.index ["component_id"], name: "index_study_result_data_points_on_component_id"
     t.index ["phase_definition_id"], name: "index_study_result_data_points_on_phase_definition_id"
     t.index ["protocol_user_id"], name: "index_study_result_data_points_on_protocol_user_id"
+    t.index ["stage_id"], name: "index_study_result_data_points_on_stage_id"
     t.index ["trial_definition_id"], name: "index_study_result_data_points_on_trial_definition_id"
   end
 
@@ -207,7 +226,9 @@ ActiveRecord::Schema.define(version: 20181210111808) do
     t.datetime "updated_at", null: false
     t.datetime "started_at"
     t.datetime "completed_at"
+    t.index ["current_stage_id"], name: "index_study_result_experiments_on_current_stage_id"
     t.index ["protocol_user_id"], name: "index_study_result_experiments_on_protocol_user_id"
+    t.index ["study_result_id"], name: "index_study_result_experiments_on_study_result_id"
   end
 
   create_table "study_result_stages", force: :cascade do |t|
@@ -222,6 +243,8 @@ ActiveRecord::Schema.define(version: 20181210111808) do
     t.datetime "updated_at", null: false
     t.datetime "started_at"
     t.datetime "completed_at"
+    t.index ["context_id"], name: "index_study_result_stages_on_context_id"
+    t.index ["experiment_id"], name: "index_study_result_stages_on_experiment_id"
     t.index ["phase_definition_id"], name: "index_study_result_stages_on_phase_definition_id"
     t.index ["protocol_user_id"], name: "index_study_result_stages_on_protocol_user_id"
   end
@@ -251,6 +274,7 @@ ActiveRecord::Schema.define(version: 20181210111808) do
     t.index ["component_id"], name: "index_study_result_time_series_on_component_id"
     t.index ["phase_definition_id"], name: "index_study_result_time_series_on_phase_definition_id"
     t.index ["protocol_definition_id"], name: "index_study_result_time_series_on_protocol_definition_id"
+    t.index ["stage_id"], name: "index_study_result_time_series_on_stage_id"
     t.index ["study_definition_id"], name: "index_study_result_time_series_on_study_definition_id"
   end
 
@@ -264,6 +288,7 @@ ActiveRecord::Schema.define(version: 20181210111808) do
     t.datetime "updated_at", null: false
     t.datetime "started_at"
     t.datetime "completed_at"
+    t.index ["experiment_id"], name: "index_study_result_trial_results_on_experiment_id"
     t.index ["phase_definition_id"], name: "index_study_result_trial_results_on_phase_definition_id"
     t.index ["protocol_user_id"], name: "index_study_result_trial_results_on_protocol_user_id"
     t.index ["trial_definition_id"], name: "index_study_result_trial_results_on_trial_definition_id"

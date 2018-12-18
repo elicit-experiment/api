@@ -3,12 +3,12 @@ import reduxApi, {transformers} from "redux-api";
 import adapterFetch from "redux-api/lib/adapters/fetch";
 import _ from 'lodash'
 
-import {logInUser, loginUser, logoutUser, refreshUserToken, resetUserToken} from "../actions/tokens_actions"
+import {logInUser, logoutUser, refreshUserToken, resetUserToken} from "../actions/tokens_actions"
 import {store} from '../store/store';
 
 const api_root = '/api/v1';
-const public_client_id = 'admin_public';
-const public_client_secret = 'czZCaGRSa3F0MzpnWDFmQmF0M2JW';
+//const public_client_id = 'admin_public';
+//const public_client_secret = 'czZCaGRSa3F0MzpnWDFmQmF0M2JW';
 const default_headers = {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
@@ -49,6 +49,7 @@ const refreshTokenIfExpired = ({
         }
         return cb()
     }
+    console.warn('refreshTokenIfExpired: no token, not making call');
     // no token? don't make the call.
 };
 
@@ -80,7 +81,7 @@ const make_entity_def = (singular, plural, endpoint) => {
             if (action.type === `@@redux-api@${plural}_delete_${singular}`) {
                 return {
                     ...state,
-                    data: state.data.filter((item, index) => item.id !== action.id),
+                    data: state.data.filter((item, _index) => item.id !== action.id),
                 };
             }
             if (action.type === `@@redux-api@${plural}_update_${singular}`) {
@@ -117,11 +118,11 @@ const make_entity_def = (singular, plural, endpoint) => {
         postfetch: [
             function ({
                           data,
-                          actions,
+                          _actions,
                           dispatch,
-                          getState,
+                          _getState,
                           request,
-                          response,
+                          _response,
                       }) {
                 if (!request) {
                     debugger;
@@ -178,16 +179,17 @@ const take_protocol = {
             headers: _.extend({}, default_headers),
         },
         prefetch: [
-            refreshTokenIfExpired,
+// Because of anonymous protocols, we don't need to be logged in for this
+            //            refreshTokenIfExpired,
         ],
         postfetch: [
             function ({
                           data,
-                          actions,
-                          dispatch,
-                          getState,
-                          request,
-                          response,
+                          _actions,
+                          _dispatch,
+                          _getState,
+                          _request,
+                          _response,
                       }) {
                 window.location.href = data.url
             },
@@ -208,16 +210,28 @@ const eligeable_protocol = {
     },
 };
 
+const anonymous_protocols = {
+    anonymous_protocols: {
+        url: `${api_root}/participant/anonymous_protocols`,
+        transformer: transformers.array,
+        options: {
+            headers: _.extend({}, default_headers),
+        },
+        prefetch: [
+        ],
+    },
+};
+
 let user_entity = make_entity_def('user', 'user', 'users');
 
 // for users, make sure when we post (sign up) we chain the login action)
 user_entity.user.postfetch.push(function ({
-                                              data,
-                                              actions,
+                                              _data,
+                                              _actions,
                                               dispatch,
-                                              getState,
+                                              _getState,
                                               request,
-                                              response,
+                                              _response,
                                           }) {
     if (!request || !request.params) {
         return
@@ -232,10 +246,11 @@ const api = reduxApi(_.extend({},
     current_user,
     take_protocol,
     eligeable_protocol,
+    anonymous_protocols,
     make_entity_def('study_definition', 'studies', 'study_definitions'),
     make_entity_def('protocol_definition', 'protocol_definitions', '/study_definitions/:study_definition_id/protocol_definitions'),
     make_entity_def('phase_definitions', 'phase_definitions', '/study_definitions/:study_definition_id/protocol_definitions/:protocol_definition_id/phase_definitions'),
-    user_entity)).use("options", (url, params, getState) => {
+    user_entity)).use("options", (_url, _params, getState) => {
     const {
         tokens: {
             clientToken,
@@ -259,10 +274,10 @@ const api = reduxApi(_.extend({},
             },
         };
     }
-    return headers;
+    return default_headers;
 }).use("responseHandler",
     (err, data) => {
-        console.log(`RESPONSE: ${JSON.stringify(err)} ${JSON.stringify(data)}`);
+        //console.log(`RESPONSE; err: ${JSON.stringify(err)} data: ${JSON.stringify(data)}`);
 
         if (err) {
             if (err.error === 'invalid_token') {

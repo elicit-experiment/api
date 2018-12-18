@@ -1,6 +1,6 @@
 module Api::V1
   class ParticipantController < ApiController
-    before_action :doorkeeper_authorize! # Requires access token for all actions
+    before_action :doorkeeper_authorize!, except: [:anonymous_protocols] # Requires access token for all actions
 
     def eligeable_protocols
       protocol_users = ProtocolUser.joins(:protocol_definition)
@@ -12,7 +12,14 @@ module Api::V1
       respond_with protocol_users, :include => [:protocol_definition, :study_definition, { :experiment => {include: :current_stage} }  ]
     end
 
-   private
+    def anonymous_protocols
+      protocol_definitions = ProtocolDefinition.joins(:study_definition)
+                                               .where({:study_definitions => {:allow_anonymous_users => true}})
+
+      respond_with protocol_definitions, :include => [:study_definition]
+    end
+
+    private
 
   end
 end
