@@ -29,30 +29,28 @@ module ChaosApi::V6
 
       output = JSON.parse(params[:output])
 
+      datapoint_query_fields = {
+          :stage_id => @chaos_session.stage&.id,
+      :protocol_user_id => @chaos_session.protocol_user_id,
+      :phase_definition_id => @component.phase_definition_id,
+      :trial_definition_id => @component.trial_definition_id,
+      :component_id => @component.id,
+      }
+
       new_datapoints = output["Events"].map do |event|
-        dp_params = {
-            :stage_id => @chaos_session.stage&.id,
-            :protocol_user_id => @chaos_session.protocol_user_id,
-            :phase_definition_id => @component.phase_definition_id,
-            :trial_definition_id => @component.trial_definition_id,
-            :component_id => @component.id,
+        dp_params = datapoint_query_fields.merge({
             :point_type => event["Type"],
             :kind => event["EventId"] || event['Id'],
             :value => event["Data"],
             :method => event["Method"],
             :datetime => event["DateTime"]
-        }
+        })
         StudyResult::DataPoint.new(dp_params)
       end
 
-      state_dp_params = {
-          :stage_id => @chaos_session.stage&.id,
-          :protocol_user_id => @chaos_session.protocol_user_id,
-          :phase_definition_id => @component.phase_definition_id,
-          :trial_definition_id => @component.trial_definition_id,
-          :component_id => @component.id,
-          :point_type => "State"
-      }
+      state_dp_params = datapoint_query_fields.merge({
+          :point_type => 'State'
+      })
 
       if @chaos_session.preview
 
@@ -68,7 +66,14 @@ module ChaosApi::V6
         return
       end
 
-      StudyResult::DataPoint.transaction { new_datapoints.each(&:save!) }
+      StudyResult::DataPoint.transaction do
+        # because CHAOS' semantics are to republish everything, blow away existing datapoints
+        # We can't easily go incremental because of chaos' rate limiting, which means some updates
+        # might not fire, and it's not easy to keep track of which ones made it to the server and which
+        # ones didn't
+        StudyResult::DataPoint.where(datapoint_query_fields).delete_all
+        new_datapoints.each(&:save!)
+      end
 
       logger.info new_datapoints.ai
 

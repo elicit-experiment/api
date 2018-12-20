@@ -72,7 +72,7 @@ module Api::V1
       if not query_params.nil?
         qp = query_params
         qp.delete_if { |k, v| v.nil? }
-        resources = resource_class.includes(self.query_includes).where(qp).order(order_params)
+        resources = resource_class.includes(self.send(:query_includes)).where(qp).order(order_params)
       end
 
       if not search_param.nil?
@@ -90,7 +90,7 @@ module Api::V1
                                   .per(page_params[:page_size])
       end
       instance_variable_set(plural_resource_name, resources)
-      respond_with instance_variable_get(plural_resource_name), :include => self.response_includes
+      respond_with instance_variable_get(plural_resource_name), :include => self.send(:response_includes)
     end
 
     # GET /api/{plural_resource_name}/:id
