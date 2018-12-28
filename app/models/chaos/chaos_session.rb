@@ -27,6 +27,7 @@ module Chaos
         :study_result_id => study_result.id,
         :protocol_user_id => protocol_user.id }).first_or_initialize do |e|
         # we need to have a real experiment with an ID for later
+        e.started_at = DateTime.now
         e.save!
       end
 
