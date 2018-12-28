@@ -1,5 +1,5 @@
 import React from 'react'
-import _ from 'lodash'
+import { find } from 'lodash/find'
 import update from 'react-addons-update'
 import Study from './Study'
 
@@ -20,7 +20,7 @@ class EditStudy extends React.Component {
 
   buildState(props) {
     let study_id = props.match.params.study_id;
-    let study = _.find(props.studies, (study) => study_id == study.id);
+    let study = find(props.studies, (study) => study_id == study.id);
     console.dir(props);
     let study_protocols = props.study_protocols.filter((sp) => sp.study_id !== study_id );
     console.dir(study_protocols);

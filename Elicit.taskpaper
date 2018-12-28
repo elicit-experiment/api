@@ -18,14 +18,28 @@ Fixes Nov 28:
 - Query example: "Give me all eye tracking for each video". @done
 
 - Have you tried to see what happens when people to not have a webcam? Or they don’t allow access, then it fails? @done
-- Prevent users from pausing or going back in the video or stopping.
-- HTTP support
-- Landing page for mechanical turn (create seprate page, automatically log in and assign new user when quiz is taken from there)
-- Update the 'normal' home page.
-- Provide video coodinates.
+- HTTP support @done
+- Landing page for mechanical turk (create seprate page, automatically log in and assign new user when quiz is taken from there) @done
+- Update the 'normal' home page. @done
+- Provide video coodinates. @done
 
+- Prevent users from pausing or going back in the video or stopping. @done
+- Fix duplicate events @done
+- Update to new object creation code idiom in build_study.py @done
 
+- Change the output for answers.csv to "The actual text of the response and the ID (compared to the input questions, i.e. options are 1. The sky is blue, 2. The sky is red, 3, the sky is black, presented to the user in order 2 3 1, the user chooses The sky is blue. When the answer is returned then then option 1, The sky is blue is returned.)"
+- Break out the layout into layouts.csv with the geometry as columns, plus experiment_id, phase_definition_id, trial_definition_id, component_id, time, user_id
+- Create trial_events.csv as "A dump of all timestamps on the experiment level (when did the user start and end the experiment, phase level, when did they start/stop a phase and on the trial level, when was a trial started and ended."
+- Dump all "address" info (experiment_id, phase_definition_id, trial_definition_id, component_id) in video.csv
+- [Low Priority] Have the library code handle the json.dumps
 
+- [bug fix] experiment results doesn't always have created_at and completed_at
+
+- Anonymous user post-experiment landing page
+- Support for adding a hidden "MTurk token" to post-experiment landing page
+- Double check formatting codes work: "Also a small bug: In the Summary text field describing a protocol. I can see in your scrip that you insert a number of \n however it seems these are ignored. Maybe the frontend uses different notation for the next line symbol."
+- [Low Priority, Try] to get phase_definition_id, trial_definition_id included in webgazer.csv
+- [Low Priority] Layout on all components
 
 Add About Page:
 - Add About Page @done(2017-12-05)

@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import cloneDeep from 'lodash/cloneDeep'
 import update from 'react-addons-update'
 
 //Import Tokens Constants
@@ -29,14 +29,14 @@ const TokensReducer = (state = {
       //Set clientToken to sessionStorage to maintain token in event of page refresh
       sessionStorage.setItem("clientToken", JSON.stringify(action.clientToken, 2));
       console.dir(JSON.stringify(state, null, 2));
-      newState = _.cloneDeep(state);
+      newState = cloneDeep(state);
       newState.clientToken = action.clientToken;
       console.dir(JSON.stringify(newState, null, 2));
       return newState;
     case RECEIVE_USER_TOKEN:
       //Set userToken to sessionStorage to maintain token in event of page refresh
       sessionStorage.setItem("userToken", JSON.stringify(action.userToken, 2));
-      newState = _.cloneDeep(state);
+      newState = cloneDeep(state);
       newState.userToken = action.userToken;
       return update(state, {
         'userToken': {
@@ -45,7 +45,7 @@ const TokensReducer = (state = {
       });
     case RESET_USER_TOKEN:
       sessionStorage.removeItem("userToken");
-      newState = _.cloneDeep(state);
+      newState = cloneDeep(state);
       newState.userToken = {
         access_token: undefined,
       };

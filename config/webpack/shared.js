@@ -31,6 +31,12 @@ module.exports = {
     publicPath: output.publicPath
   },
 
+  optimization: {
+    splitChunks: {
+      chunks: 'all'
+    },
+  },
+
   module: {
     rules: sync(join(loadersDir, '*.js')).map(loader => require(loader))
   },
@@ -39,6 +45,8 @@ module.exports = {
     new webpack.EnvironmentPlugin(JSON.parse(JSON.stringify(env))),
     new ExtractTextPlugin(env.NODE_ENV === 'production' ? '[name]-[hash].css' : '[name].css'),
     new ManifestPlugin({
+      entrypoints: true,
+      writeToDisk: true,
       publicPath: output.publicPath,
       writeToFileEmit: true
     })

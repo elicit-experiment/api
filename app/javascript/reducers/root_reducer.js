@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import extend from 'lodash/extend';
 import {
   LOGOUT_USER,
 } from '../actions/tokens_actions';
@@ -13,7 +13,7 @@ import elicitApi from "../api/elicit-api";
 //Import Individual Reducers
 import TokensReducer from './tokens_reducer';
 
-const reducers = _.extend({
+const reducers = extend({
   tokens: TokensReducer,
 }, elicitApi.reducers);
 
