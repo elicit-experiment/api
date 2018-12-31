@@ -24,18 +24,14 @@ module.exports = {
       return localMap
     }, {}
   ),
-
+/* this causes the entry to not even get called
+TODO: investigate
   output: {
     filename: '[name].js',
     path: output.path,
     publicPath: output.publicPath
   },
-
-  optimization: {
-    splitChunks: {
-      chunks: 'all'
-    },
-  },
+ */
 
   module: {
     rules: sync(join(loadersDir, '*.js')).map(loader => require(loader))
