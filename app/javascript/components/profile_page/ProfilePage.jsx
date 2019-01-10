@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
 export default class ProfilePage extends Component {
   constructor(props) {
@@ -32,7 +33,7 @@ export default class ProfilePage extends Component {
 }
 
 ProfilePage.propTypes = {
-  current_user: React.PropTypes.object.isRequired,
+  current_user: PropTypes.object.isRequired,
 };
 
 ProfilePage.defaultProps = {

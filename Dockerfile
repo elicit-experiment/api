@@ -12,7 +12,7 @@ RUN apt-get update -qq && apt-get install -y build-essential libpq-dev
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 RUN apt-get -y install nodejs
 RUN node --version
-rUN npm --version
+RUN npm --version
 
 # Install arn
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
@@ -38,7 +38,7 @@ RUN bundle install
 
 # Node:
 COPY package.json .
-RUN npm install
+RUN yarn install
 RUN node --version
 
 EXPOSE 3000
@@ -52,16 +52,16 @@ COPY .babelrc .
 COPY .bowerrc .
 COPY .postcssrc.yml .
 COPY bin bin
-#RUN bundle exec rails webpacker:install
-
-#RUN RAILS_ENV=production bin/webpack
 
 # Copy the main application.
 COPY . .
 RUN mkdir log
 
 # fake DB per https://iprog.com/posting/2013/07/errors-when-precompiling-assets-in-rails-4-0
+RUN rm -rf public/assets
+RUN rm -rf public/packs
 RUN RAILS_ENV=production PRECOMPILE=1 DATABASE_URL=postgresql://user:pass@127.0.0.1/dbname bundle exec rake assets:precompile
+RUN ls -als public/packs
 
 RUN RAILS_ENV=test PRECOMPILE=1 bundle exec rake db:drop
 RUN RAILS_ENV=test PRECOMPILE=1 bundle exec rake db:create

@@ -40,6 +40,7 @@ console.log("Elicit App Loading...");
 console.dir(preloadedStore);
 
 const onload = () => {
+    console.log("Loader::onload");
   var elt = document.getElementById('elicit-app');
   ReactDOM.render(<ElicitRoot store={store}></ElicitRoot>, elt);
 };

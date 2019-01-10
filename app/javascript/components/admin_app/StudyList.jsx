@@ -5,14 +5,13 @@ import PropTypes from 'prop-types'
 import TransitionGroup from 'react-transition-group/TransitionGroup'
 import Transition from 'react-transition-group/Transition';
 import CSSTransition from 'react-transition-group/CSSTransition';
-import InlineEdit from 'react-edit-inline';
 import update from 'react-addons-update'
 import Dropdown from '../ui_elements/DropDown'
 import Study from './Study'
 import { AppRoutes } from './AdminApp'
 import { Link } from 'react-router-dom'
 import pathToRegexp from 'path-to-regexp'
-import elicitApi from "../../api/elicit-api.js"; 
+import elicitApi from "../../api/elicit-api.js";
 
 const Fade = ({ children, ...props }) => (
  <CSSTransition

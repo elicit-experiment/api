@@ -16,5 +16,6 @@ db/*.sqlite3
 node_modules/
 vendor/assets/components/
 public/assets/
-
+public/packs/
+yarn-error.log
 

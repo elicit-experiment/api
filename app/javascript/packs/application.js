@@ -15,11 +15,10 @@ window.jQuery = jquery;
 window.jquery = jquery;
 
 import 'bootstrap/dist/css/bootstrap'
-//let Boostrap = require('bootstrap/dist/js/bootstrap')
 let Bootstrap = require('bootstrap');
 
 import './main.scss'
 
-import Loader from '../Loader'
+import Loader from '../Loader.jsx'
 
 document.addEventListener("DOMContentLoaded", Loader);

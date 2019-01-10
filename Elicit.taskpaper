@@ -32,7 +32,6 @@ Fixes Nov 28:
 - Create trial_events.csv as "A dump of all timestamps on the experiment level (when did the user start and end the experiment, phase level, when did they start/stop a phase and on the trial level, when was a trial started and ended."
 - Dump all "address" info (experiment_id, phase_definition_id, trial_definition_id, component_id) in video.csv
 - [Low Priority] Have the library code handle the json.dumps
-
 - [bug fix] experiment results doesn't always have created_at and completed_at
 
 - Anonymous user post-experiment landing page

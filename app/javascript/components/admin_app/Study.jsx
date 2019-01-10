@@ -1,7 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
-import InlineEdit from "react-edit-inline";
+//import InlineEdit from "react-edit-inline";
 import update from "react-addons-update";
 import Dropdown from "../ui_elements/DropDown";
 import { AppRoutes } from "./AdminApp";
@@ -192,23 +192,7 @@ class Study extends React.Component {
             <b className="col-xs-2">Title:</b>
             <div className="col-xs-5">
               {this.props.study.id} —{" "}
-              <InlineEdit
-                validate={this.customValidateTitle}
-                activeClassName="editing col-xs-5xx"
-                className="col-xs-5xx"
-                text={this.state.title}
-                paramName="title"
-                change={this.titleChanged}
-                style={{
-                  minWidth: 150,
-                  display: "inline-block",
-                  margin: 0,
-                  padding: 0,
-                  fontSize: 15,
-                  outline: 0,
-                  border: 0,
-                }}
-              />
+
             </div>
           </div>
           <div className="row study-info-row">
