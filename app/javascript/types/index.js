@@ -1,5 +1,23 @@
 import PropTypes from 'prop-types';
 
+export const ApiReturnCollectionOf = (BaseType) => PropTypes.shape({
+  data: PropTypes.arrayOf(BaseType).isRequired,
+  error: PropTypes.any,
+  loading: PropTypes.bool.isRequired,
+  request: PropTypes.shape({}),
+  sync: PropTypes.bool.isRequired,
+  syncing: PropTypes.bool.isRequired,
+});
+
+export const ApiReturnValueOf = (BaseType) => PropTypes.shape({
+  data: BaseType,
+  error: PropTypes.any,
+  loading: PropTypes.bool.isRequired,
+  request: PropTypes.shape({}),
+  sync: PropTypes.bool.isRequired,
+  syncing: PropTypes.bool.isRequired,
+});
+
 export const RequestShapeType = PropTypes.shape({});
 
 export const MatchType = PropTypes.shape({
@@ -16,25 +34,20 @@ export const LocationType = PropTypes.shape({
     search: PropTypes.string.isRequired,
 }).isRequired;
 
-export const CurrentUserType = PropTypes.shape({
-    data: PropTypes.shape({
-        anonymous: PropTypes.bool,
-        created_at: PropTypes.string,
-        email: PropTypes.string,
-        id: PropTypes.number,
-        role: PropTypes.string,
-        updated_at: PropTypes.string,
-        username: PropTypes.string,
-    }).isRequired,
-    error: PropTypes.any,
-    loading: PropTypes.bool.isRequired,
-    request: RequestShapeType,
-    sync: PropTypes.bool.isRequired,
-    syncing: PropTypes.bool.isRequired,
-}).isRequired;
+export const UserType = PropTypes.shape({
+  anonymous: PropTypes.bool,
+  created_at: PropTypes.string,
+  email: PropTypes.string,
+  id: PropTypes.number,
+  role: PropTypes.string,
+  updated_at: PropTypes.string,
+  username: PropTypes.string,
+});
+
+export const CurrentUserType = ApiReturnValueOf(UserType);
 
 export const UserTokenType = PropTypes.shape({
-    access_token: PropTypes.string.isRequired,
+    access_token: PropTypes.string,
     created_at: PropTypes.number.isRequired,
     expires_in: PropTypes.number.isRequired,
     refresh_token: PropTypes.string.isRequired,
@@ -108,12 +121,4 @@ export const EligibleProtocolsType = PropTypes.shape({
     sync: PropTypes.bool.isRequired,
     syncing: PropTypes.bool.isRequired,
 });
-
-export const AnonymousProtocolsType = PropTypes.shape({
-    data: PropTypes.arrayOf(ProtocolDefinitionType).isRequired,
-    error: PropTypes.any,
-    loading: PropTypes.bool.isRequired,
-    request: PropTypes.shape({}),
-    sync: PropTypes.bool.isRequired,
-    syncing: PropTypes.bool.isRequired,
-});
+export const AnonymousProtocolsType = ApiReturnCollectionOf(ProtocolDefinitionType);

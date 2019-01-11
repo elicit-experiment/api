@@ -20,7 +20,7 @@
   clear:both;
   padding-top:20px;
   background-color: #f1f1f1;
-} 
+}
 
 .fade-apear {
   opacity: 1;
@@ -73,21 +73,21 @@ h1 {
 
 .new-study {
  text-align:center;
- font-size: 36px; 
+ font-size: 36px;
 }
 
 .study {
   -webkit-transition: 0.5s;
   -moz-transition: 0.5s;
   -o-transition: 0.5s;
-  visibility: hidden; 
+  visibility: hidden;
 }
 
 .study-summary {
   -webkit-transition: 0.5s;
   -moz-transition: 0.5s;
   -o-transition: 0.5s;
-  visibility: hidden; 
+  visibility: hidden;
 }
 
 .study-detail {
@@ -98,7 +98,7 @@ h1 {
 
 
 .study-summary.show {
-  visibility: visible; 
+  visibility: visible;
 }
 
 .study-wrapper {
@@ -120,7 +120,7 @@ h1 {
   display:block;
   position:absolute;
   right:6px;
-  top:20px;  
+  top:20px;
 }
 
 .protocol-header-row {
@@ -133,11 +133,11 @@ h1 {
   -webkit-transition: 0.5s;
   -moz-transition: 0.5s;
   -o-transition: 0.5s;
-  visibility: hidden; 
+  visibility: hidden;
 }
 
 .protocol-summary.show {
-  visibility: visible; 
+  visibility: visible;
 }
 
 .protocol-wrapper {
@@ -156,13 +156,13 @@ h1 {
 }
 
 .protocol-description-text {
- font-size: 12px; 
-  padding-bottom:15px; 
+ font-size: 12px;
+  padding-bottom:15px;
 }
 
 .protocol-summary-text {
-  padding-bottom:15px; 
-  font-size: 14px; 
+  padding-bottom:15px;
+  font-size: 14px;
 }
 
 .started-experiment {
@@ -226,4 +226,11 @@ h1 {
 .background-logo {
   font-family: 'Leckerli One', cursive;
   font-size: 80vh;
+}
+
+.study-action-bar > a,
+.study-action-bar > div,
+.study-action-bar > button {
+  margin-left:10px;
+  float: right;
 }

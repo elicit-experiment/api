@@ -20,10 +20,10 @@
     "react": "^16.7.0",
     "react-addons-update": "^15.6.2",
     "react-bootstrap-toggle": "^2.2.6",
+    "react-copy-to-clipboard": "^5.0.1",
     "react-data-grid": "^2.0.80",
     "react-data-grid-addons": "^2.0.80",
     "react-dom": "^16.7.0",
-    "react-edit-inline": "^1.0.8",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.2.2",
     "react-transition-group": "^2.2.1",
@@ -33,6 +33,7 @@
     "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
+    "babel-eslint": "^10.0.1",
     "eslint": "^5.8.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-config-standard": "^12.0.0",

@@ -44,8 +44,6 @@ class AdminApp extends React.Component {
 			return <Redirect to='/participant'></Redirect>
 		}
 
-		console.log(`${this.props.match.url}/studies/:study_id/protocols/:protocol_id`);
-
 		return (
 			<div>
 				<HeaderContainer></HeaderContainer>
@@ -60,14 +58,6 @@ class AdminApp extends React.Component {
 	}
 }
 
-
-/*var locationShape = PropTypes.shape({
-	hash: PropTypes.string.isRequired,
-	key: PropTypes.string.isRequired,
-	pathname: PropTypes.string.isRequired,
-	search: PropTypes.string.isRequired
-});
-*/
 AdminApp.propTypes = {
 	current_user: CurrentUserType,
 	match: MatchType,

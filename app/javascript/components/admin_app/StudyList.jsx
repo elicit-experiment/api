@@ -1,17 +1,10 @@
 import React from 'react'
-import ReactDOM from 'react-dom'
-import { Provider, connect } from "react-redux";
 import PropTypes from 'prop-types'
 import TransitionGroup from 'react-transition-group/TransitionGroup'
-import Transition from 'react-transition-group/Transition';
 import CSSTransition from 'react-transition-group/CSSTransition';
-import update from 'react-addons-update'
-import Dropdown from '../ui_elements/DropDown'
 import Study from './Study'
-import { AppRoutes } from './AdminApp'
-import { Link } from 'react-router-dom'
-import pathToRegexp from 'path-to-regexp'
-import elicitApi from "../../api/elicit-api.js";
+import {StudyDefinitionType, ProtocolDefinitionType, ApiReturnCollectionOf} from '../../types';
+import pluralize from 'pluralize';
 
 const Fade = ({ children, ...props }) => (
  <CSSTransition
@@ -23,14 +16,14 @@ const Fade = ({ children, ...props }) => (
  </CSSTransition>
 );
 
-
-
 class StudyList extends React.Component {
   render() {
+    console.log(JSON.stringify(this.props, null, 2));
+
     if (!this.props.studies || !this.props.studies.data) {
       return (<div><h1>Loading...</h1></div>)
     }
-    var studies = this.props.studies.data.map( (study, i) => {
+    const studies = this.props.studies.data.map( (study, i) => {
       return(
         <Fade key={study.id} appear={true} >
           <div>
@@ -42,7 +35,7 @@ class StudyList extends React.Component {
 
     return(
     <div>
-      <h1>{studies.length} Studies</h1>
+      <h1>{studies.length} {pluralize('Study', studies.length)} </h1>
       <TransitionGroup>
         {studies}
       </TransitionGroup>
@@ -57,6 +50,12 @@ class StudyList extends React.Component {
     }
   }
 }
+
+StudyList.propTypes = {
+  protocol_definitions: ApiReturnCollectionOf(ProtocolDefinitionType),
+  studies: ApiReturnCollectionOf(StudyDefinitionType),
+  loadStudies: PropTypes.func,
+};
 
 export default StudyList;
 

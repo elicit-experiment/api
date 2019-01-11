@@ -1,16 +1,15 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
-//import InlineEdit from "react-edit-inline";
 import update from "react-addons-update";
-import Dropdown from "../ui_elements/DropDown";
 import { AppRoutes } from "./AdminApp";
 import { Link } from "react-router-dom";
-import pathToRegexp from "path-to-regexp";
 import elicitApi from "../../api/elicit-api.js";
 import { connect } from "react-redux";
 import $ from "jquery";
 import Toggle from "react-bootstrap-toggle";
+import {StudyDefinitionType, ProtocolDefinitionType, ApiReturnCollectionOf} from '../../types';
+import {CopyToClipboard} from 'react-copy-to-clipboard';
 
 const ProtocolInfoLink = props => (
   <div className="row study-info-row">
@@ -25,6 +24,12 @@ const ProtocolInfoLink = props => (
     </b>
   </div>
 );
+
+ProtocolInfoLink.propTypes = {
+  protocols: PropTypes.arrayOf(ProtocolDefinitionType),
+  study: StudyDefinitionType,
+};
+
 
 class _Protocol extends React.Component {
   constructor(props) {
@@ -59,27 +64,35 @@ class _Protocol extends React.Component {
     );
   }
   render() {
+      const htmlDescription = {
+          dangerouslySetInnerHTML: { __html: this.props.protocol.description },
+      };
+
     return (
       <div className="row well " key={this.props.protocol.id}>
         <div
           className="protocol-row protocol-header-row"
           key={"t" + this.props.protocol.id}
         >
-          <div className="col-xs-5">
+          <div className="col-xs-6">
             <b>{this.props.protocol.id}  —{" "}
             {this.props.protocol.name}</b>
           </div>
-          <div className="col-xs-3">
+          <div className="col-xs-6 study-action-bar">
             <Link to={`/admin/studies/${this.props.study.id}/protocols/${this.props.protocol.id}`} className="active btn btn-primary">
-              Preview Protocol
+              Preview
             </Link>
-          </div>
-          <div className="col-xs-2">
+            <CopyToClipboard text={`${window.location.origin}/studies/${this.props.study.id}/protocols/${this.props.protocol.id}`}
+                             onCopy={() => this.setState({copied: true})}>
+              <button type="button" className="btn btn-primary">
+                {this.state.copied ? <span style={{color: 'red'}}>Copied.</span> : <span>Get Link</span>}
+                <i className="glyphicon glyphicon-link" aria-hidden="true" />
+              </button>
+            </CopyToClipboard>
+
             <button type="button" className="btn btn-primary">
               Phases &nbsp; <span className="badge badge-secondary">{this.props.protocol.phase_definitions.length}</span>
             </button>
-          </div>
-          <div className="col-xs-2">
             <Toggle
               onClick={this.onToggle.bind(this)}
               on={<span>Active</span>}
@@ -93,13 +106,17 @@ class _Protocol extends React.Component {
         </div>
 
         <div className="protocol-row " key={"d" + this.props.protocol.id}>
-          <div className="col-xs-12">{this.props.protocol.description}</div>
+          <div className="col-xs-12" {...htmlDescription}></div>
         </div>
       </div>
     );
   }
 }
 
+_Protocol.propTypes = {
+  protocol: ProtocolDefinitionType,
+  study: StudyDefinitionType,
+};
 
 const Protocol = connect(state => ({}))(_Protocol);
 
@@ -127,6 +144,13 @@ class ProtocolEdit extends React.Component {
   }
 }
 
+ProtocolEdit.propTypes = {
+  study_protocols: PropTypes.arrayOf(ProtocolDefinitionType),
+  protocol_definitions: ApiReturnCollectionOf(ProtocolDefinitionType),
+  study: StudyDefinitionType,
+};
+
+
 class Study extends React.Component {
   constructor(props) {
     super(props);
@@ -134,8 +158,6 @@ class Study extends React.Component {
     this.deleteStudy = this.deleteItem.bind(this);
     this.state = {
       title: this.props.study.title,
-      users: this.props.users,
-      studies: this.props.studies,
     };
   }
 
@@ -165,7 +187,7 @@ class Study extends React.Component {
   dropDownOnChange(x) {}
 
   render() {
-    var protocols_row, study_class;
+    let protocols_row, study_class;
     if (true || this.props.edit_protocols) {
       protocols_row = (
         <ProtocolEdit
@@ -187,11 +209,11 @@ class Study extends React.Component {
     }
     return (
       <div className="study-wrapper" key={this.props.study.id}>
-        <div className={study_class} data-studyId={this.props.study.id}>
+        <div className={study_class} data-studyid={this.props.study.id}>
           <div className="row study-info-row">
             <b className="col-xs-2">Title:</b>
             <div className="col-xs-5">
-              {this.props.study.id} —{" "}
+              {this.props.study.id} — {this.props.study.title}
 
             </div>
           </div>
@@ -235,6 +257,16 @@ class Study extends React.Component {
     );
   }
 }
+
+Study.propTypes = {
+  protocol_definitions: ApiReturnCollectionOf(ProtocolDefinitionType),
+  study: StudyDefinitionType,
+  edit_protocols: PropTypes.bool,
+};
+
+Study.defaultProps = {
+  edit_protocols: false,
+};
 
 const mapStateToProps = state => ({});
 
