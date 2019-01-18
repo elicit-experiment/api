@@ -159,7 +159,7 @@ class ChaosExperimentService
       end
 
       begin
-        component_data = JSON.parse(c.definition_data)
+        component_data = JSON.parse(c.definition_data || '{}')
       rescue JSON::ParserError => pe
         Rails.logger.error "Failed to parse component definition data='#{c.definition_data}'"
         Rails.logger.error pe.ai

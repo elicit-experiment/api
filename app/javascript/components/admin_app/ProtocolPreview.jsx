@@ -8,8 +8,12 @@ export default class ProtocolPreview extends React.Component {
       let phases = this.props.protocol.phase_definitions.map( (phase) => {
         let trials = phase.trial_definitions.map( (trial) => {
           let preview_href = `/api/v1/study_definitions/${this.props.match.params.study_id}/protocol_definitions/${this.props.match.params.protocol_id}/preview?phase_definition_id=${phase.id}&trial_definition_id=${trial.id}`;
+          let trialInfo = `Trial ${trial.id}`;
+          if ('name' in trial && !!trial.name && trial.name !== '') {
+            trialInfo += ` ${trial.name}`
+          }
           return <div className="row" key={trial.id}>
-              <div className="col-xs-offset-4 col-xs-4">Trial {trial.id}</div>
+              <div className="col-xs-offset-4 col-xs-4">{trialInfo}</div>
             <div className="col-xs-4"><a href={preview_href}> See Preview</a></div>
           </div>
         });

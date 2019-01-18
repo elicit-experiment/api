@@ -86,6 +86,7 @@ class _Protocol extends React.Component {
                              onCopy={() => this.setState({copied: true})}>
               <button type="button" className="btn btn-primary">
                 {this.state.copied ? <span style={{color: 'red'}}>Copied.</span> : <span>Get Link</span>}
+                &nbsp;
                 <i className="glyphicon glyphicon-link" aria-hidden="true" />
               </button>
             </CopyToClipboard>

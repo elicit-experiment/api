@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181218035443) do
+ActiveRecord::Schema.define(version: 20190118161909) do
 
   create_table "chaos_sessions", force: :cascade do |t|
     t.integer "user_id", null: false
@@ -301,6 +301,8 @@ ActiveRecord::Schema.define(version: 20181218035443) do
     t.integer "phase_definition_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "name"
+    t.string "description"
     t.index ["phase_definition_id"], name: "index_trial_definitions_on_phase_definition_id"
     t.index ["protocol_definition_id"], name: "index_trial_definitions_on_protocol_definition_id"
     t.index ["study_definition_id"], name: "index_trial_definitions_on_study_definition_id"

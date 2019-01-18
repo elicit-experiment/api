@@ -12,7 +12,7 @@ module Api::V1
                   :protocol_definition_id => params[:protocol_definition_id],
                   :phase_definition_id => params[:phase_definition_id],
                  }
-        params.require(:trial_definition).permit(:definition_data).merge(origin)
+        params.require(:trial_definition).permit([:definition_data, :name, :description]).merge(origin)
       end
     end
   end
