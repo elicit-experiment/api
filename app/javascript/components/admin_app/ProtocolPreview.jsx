@@ -1,6 +1,5 @@
 import React from 'react';
-//import PropTypes from 'prop-types';
-import { MatchType } from 'types';
+import {MatchType, ProtocolDefinitionType} from 'types';
 
 export default class ProtocolPreview extends React.Component {
   render() {
@@ -35,5 +34,6 @@ export default class ProtocolPreview extends React.Component {
 }
 
 ProtocolPreview.propTypes = {
+  protocol: ProtocolDefinitionType,
 	match: MatchType,
 };

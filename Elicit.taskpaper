@@ -45,6 +45,12 @@ Final Push:
 		- Instructions (this will be an iterative process on my part,  I have already sent you a bunch of text a while ago)
 		Volume control (have a small video in the instructions and tell people to adjust the volume so they can hear the video, that would ensure they have headphones on, or whatever they use)
 		- Demographics page (you can make a draft, and we can see if it is all there)
+		- Dump demographics page results to csv
+		- Center the FreeText component by wrapping it.
+		- Separate Video and Video+Calibration as different components
+		- Update description of calibration in "main" /"primary" calibration page
+		- Admin Page: are you sure prompt on study deletion @done
+		- Header HTML/centering issue @done
 	
 Once this is up and running I can run the experiment 10 times and see if everything parses correctly etc.
 	

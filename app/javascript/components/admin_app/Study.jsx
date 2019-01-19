@@ -1,5 +1,4 @@
 import React from "react";
-import ReactDOM from "react-dom";
 import PropTypes from "prop-types";
 import update from "react-addons-update";
 import { AppRoutes } from "./AdminApp";
@@ -10,6 +9,7 @@ import $ from "jquery";
 import Toggle from "react-bootstrap-toggle";
 import {StudyDefinitionType, ProtocolDefinitionType, ApiReturnCollectionOf} from '../../types';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
+import SweetAlert from 'sweetalert2-react';
 
 const ProtocolInfoLink = props => (
   <div className="row study-info-row">
@@ -29,7 +29,6 @@ ProtocolInfoLink.propTypes = {
   protocols: PropTypes.arrayOf(ProtocolDefinitionType),
   study: StudyDefinitionType,
 };
-
 
 class _Protocol extends React.Component {
   constructor(props) {
@@ -156,9 +155,9 @@ class Study extends React.Component {
   constructor(props) {
     super(props);
     this.titleChanged = this.titleChanged.bind(this);
-    this.deleteStudy = this.deleteItem.bind(this);
     this.state = {
       title: this.props.study.title,
+      deleteVerify: false,
     };
   }
 
@@ -208,8 +207,25 @@ class Study extends React.Component {
       );
       study_class = "well show study-summary";
     }
+
+    // TODO: style sweetalert or replace it with a bootstrap modal doing the same thing
+    // (and maybe using the same interface)
+    const deleteAlert = <SweetAlert
+        show={this.state.deleteVerify}
+        title="Really delete?"
+        text="Are you sure you want to delete this study and all its results?"
+        type='warning'
+        showCancelButton={true}
+        confirmButtonText="Yes, delete it!"
+        onConfirm={() => {
+          this.setState({ deleteVerify: false });
+          this.deleteStudy();
+        }}
+    />
+
     return (
       <div className="study-wrapper" key={this.props.study.id}>
+        {deleteAlert}
         <div className={study_class} data-studyid={this.props.study.id}>
           <div className="row study-info-row">
             <b className="col-xs-2">Title:</b>
@@ -231,7 +247,7 @@ class Study extends React.Component {
             </div>
           </div>
           {protocols_row}
-          <button className="remove-study" onClick={this.deleteStudy}>
+          <button className="remove-study" onClick={() => this.setState({ deleteVerify: true })}>
             {" "}
             &times;{" "}
           </button>
@@ -239,7 +255,7 @@ class Study extends React.Component {
             <div className="col-xs-2" />
             <div className="col-xs-5">
               <button
-                onClick={this.deleteStudy}
+                onClick={() => this.setState({ deleteVerify: true })}
                 className="active btn btn-danger"
               >
                 Delete Study
@@ -251,7 +267,7 @@ class Study extends React.Component {
     );
   }
 
-  deleteItem(itm) {
+  deleteStudy() {
     const { dispatch } = this.props;
     dispatch(
       elicitApi.actions.study_definition.delete({ id: this.props.study.id })
