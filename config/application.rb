@@ -14,6 +14,8 @@ module ElicitApi
     # -- all .rb files in that directory are automatically loaded.
     config.api_only = false
 
+    config.active_record.schema_format = :sql
+
     config.autoload_paths << "#{Rails.root}/lib"
     config.autoload_paths << "#{Rails.root}/app/services"
     config.autoload_paths << "#{Rails.root}/app/plugins"
