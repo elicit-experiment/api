@@ -15,7 +15,8 @@ module Chaos
       protocol_user.nil? || study_result.nil?
     end
 
-    def populate()
+    def populate(custom_parameters)
+      Rails.logger.info "chaos_session#populate #{custom_parameters.ai}"
       study_result = StudyResult::StudyResult.where({
         :user_id => self.user_id,
         :study_definition_id => study_definition_id}).first_or_initialize
@@ -28,6 +29,7 @@ module Chaos
         :protocol_user_id => protocol_user.id }).first_or_initialize do |e|
         # we need to have a real experiment with an ID for later
         e.started_at = DateTime.now
+        e.custom_parameters = custom_parameters.to_json
         e.save!
       end
 

@@ -3,7 +3,9 @@ module Api::V1
 
     include StudyCreation
 
-    #before_action :doorkeeper_authorize! # Requires access token for all actions
+    skip_before_action :authenticate_user!, only: :take
+
+    before_action :doorkeeper_authorize!, except: [:take] # Requires access token for all actions except take, which can be anonymous
 
     def take
       @study_definition_id = params[:study_definition_id]
@@ -20,20 +22,25 @@ module Api::V1
         return
       end
 
+
       session_guid = SecureRandom.uuid
+      query_params = {session_guid: session_guid}.merge(request.query_parameters)
+      query_string = "?"+query_params.map{|k,v| "#{k}=#{v}"}.join('&')
+      hash_string = "#Experiment/#{@protocol_definition_id}"
+
       pfe = Rails.configuration.elicit['participant_frontend']
       session_params = {
           :user_id => @protocol_user.user_id,
           :session_guid => session_guid,
-          :url => "#{pfe['scheme']}://#{pfe['host']}:#{pfe['port']}/?session_guid=#{session_guid}#Experiment/#{@protocol_definition_id}",
+          :url => "#{pfe['scheme']}://#{pfe['host']}:#{pfe['port']}/#{query_string}#{hash_string}",
           :expires_at => Date.today + 1.day,
           :study_definition_id => @study_definition_id,
           :protocol_definition_id => @protocol_definition_id,
-          :protocol_user_id => @protocol_user.id,
+          :protocol_user_id => @protocol_user.id
       }
       session = Chaos::ChaosSession.new(session_params)
 
-      session.populate
+      session.populate request.query_parameters
 
       Rails.logger.info "Taking session #{session.ai}"
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190118161909) do
+ActiveRecord::Schema.define(version: 20190120052807) do
 
   create_table "chaos_sessions", force: :cascade do |t|
     t.integer "user_id", null: false
@@ -216,20 +216,8 @@ ActiveRecord::Schema.define(version: 20190118161909) do
     t.index ["trial_definition_id"], name: "index_study_result_data_points_on_trial_definition_id"
   end
 
-  create_table "study_result_experiments", force: :cascade do |t|
-    t.integer "study_result_id", null: false
-    t.integer "protocol_user_id", null: false
-    t.integer "current_stage_id"
-    t.integer "num_stages_completed"
-    t.integer "num_stages_remaining"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "started_at"
-    t.datetime "completed_at"
-    t.index ["current_stage_id"], name: "index_study_result_experiments_on_current_stage_id"
-    t.index ["protocol_user_id"], name: "index_study_result_experiments_on_protocol_user_id"
-    t.index ["study_result_id"], name: "index_study_result_experiments_on_study_result_id"
-  end
+# Could not dump table "study_result_experiments" because of following StandardError
+#   Unknown type 'jsonb' for column 'custom_parameters'
 
   create_table "study_result_stages", force: :cascade do |t|
     t.integer "experiment_id", null: false

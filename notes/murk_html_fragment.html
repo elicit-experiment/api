@@ -1,0 +1,69 @@
+<!-- from -->
+
+<div style="font-family:sans-serif;margin-left:10%;margin-right:10%;">
+    <p style="font-weight:bold;margin-left:15%;margin-right:15%;font-size:2em;">Pipe MTurk parameters via URL</p>
+
+    <!-- THIS IS WHERE THE LINK WILL APPEAR -->
+    <span id='link'>Link will appear here once HIT is accepted. If it does not, make sure javascript is enabled in your browser.</span>
+
+    <script type="text/javascript">
+        var surveyUrl = "https://elicit.compute.dtu.dk/studies/53/protocols/51";
+      // RETRIEVE URL
+      var fullurl=new String();
+      // THIS IS THE LINE TO CAPTURE THE ACTUAL URL:
+      var fullurl=document.location.href;
+
+
+      // START TEST CODE (DELETE THIS SECTION BEFORE PUTTING INTO MTURK)
+
+      // USE THIS LINE TO TEST THAT THE CODE IS WORKING FOR A REAL MTURK ASSIGNMENT:
+      // var fullurl="https://s3.amazonaws.com/mturk_bulk/hits/46029244/xIpb71zULpXQALR7MKF2DA.html?assignmentId=2PB51Y7QEOZFH9JGPVKMUFXTFYWGDA&hitId=2OMJ79KQW6186NX9AI3DA5XC8D2JL4&workerId=A1RO9EXAMPLE65&turkSubmitTo=https%3A%2F%2Fwww.mturk.com";
+      // USE THIS LINE TO TEST THAT THE CODE IS WORKING FOR "PREVIEW" MODE:
+      // var fullurl="https://s3.amazonaws.com/mturk_bulk/hits/46029244/xIpb71zULpXQALR7MKF2DA.html?assignmentId=ASSIGNMENT_ID_NOT_AVAILABLE";
+
+      // END TEST CODE
+
+
+      // FUNCTION TO EXTRACT A URL PARAMETER (FROM: https://s3.amazonaws.com/mturk-public/externalHIT_v1.js)
+      function turkGetParam( name ) {
+        var regexS = "[\?&]"+name+"=([^&#]*)";
+        var regex = new RegExp( regexS );
+        var tmpURL = fullurl;
+        var results = regex.exec( tmpURL );
+        if( results == null ) {
+          return "";
+        } else {
+          return results[1];
+        }
+      }
+
+      // ASSIGNS THE URL PARAMETERS TO JAVASCRIPT VARIABLES
+      var assign = turkGetParam('assignmentId');
+      var hit = turkGetParam('hitId');
+      var worker = turkGetParam('workerId');
+
+      // THIS PART BUILDS THE LINK FOR AN ACCEPTED ASSIGNMENT
+      if(assign=="ASSIGNMENT_ID_NOT_AVAILABLE") {
+        // THIS IS A MESSAGE ABOUT THE HIT BEING IN PREVIEW MODE (SO IT WON'T SHOW THE LINK)
+        document.getElementById('link').innerHTML = "<p style='font-weight:bold;text-align:center;'>Link will become available once you accept the HIT.</p>";
+      } else {
+        // CONSTRUCT THE SURVEY LINK WITH THE EMBEDDED VALUES:
+        var surveylink = new String(surveyUrl+"/?"
+          + "assignmentId=" + assign
+          + "&hitId=" + hit
+          + "&workerId=" + worker
+        );
+        // IN QUALTRICS, THESE PARAMETERS CAN BE RETRIEVED AND USED IN THE SURVEY BY RETRIEVED 'EMBEDDED VALUES' AND USING AS 'PIPED TEXT'
+        // IN SURVEY MONKEY, ONE VALUE (OR A CONCATENATION OF VALUES) CAN BE SENT TO (AND SAVED BY) THE SURVEY BUT NOT PIPED
+        // E.G., var surveylink = new String("http://www.survey.com/surveylink?c=" + worker");
+        // IN GOOGLE FORMS, PARAMETERS CAN BE PIPED TO FORM ENTRY FIELDS
+        /* E.G., var surveylink = new String("http://spreadsheets.google.com/viewform?formkey=12345"
+                 + "&entry_0=" + assign
+                 + "&entry_1=" + hit
+                 + "&entry_2=" + worker);
+        */
+        // DISPLAY THE LINK
+        document.getElementById('link').innerHTML = "<p><a href=' + surveylink + "' target='_blank'>Complete this survey</a></p>";
+      }
+    </script>
+</div>

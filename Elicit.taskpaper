@@ -46,9 +46,10 @@ Final Push:
 		Volume control (have a small video in the instructions and tell people to adjust the volume so they can hear the video, that would ensure they have headphones on, or whatever they use)
 		- Demographics page (you can make a draft, and we can see if it is all there)
 		- Dump demographics page results to csv
-		- Center the FreeText component by wrapping it.
+		- Center the FreeText component by wrapping it. @done
 		- Separate Video and Video+Calibration as different components
-		- Update description of calibration in "main" /"primary" calibration page
+		- Update description of calibration in "main" /"primary" calibration page + "sit still"
+		- Add MaxNoOfAttempts to calibration
 		- Admin Page: are you sure prompt on study deletion @done
 		- Header HTML/centering issue @done
 	
