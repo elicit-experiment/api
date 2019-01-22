@@ -23,6 +23,14 @@ module Api::V1
       end
     end
 
+    def query_includes
+      [:trial_definition]
+    end
+
+    def response_includes
+      [:trial_definition]
+    end
+
     def query_params
       {
           :trial_definition_id => params[:trial_definition_id],

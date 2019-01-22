@@ -42,27 +42,40 @@ Fixes Nov 28:
 
 Final Push:
 	Elicit side:
-		- Instructions (this will be an iterative process on my part,  I have already sent you a bunch of text a while ago)
+		- Instructions (this will be an iterative process on Jens' part,  I have already sent you a bunch of text a while ago)
 		Volume control (have a small video in the instructions and tell people to adjust the volume so they can hear the video, that would ensure they have headphones on, or whatever they use)
-		- Demographics page (you can make a draft, and we can see if it is all there)
+		- Demographics page (you can make a draft, and we can see if it is all there) @done
 		- Dump demographics page results to csv
 		- Center the FreeText component by wrapping it. @done
-		- Separate Video and Video+Calibration as different components
-		- Update description of calibration in "main" /"primary" calibration page + "sit still"
-		- Add MaxNoOfAttempts to calibration
+		- Separate Video and Video+Calibration as different components @done
+		- Update description of calibration in "main" /"primary" calibration page + "sit still" @done
+		- Add MaxNoOfAttempts to calibration (and build_study.py) @done
+		- Add MinCalibrationPct to calibration (and build_study.py) @done
 		- Admin Page: are you sure prompt on study deletion @done
 		- Header HTML/centering issue @done
 	
 Once this is up and running I can run the experiment 10 times and see if everything parses correctly etc.
 	
 	Mechanical Turk:
-		- Instructions (I can write some text here, again an iterative process)
-		- Consent form (I am working on that)
-		- Link to elicit (you will work on that)
+		- Instructions (Jens write some text here, again an iterative process)
+		- Consent form (Jens working on that)
+		- Link to elicit (Iain will work on that) @done
 	
 	Elicit / Mechanical Turk:
 		- Turk ID to Elicit with link (is this something custom for this experiment, or do you plan to make it general? i.e. can this be used for other experiment that I can run on mechanical turk?)
 		- Store Turk ID in Elicit and parse it with dump_results script.
+		- Component (to go on end-of-experiment page) to generate completion code
+		- Component to redirect to HIT completion page?
+		
+	Bugs:
+		 - In the preview page in the admin section of the webpage, the protocol description is shown, not the protocol title. (Just the title is wanted)
+		- Write a WebGazerCalibrate trial without the weird extra component
+		- Multiple videos on one page
+		
+		
+	Future:
+		- Preview for TrialOrders: be able to select a TrialOrder/Protocol user and show it to them
+		- 
 
 Add About Page:
 - Add About Page @done(2017-12-05)

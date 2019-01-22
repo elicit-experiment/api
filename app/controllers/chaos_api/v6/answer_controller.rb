@@ -75,8 +75,6 @@ module ChaosApi::V6
         new_datapoints.each(&:save!)
       end
 
-      logger.info new_datapoints.ai
-
       state = StudyResult::DataPoint.where(state_dp_params).first_or_initialize
 
       output.delete("Events")
