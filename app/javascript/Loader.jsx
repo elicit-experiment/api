@@ -17,15 +17,18 @@ const getToken = (tok) => {
         if (expire_time < (new Date()).getTime()) {
           console.warn('returning expired usertoken')
         }
-        return token
+        if ('access_token' in token) {
+          if (!!token.access_token) {
+            return token
+          }
+        }
+        return undefined;
     } catch (e) {
      console.warn("Bad stuff in localstorage for usertoken.");
      sessionStorage.removeItem(tok)
     }
   }
-  return  {
-      access_token: undefined,
-    }
+  return undefined;
 };
 
 const preloadedStore = {
@@ -40,8 +43,8 @@ console.log("Elicit App Loading...");
 console.dir(preloadedStore);
 
 const onload = () => {
-    console.log("Loader::onload");
-  var elt = document.getElementById('elicit-app');
+  console.log("Loader::onload");
+  const elt = document.getElementById('elicit-app');
   ReactDOM.render(<ElicitRoot store={store}></ElicitRoot>, elt);
 };
 

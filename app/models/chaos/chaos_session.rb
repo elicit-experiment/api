@@ -15,6 +15,10 @@ module Chaos
       protocol_user.nil? || study_result.nil?
     end
 
+    def self.clear_expired!
+      ChaosSession.where("expires_at < ?", Date.new).delete_all
+    end
+
     def populate(custom_parameters)
       Rails.logger.info "chaos_session#populate #{custom_parameters.ai}"
       study_result = StudyResult::StudyResult.where({

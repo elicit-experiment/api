@@ -2,6 +2,7 @@
 
 # A CHAOS experiment is equivalent to a protocol
 class ChaosExperimentService
+  include Rails.application.routes.url_helpers
   include Denilize
 
   attr_accessor :study_definition
@@ -43,7 +44,8 @@ class ChaosExperimentService
       NoOfTrials: stage.num_trials,
       TrialsCompleted: stage.trials_completed,
       FooterLabel: @study_definition.footer_label,
-      RedirectOnCloseUrl: @study_definition.redirect_close_on_url,
+#      RedirectOnCloseUrl: @study_definition.redirect_close_on_url,
+      RedirectOnCloseUrl: chaos_endexperiment_url,
       CurrentSlideIndex: stage.current_trial,
       Fullname: 'Questionnaire, 1.0'
     }
@@ -113,6 +115,8 @@ class ChaosExperimentService
         return nil
       end
 
+      Rails.logger.info "Found suitable non-user TrialOrder or user trial for #{@user_id} using trial_ordering #{@phase_definition.trial_ordering}: #{@trial_order.ai} "
+
       TrialOrderSelectionMapping.create!(trial_order: @trial_order,
                                          user_id: @user_id,
                                          phase_definition: @phase_definition)
@@ -133,8 +137,11 @@ class ChaosExperimentService
     @trial_definition
   end
 
+  # make the slide for the given trial number (a.k.a. slide number)
   def make_slide(trial_no = 0, protocol_user_id = nil, trial_definition = nil)
     @trial_definition = trial_definition || trial_for_slide_index(trial_no)
+
+    return  ChaosResponse.new(nil, "Cannot find definition for index #{trial_no}") unless @trial_definition
 
     @components = Component.where(trial_query.merge(trial_definition_id: @trial_definition.id)).order(:id).entries
     # @stimuli = Stimulus.where(trial_query).order(:id).entries

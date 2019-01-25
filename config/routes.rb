@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   # root of site
-  root 'client_app#index'
+  root 'client_app#index', as: :client_app
 
   # routes to enable the CHAOS protocol used by the clients
 	  scope :v6 do
@@ -21,7 +21,9 @@ Rails.application.routes.draw do
       post 'time_series/:series_type' => 'chaos_api/v6/time_series#create' , :defaults => { :format => 'json' }
 
 		  get "/*" => redirect("/")
-	  end
+    end
+
+  get 'chaos/endexperiment' => 'chaos#endexperiment'
 
   # API
   namespace :api do
@@ -86,9 +88,9 @@ Rails.application.routes.draw do
 
   ## Client app pages -- just load the client app
 
-  get '/admin'  => 'client_app#index'
-  get '/participant'  => 'client_app#index'
-  get '/login'  => 'client_app#index'
+  get '/admin'  => 'client_app#index', as: :client_app_admin
+  get '/participant'  => 'client_app#index', as: :client_app_participant
+  get '/login'  => 'client_app#index', as: :client_app_login
   match '/client_app/*remainder' => 'client_app#index', via: :all
   match '/participant/*remainder' => 'client_app#index', via: :all
   match '/login/*remainder' => 'client_app#index', via: :all

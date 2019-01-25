@@ -18,6 +18,16 @@ class AnonymousProtocolLandingPageContainer extends React.Component {
   }
 
   render() {
+    if ((!this.props.anonymous_protocols.sync &&
+      !this.props.anonymous_protocols.loading)) {
+      return <div>Loading Protocol {this.state.protocol_id} information</div>;
+    }
+
+    if (this.props.take_protocol && 'error' in this.props.take_protocol) {
+      console.dir(this.props.take_protocol.error);
+      return <div>Sorry, this protocol cannot be taken.</div>
+    }
+
     let protocol = this.getProtocol();
     console.dir(`Rendering protocol ${this.state.protocol_id} with ${protocol}`);
     console.dir(protocol);
@@ -29,8 +39,9 @@ class AnonymousProtocolLandingPageContainer extends React.Component {
             {protocol_info}
           </div>
       );
+    } else {
+      return <div>This protocol is not available to be taken anonymously</div>
     }
-    return <div>Loading Protocol {this.state.protocol_id} information</div>;
   }
 
   getProtocol() {
@@ -65,6 +76,7 @@ AnonymousProtocolLandingPageContainer.defaultProps = {
 
 const mapStateToProps = (state) => ({
   anonymous_protocols: state.anonymous_protocols,
+  take_protocol: state.take_protocol,
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -6,7 +6,6 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-
 module ElicitApi
   class Application < Rails::Application
     # Settings in config/environments/* take precedence over those specified here.
@@ -23,6 +22,10 @@ module ElicitApi
     config.elicit = config_for(:elicit_config)
 
     config.time_series_schema = config_for(:time_series_schema_config)
+
+    elicit_portal = Rails.configuration.elicit['elicit_portal']
+    Rails.application.routes.default_url_options = elicit_portal.symbolize_keys.slice(:host, :port)
+    #URI("#{elicit_portal['scheme']}://#{elicit_portal['host']}:#{elicit_portal['port']}").to_s
 
     log_level = String(ENV['LOG_LEVEL'] || "info").upcase
     logger = ActiveSupport::Logger.new(STDOUT)

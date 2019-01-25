@@ -10,6 +10,7 @@ module Api::V1
     def take
       @study_definition_id = params[:study_definition_id]
       @protocol_definition_id = params[:protocol_definition_id]
+
       set_protocol_user
 
       unless @protocol_user
@@ -22,10 +23,9 @@ module Api::V1
         return
       end
 
-
       session_guid = SecureRandom.uuid
       query_params = {session_guid: session_guid}.merge(request.query_parameters)
-      query_string = "?"+query_params.map{|k,v| "#{k}=#{v}"}.join('&')
+      query_string = "?" + query_params.map {|k, v| "#{k}=#{v}"}.join('&')
       hash_string = "#Experiment/#{@protocol_definition_id}"
 
       pfe = Rails.configuration.elicit['participant_frontend']
@@ -61,13 +61,31 @@ module Api::V1
         return
       end
 
-      Rails.logger.info "Not logged in during take; tring anonymous protocol."
-
       study_definition = StudyDefinition.find(@study_definition_id)
 
       return nil unless study_definition
 
       return nil unless study_definition.allow_anonymous_users
+
+      worker_id = params[:workerId]
+
+      Rails.logger.info "WORKERID: #{worker_id}"
+
+      unless worker_id.blank? || !%r{[A-Z0-9]+}.match(worker_id)
+        Rails.logger.info "Not logged in during take, but workerId specified as #{worker_id}; trying anonymous protocol."
+
+        user = create_and_sign_in_anonymous_participant(study_definition, worker_id)
+
+        return unless user
+
+        protocol_user = ProtocolUser.find_or_create_by(protocol_definition_id: @protocol_definition_id, user_id: user.id, group_name: "MTurkAnonymous")
+
+        @protocol_user = protocol_user if protocol_user.save
+
+        return
+      end
+
+      Rails.logger.info "Not logged in during take; trying anonymous protocol by stealing a predefined ProtocolUser..."
 
       candidate_protocol_users = ProtocolUser
                                      .where(protocol_definition_id: @protocol_definition_id)
@@ -77,9 +95,52 @@ module Api::V1
       Rails.logger.info "Anonymous protocol. Got #{candidate_protocol_users.size} candidates."
 
       @protocol_user = candidate_protocol_users.take
+
+      render json: ElicitError.new("Maximum participants exceeded.", :not_found), status: :not_found unless performed? || @protocol_user
     end
 
     private
+
+    def create_and_sign_in_anonymous_participant(study_definition, username)
+      user_params = {:email => "#{username}@elicit.dk".downcase, :username => username}
+
+      user = User.find_or_initialize_by(user_params) do |user|
+        Rails.logger.info "Trying to create new anonymous user #{username}"
+        user.password = 'abcd12_'
+        user.password_confirmation = 'abcd12_'
+        user.sign_in_count = 0
+        user.role = 'registered_user'
+        user.anonymous = true
+
+        StudyDefinition.transaction do
+          study_definition.reload
+          if study_definition.auto_created_user_count < study_definition.max_auto_created_users
+            if user.save
+              study_definition.increment!(:auto_created_user_count)
+              Rails.logger.info "Created anonymous user #{username} id=#{user.id}"
+            else
+              Rails.logger.warn "User failed to save #{user.errors.ai}"
+              user = nil
+            end
+          else
+            Rails.logger.warn "No budget remains for creating anonymous user: #{study_definition.auto_created_user_count}/#{study_definition.max_auto_created_users} taken"
+            user = nil
+            render json: ElicitError.new("Maximum participants exceeded.", :not_found), status: :unauthorized unless performed?
+          end
+        end
+        user
+      end
+
+      if user
+        Rails.logger.info "Signing in anonymous user #{username} #{user.ai}."
+
+        sign_in(:user, user)
+      else
+        Rails.logger.warn "No suitable user found/created in create_and_sign_in_anonymous_participant"
+      end
+
+      user
+    end
 
     def query_params
       {:study_definition_id => params[:study_definition_id]}

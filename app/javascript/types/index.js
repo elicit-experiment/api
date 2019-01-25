@@ -53,7 +53,7 @@ export const UserTokenType = PropTypes.shape({
     refresh_token: PropTypes.string.isRequired,
     scope: PropTypes.string.isRequired,
     token_type: PropTypes.string.isRequired,
-}).isRequired;
+});
 
 export const ProtocolDefinitionType = PropTypes.shape({
     active: PropTypes.bool.isRequired,

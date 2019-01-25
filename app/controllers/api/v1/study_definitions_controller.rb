@@ -17,6 +17,9 @@ module Api::V1
     allow_anonymous_users
     show_in_study_list
     max_anonymous_users
+    auto_created_user_count
+    max_auto_created_users
+    max_concurrent_users
     ].map(&:to_sym)
 
     include StudyCreation

@@ -50,6 +50,18 @@ class StudyDefinition < ApplicationRecord
       key :type, :integer
       key :format, :int32
     end
+    property :auto_created_user_count do
+      key :type, :integer
+      key :format, :int32
+    end
+    property :max_auto_created_users do
+      key :type, :integer
+      key :format, :int32
+    end
+    property :max_concurrent_users do
+      key :type, :integer
+      key :format, :int32
+    end
     property :principal_investigator_user_id do
       key :type, :integer
       key :format, :int64

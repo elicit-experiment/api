@@ -34,7 +34,8 @@ export const tokenStatus = (clientToken, userToken, requestClientToken) => {
   }
 
   if (!userToken || !userToken.access_token) {
-    console.log("no user token")
+    console.log("no user token");
+    console.dir(userToken);
   } else {
     token_status = 'user'
   }

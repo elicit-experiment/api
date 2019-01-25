@@ -17,7 +17,6 @@ class FrontPageApp extends React.Component {
 
   render() {
     const landingPageUrl = `${this.props.match.url}studies/:study_id/protocols/:protocol_id`;
-    console.log(landingPageUrl);
     return (
         <div>
           <HeaderContainer></HeaderContainer>
