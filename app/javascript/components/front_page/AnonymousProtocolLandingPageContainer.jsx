@@ -19,13 +19,22 @@ class AnonymousProtocolLandingPageContainer extends React.Component {
 
   render() {
     if ((!this.props.anonymous_protocols.sync &&
-      !this.props.anonymous_protocols.loading)) {
+      this.props.anonymous_protocols.loading)) {
       return <div>Loading Protocol {this.state.protocol_id} information</div>;
     }
 
-    if (this.props.take_protocol && 'error' in this.props.take_protocol) {
+    console.log(JSON.stringify(this.props.take_protocol));
+
+    if (this.props.take_protocol &&
+        !this.props.take_protocol.loading &&
+       ('error' in this.props.take_protocol) &&
+        this.props.take_protocol.error) {
       console.dir(this.props.take_protocol.error);
-      return <div>Sorry, this protocol cannot be taken.</div>
+      if (this.props.take_protocol.error.status === 404) {
+        return <div>Sorry, this protocol has already enough participants.</div>
+      } else {
+        return <div>Sorry, this protocol cannot be taken.</div>
+      }
     }
 
     let protocol = this.getProtocol();

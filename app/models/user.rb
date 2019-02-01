@@ -4,7 +4,10 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
   devise :doorkeeper
-  validates :role, acceptance: { accept: ['admin', 'registered_user', 'anonymous_user'] }
+
+  ROLES={:admin => 'admin', :registered => 'registered_user', :anonymous => 'anonymous_user'}
+
+  validates :role, acceptance: { accept: ROLES.values() }
 
   has_many :study_definitions
 
@@ -30,8 +33,14 @@ class User < ApplicationRecord
     property :username do
       key :type, :string
     end
+#    property :role do
+#      key :enum, User::ROLES.values
+#    end
     property :role do
       key :type, :string
+    end
+    property :anonymous do
+      key :type, :boolean
     end
     property :password do
       key :type, :string
@@ -54,8 +63,14 @@ class User < ApplicationRecord
     property :username do
       key :type, :string
     end
+#    property :role do
+#      key :enum, User::ROLES.values
+#    end
     property :role do
       key :type, :string
+    end
+    property :anonymous do
+      key :type, :boolean
     end
     property :password do
       key :type, :string

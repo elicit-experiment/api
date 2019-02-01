@@ -13,6 +13,8 @@ module Api::V1
 
       set_protocol_user
 
+      return if performed?
+
       unless @protocol_user
         render json: ElicitError.new("Cannot find user for protocol.", :unauthorized), status: :unauthorized unless performed?
         return
@@ -74,7 +76,7 @@ module Api::V1
       unless worker_id.blank? || !%r{[A-Z0-9]+}.match(worker_id)
         Rails.logger.info "Not logged in during take, but workerId specified as #{worker_id}; trying anonymous protocol."
 
-        user = create_and_sign_in_anonymous_participant(study_definition, worker_id)
+        user = create_and_sign_in_anonymous_participant(study_definition, worker_id, "mturk.elicit.dk")
 
         return unless user
 
@@ -101,15 +103,14 @@ module Api::V1
 
     private
 
-    def create_and_sign_in_anonymous_participant(study_definition, username)
-      user_params = {:email => "#{username}@elicit.dk".downcase, :username => username}
+    def create_and_sign_in_anonymous_participant(study_definition, username, email_domain = "elicit.dk")
+      user_params = {:email => "#{username}@#{email_domain}".downcase, :username => username, :role => User::ROLES[:anonymous]}
 
       user = User.find_or_initialize_by(user_params) do |user|
         Rails.logger.info "Trying to create new anonymous user #{username}"
         user.password = 'abcd12_'
         user.password_confirmation = 'abcd12_'
         user.sign_in_count = 0
-        user.role = 'registered_user'
         user.anonymous = true
 
         StudyDefinition.transaction do

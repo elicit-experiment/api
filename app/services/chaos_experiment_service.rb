@@ -36,15 +36,15 @@ class ChaosExperimentService
       Name: @study_definition.title,
       Css: '',
       Version: @study_definition.version,
-      # ExperimentDescription: @study_definition.description,
       CreatedBy: @study_definition.principal_investigator_user_id.to_s,
+      # ExperimentDescription: @study_definition.description,
       # Data: @study_definition.data,
+      #      RedirectOnCloseUrl: @study_definition.redirect_close_on_url,
       LockQuestion: @study_definition.lock_question == 1,
       EnablePrevious: @study_definition.enable_previous == 1,
       NoOfTrials: stage.num_trials,
       TrialsCompleted: stage.trials_completed,
       FooterLabel: @study_definition.footer_label,
-#      RedirectOnCloseUrl: @study_definition.redirect_close_on_url,
       RedirectOnCloseUrl: chaos_endexperiment_url,
       CurrentSlideIndex: stage.current_trial,
       Fullname: 'Questionnaire, 1.0'
@@ -92,43 +92,19 @@ class ChaosExperimentService
   end
 
   def trial_for_slide_index(trial_no = 0)
-    # TODO: since we just need one of these, this would be better written as an offset/limit query
-    @trials = TrialDefinition.where(trial_query).order(:id).entries
+    @trial_order = @phase_definition.trial_order_for_user @user_id
 
-    @trial_order = TrialOrder.where(trial_query.merge(user_id: @user_id)).first
+    @trials = []
 
     if @trial_order.nil?
-      if @phase_definition.trial_ordering == 'RandomWithReplacement'
-        @trial_order = TrialOrder.where(trial_query.merge(user_id: nil)).order('RANDOM()').first
-      elsif @phase_definition.trial_ordering == 'RandomWithoutReplacement'
-        @trial_order = TrialOrder
-                       .where(trial_query.merge(user_id: nil))
-                       .left_joins(:trial_order_selection_mappings)
-                       .where(trial_order_selection_mappings: { id: nil }).first
-      else
-        @trial_order = TrialOrder.where(trial_query.merge(user_id: nil)).order('RANDOM()').first
-      end
-
-      if @trial_order.nil?
-        all_trial_orders = TrialOrder.where(trial_query)
-        Rails.logger.error "Cannot find suitable non-user TrialOrder or user trial for #{@user_id} amongst #{all_trial_orders.ai}"
-        return nil
-      end
-
-      Rails.logger.info "Found suitable non-user TrialOrder or user trial for #{@user_id} using trial_ordering #{@phase_definition.trial_ordering}: #{@trial_order.ai} "
-
-      TrialOrderSelectionMapping.create!(trial_order: @trial_order,
-                                         user_id: @user_id,
-                                         phase_definition: @phase_definition)
+      # TODO: since we just need one of these, this would be better written as an offset/limit query
+      @trials = TrialDefinition.where(trial_query).order(:id).entries
+      @trial_sequence = TrialOrder.default_sequence(@trials)
+      @trial_definition = @trials.detect { |trial| trial.id == @trial_sequence[trial_no] }
+    else
+      @trial_sequence = @trial_order.sequence_data.split(',').map(&:to_i)
+      @trial_definition = TrialDefinition.find(@trial_sequence&.[](trial_no))
     end
-
-    @trial_sequence = if @trial_order.nil?
-                        TrialOrder.default_sequence(@trials)
-                      else
-                        @trial_order.sequence_data.split(',').map(&:to_i)
-                      end
-
-    @trial_definition = @trials.detect { |trial| trial.id == @trial_sequence[trial_no] }
 
     unless @trial_definition
       Rails.logger.error "Trial order #{@trial_order.ai} sequence #{@trial_sequence.ai} contains invalid ids #{@trials.ai} for trial index #{trial_no}"

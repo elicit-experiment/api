@@ -21,7 +21,11 @@ class AnonymousProtocolLandingPage extends React.Component {
     let instructions = '';
 
     try {
-      const instructionsHtml = (JSON.parse(this.props.protocol.definition_data) || {}).instructionsHtml;
+      let instructionsHtml = "No instructions";
+      try {
+        instructionsHtml = (JSON.parse(this.props.protocol.definition_data) || {}).instructionsHtml;
+      } catch (e) {
+      }
       if (instructionsHtml) {
         const htmlInstructions = {
           dangerouslySetInnerHTML: {__html: instructionsHtml},

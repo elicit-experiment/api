@@ -3,7 +3,7 @@ module Api::V1
 
     include ElicitErrors
 
-    #include StudyCreation
+    include PaginationHeaderLinks
 
     before_action -> { doorkeeper_authorize! :public }, only: [:update, :index]
     before_action only: [:new, :create] do |controller| # access to register api requires authenticated client token
@@ -49,7 +49,15 @@ module Api::V1
         email_query = {email: params[:query]}
         @users = User.or(username_query, email_query).all()
       end
+
+      if not page_params.nil?
+        @users = @users.page(page_params[:page])
+                        .per(page_params[:page_size])
+      end
+
       render json: @users
+
+      set_pagination_headers @users
     end
 
     def show
@@ -75,7 +83,7 @@ module Api::V1
     end
 
     def user_params
-      params.require(:user).permit(:email, :username, :password, :password_confirmation)
+      params.require(:user).permit(:email, :username, :password, :password_confirmation, :role, :anonymous, :group_name)
     end
 
     def sign_up_params

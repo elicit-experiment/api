@@ -3,6 +3,8 @@ module Api::V1
 
     include ElicitErrors
 
+    include PaginationHeaderLinks
+
     prepend_before_action :set_resource, only: [:destroy, :show, :update]
 
     respond_to :json
@@ -25,22 +27,6 @@ module Api::V1
 
     def search_param
       nil
-    end
-
-    def page_params
-      if action_name == "index"
-        page = params[:page] || self.default_page
-        page_size = params[:page_size] || self.default_page_size
-        { :page => page, :page_size => page_size}
-      end
-    end
-
-    def default_page_size
-      20
-    end
-
-    def default_page
-      1
     end
 
     def eager_load_fields
@@ -87,10 +73,12 @@ module Api::V1
 
       if not page_params.nil?
         resources = resources.page(page_params[:page])
-                                  .per(page_params[:page_size])
+                             .per(page_params[:page_size])
       end
       instance_variable_set(plural_resource_name, resources)
       respond_with instance_variable_get(plural_resource_name), :include => self.send(:response_includes)
+
+      set_pagination_headers instance_variable_get(plural_resource_name)
     end
 
     # GET /api/{plural_resource_name}/:id

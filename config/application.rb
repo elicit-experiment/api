@@ -23,9 +23,18 @@ module ElicitApi
 
     config.time_series_schema = config_for(:time_series_schema_config)
 
-    elicit_portal = Rails.configuration.elicit['elicit_portal']
-    Rails.application.routes.default_url_options = elicit_portal.symbolize_keys.slice(:host, :port)
-    #URI("#{elicit_portal['scheme']}://#{elicit_portal['host']}:#{elicit_portal['port']}").to_s
+    elicit_portal = Rails.configuration.elicit['elicit_portal'].symbolize_keys
+    port = elicit_portal[:port]
+    port = nil if elicit_portal[:scheme] == 'https' && port == 443
+    port = nil if elicit_portal[:scheme] == 'http' && port == 80
+    default_url_options_config = {
+        :protocol => elicit_portal[:scheme],
+        :host => elicit_portal[:host]
+    }
+    default_url_options_config[:port] = port if port
+    Rails.application.routes.default_url_options = default_url_options_config
+
+#    puts "#{default_url_options_config.ai} #{Rails.application.routes.default_url_options.ai}"
 
     log_level = String(ENV['LOG_LEVEL'] || "info").upcase
     logger = ActiveSupport::Logger.new(STDOUT)
