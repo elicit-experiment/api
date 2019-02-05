@@ -61,7 +61,6 @@ module Api::V1
     end
 
     def show
-      logger.warn "SHOW #{params[:id]}"
       @user = User.find_by(id: params[:id]) || User.find_by(username: params[:id]) || User.find_by(email: params[:id]) || not_found
 
       if @user

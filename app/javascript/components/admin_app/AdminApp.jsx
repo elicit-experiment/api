@@ -47,7 +47,7 @@ class AdminApp extends React.Component {
 		return (
 			<div>
 				<HeaderContainer></HeaderContainer>
-				<div id="wrap" className="admin-app-container container">
+				<div id="wrap" className="admin-app-container app-container container">
 					<Route path={`${this.props.match.url}/studies/:study_id/protocols/:protocol_id`}
                            component={ProtocolPreviewContainer}/>
 					<Route exact path={`${this.props.match.url}`} component={StudyManagement}/>

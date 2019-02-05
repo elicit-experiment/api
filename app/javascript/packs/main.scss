@@ -1,15 +1,14 @@
 @import "../scss/long-shadow-mixin.scss";
 
- body {
+body {
   padding-top: 50px;
   padding-bottom: 120px;
 }
 
-.admin-app-container, .page-container, .wrap {
-    min-height: 100%;
-    height: auto !important;
-    height: 100%;
-    margin: 0 auto -45px; /* the bottom margin is the negative value of the footer's height */
+.app-container, .wrap {
+  min-height: 100%;
+  height: auto !important;
+  margin: 0 auto -45px; /* the bottom margin is the negative value of the footer's height */
   padding: 0 0 40px;
 }
 
@@ -17,48 +16,48 @@
   /*position: absolute;*/
   margin-top: -40px; /* negative value of footer height */
   height: 40px;
-  clear:both;
-  padding-top:20px;
+  clear: both;
+  padding-top: 20px;
   background-color: #f1f1f1;
 }
 
-.fade-apear {
+.fade-appear {
   opacity: 1;
   height: 100%;
 }
 
 .fade-appear.fade-appear-active {
   opacity: 0.5;
-  height: 0px;
+  height: 0;
   transition: all 500ms ease-in-out;
 }
 
 .fade-enter {
   opacity: 0.5;
-  transform: scale(1,.2);
+  transform: scale(1, .2);
   height: 20%;
-  max-height:10%;
-  overflow-y:clip;
+  max-height: 10%;
+  overflow-y: clip;
 }
 
 .fade-enter.fade-enter-active {
   opacity: 1;
   height: auto;
-  max-height:auto;
-  transform: scale(1,1.0);
+  max-height: auto;
+  transform: scale(1, 1.0);
   transition: all 500ms ease-in-out;
 }
 
 .fade-exit {
   opacity: 1;
-  transform: scale(1,1.0);
+  transform: scale(1, 1.0);
 }
 
 .fade-exit.fade-exit-active {
-  transform: scale(1,.2);
+  transform: scale(1, .2);
   height: 20%;
-  max-height:10%;
-  overflow-y:clip;
+  max-height: 10%;
+  overflow-y: clip;
   opacity: 0.2;
   transition: all 300ms ease-in-out;
 }
@@ -68,12 +67,11 @@ h1 {
   padding-bottom: 5px;
 }
 
-
 // Study List
 
 .new-study {
- text-align:center;
- font-size: 36px;
+  text-align: center;
+  font-size: 36px;
 }
 
 .study {
@@ -96,7 +94,6 @@ h1 {
   -o-transition: 0.5s;
 }
 
-
 .study-summary.show {
   visibility: visible;
 }
@@ -111,16 +108,16 @@ h1 {
 }
 
 .study-info-protocols-count {
-  text-align:left;
-  margin-left:0px;
-  padding-left:0px;
+  text-align: left;
+  margin-left: 0;
+  padding-left: 0;
 }
 
 .remove-study {
-  display:block;
-  position:absolute;
-  right:6px;
-  top:20px;
+  display: block;
+  position: absolute;
+  right: 6px;
+  top: 20px;
 }
 
 .protocol-header-row {
@@ -150,18 +147,18 @@ h1 {
 }
 
 .protocol-info-protocols-count {
-  text-align:left;
-  margin-left:0px;
-  padding-left:0px;
+  text-align: left;
+  margin-left: 0px;
+  padding-left: 0px;
 }
 
 .protocol-description-text {
- font-size: 12px;
-  padding-bottom:15px;
+  font-size: 12px;
+  padding-bottom: 15px;
 }
 
 .protocol-summary-text {
-  padding-bottom:15px;
+  padding-bottom: 15px;
   font-size: 14px;
 }
 
@@ -175,7 +172,7 @@ h1 {
   font-size: 20vw;
   text-align: center;
   margin-top: 20vw;
-  text-shadow: 1px 1px rgba(187,187,187, 0.95), 2px 2px rgba(187,187,187, 0.90), 3px 3px rgba(187,187,187, 0.85), 4px 4px rgba(187,187,187, 0.80), 5px 5px rgba(187,187,187, 0.75), 6px 6px rgba(187,187,187, 0.70), 7px 7px rgba(187,187,187, 0.65), 8px 8px rgba(187,187,187, 0.60), 9px 9px rgba(187,187,187, 0.55), 10px 10px rgba(187,187,187, 0.50), 11px 11px rgba(187,187,187, 0.45), 12px 12px rgba(187,187,187, 0.40), 13px 13px rgba(187,187,187, 0.35), 14px 14px rgba(187,187,187, 0.30), 15px 15px rgba(187,187,187, 0.25), 16px 16px rgba(187,187,187, 0.20), 17px 17px rgba(187,187,187, 0.15), 18px 18px rgba(187,187,187, 0.10), 19px 19px rgba(187,187,187, 0.05), 20px 20px rgba(187,187,187, 0.00)
+  text-shadow: 1px 1px rgba(187, 187, 187, 0.95), 2px 2px rgba(187, 187, 187, 0.90), 3px 3px rgba(187, 187, 187, 0.85), 4px 4px rgba(187, 187, 187, 0.80), 5px 5px rgba(187, 187, 187, 0.75), 6px 6px rgba(187, 187, 187, 0.70), 7px 7px rgba(187, 187, 187, 0.65), 8px 8px rgba(187, 187, 187, 0.60), 9px 9px rgba(187, 187, 187, 0.55), 10px 10px rgba(187, 187, 187, 0.50), 11px 11px rgba(187, 187, 187, 0.45), 12px 12px rgba(187, 187, 187, 0.40), 13px 13px rgba(187, 187, 187, 0.35), 14px 14px rgba(187, 187, 187, 0.30), 15px 15px rgba(187, 187, 187, 0.25), 16px 16px rgba(187, 187, 187, 0.20), 17px 17px rgba(187, 187, 187, 0.15), 18px 18px rgba(187, 187, 187, 0.10), 19px 19px rgba(187, 187, 187, 0.05), 20px 20px rgba(187, 187, 187, 0.00)
 }
 
 .elicit-subtitle {
@@ -183,7 +180,6 @@ h1 {
   text-align: center;
   margin-top: 10vw;
 }
-
 
 // Login
 
@@ -197,7 +193,6 @@ h1 {
   display: flex;
   align-items: center;
 }
-
 
 // NAV
 
@@ -223,6 +218,7 @@ h1 {
   color: #333 !important;
   font-size: 26px;
 }
+
 .background-logo {
   font-family: 'Leckerli One', cursive;
   font-size: 80vh;
@@ -231,6 +227,12 @@ h1 {
 .study-action-bar > a,
 .study-action-bar > div,
 .study-action-bar > button {
-  margin-left:10px;
+  margin-left: 10px;
   float: right;
+}
+
+
+.swal2-popup .swal2-content {
+  font-size: 14px;
+  font-weight: normal;
 }

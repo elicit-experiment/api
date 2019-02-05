@@ -20,7 +20,7 @@ class FrontPageApp extends React.Component {
     return (
         <div>
           <HeaderContainer></HeaderContainer>
-          <div id="wrap" className="home-page-app-container container">
+          <div id="wrap" className="home-page-app-container app-container container">
             <Route path={landingPageUrl}
                    component={AnonymousProtocolLandingPageContainer}/>
             <Route exact path={`${this.props.match.url}`} component={FrontPageContainer}/>

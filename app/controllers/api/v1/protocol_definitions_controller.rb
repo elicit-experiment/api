@@ -56,10 +56,7 @@ module Api::V1
 
     def set_protocol_user
       if current_api_user_id
-        @protocol_user = ProtocolUser
-                             .where({:user_id => current_api_user_id,
-                                     :protocol_definition_id => @protocol_definition_id})
-                             .includes(:protocol_definition).first!
+        @protocol_user = ProtocolUser.for_user(@protocol_definition_id).first!
         return
       end
 
@@ -89,10 +86,9 @@ module Api::V1
 
       Rails.logger.info "Not logged in during take; trying anonymous protocol by stealing a predefined ProtocolUser..."
 
-      candidate_protocol_users = ProtocolUser
-                                     .where(protocol_definition_id: @protocol_definition_id)
-                                     .left_outer_joins(:experiment)
-                                     .where({:study_result_experiments => {protocol_user_id: nil}})
+      candidate_protocol_users = ProtocolUser.free_for_anonymous(@protocol_definition_id)
+
+      Rails.logger.info candidate_protocol_users.explain
 
       Rails.logger.info "Anonymous protocol. Got #{candidate_protocol_users.size} candidates."
 

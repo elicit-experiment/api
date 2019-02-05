@@ -31,7 +31,7 @@ class ParticipantApp extends React.Component {
     return(
     <div>
       <HeaderContainer></HeaderContainer>
-      <div id="wrap" className="admin-app-container container">
+      <div id="wrap" className="participant-app-container app-container container">
         <ParticipantProtocolList {...this.props} />
       </div>
       <FooterContainer></FooterContainer>

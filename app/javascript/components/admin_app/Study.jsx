@@ -215,6 +215,9 @@ class Study extends React.Component {
         title="Really delete?"
         text="Are you sure you want to delete this study and all its results?"
         type='warning'
+        buttonsStyling={false}
+        confirmButtonClass='btn btn-primary btn-lg'
+        cancelButtonClass='btn btn-lg'
         showCancelButton={true}
         confirmButtonText="Yes, delete it!"
         onConfirm={() => {
