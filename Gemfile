@@ -89,7 +89,12 @@ gem 'json-schema-generator'
 gem 'carrierwave'
 gem 'carrierwave-base64'
 
-group :development do
-  gem 'capistrano', '~> 3.11', require: false
-  gem 'capistrano-git-with-submodules', '~> 2.0'
-end
+
+gem 'rack-mini-profiler', require: false
+
+
+gem "flamegraph", "~> 0.9.5"
+
+gem "memory-profiler", "~> 1.0"
+
+gem "stackprof", "~> 0.2.12"

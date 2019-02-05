@@ -47,8 +47,6 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.5.2)
       public_suffix (>= 2.0.2, < 4.0)
-    airbrussh (1.3.0)
-      sshkit (>= 1.6.1, != 1.7.0)
     apivore (1.6.2)
       actionpack (>= 4, < 6)
       hashie (~> 3.3)
@@ -62,13 +60,6 @@ GEM
     bcrypt (3.1.12)
     builder (3.2.3)
     byebug (10.0.2)
-    capistrano (3.11.0)
-      airbrussh (>= 1.0.0)
-      i18n
-      rake (>= 10.0.0)
-      sshkit (>= 1.9.0)
-    capistrano-git-with-submodules (2.0.3)
-      capistrano (~> 3.7)
     carrierwave (1.2.3)
       activemodel (>= 4.0.0)
       activesupport (>= 4.0.0)
@@ -96,6 +87,7 @@ GEM
     erubi (1.7.1)
     execjs (2.7.0)
     ffi (1.9.25)
+    flamegraph (0.9.5)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
     hashie (3.6.0)
@@ -135,6 +127,7 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.7.1)
       mini_mime (>= 0.1.1)
+    memory-profiler (1.0.3)
     metaclass (0.0.4)
     method_source (0.9.0)
     mime-types (3.2.2)
@@ -146,9 +139,6 @@ GEM
     mocha (1.7.0)
       metaclass (~> 0.0.1)
     multi_json (1.13.1)
-    net-scp (1.2.1)
-      net-ssh (>= 2.6.5)
-    net-ssh (5.0.2)
     nio4r (2.3.1)
     nokogiri (1.8.5)
       mini_portile2 (~> 2.3.0)
@@ -165,6 +155,8 @@ GEM
     puma (3.12.0)
     rack (2.0.5)
     rack-cors (1.0.2)
+    rack-mini-profiler (1.0.2)
+      rack (>= 1.2.0)
     rack-proxy (0.6.5)
       rack
     rack-test (1.1.0)
@@ -259,9 +251,7 @@ GEM
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
     sqlite3 (1.3.13)
-    sshkit (1.17.0)
-      net-scp (>= 1.1.2)
-      net-ssh (>= 2.8.0)
+    stackprof (0.2.12)
     swagger-blocks (1.3.1)
     swagger_ui_engine (1.1.2)
       rails (>= 4.2)
@@ -294,24 +284,25 @@ DEPENDENCIES
   apivore
   awesome_print
   byebug
-  capistrano (~> 3.11)
-  capistrano-git-with-submodules (~> 2.0)
   carrierwave
   carrierwave-base64
   devise (~> 4.4.0)
   devise-doorkeeper
   doorkeeper
+  flamegraph (~> 0.9.5)
   jbuilder (~> 2.5)
   json-schema
   json-schema-generator
   kaminari
   lograge (~> 0.4)
   logstash-event
+  memory-profiler (~> 1.0)
   mocha
   pg
   pry
   puma (~> 3.0)
   rack-cors
+  rack-mini-profiler
   rails (~> 5.1.0)
   rails-erd
   responders
@@ -319,6 +310,7 @@ DEPENDENCIES
   rubocop
   spring
   sqlite3
+  stackprof (~> 0.2.12)
   swagger-blocks (= 1.3.1)
   swagger_ui_engine
   tzinfo-data
@@ -329,4 +321,4 @@ RUBY VERSION
    ruby 2.5.1p57
 
 BUNDLED WITH
-   1.16.2
+   1.16.6
