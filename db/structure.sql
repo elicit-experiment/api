@@ -31,7 +31,7 @@ CREATE INDEX "index_stimuli_on_protocol_definition_id" ON "stimuli" ("protocol_d
 CREATE INDEX "index_stimuli_on_study_definition_id" ON "stimuli" ("study_definition_id");
 CREATE INDEX "index_stimuli_on_trial_definition_id" ON "stimuli" ("trial_definition_id");
 CREATE TABLE IF NOT EXISTS "study_result_contexts" ("id" SERIAL PRIMARY KEY NOT NULL, "timestamp" timestamp, "context_type" text, "data" text, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL);
-CREATE TABLE IF NOT EXISTS "study_result_data_points" ("id" SERIAL PRIMARY KEY NOT NULL, "stage_id" integer NOT NULL, "protocol_user_id" integer, "phase_definition_id" integer, "trial_definition_id" integer, "component_id" integer, "kind" varchar, "point_type" varchar, "value" varchar, "method" varchar, "timestamp" timestamp, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL);
+CREATE TABLE IF NOT EXISTS "study_result_data_points" ("id" SERIAL PRIMARY KEY NOT NULL, "stage_id" integer NOT NULL, "protocol_user_id" integer, "phase_definition_id" integer, "trial_definition_id" integer, "component_id" integer, "kind" varchar, "point_type" varchar, "value" varchar, "method" varchar, "datetime" timestamp, "created_at" timestamp NOT NULL, "updated_at" timestamp NOT NULL);
 CREATE INDEX "index_study_result_data_points_on_component_id" ON "study_result_data_points" ("component_id");
 CREATE INDEX "index_study_result_data_points_on_phase_definition_id" ON "study_result_data_points" ("phase_definition_id");
 CREATE INDEX "index_study_result_data_points_on_protocol_user_id" ON "study_result_data_points" ("protocol_user_id");

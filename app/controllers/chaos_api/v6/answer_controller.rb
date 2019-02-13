@@ -40,6 +40,7 @@ module ChaosApi::V6
       new_datapoints = output["Events"].map do |event|
         dp_params = datapoint_query_fields.merge({
             :point_type => event["Type"],
+            :entity_type => event["EntityType"],
             :kind => event["EventId"] || event['Id'],
             :value => event["Data"],
             :method => event["Method"],

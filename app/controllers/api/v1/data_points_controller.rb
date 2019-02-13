@@ -18,13 +18,24 @@ module Api::V1
 
       Rails.logger.info "DataPoint where: #{filter_fields.ai}"
 
-      resources = StudyResult::DataPoint.where(filter_fields)
+      resources = StudyResult::DataPoint.where(filter_fields).includes(:component)
 
       if not page_params.nil?
         resources = resources
                         .page(page_params[:page])
                         .per(page_params[:page_size])
       end
+
+      cols = StudyResult::DataPoint.column_names.map(&:to_sym)
+      ap cols
+#      resources = resources.map{ |dp| dp.pluck(*cols).merge({component_name: dp.component.name}) }#map{ |dp| x = dp.to_h; x[:component_name] = x[:component][:name]; delete x[:component]; x}
+      #resources = resources.pluck(*cols)
+      resources = resources.map do |dp|
+        h = dp.as_json
+        h[:component_name] = dp.component.name
+        h
+      end
+      ap resources
       instance_variable_set(plural_resource_name, resources)
       respond_with instance_variable_get(plural_resource_name)
     end
@@ -48,6 +59,7 @@ module Api::V1
         params.require(:data_point).permit([
                                                :kind,
                                                :point_type,
+                                               :entity_type,
                                                :value,
                                                :method,
                                                :datetime,

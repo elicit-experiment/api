@@ -251,6 +251,7 @@ class Apidocs::V1::DataPointsApidocs
     end
   end
 
+
   swagger_schema :DataPoint do
     key :required, [:stage_id, :protocol_user_id, :phase_definition_id, :trial_definition_id, :component_id]
     property :stage_id do
@@ -273,7 +274,13 @@ class Apidocs::V1::DataPointsApidocs
       key :type, :integer
       key :format, :int64
     end
+    property :component_name do
+      key :type, :string
+    end
     property :kind do
+      key :type, :string
+    end
+    property :entity_type do
       key :type, :string
     end
     property :point_type do
@@ -287,6 +294,7 @@ class Apidocs::V1::DataPointsApidocs
     end
     property :datetime do
       key :type, :string
+      key :format, :"date-time"
     end
   end
 

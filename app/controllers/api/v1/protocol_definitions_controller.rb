@@ -56,7 +56,7 @@ module Api::V1
 
     def set_protocol_user
       if current_api_user_id
-        @protocol_user = ProtocolUser.for_user(@protocol_definition_id).first!
+        @protocol_user = ProtocolUser.for_user(@protocol_definition_id, current_api_user_id).first!
         return
       end
 

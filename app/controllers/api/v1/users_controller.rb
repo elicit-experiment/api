@@ -82,7 +82,9 @@ module Api::V1
     end
 
     def user_params
-      params.require(:user).permit(:email, :username, :password, :password_confirmation, :role, :anonymous, :group_name)
+      x = params.require(:user).permit(:email, :username, :password, :password_confirmation, :role, :anonymous)
+      Rails.logger.info x.ai
+      x
     end
 
     def sign_up_params

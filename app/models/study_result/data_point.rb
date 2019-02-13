@@ -10,5 +10,10 @@ module StudyResult
     belongs_to :stage, :class_name => "Stage", :foreign_key => "stage_id"
     belongs_to :component, :class_name => "Component", :foreign_key => "component_id"
     belongs_to :context, :class_name => "Context", :foreign_key => "context_id", :optional => true
+
+    include Swagger::Blocks
+
+    # TODO: why does including the blocks here cause it not to be found in the apidocs controller? is it the module?
+
   end
 end
