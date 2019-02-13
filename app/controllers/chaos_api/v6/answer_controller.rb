@@ -9,13 +9,13 @@ module ChaosApi::V6
     def create
       @response = ChaosResponse.new([])
 
-      sessionGUID = params[:sessionGUID]
+      session_guid = params[:sessionGUID]
 
-      @chaos_session = Chaos::ChaosSession.where({:session_guid => sessionGUID}).first
+      @chaos_session = Chaos::ChaosSession.where({:session_guid => session_guid}).first
 
-      questionId = params[:questionId].split(':')
-      study_definition_id = questionId[0].to_i
-      component_definition_id = questionId[1].to_i
+      question_id = params[:questionId].split(':')
+      study_definition_id = question_id[0].to_i
+      component_definition_id = question_id[1].to_i
 
       @component = Component.find(component_definition_id)
 
@@ -31,37 +31,21 @@ module ChaosApi::V6
 
       datapoint_query_fields = {
           :stage_id => @chaos_session.stage&.id,
-      :protocol_user_id => @chaos_session.protocol_user_id,
-      :phase_definition_id => @component.phase_definition_id,
-      :trial_definition_id => @component.trial_definition_id,
-      :component_id => @component.id,
+          :protocol_user_id => @chaos_session.protocol_user_id,
+          :phase_definition_id => @component.phase_definition_id,
+          :trial_definition_id => @component.trial_definition_id,
+          :component_id => @component.id,
       }
 
-      new_datapoints = output["Events"].map do |event|
-        dp_params = datapoint_query_fields.merge({
-            :point_type => event["Type"],
-            :entity_type => event["EntityType"],
-            :kind => event["EventId"] || event['Id'],
-            :value => event["Data"],
-            :method => event["Method"],
-            :datetime => event["DateTime"]
-        })
-        StudyResult::DataPoint.new(dp_params)
-      end
-
-      state_dp_params = datapoint_query_fields.merge({
-          :point_type => 'State'
-      })
+      new_datapoints = StudyResult::DataPoint.from_chaos_output(datapoint_query_fields, output)
 
       if @chaos_session.preview
-
         logger.info params.permit!.ai
         logger.info new_datapoints.ai
-        logger.info state_dp_params.ai
 
         respond_to do |format|
-          format.xml { render :xml => '' }
-          format.json { render :json => @response.to_json }
+          format.xml {render :xml => ''}
+          format.json {render :json => @response.to_json}
         end
 
         return
@@ -76,24 +60,17 @@ module ChaosApi::V6
         new_datapoints.each(&:save!)
       end
 
-      state = StudyResult::DataPoint.where(state_dp_params).first_or_initialize
-
-      output.delete("Events")
-      state.value = output.to_json
-      state.datetime = DateTime.now
-      state.save!
-
       if output["Context"]
         context = StudyResult::Context.find_or_create_by({
-          :context_type => output["Context"]["Type"],
-          :data => output["Context"]["Data"],
-          })
+                                                             :context_type => output["Context"]["Type"],
+                                                             :data => output["Context"]["Data"],
+                                                         })
         context.save!
       end
 
       respond_to do |format|
-        format.xml { render :xml => '' }
-        format.json { render :json => @response.to_json }
+        format.xml {render :xml => ''}
+        format.json {render :json => @response.to_json}
       end
     end
 

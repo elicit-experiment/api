@@ -452,9 +452,17 @@ class Apidocs::V1::TimeSeriesApidocs
     property :schema_metadata do
       key :type, :string
     end
+    property :created_at do
+      key :type, :string
+      key :format, :"date-time"
+    end
+    property :updated_at do
+      key :type, :string
+      key :format, :"date-time"
+    end
     property :completed_at do
       key :type, :string
-      key :format, :datetime
+      key :format, :"date-time"
     end
   end
 

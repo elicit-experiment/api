@@ -221,7 +221,7 @@ class Apidocs::V1::ExperimentsApidocs
     property :id do
       key :type, :integer
       key :format, :int64
-    end 
+    end
     property :study_result_id do
       key :type, :integer
       key :format, :int64
@@ -241,6 +241,14 @@ class Apidocs::V1::ExperimentsApidocs
     property :num_stages_remaining do
       key :type, :integer
       key :format, :int64
+    end
+    property :created_at do
+      key :type, :string
+      key :format, :"date-time"
+    end
+    property :updated_at do
+      key :type, :string
+      key :format, :"date-time"
     end
     property :started_at do
       key :type, :string

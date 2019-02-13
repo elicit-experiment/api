@@ -15,5 +15,40 @@ module StudyResult
 
     # TODO: why does including the blocks here cause it not to be found in the apidocs controller? is it the module?
 
+
+
+    ##
+    # Transform a chaos Output object into a series of datapoints
+    def self.from_chaos_output(datapoint_address, output)
+      new_datapoints = output["Events"].map do |event|
+        kind = event["EventId"] || event['Id']
+        entity_type = event['EntityType']
+        dp_params = datapoint_address.merge({
+                                                :point_type => event["Type"],
+                                                :entity_type => entity_type,
+                                                :kind => kind,
+                                                :value => event["Data"],
+                                                :method => event["Method"],
+                                                :datetime => event["DateTime"]
+                                            })
+        DataPoint.new(dp_params)
+      end
+
+      state_dp_params = datapoint_address.merge({
+                                                    :entity_type => new_datapoints.first&.entity_type || '',
+                                                    :kind => new_datapoints.first&.kind || '',
+                                                    :point_type => 'State'
+                                                })
+
+      state = DataPoint.where(state_dp_params).first_or_initialize
+
+      output.delete("Events")
+      state.value = output.to_json
+      state.datetime = DateTime.now
+
+      new_datapoints << state
+      new_datapoints
+    end
+
   end
 end

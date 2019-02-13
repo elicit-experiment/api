@@ -15,9 +15,9 @@ module ChaosApi::V6
 
     def show
       id = params[:id]
-      sessionGUID = params[:sessionGUID]
+      session_guid = params[:sessionGUID]
 
-      @chaos_session = Chaos::ChaosSession.where({:session_guid => sessionGUID}).includes([:stage,
+      @chaos_session = Chaos::ChaosSession.where({:session_guid => session_guid}).includes([:stage,
                                                                                            :study_definition,
                                                                                            :protocol_definition,
                                                                                            :phase_definition,

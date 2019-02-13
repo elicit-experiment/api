@@ -292,6 +292,14 @@ class Apidocs::V1::DataPointsApidocs
     property :method do
       key :type, :string
     end
+    property :created_at do
+      key :type, :string
+      key :format, :"date-time"
+    end
+    property :updated_at do
+      key :type, :string
+      key :format, :"date-time"
+    end
     property :datetime do
       key :type, :string
       key :format, :"date-time"

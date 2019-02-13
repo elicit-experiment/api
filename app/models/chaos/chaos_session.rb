@@ -97,19 +97,26 @@ module Chaos
 
       stage = nil
 
-      if !next_phase.nil?
+      if next_phase.nil?
+        Rails.logger.info "No next phase; ending experiment"
+        self.stage_id = nil
+        experiment.current_stage_id = nil
+        experiment.completed_at = DateTime.now
+        self.phase_definition_id = nil
+
+      else
         next_stage = StudyResult::Stage.where({
-          :experiment_id => experiment.id,
-          :protocol_user_id => experiment.protocol_user_id,
-          :phase_definition_id => next_phase.id}).first_or_initialize
+                                                  :experiment_id => experiment.id,
+                                                  :protocol_user_id => experiment.protocol_user_id,
+                                                  :phase_definition_id => next_phase.id}).first_or_initialize
 
         self.stage_id = next_stage.id
         unless next_stage.num_trials
-            trial_params = {:study_definition_id => study_definition_id,
-                           :protocol_definition_id => protocol_definition_id,
-                           :phase_definition_id => next_phase.id}
-            trials = TrialDefinition.where(trial_params)
-            next_stage.num_trials = trials.count
+          trial_params = {:study_definition_id => study_definition_id,
+                          :protocol_definition_id => protocol_definition_id,
+                          :phase_definition_id => next_phase.id}
+          trials = TrialDefinition.where(trial_params)
+          next_stage.num_trials = trials.count
         end
         next_stage.current_trial = 0 unless next_stage.current_trial
         experiment.current_stage = next_stage
@@ -122,12 +129,6 @@ module Chaos
 
         self.phase_definition_id = next_phase.id
         self.save!
-      else
-        Rails.logger.info "no next phase!"
-        self.stage_id = nil
-        experiment.current_stage_id = nil
-        experiment.completed_at = DateTime.now
-        self.phase_definition_id = nil
       end
 
       experiment.save!
