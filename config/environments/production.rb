@@ -47,7 +47,7 @@ config.webpacker.check_yarn_integrity = false
 
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
-  config.log_level = :info
+  config.log_level = config.environment[:public_facing?] ? :info : :debug
 
   # Prepend all log lines with the following tags.
   config.log_tags = [ :request_id ]
@@ -73,16 +73,6 @@ config.webpacker.check_yarn_integrity = false
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
   config.log_formatter = ::Logger::Formatter.new
-
-  # Use a different logger for distributed setups.
-  # require 'syslog/logger'
-  # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
-
-  if ENV["RAILS_LOG_TO_STDOUT"].present?
-    logger           = ActiveSupport::Logger.new(STDOUT)
-    logger.formatter = config.log_formatter
-    config.logger = ActiveSupport::TaggedLogging.new(logger)
-  end
 
   # below are only used for swagger ui to auto-populate test client id
   config.swagger_default_client_id = 'ef4032ea6c300bc4e11aa8326951b5142f14f6b1741b6d4f3aaeefffe6e6df02'

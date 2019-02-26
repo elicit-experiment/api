@@ -24,19 +24,107 @@ module ChaosApi::V6
     def create
       @response = ChaosResponse.new([])
       @series_type = params[:series_type] || 'webgazer'
-      @data = post_params[:points]
 
       if @chaos_session.preview
         respond_to do |format|
-          format.xml { render :xml => '' }
-          format.json { render :json => @response.to_json }
+          format.json {render :json => @response.to_json}
         end
 
         return
       end
 
-      #logger.info @chaos_session.ai
+      time_series = get_time_series
 
+      @response_status = :created
+
+      if params[:points]
+        append_from_json(time_series)
+      elsif params[:file]
+        append_from_file(time_series)
+      end
+
+      render :json => @response.to_json, status: @response_status
+    end
+
+    def append
+      @response = ChaosResponse.new([])
+      @series_type = params[:series_type] || 'webgazer'
+
+      if @chaos_session.preview
+        respond_to do |format|
+          format.json {render :json => @response.to_json}
+        end
+
+        return
+      end
+
+      time_series = get_time_series
+
+      @response_status = :created
+
+      if params[:points]
+        append_from_json(time_series)
+      elsif params[:file]
+        append_from_file(time_series)
+      end
+
+      render :json => @response.to_json, status: @response_status
+    end
+
+    private
+
+    def append_from_json(time_series)
+      @data = post_params[:points]
+
+      append_text = @data.map do |row|
+        WEBGAZER_HEADERS.map {|col| row[col]}.join("\t")
+      end.join("\n")
+
+      time_series.append_to_tsv(append_text, WEBGAZER_HEADERS, 'webgazer.tsv')
+
+      unless time_series.save
+        logger.error 'time series failed to save!'
+        logger.error time_series.ai
+        logger.error time_series.errors.full_messages.join("\n")
+        @response = ChaosResponse.new([], 'failed to save')
+        @response_status = :unprocessable_entity
+      end
+
+      logger.debug "Saved time series #{time_series.id}"
+    end
+
+
+    def append_from_file(time_series)
+
+      @file = params[:file]
+
+      # check headers
+      header = @file.tempfile.readline.chomp
+      if header != WEBGAZER_HEADERS.join("\t")
+        logger.warn "invalid header passed through file: #{header}"
+        @response = ChaosResponse.new([], 'failed to save')
+        @response_status = :unprocessable_entity
+        return
+      end
+
+      #@file.tempfile.rewind
+
+      #puts File.read(@file.tempfile.path)
+
+      time_series.append_file_to_tsv(@file.tempfile, WEBGAZER_HEADERS, 'webgazer.tsv')
+
+      unless time_series.save
+        logger.error 'time series failed to save!'
+        logger.error time_series.ai
+        logger.error time_series.errors.full_messages.join("\n")
+        @response = ChaosResponse.new([], 'failed to save')
+        @response_status = :unprocessable_entity
+      end
+
+      logger.debug "Saved time series #{time_series.id}"
+    end
+
+    def get_time_series
       study_definition_id = @chaos_session.study_definition_id
       phase_definition_id = @chaos_session.phase_definition_id
 
@@ -49,57 +137,21 @@ module ChaosApi::V6
           schema_metadata: nil,
       }
 
-      time_series = StudyResult::TimeSeries.where(time_series_params).first_or_initialize
-
-      append_text = @data.map do |row|
-        WEBGAZER_HEADERS.map{|col| row[col]}.join("\t")
-      end.join("\n")
-
-      if !time_series.file.file
-        time_series.file = FileIO.new(WEBGAZER_HEADERS.map(&:to_s).join("\t") + "\n" + append_text + "\n", 'webgazer.tsv')
-        logger.info "Creating initial time series with #{@data.length} rows to #{time_series.file.path}"
-      else
-        unless File.exists? time_series.file.path
-          logger.warn "Time Series file doesn't exist: #{time_series.file.path}"
-          dir = File.dirname(time_series.file.path)
-          FileUtils.mkdir_p dir
-          File.open(time_series.file.path, 'w') { |file| file.write(WEBGAZER_HEADERS.map(&:to_s).join("\t") + "\n") }
-        end
-        open(time_series.file.path, 'a') do |f|
-          f.puts append_text
-        end
-        logger.info "Wrote #{@data.length} rows to #{time_series.file.path}"
-      end
-
-      unless time_series.save
-        logger.error 'time series failed to save!'
-        logger.error time_series_params.ai
-        logger.error time_series.ai
-        logger.error time_series.errors.full_messages.join("\n")
-      end
-
-      logger.info "Saved time series #{time_series.id}"
-
-      respond_to do |format|
-        format.xml { render :xml => '', status: :created }
-        format.json { render :json => @response.to_json, status: :created }
-      end
+      StudyResult::TimeSeries.where(time_series_params).first_or_initialize
     end
-
-    private
 
     def respond_error(msg, status = :unprocessable_entity)
       @response = ChaosResponse.new([], msg)
       respond_to do |format|
-        format.xml { render :xml => @response.to_xml, status: status }
-        format.json { render :json => @response.to_json, status: status }
+        format.xml {render :xml => @response.to_xml, status: status}
+        format.json {render :json => @response.to_json, status: status}
       end
     end
 
 
     def post_params
       #validate POST parameters
-      params.permit(:format, :sessionGUID, :series_type, points: WEBGAZER_HEADERS)
+      params.permit(:format, :sessionGUID, :series_type, :file, points: WEBGAZER_HEADERS)
     end
   end
 end

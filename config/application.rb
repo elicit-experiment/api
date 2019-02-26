@@ -34,20 +34,47 @@ module ElicitApi
     default_url_options_config[:port] = port if port
     Rails.application.routes.default_url_options = default_url_options_config
 
-#    puts "#{default_url_options_config.ai} #{Rails.application.routes.default_url_options.ai}"
+    config.environment = {
+        public_facing?: (elicit_portal[:host].include?('compute.dtu.dk') || false)
+#        external_host: "#{elicit_portal[:host]}",
+#        external_hostname: "#{elicit_portal[:scheme]}://#{elicit_portal[:host] + port}",
+#        external_protocol: elicit_portal[:scheme]
+    }
 
-    log_level = String(ENV['LOG_LEVEL'] || "info").upcase
-    logger = ActiveSupport::Logger.new(STDOUT)
-    logger.formatter = config.log_formatter
-    logger.level = Logger.const_get(log_level)
-    config.logger = ActiveSupport::TaggedLogging.new(logger)
+    logger               = ActiveSupport::Logger.new(STDOUT)
+    logger.formatter     = config.log_formatter
+    config.logger        = ActiveSupport::TaggedLogging.new(logger)
 
-    config.log_level = log_level
     config.lograge.enabled = true
+    unless Rails.env.production?
+      # log rage doesn't log params by default.
+      # For production, though, the params can be HUGE (e.g. webgazer datapoints, so let's be cautious)
+      config.lograge.custom_options = lambda do |event|
+        exceptions = %w[controller action format id points]
+        { params: event.payload[:params].except(*exceptions) }
+      end
+    end
+    if config.lograge.enabled
+      class ActionDispatch::DebugExceptions
+        alias old_log_error log_error
 
-#    config.lograge.custom_options = lambda do |event|
-#    #        params = event.payload[:params].reject { |k| %w(controller action).include?(k) }
-#    #        { "params" => params }
-#    #    end
+        def log_error(env, wrapper)
+          exception = wrapper.exception
+          if exception.is_a?(ActionController::RoutingError)
+            data = {
+                method: env['REQUEST_METHOD'],
+                path: env['REQUEST_PATH'],
+                status: wrapper.status_code,
+                error: "#{exception.class.name}: #{exception.message}"
+            }
+            formatted_message = Lograge.formatter.call(data)
+            logger(env).send(Lograge.log_level, formatted_message)
+          else
+            old_log_error env, wrapper
+          end
+        end
+      end
+    end
+
   end
 end

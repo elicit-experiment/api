@@ -33,6 +33,20 @@ class Apidocs::V1::ProtocolUsersApidocs
         key :type, :integer
         key :format, :int64
       end
+      parameter do
+        key :name, :page_size
+        key :in, :query
+        key :description, 'Return page size (defaults to 20)'
+        key :required, false
+        key :type, :integer
+      end
+      parameter do
+        key :name, :page
+        key :in, :query
+        key :description, 'Return page number (defaults to 1)'
+        key :required, false
+        key :type, :integer
+      end
       response 200 do
         key :description, 'Array of protocol user objects'
         schema do

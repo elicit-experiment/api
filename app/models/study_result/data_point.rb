@@ -11,11 +11,14 @@ module StudyResult
     belongs_to :component, :class_name => "Component", :foreign_key => "component_id"
     belongs_to :context, :class_name => "Context", :foreign_key => "context_id", :optional => true
 
-    include Swagger::Blocks
-
+    # include Swagger::Blocks
+    #
+    #
+    #
+    #
+    #
+    #
     # TODO: why does including the blocks here cause it not to be found in the apidocs controller? is it the module?
-
-
 
     ##
     # Transform a chaos Output object into a series of datapoints
@@ -23,22 +26,24 @@ module StudyResult
       new_datapoints = output["Events"].map do |event|
         kind = event["EventId"] || event['Id']
         entity_type = event['EntityType']
-        dp_params = datapoint_address.merge({
-                                                :point_type => event["Type"],
-                                                :entity_type => entity_type,
-                                                :kind => kind,
-                                                :value => event["Data"],
-                                                :method => event["Method"],
-                                                :datetime => event["DateTime"]
-                                            })
+        dp_params = {
+            :point_type => event["Type"],
+            :entity_type => entity_type,
+            :kind => kind,
+            :value => event["Data"],
+            :method => event["Method"],
+            :datetime => event["DateTime"]
+        }
+        dp_params = datapoint_address.merge(dp_params)
         DataPoint.new(dp_params)
       end
 
-      state_dp_params = datapoint_address.merge({
-                                                    :entity_type => new_datapoints.first&.entity_type || '',
-                                                    :kind => new_datapoints.first&.kind || '',
-                                                    :point_type => 'State'
-                                                })
+      state_dp_params = {
+          :entity_type => new_datapoints.first&.entity_type || '',
+          :kind => new_datapoints.first&.kind || '',
+          :point_type => 'State'
+      }
+      state_dp_params = datapoint_address.merge(state_dp_params)
 
       state = DataPoint.where(state_dp_params).first_or_initialize
 

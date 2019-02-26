@@ -13,8 +13,10 @@ ln -s /var/www/app/public/ public
 # copy awesome print config for production
 cp ./.aprc.production ~/.aprc
 
-# It's OK that this fails
-RAILS_ENV=production PRECOMPILE=1 bundle exec rake db:setup
+# start from scratch
+#DISABLE_DATABASE_ENVIRONMENT_CHECK=1 RAILS_ENV=production PRECOMPILE=1 bundle exec rake db:drop
+#DISABLE_DATABASE_ENVIRONMENT_CHECK=1 RAILS_ENV=production PRECOMPILE=1 bundle exec rake db:setup
+#DISABLE_DATABASE_ENVIRONMENT_CHECK=1 RAILS_ENV=production PRECOMPILE=1 bundle exec rake db:seed
 
 RAILS_ENV=production PRECOMPILE=1 bundle exec rake db:migrate
 

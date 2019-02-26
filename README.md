@@ -14,6 +14,12 @@ ln -s .env-local .env
 
 (`.env` will automatically be picked up by `docker-compose`)
 
+OR
+
+```bash
+bash -ac 'source .env-local && docker-compose up -d redis postgres'
+```
+
 ### 2. Build Docker
 
 ```bash

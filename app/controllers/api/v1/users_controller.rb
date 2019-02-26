@@ -22,7 +22,7 @@ module Api::V1
       build_resource(sign_up_params)
       resource.save
       yield resource if block_given?
-      if ! resource.persisted?
+      if !resource.persisted?
         clean_up_passwords resource
         set_minimum_password_length
         e = ElicitError.new("Cannot create user", :unprocessable_entity, details: resource.errors)

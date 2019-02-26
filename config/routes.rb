@@ -19,6 +19,7 @@ Rails.application.routes.draw do
 		  get 'Slide/Completed' => 'chaos_api/v6/slide#get' , :defaults => { :format => 'json' }
 		  match 'Answer/Set', to: 'chaos_api/v6/answer#cors_set_access_control_headers', via: :options
       post 'time_series/:series_type' => 'chaos_api/v6/time_series#create' , :defaults => { :format => 'json' }
+      post 'time_series/:series_type/file' => 'chaos_api/v6/time_series#append'
 
 		  get "/*" => redirect("/")
     end
