@@ -1,11 +1,12 @@
-frontend/
-docker/
-notes/
-doc/
+frontend/**/*
+docker/**/*
+notes/**/*
+doc/**/*
 ./Gemfile.lock
 README.md
 README.rdoc
-.git
+.git/
+.idea/
 Gemfile.lock
 LICENSE
 tmp/

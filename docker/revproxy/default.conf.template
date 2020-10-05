@@ -1,5 +1,4 @@
-
-
+keepalive_timeout 10;
 
 upstream app-api {
   server app-api:3000;

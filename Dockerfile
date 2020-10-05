@@ -74,4 +74,5 @@ RUN ls -als public/packs
 # generate cookie key
 RUN PRECOMPILE=1 bundle exec rake secret > ~/secret-key-base.txt
 
+ENV RAILS_ENV=production
 CMD ["/bin/sh", "-c", "./run-server.sh  2>&1 | tee log/run-server.log"]
