@@ -34,6 +34,7 @@ services:
     build:
         context: docker/revproxy
         args:
+          - API_SCHEME=${API_SCHEME}
           - SITE_SUFFIX=${SITE_SUFFIX}
     volumes:
       - 'app_public:/var/www/app/public'
