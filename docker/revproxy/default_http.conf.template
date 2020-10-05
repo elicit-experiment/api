@@ -40,9 +40,6 @@ server {
 
   server_name admin-elicit.${SITE_SUFFIX};
 
-  ssl_certificate     /certs/admin-elicit.${SITE_SUFFIX}/fullchain.pem;
-  ssl_certificate_key /certs/admin-elicit.${SITE_SUFFIX}/privkey.pem;
-
   return 302 https://elicit.${SITE_SUFFIX}/admin$request_uri;
 }
 
