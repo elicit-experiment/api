@@ -42,5 +42,3 @@
 yarn-debug.log*
 yarn-error.log*
 .yarn-integrity
-
-/docker/**/*
