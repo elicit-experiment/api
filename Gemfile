@@ -10,7 +10,7 @@ git_source(:github) do |repo_name|
 end
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.1.0'
+gem 'rails', '~> 5.2'
 gem 'webpacker'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
@@ -77,7 +77,7 @@ gem 'activemodel-serializers-xml'
 gem 'actionpack-xml_parser'
 
 group :production do
-  gem 'pg'
+  gem 'pg', '~> 1.2'
 end
 
 gem 'lograge', '~> 0.4'
@@ -98,3 +98,5 @@ gem "flamegraph", "~> 0.9.5"
 gem "memory-profiler", "~> 1.0"
 
 gem "stackprof", "~> 0.2.12"
+
+gem "dotenv-rails", "~> 2.7"

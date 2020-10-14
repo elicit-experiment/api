@@ -11,10 +11,10 @@ server {
 
    server_name elicit.${SITE_SUFFIX} api-elicit.${SITE_SUFFIX};
 
-   include conf.d/sites/api.conf;
+  include conf.d/sites/api.conf;
 }
 
-# frontend
+# experiment frontend
 server {
   listen 8081;
 
@@ -24,7 +24,7 @@ server {
 }
 
 
-# frontend
+# experiment frontend
 server {
   listen 8080;
 
