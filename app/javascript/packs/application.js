@@ -14,11 +14,6 @@ window.$ = jquery;
 window.jQuery = jquery;
 window.jquery = jquery;
 
-import 'bootstrap/dist/css/bootstrap'
-let Bootstrap = require('bootstrap');
-
-import './main.scss'
-
 import Loader from '../Loader.jsx'
 
 document.addEventListener("DOMContentLoaded", Loader);

@@ -1,15 +1,18 @@
 # Base image:
-FROM ruby:2.5.1
+FROM ruby:2.5.7
 
 ARG SITE_SUFFIX
+ARG API_SCHEME
+
+ENV API_SCHEME=$API_SCHEME
 
 RUN cat /etc/os-release
 
 # Install dependencies
 RUN apt-get update -qq && apt-get install -y build-essential libpq-dev
 
-# Install node 8
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
+# Install node 12
+RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
 RUN apt-get -y install nodejs
 RUN node --version
 RUN npm --version
@@ -38,6 +41,7 @@ RUN bundle install
 
 # Node:
 COPY package.json .
+COPY yarn.lock .
 RUN yarn install
 RUN node --version
 

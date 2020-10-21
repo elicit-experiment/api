@@ -28,6 +28,7 @@ module ChaosApi::V6
       # TODO: make this the "get session guid pre-action"
       referrer = request.referer
       Rails.logger.debug "Referer: #{referrer}"
+      Rails.logger.debug request.cookies.ai
       session_guids = {}
       unless referrer.blank?
         qp = Rack::Utils.parse_nested_query URI(referrer).query
@@ -45,6 +46,17 @@ module ChaosApi::V6
         @response = ChaosResponse.new(nil, "Unknown session")
         render json: @response.to_json, :status => :unprocessable_entity
       else
+        response.set_cookie(
+          :session_guid,
+          {
+            value: session_guid,
+            # expires: 60.minutes.from_now,
+            path: '/',
+            secure: Rails.configuration.elicit['participant_frontend']['scheme'] == 'https',
+            httponly: true
+          }
+        )
+
         @response = ChaosResponse.new([
                                        {
                                          "DateCreated": Time.now.to_i,

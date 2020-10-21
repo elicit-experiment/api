@@ -1,56 +1,70 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
 import PropTypes from 'prop-types';
+import { Navbar, Nav, NavDropdown } from "react-bootstrap";
 
 class Header extends React.Component {
   render() {
-    var admin = "";
+    var admin = <div></div>;
 
     if (this.props.current_user_role == 'admin') {
-      admin = <li><Link to='/admin'>Admin</Link></li>
+      admin = <Nav.Link href='/admin'>Admin</Nav.Link>
     }
 
     var loginLogout = "";
     var userName = "";
 
     if (this.props.current_user_role === undefined) {
-      loginLogout = <li><a href="/login">Login</a></li>;
-      userName = <li><a href="/login">none</a></li>
+      loginLogout = <Nav.Link href="/login">Login</Nav.Link>;
+      userName = <li className="nav-item"></li>
     } else {
-      userName = <li><a href="/profile">{this.props.current_username || this.props.current_user_email}</a></li>;
+      userName = <Nav.Link href="/profile">{this.props.current_username || this.props.current_user_email}</Nav.Link>;
 
-      loginLogout = <li>
-        <button type="button" className="btn btn-link" onClick={(e) => {
+      loginLogout = <Nav.Link onClick={(_e) => {
           this.props.logoutUser()
         }}>Logout
-        </button>
-      </li>
+        </Nav.Link>
     }
 
+    const profile = (this.props.current_user_role === undefined) ? <Nav.Link href="/login">Login</Nav.Link> :
+      <NavDropdown title={this.props.current_username || this.props.current_user_email} id="basic-nav-dropdown">
+      <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
+      <NavDropdown.Divider />
+      <NavDropdown.Item href="#" onClick={(_e) => {
+        this.props.logoutUser()
+      }}>Logout</NavDropdown.Item>
+    </NavDropdown>
     return (
-        <nav className="nav navbar navbar-default navbar-fixed-top">
-          <div className="navbar-header">
-            <button type="button" className="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-              <span className="icon-bar"></span>
-              <span className="icon-bar"></span>
-              <span className="icon-bar"></span>
-            </button>
+      <Navbar bg="light" expand="lg">
+        <Navbar.Brand href="#home"><a className="navbar-brand" href="/">Elicit</a></Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="ml-auto">
+            { admin }
+            <Nav.Link href='/participant'>Participant</Nav.Link>
+            <Nav.Link href='/about'>About</Nav.Link>
+            {profile}
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
+/*
+        <nav className="nav navbar navbar-expand-lg navbar-light bg-light sticky-top">
             <a className="navbar-brand" href="/">Elicit</a>
-          </div>
-          <div className="collapse navbar-collapse">
-            <ul id="admin-nav" className="nav navbar-nav">
+            <button type="button" className="navbar-toggler" data-toggle="collapse" data-target="#navbarSupportedContent">
+              <span className="navbar-toggler-icon"></span>
+            </button>
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul id="admin-nav" className="nav navbar-nav ml-auto mt-2 mt-lg-0">
               {admin}
-              <li><Link to='/participant'>Participant</Link></li>
-              <li><Link to='/about'>About</Link></li>
-            </ul>
-
-            <ul className="nav navbar-nav navbar-right">
-              {userName}
+              <li className="nav-item"><Link className="nav-link" to='/participant'>Participant</Link></li>
+              <li className="nav-item"><Link className="nav-link" to='/about'>About</Link></li>
               {loginLogout}
-              <li>&nbsp;</li>
+              {userName}
             </ul>
           </div>
         </nav>
+
+ */
     )
   }
 }

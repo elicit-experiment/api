@@ -12,18 +12,18 @@ export default class ProtocolPreview extends React.Component {
             trialInfo += ` ${trial.name}`
           }
           return <div className="row" key={trial.id}>
-              <div className="col-xs-offset-4 col-xs-4">{trialInfo}</div>
-            <div className="col-xs-4"><a href={preview_href}> See Preview</a></div>
+              <div className="offset-4 col-4">{trialInfo}</div>
+            <div className="col-4"><a href={preview_href}> See Preview</a></div>
           </div>
         });
-        return <div className="row" key={phase.id}>
-          <div className="row col-xs-offset-2 col-xs-10">Phase {phase.id}</div>
+        return <div className="container" key={phase.id}>
+          <div className="row offset-2 col-10">Phase {phase.id}</div>
           {trials}
         </div>
       });
       return <div>
-          <h3 className="col-xs-offset-1 col-xs-10 center">Protocol &ldquo;{this.props.protocol.name}&rdquo; Preview</h3>
-        <div className="row well">
+          <h3 className="offset-1 col-10 center">Protocol &ldquo;{this.props.protocol.name}&rdquo; Preview</h3>
+        <div className="row card">
         {phases}
         </div>
       </div>

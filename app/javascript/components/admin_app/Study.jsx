@@ -6,20 +6,20 @@ import { Link } from "react-router-dom";
 import elicitApi from "../../api/elicit-api.js";
 import { connect } from "react-redux";
 import $ from "jquery";
-import Toggle from "react-bootstrap-toggle";
+import BootstrapSwitchButton from 'bootstrap-switch-button-react'
 import {StudyDefinitionType, ProtocolDefinitionType, ApiReturnCollectionOf} from '../../types';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
 import SweetAlert from 'sweetalert2-react';
 
 const ProtocolInfoLink = props => (
   <div className="row study-info-row">
-    <b className="col-xs-2">Protocols:</b>
-    <div className="col-xs-2">
+    <b className="col-2">Protocols:</b>
+    <div className="col-2">
       <Link to={`/admin/studies/${props.study.id}`} className="active">
         <i className="glyphicon glyphicon-edit" aria-hidden="true" /> Edit
       </Link>
     </div>
-    <b className="col-xs-1 study-info-protocols-count">
+    <b className="col-1 study-info-protocols-count">
       {(props.protocols || []).length}
     </b>
   </div>
@@ -68,16 +68,16 @@ class _Protocol extends React.Component {
       };
 
     return (
-      <div className="row well " key={this.props.protocol.id}>
+      <div className="row card " key={this.props.protocol.id}>
         <div
-          className="protocol-row protocol-header-row"
+          className="protocol-row container protocol-header-row"
           key={"t" + this.props.protocol.id}
         >
-          <div className="col-xs-6">
+          <div className="col-4">
             <b>{this.props.protocol.id}  —{" "}
             {this.props.protocol.name}</b>
           </div>
-          <div className="col-xs-6 study-action-bar">
+          <div className="col-8 study-action-bar">
             <Link to={`/admin/studies/${this.props.study.id}/protocols/${this.props.protocol.id}`} className="active btn btn-primary">
               Preview
             </Link>
@@ -93,20 +93,20 @@ class _Protocol extends React.Component {
             <button type="button" className="btn btn-primary">
               Phases &nbsp; <span className="badge badge-secondary">{this.props.protocol.phase_definitions.length}</span>
             </button>
-            <Toggle
-              onClick={this.onToggle.bind(this)}
-              on={<span>Active</span>}
-              off={<span>Inactive</span>}
+            <BootstrapSwitchButton
+              onChange={this.onToggle.bind(this)}
+              onlabel='Active'
+              offlabel='Inactive'
               size="md"
               offstyle="danger"
               onstyle="success"
-              active={this.state.active}
-            />
+              width="100"
+              checked={this.state.active}></BootstrapSwitchButton>
           </div>
         </div>
 
         <div className="protocol-row " key={"d" + this.props.protocol.id}>
-          <div className="col-xs-12" {...htmlDescription}></div>
+          <div className="col-12" {...htmlDescription}></div>
         </div>
       </div>
     );
@@ -137,8 +137,8 @@ class ProtocolEdit extends React.Component {
 
     return (
       <div className="row study-info-row" key={"new-protocol"}>
-        <b className="col-xs-2">Protocols:</b>
-        <div className="col-xs-10">{protocol_list}</div>
+        <b className="col-2">Protocols:</b>
+        <div className="col-10">{protocol_list}</div>
       </div>
     );
   }
@@ -162,7 +162,6 @@ class Study extends React.Component {
   }
 
   componentDidUpdate() {
-    $('[data-toggle="tooltip"]').tooltip();
   }
 
   titleChanged(data) {
@@ -196,7 +195,7 @@ class Study extends React.Component {
           protocol_definitions={this.props.protocol_definitions}
         />
       );
-      study_class = "well show study-detail";
+      study_class = "card show study-detail";
     } else {
       protocols_row = (
         <ProtocolInfoLink
@@ -205,7 +204,7 @@ class Study extends React.Component {
           protocol_definitions={this.props.protocol_definitions}
         />
       );
-      study_class = "well show study-summary";
+      study_class = "card show study-summary";
     }
 
     // TODO: style sweetalert or replace it with a bootstrap modal doing the same thing
@@ -230,39 +229,41 @@ class Study extends React.Component {
       <div className="study-wrapper" key={this.props.study.id}>
         {deleteAlert}
         <div className={study_class} data-studyid={this.props.study.id}>
-          <div className="row study-info-row">
-            <b className="col-xs-2">Title:</b>
-            <div className="col-xs-5">
-              {this.props.study.id} — {this.props.study.title}
+          <div className="container">
+            <div className="row study-info-row">
+              <b className="col-2">Title:</b>
+              <div className="col-5">
+                {this.props.study.id} — {this.props.study.title}
 
+              </div>
             </div>
-          </div>
-          <div className="row study-info-row">
-            <b className="col-xs-2">PI:</b>
-            <div className="col-xs-5">
-              <b>{this.props.study.principal_investigator.email}</b>
+            <div className="row study-info-row">
+              <b className="col-2">PI:</b>
+              <div className="col-5">
+                <b>{this.props.study.principal_investigator.email}</b>
+              </div>
             </div>
-          </div>
-          <div className="row study-info-row">
-            <b className="col-xs-2">Description:</b>
-            <div className="col-xs-10">
-              {this.props.study.description}
+            <div className="row study-info-row">
+              <b className="col-2">Description:</b>
+              <div className="col-10">
+                {this.props.study.description}
+              </div>
             </div>
-          </div>
-          {protocols_row}
-          <button className="remove-study" onClick={() => this.setState({ deleteVerify: true })}>
-            {" "}
-            &times;{" "}
-          </button>
-          <div className="row study-info-row">
-            <div className="col-xs-2" />
-            <div className="col-xs-5">
-              <button
-                onClick={() => this.setState({ deleteVerify: true })}
-                className="active btn btn-danger"
-              >
-                Delete Study
-              </button>
+            {protocols_row}
+            <button className="btn btn-danger remove-study" onClick={() => this.setState({ deleteVerify: true })}>
+              {" "}
+              &times;{" "}
+            </button>
+            <div className="row study-info-row">
+              <div className="col-2" />
+              <div className="col-5">
+                <button
+                  onClick={() => this.setState({ deleteVerify: true })}
+                  className="active btn btn-danger"
+                >
+                  Delete Study
+                </button>
+              </div>
             </div>
           </div>
         </div>

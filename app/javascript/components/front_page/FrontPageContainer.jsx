@@ -1,6 +1,4 @@
 import React from 'react'
-import HeaderContainer from "../nav/HeaderContainer"
-import FooterContainer from "../nav/FooterContainer"
 import FrontPage from "./FrontPage.jsx"
 import {currentUser} from "../../reducers/selector";
 import connect from "react-redux/es/connect/connect";
@@ -19,16 +17,12 @@ class FrontPageContainer extends React.Component {
 
     render() {
         return (
-            <div>
-                <HeaderContainer></HeaderContainer>
                 <FrontPage current_user_role={this.props.current_user.data.role}
                            current_username={this.props.current_user.data.username}
                            current_user_email={this.props.current_user.data.email}
                            anonymous_protocols={this.props.anonymous_protocols}
                            loadAnonymousProtocols={this.props.loadAnonymousProtocols}
                 />
-                <FooterContainer></FooterContainer>
-            </div>
         )
     }
 }

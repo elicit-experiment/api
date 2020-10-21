@@ -9,10 +9,13 @@ services:
         context: .
         args:
           - SITE_SUFFIX=${SITE_SUFFIX}
+          - SECRET_KEY_BASE=${SECRET_KEY_BASE}
+          - API_SCHEME=${API_SCHEME}
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - SITE_SUFFIX=${SITE_SUFFIX}
+      - SECRET_KEY_BASE=${SECRET_KEY_BASE}
     volumes:
       - app_public:/var/www/app/public
     expose:

@@ -1,77 +1,58 @@
-## Running Docker
+# Elicit Experiment
 
-### 1. Set Environment
+Elicit experiment is a system for creating psychological studies, presenting them to subject and gathering the results.
 
-```bash
-export $(grep -v '^#' .env-local | xargs)
-```
+## Installation
 
-OR
+Installation instructions are found [here](./INSTALL.md).
 
-```bash
-ln -s .env-local .env
-```
+## Development
 
-(`.env` will automatically be picked up by `docker-compose`)
+### 1. Setup Environment
 
-OR
+Follow the instructions in [INSTALL.md](./INSTALL.md) to create a local `.env` file.
+
+### 2. Start the Docker Dependencies
 
 ```bash
-bash -ac 'source .env-local && docker-compose up -d redis postgres'
+docker-compose up -d redis postgres
 ```
 
-### 2. Build Docker
+### 3. Run the Local Servers
+
+There are 3 separate servers required: the API, the admin/participant frontend and the experiment frontend.
+
+#### API
+
+```
+bundle install
+bundle exec rails s -b 0.0.0.0
+```
+
+#### Admin/Participant Frontend
 
 ```bash
-docker-compose build
+bin/webpack-dev-server
 ```
 
-### 2. Run Docker
+#### Experiment Frontend
 
 ```bash
-docker-compose up -d
+pushd docker/experiment-frontend
+npm install
+gulp build
+gulp serve
 ```
 
-## Generating test files
+### Common Development Tasks
 
-
-### Experiments
-
-```
-guid=a9f56a58-aaaa-eeee-1355-012345678901
-guid=a9f56a58-aaaa-eeee-1355-012345678904
-guid=a9f56a58-aaaa-eeee-1355-012345678902
-guid=a9f56a58-aaaa-eeee-1355-012345678903
-guid=a9f56a58-aaaa-eeee-1355-012345678905
-
-curl "https://dev-api.cosound.dk/v6/Experiment/Get?id=${guid}&format=json2&userHTTPStatusCodes=False" -H 'Origin: http://localhost:5504' -H 'Accept-Encoding: gzip, deflate, br' -H 'Accept-Language: en-US,en;q=0.8,fr;q=0.6' -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36' -H 'Accept: */*' -H 'Referer: http://localhost:5504/' -H 'Connection: keep-alive' --compressed > test/fixtures/files/production_examples/experiment_${guid}.json
-```
-
-### Questions
-
-```
-guid=a9f56a58-aaaa-eeee-1355-012345678901
-guid=a9f56a58-aaaa-eeee-1355-012345678904
-guid=a9f56a58-aaaa-eeee-1355-012345678902
-guid=a9f56a58-aaaa-eeee-1355-012345678903
-guid=a9f56a58-aaaa-eeee-1355-012345678905
-i=2
-echo "https://dev-api.cosound.dk/v6/Question/Get?id=${guid}&index=${i}&format=json3&userHTTPStatusCodes=False"
-curl "https://dev-api.cosound.dk/v6/Question/Get?id=${guid}&index=${i}&format=json3&userHTTPStatusCodes=False" -H 'Origin: http://localhost:5504' -H 'Accept-Encoding: gzip, deflate, br' -H 'Accept-Language: en-US,en;q=0.8,fr;q=0.6' -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36' -H 'Accept: */*' -H 'Referer: http://localhost:5504/' -H 'Connection: keep-alive' --compressed > test/fixtures/files/production_examples/questions_${guid}_${i}.json
-```
-
-
-# Design
-
-## Extract DB diagram
+#### Extract DB diagram
 
 ```
 bundle exec erd
 ```
 
-# Common Tasks
-
-## Nuke the DB
+#### Nuke the DB
 
 ```bash
 RAILS_ENV=development ./redb.sh

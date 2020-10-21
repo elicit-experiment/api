@@ -1,5 +1,6 @@
 //Import Dependencies
 import React from 'react';
+import Modal from "react-bootstrap/Modal";
 
 class LogInSignUp extends React.Component {
   constructor(props) {
@@ -82,63 +83,50 @@ class LogInSignUp extends React.Component {
     }
 
     return(
-      <div className="modal fade" data-backdrop="static" id="logInModal" role="dialog" aria-hidden={String(this.props.hidden)}>
-        <div className="modal-dialog">
-
-          <div className="modal-content">
-            <div className="modal-header" style={{padding:"35px 50px"}}>
-              {this.dismissButton()}
-              <h4><span className="glyphicon glyphicon-lock"></span> Login</h4>
-              {error}
+      <Modal show={true}>
+        <Modal.Header>
+          <h4><span className="glyphicon glyphicon-lock"></span> Login</h4>
+          {error}
+        </Modal.Header>
+        <Modal.Body>
+          <form role="form" onSubmit={this.logInUser()}>
+            <div className="form-group">
+              <label htmlFor="usrname"><span className="glyphicon glyphicon-user glyphicon-envelope"></span> Username or Email</label>
+              <input type="text"
+                     className="form-control"
+                     id="email"
+                     placeholder="Enter email"
+                     autoComplete="username"
+                     onChange={this.updateState('email')}/>
             </div>
-            <div className="modal-body" style={{padding:"40px 50px"}}>
-              <form role="form" onSubmit={this.logInUser()}>
-                <div className="form-group">
-                  <label htmlFor="usrname"><span className="glyphicon glyphicon-user glyphicon-envelope"></span> Username or Email</label>
-                  <input type="text"
-                         className="form-control"
-                         id="email"
-                         placeholder="Enter email"
-                         autoComplete="username"
-                         onChange={this.updateState('email')}/>
-                </div>
-                <div className="form-group">
-                  <label htmlFor="psw"><span className="glyphicon glyphicon-eye-open"></span> Password</label>
-                  <input type="password"
-                         className="form-control"
-                         id="psw"
-                         placeholder="Enter password"
-                         autoComplete="current-password"
-                         onChange={this.updateState('password')}/>
-                </div>
-                <div className="checkbox">
-                  <label><input type="checkbox" value=""/>Remember me</label>
-                </div>
-                <button type="submit" className="btn btn-success btn-block"><span className="glyphicon glyphicon-off"></span> Login</button>
-              </form>
+            <div className="form-group">
+              <label htmlFor="psw"><span className="glyphicon glyphicon-eye-open"></span> Password</label>
+              <input type="password"
+                     className="form-control"
+                     id="psw"
+                     placeholder="Enter password"
+                     autoComplete="current-password"
+                     onChange={this.updateState('password')}/>
             </div>
-            <div className="modal-footer">
-              <p>Not a member? <a href="#" onClick={this.toggleLogIn}>Sign Up</a></p>
-              <p>Forgot <a href="#">Password?</a></p>
-            </div>
-          </div>
-        </div>
-      </div>
+            <button type="submit" className="btn btn-success btn-block"><span className="glyphicon glyphicon-off"></span> Login</button>
+          </form>
+        </Modal.Body>
+        <Modal.Footer>
+          <p>Not a member? <a href="#" onClick={this.toggleLogIn}>Sign Up</a></p>
+          <p>Forgot <a href="#">Password?</a></p>
+        </Modal.Footer>
+      </Modal>
     );
   }
 
   // Generates the HTML for the sign up form
   signUpForm() {
     return(
-      <div className="modal fade" id="signUpModal" role="dialog">
-        <div className="modal-dialog">
-
-          <div className="modal-content">
-            <div className="modal-header" style={{padding:"35px 50px"}}>
-              {this.dismissButton()}
+      <Modal show={true}>
+           <Modal.Header>
               <h4><span className="glyphicon glyphicon-lock"></span> Sign Up</h4>
-            </div>
-            <div className="modal-body" style={{padding:"40px 50px"}}>
+            </Modal.Header>
+            <Modal.Body>
               <form role="form" onSubmit={this.signUpUser()}>
                 <div className="form-group">
                   <label htmlFor="usrname"><span className="glyphicon glyphicon-user"></span> User Name</label>
@@ -180,15 +168,12 @@ class LogInSignUp extends React.Component {
                 </div>
                   <button type="submit" className="btn btn-success btn-block"><span className="glyphicon glyphicon-off"></span> Sign Up</button>
               </form>
-            </div>
-            <div className="modal-footer">
-              <button type="submit" className="btn btn-danger btn-default pull-left" data-dismiss="modal"><span className="glyphicon glyphicon-remove"></span> Cancel</button>
+            </Modal.Body>
+            <Modal.Footer>
               <p>Already a Member? <a href="#" onClick={this.toggleLogIn}>Log In</a></p>
               <p>Forgot <a href="#">Password?</a></p>
-            </div>
-          </div>
-        </div>
-      </div>
+            </Modal.Footer>
+          </Modal>
     );
   }
 

@@ -17,22 +17,22 @@ test:
 prod_env: &prod_env
   participant_frontend:
     host: experiment-elicit.<%= ENV['SITE_SUFFIX'] %>
-    port: 443
-    scheme: https
+    port:  <% ENV['API_SCHEME'] == 'https' ? 443 : 80 %>
+    scheme: <% ENV['API_SCHEME'] %>
   elicit_portal:
     host: elicit.<%= ENV['SITE_SUFFIX'] %>
-    port: 443
-    scheme: https
+    port: <%= ENV['API_SCHEME'] == 'https' ? 443 : 80 %>
+    scheme: <%= ENV['API_SCHEME'] %>
 
 local_env: &local_env
   participant_frontend:
-    host: experiment-elicit.docker.local
-    port: 443
-    scheme: https
+    host: experiment-elicit.<%= ENV['SITE_SUFFIX'] %>
+    port: <%= ENV['API_SCHEME'] == 'https' ? 443 : 80 %>
+    scheme: <%= ENV['API_SCHEME'] %>
   elicit_portal:
-    host: elicit.docker.local
-    port: 443
-    scheme: https
+    host: elicit.<%= ENV['SITE_SUFFIX'] %>
+    port: <%= ENV['API_SCHEME'] == 'https' ? 443 : 80 %>
+    scheme: <%= ENV['API_SCHEME'] %>
 
 production:
   <<: *<%= (ENV.fetch('SITE_SUFFIX') { 'docker.local' }) == 'compute.dtu.dk' ? 'prod_env' : 'local_env' %>

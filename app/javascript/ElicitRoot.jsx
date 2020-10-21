@@ -4,12 +4,14 @@ import { Route, Redirect, Switch, BrowserRouter, withRouter } from 'react-router
 import history from './packs/history.js'
 import { connect } from 'react-redux';
 import { Provider } from 'react-redux';
+import PropTypes from "prop-types";
 
 // Import Components
 import { AdminApp } from './components/admin_app/AdminApp';
 import { ParticipantApp } from './components/participant_app/ParticipantApp';
 import LoginSignUpContainer from './components/login_signup/LoginSignUpContainer.jsx';
 import AboutPageContainer from './components/about_page/AboutPageContainer.jsx';
+import LicensePageContainer from './components/license_page/LicensePageContainer.jsx';
 import { FrontPageApp } from './components/front_page/FrontPageApp.jsx';
 import ProfilePageContainer from './components/profile_page/ProfilePageContainer.jsx';
 
@@ -54,6 +56,7 @@ const RawRootRoutes = (props) => {
         <Route exact path="/participant" component={ParticipantApp}/>
         <Route exact path="/login" component={LoginSignUpContainer}/>
         <Route exact path="/about" component={AboutPageContainer}/>
+        <Route exact path="/license" component={LicensePageContainer}/>
         <Route exact path="/profile" component={ProfilePageContainer}/>
         <Route path="/" component={FrontPageApp}/>
         <Redirect from="*" to="/"/>
@@ -89,6 +92,10 @@ const Root = (props) => {
     </BrowserRouter>
 </Provider>
   );
+};
+
+Root.propTypes = {
+  store: PropTypes.object,
 };
 
 export default Root

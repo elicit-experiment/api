@@ -8,6 +8,7 @@ module ChaosApi::V6
     before_action :get_session
 
     def get_session
+      Logger.info "get_session"
       sessionGUID = params[:sessionGUID] || cookies[:session_guid]
 
       @chaos_session = Chaos::ChaosSession.where({:session_guid => sessionGUID}).take

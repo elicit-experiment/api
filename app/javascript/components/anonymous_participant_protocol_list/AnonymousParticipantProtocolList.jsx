@@ -10,7 +10,7 @@ export default class AnonymousParticipantProtocolList extends React.Component {
 
         const protocols = this.props.anonymous_protocols.data.map((protocol_def) => {
             return (
-                <div className="row col-xs-12" key={protocol_def.id}>
+                <div className="row col-12" key={protocol_def.id}>
                     <ParticipantProtocol protocol={protocol_def}
                                          study={protocol_def.study_definition}
                                          users={[]}

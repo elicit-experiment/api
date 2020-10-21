@@ -8,6 +8,8 @@ import ReactDOM from 'react-dom'
 //Store and Root Component
 import { configureStore } from './store/store';
 import ElicitRoot from './ElicitRoot';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'packs/main.scss'
 
 const getToken = (tok) => {
   if (sessionStorage[tok]) {
@@ -18,7 +20,7 @@ const getToken = (tok) => {
           console.warn('returning expired usertoken')
         }
         if ('access_token' in token) {
-          if (!!token.access_token) {
+          if (token.access_token) {
             return token
           }
         }

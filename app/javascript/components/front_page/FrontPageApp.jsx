@@ -9,6 +9,7 @@ import HeaderContainer from "../nav/HeaderContainer.jsx";
 import FooterContainer from "../nav/FooterContainer.jsx";
 import AnonymousProtocolLandingPageContainer from "./AnonymousProtocolLandingPageContainer";
 import FrontPageContainer from "./FrontPageContainer";
+import ParticipatePage from "./ParticipatePage";
 
 class FrontPageApp extends React.Component {
   constructor(props) {
@@ -17,14 +18,17 @@ class FrontPageApp extends React.Component {
 
   render() {
     const landingPageUrl = `${this.props.match.url}studies/:study_id/protocols/:protocol_id`;
+    const participatePageUrl = `${this.props.match.url}participate`;
     return (
-        <div>
+        <div className="page-wrapper d-flex flex-column">
           <HeaderContainer></HeaderContainer>
-          <div id="wrap" className="home-page-app-container app-container container">
+          <main id="wrap" className="home-page-app-container app-container container flex-fill">
             <Route path={landingPageUrl}
                    component={AnonymousProtocolLandingPageContainer}/>
+            <Route path={participatePageUrl}
+                   component={ParticipatePage}/>
             <Route exact path={`${this.props.match.url}`} component={FrontPageContainer}/>
-          </div>
+          </main>
           <FooterContainer></FooterContainer>
         </div>
     )

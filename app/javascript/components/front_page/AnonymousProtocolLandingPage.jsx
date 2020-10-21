@@ -31,8 +31,8 @@ class AnonymousProtocolLandingPage extends React.Component {
           dangerouslySetInnerHTML: {__html: instructionsHtml},
         };
         instructions = <div className="row">
-          <div className="col-xs-12"><h3>Instructions</h3></div>
-          <div className="col-xs-12" {...htmlInstructions}></div>
+          <div className="col-12"><h3>Instructions</h3></div>
+          <div className="col-12" {...htmlInstructions}></div>
         </div>;
       }
     }
@@ -46,23 +46,23 @@ class AnonymousProtocolLandingPage extends React.Component {
               className="protocol-row protocol-header-row"
               key={'t' + this.props.protocol.id}
           >
-            <div className="col-xs-10 offset-2">
+            <div className="col-10 offset-2">
               <b>{this.props.protocol.id} — {this.props.protocol.name}</b>
             </div>
           </div>
 
           <div className="row">
-            <div className="col-xs-12"><h3>Description</h3></div>
-            <div className="col-xs-10 offset-2"
+            <div className="col-12"><h3>Description</h3></div>
+            <div className="col-10 offset-2"
                  key={'d' + this.props.protocol.id}>
-              <div className="col-xs-12" {...htmlDescription}></div>
+              <div className="col-12" {...htmlDescription}></div>
             </div>
           </div>
 
           {instructions}
 
           <div className="row">
-            <div className="col-xs-12 center">
+            <div className="col-12 center">
               {takeProtocol}
             </div>
           </div>

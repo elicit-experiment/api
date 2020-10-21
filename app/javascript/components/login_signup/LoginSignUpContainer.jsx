@@ -5,6 +5,7 @@ import $ from 'jquery'
 
 // Import Component
 import LoginSignUp from './LoginSignUp';
+import Modal from "react-bootstrap/Modal";
 
 // Import Actions
 import {logInUser} from '../../actions/tokens_actions';
@@ -26,24 +27,6 @@ class LoginSignUpContainer extends React.Component {
     }
   }
 
-  componentDidMount() {
-    $('#logInModal')
-        .on('hidden.bs.modal', () => {
-          this.setState({loginSignup: 'hidden'})
-        })
-        .on('shown.bs.modal', () => {
-          this.setState({loginSignup: 'shown'})
-        });
-    $('#pleaseWaitDialog')
-        .on('hidden.bs.modal', () => {
-          this.setState({pleaseWait: 'hidden'})
-        })
-        .on('shown.bs.modal', () => {
-          this.setState({pleaseWait: 'shown'})
-        });
-    this.setModalState()
-  }
-
   componentWillUnmount() {
     this.unbindAll()
   }
@@ -58,18 +41,6 @@ class LoginSignUpContainer extends React.Component {
   }
 
   setModalState() {
-    if (this.showPleaseWait() && (this.state.pleaseWait === 'hidden')) {
-      $('#pleaseWaitDialog').modal('show');
-    } else if (!this.showPleaseWait() && (this.state.pleaseWait.startsWith('show'))) {
-      $('#pleaseWaitDialog').modal('hide');
-    }
-
-    if (this.showLoginSignup() && (this.state.loginSignup === 'hidden')) {
-      $('#logInModal').modal('show')
-    } else if (!this.showLoginSignup() && (this.state.loginSignup === 'shown')) {
-      $('#logInModal').modal('hide')
-    }
-
     if (this.props.tokenStatus === 'user') {
       if (this.props.currentUser && !this.props.currentUser.sync && !this.props.currentUser.loading) {
         this.props.getCurrentUser()
@@ -113,27 +84,18 @@ class LoginSignUpContainer extends React.Component {
     return <div>
       <h1 className="elicit-title">Elicit</h1>
       <h3 className="elicit-subtitle">dtu</h3>
-      <LoginSignUp {...this.props} dismissable={false} hidden={!this.showLoginSignup()}></LoginSignUp>
-      <div>
-        <div className="modal" id="pleaseWaitDialog" tabIndex="-1" role="dialog" aria-labelledby="myModalLabel"
-             aria-hidden={String(!this.showPleaseWait())}>
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h1>Logging in...</h1>
-              </div>
-              <div className="modal-body">
-                <div className="progress">
-                  <div className="progress-bar progress-bar-success progress-bar-striped" role="progressbar"
-                       aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style={{width: "40%"}}>
-                    <span className="sr-only">80% Complete (success)</span>
-                  </div>
-                </div>
-              </div>
+      <LoginSignUp {...this.props} showLoginSignup={this.showLoginSignup()} dismissable={false}></LoginSignUp>
+      <Modal show={this.showPleaseWait()}>
+        <Modal.Header><h1>Logging in...</h1></Modal.Header>
+        <Modal.Body>
+          <div className="progress">
+            <div className="progress-bar progress-bar-success progress-bar-striped" role="progressbar"
+                 aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style={{width: "40%"}}>
+              <span className="sr-only">80% Complete (success)</span>
             </div>
           </div>
-        </div>
-      </div>
+        </Modal.Body>
+      </Modal>
     </div>
 
   }

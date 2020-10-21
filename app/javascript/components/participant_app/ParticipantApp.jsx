@@ -1,6 +1,6 @@
 //Import React and Dependencies
 import React from 'react';
-import { Redirect } from 'react-router-dom'
+import {Redirect, Route} from 'react-router-dom'
 import ParticipantProtocolList from './ParticipantProtocolList'
 import { connect } from "react-redux";
 
@@ -13,6 +13,8 @@ import { tokenStatus } from '../../reducers/selector';
 
 // Import API
 import elicitApi from "../../api/elicit-api.js";
+import ProtocolPreviewContainer from "../admin_app/ProtocolPreviewContainer";
+import StudyManagement from "../admin_app/StudyManagement";
 
 class ParticipantApp extends React.Component {
   render() {
@@ -29,13 +31,13 @@ class ParticipantApp extends React.Component {
     }
 
     return(
-    <div>
-      <HeaderContainer></HeaderContainer>
-      <div id="wrap" className="participant-app-container app-container container">
-        <ParticipantProtocolList {...this.props} />
+      <div className="page-wrapper d-flex flex-column">
+        <HeaderContainer></HeaderContainer>
+        <main id="wrap" className="participant-app-container app-container container flex-fill">
+          <ParticipantProtocolList {...this.props} />
+        </main>
+        <FooterContainer></FooterContainer>
       </div>
-      <FooterContainer></FooterContainer>
-    </div>
   )
   }
 }

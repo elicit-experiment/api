@@ -10,6 +10,9 @@ import FooterContainer from "../nav/FooterContainer.jsx";
 import {tokenStatus} from '../../reducers/selector';
 
 import ProtocolPreviewContainer from "./ProtocolPreviewContainer"
+import AnonymousProtocolLandingPageContainer from "../front_page/AnonymousProtocolLandingPageContainer";
+import ParticipatePage from "../front_page/ParticipatePage";
+import FrontPageContainer from "../front_page/FrontPageContainer";
 
 class AdminApp extends React.Component {
 	constructor(props) {
@@ -45,15 +48,15 @@ class AdminApp extends React.Component {
 		}
 
 		return (
-			<div>
-				<HeaderContainer></HeaderContainer>
-				<div id="wrap" className="admin-app-container app-container container">
-					<Route path={`${this.props.match.url}/studies/:study_id/protocols/:protocol_id`}
-                           component={ProtocolPreviewContainer}/>
-					<Route exact path={`${this.props.match.url}`} component={StudyManagement}/>
-				</div>
-				<FooterContainer></FooterContainer>
-			</div>
+      <div className="page-wrapper d-flex flex-column">
+        <HeaderContainer></HeaderContainer>
+        <main id="wrap" className="admin-app-container app-container container flex-fill">
+          <Route path={`${this.props.match.url}/studies/:study_id/protocols/:protocol_id`}
+                 component={ProtocolPreviewContainer}/>
+          <Route exact path={`${this.props.match.url}`} component={StudyManagement}/>
+        </main>
+        <FooterContainer></FooterContainer>
+      </div>
 		)
 	}
 }

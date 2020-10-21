@@ -15,50 +15,38 @@ export default class FrontPage extends Component {
     }
 
     render() {
-        const {anonymous_protocols} = this.props;
-
-        let loggedInStudies;
-        if (this.props.current_user_role === undefined) {
-            loggedInStudies =
-                <p> Log in using the header button or <Link to="/participant">click here</Link> to login and see the
-                    studies you&apos;re eligible for </p>
-        } else {
-            loggedInStudies = <p>None</p>
-        }
-
-        let anonymousStudies;
-        if (typeof anonymous_protocols === 'undefined') {
-            anonymousStudies = <section>Loading...</section>;
-        } else {
-            if (this.props.anonymous_protocols.data.length > 0) {
-                anonymousStudies = <AnonymousParticipantProtocolList
-                        anonymous_protocols={this.props.anonymous_protocols}
-                    />;
-            } else {
-                anonymousStudies = <section><p>There are no anonymous studies available at the moment</p></section>;
-            }
-        }
-
         return (
             <div id="wrap" className="admin-app-container container">
+              <div className="row">
+                <div className="mx-auto lead font-wordmark title-wordmark" >E</div>
+              </div>
                 <div className="row">
-                    <div className="col-xs-offset-1 col-xs-11" dangerouslySetInnerHTML={htmlDoc}/>
+                    <div className="col-12 mx-auto text-center text-primary" dangerouslySetInnerHTML={htmlDoc}/>
                 </div>
-                <div className="row">
-                    <div className="col-xs-offset-1 col-xs-11">
-                        <h2>Studies you can take...</h2>
-
-                        <h3>
-                            Anonymous Studies
-                        </h3>
-
-                        {anonymousStudies}
-
-                        <h3>
-                            Logged-in Studies
-                        </h3>
-                        {loggedInStudies}
+                <div className="row wrap">
+                  <div className="col-sm-4">
+                  <div className="card p-2">
+                    <h5 className="card-title text-primary">About</h5>
+                    <p className="card-text" style={{height:'5em'}}>
+                      Elicit is a web framework for creating psychological studies.
+                    </p>
+                    <a className="btn btn-link" href={'/about'}>Learn More</a>
+                  </div>
+                  </div>
+                  <div className="col-sm-4">
+                    <div className="card p-2">
+                      <h5 className="card-title text-primary">Investigators</h5>
+                      <p className="card-text" style={{height:'5em'}}>Investigators can create their own surveys, request participants and analyze the results.</p>
+                      <button className="btn btn-link">Request Access</button>
                     </div>
+                  </div>
+                  <div className="col-sm-4">
+                    <div className="card p-2">
+                      <h5 className="card-title text-primary">Participants</h5>
+                      <p className="card-text" style={{height:'5em'}}>Participate in a study!</p>
+                      <a className="btn btn-link" href={'/participate'}>Participate</a>
+                    </div>
+                  </div>
                 </div>
             </div>
         )

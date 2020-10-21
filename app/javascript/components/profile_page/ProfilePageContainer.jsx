@@ -1,7 +1,7 @@
 //Import React and Dependencies
 import React from 'react'
 import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom'
+import {Redirect, Route} from 'react-router-dom'
 
 // Import Components
 import HeaderContainer from "../nav/HeaderContainer"
@@ -15,6 +15,8 @@ import { tokenStatus } from '../../reducers/selector';
 import elicitApi from "../../api/elicit-api.js";
 import PropTypes from "prop-types";
 import { MatchType, RequestShapeType, CurrentUserType, UserTokenType } from "types";
+import ProtocolPreviewContainer from "../admin_app/ProtocolPreviewContainer";
+import StudyManagement from "../admin_app/StudyManagement";
 
 class ProfilePageContainer extends React.Component {
   constructor(props){
@@ -53,11 +55,13 @@ class ProfilePageContainer extends React.Component {
     }
 
     return(
-        <div>
-          <HeaderContainer></HeaderContainer>
+      <div className="page-wrapper d-flex flex-column">
+        <HeaderContainer></HeaderContainer>
+        <main id="wrap" className="app-container container flex-fill">
           <ProfilePage current_user={this.props.current_user.data}/>
-          <FooterContainer></FooterContainer>
-        </div>
+        </main>
+        <FooterContainer></FooterContainer>
+      </div>
     )
   }
 

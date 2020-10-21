@@ -75,11 +75,11 @@ class ParticipantProtocol extends React.Component {
           <div className='well show protocol-summary'
                data-protocol_id={this.props.protocol.id}>
             <div className='row'>
-              <b className="col-xs-2">Protocol:</b>
-              <div className='col-xs-5'>
+              <b className="col-2">Protocol:</b>
+              <div className='col-5'>
                 #{this.props.protocol.id} — {this.props.protocol.name}
               </div>
-              <div className="col-xs-offset-3 col-xs-2">
+              <div className="offset-3 col-2">
                 <button className="active btn btn-link"
                         onClick={this.handleShowModal.bind(this)}>
                   <span>Study</span>&nbsp;
@@ -89,21 +89,21 @@ class ParticipantProtocol extends React.Component {
               </div>
             </div>
             <div className='row'>
-              <b className="col-xs-2">Summary:</b>
-              <div className='col-xs-10 protocol-summary-text'>
+              <b className="col-2">Summary:</b>
+              <div className='col-10 protocol-summary-text'>
                 {this.props.protocol.summary}
               </div>
             </div>
             <div className='row'>
               <div
-                  className='col-xs-offset-2 col-xs-10 protocol-description-text' {...htmlDescription}>
+                  className='offset-2 col-10 protocol-description-text' {...htmlDescription}>
               </div>
             </div>
             <ExperimentDetails experiment={this.props.experiment}/>
             <div className='row'>
-              <div className="col-xs-9">
+              <div className="col-9">
               </div>
-              <div className="col-xs-3">
+              <div className="col-3">
                 {take_protocol}
               </div>
             </div>

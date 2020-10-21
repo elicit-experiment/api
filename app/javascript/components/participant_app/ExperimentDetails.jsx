@@ -13,8 +13,8 @@ export class ExperimentDetails extends React.Component {
       return (
         <div>
           <div className="row">
-            <b className="col-xs-2">Status:</b>
-            <div className="col-xs-10">Not Started</div>
+            <b className="col-2">Status:</b>
+            <div className="col-10">Not Started</div>
           </div>
         </div>
       );
@@ -24,8 +24,8 @@ export class ExperimentDetails extends React.Component {
       return (
         <div>
           <div className="row">
-            <b className="col-xs-2">Status:</b>
-            <div className="col-xs-10">
+            <b className="col-2">Status:</b>
+            <div className="col-10">
               <div>
                 You already participated in this experiment. Thank you!. (You can't change your answers or take it again).
               </div>
@@ -60,20 +60,20 @@ export class ExperimentDetails extends React.Component {
     return (
       <div>
         <div className="row">
-          <b className="col-xs-2">Status:</b>
-          <div className="col-xs-10">
+          <b className="col-2">Status:</b>
+          <div className="col-10">
             Started on <FormattedDate date={exp.started_at} />{" "}
           </div>
         </div>
         <div className="row">
-          <b className="col-xs-2">Stages:</b>
-          <div className="col-xs-10">
+          <b className="col-2">Stages:</b>
+          <div className="col-10">
             <p>{exp.num_stages_completed || "0"} Completed {exp.num_stages_remaining || "0"} Remaining </p>
           </div>
         </div>
         <div className="row">
-          <b className="col-xs-2">Current Stage:</b>
-          <div className="col-xs-10">{current_stage_status}</div>
+          <b className="col-2">Current Stage:</b>
+          <div className="col-10">{current_stage_status}</div>
         </div>
       </div>
     );
