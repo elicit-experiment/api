@@ -525,7 +525,8 @@ CREATE TABLE public.study_result_data_points (
     datetime timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    entity_type character varying
+    entity_type character varying,
+    deleted boolean DEFAULT false NOT NULL
 );
 
 
@@ -563,7 +564,8 @@ CREATE TABLE public.study_result_experiments (
     updated_at timestamp without time zone NOT NULL,
     started_at timestamp without time zone,
     completed_at timestamp without time zone,
-    custom_parameters jsonb
+    custom_parameters jsonb,
+    client_info jsonb
 );
 
 
@@ -602,7 +604,8 @@ CREATE TABLE public.study_result_stages (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     started_at timestamp without time zone,
-    completed_at timestamp without time zone
+    completed_at timestamp without time zone,
+    client_info jsonb
 );
 
 
@@ -1783,6 +1786,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190118161909'),
 ('20190120052807'),
 ('20190123180343'),
-('20190212194548');
+('20190212194548'),
+('20190330213822'),
+('20190330213835'),
+('20190401150202');
 
 
