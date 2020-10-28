@@ -52,6 +52,7 @@ gem 'swagger_ui_engine'
 gem 'devise', '~> 4.4.0'
 gem 'devise-doorkeeper'
 gem 'doorkeeper'
+gem 'cancancan'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

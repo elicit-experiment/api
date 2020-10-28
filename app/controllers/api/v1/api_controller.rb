@@ -104,6 +104,30 @@ module Api::V1
       doorkeeper_token.resource_owner_id if doorkeeper_token
     end
 
+    def current_user
+      @current_user ||= if doorkeeper_token
+                          User.find(doorkeeper_token.resource_owner_id)
+                        else
+                          warden.authenticate(scope: :user, store: false)
+                        end
+    end
+
+    def authenticate_scope!
+      send(:"authenticate_#{resource_name}!", force: true)
+      self.resource = send(:"current_#{resource_name}")
+    end
+
+    def authenticate_user!(force: false)
+      raise 'unauthorized' unless doorkeeper_token.present?
+    end
+
+    rescue_from CanCan::AccessDenied do |exception|
+      respond_to do |format|
+        format.json { head :forbidden }
+        format.html { redirect_to main_app.root_url, alert: exception.message }
+      end
+    end
+
     protected
 
     # The includes for the query
