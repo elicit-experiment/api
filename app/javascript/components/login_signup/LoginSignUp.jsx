@@ -43,7 +43,6 @@ class LogInSignUp extends React.Component {
                           password: this.state.password,
                           password_confirmation: this.state.passwordConfirmation };
       this.props.createUser({user: credentials}).then(()=>{this.props.loginUser(credentials)});
-      $("#signUpModal").modal('hide');
     };
   }
 
@@ -54,8 +53,6 @@ class LogInSignUp extends React.Component {
       let credentials = { email: this.state.email,
                           password: this.state.password };
       this.props.logInUser(credentials);
-      $("#logInModal").modal('hide');
-      $("#myNavbar").collapse("hide"); // Hides the collapsible dropdown navbar while on mobile devices
     };
   }
 

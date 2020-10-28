@@ -242,6 +242,15 @@ user_entity.user.postfetch.push(function ({
     }
 });
 
+// no token required to POST a sign-up
+user_entity.user.prefetch[0] = function(args, cb) {
+  if (args.request.params.method === "POST") {
+     cb();
+     return;
+  }
+  refreshTokenIfExpired(args, cb);
+}
+
 const api = reduxApi(_.extend({},
     current_user,
     take_protocol,

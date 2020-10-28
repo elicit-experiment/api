@@ -12,7 +12,6 @@ const handleResponse = (response) => {
   if (response.ok) {
     return response.json();
   }
-  console.dir(response);
   throw response;
 };
 
