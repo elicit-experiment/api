@@ -58,6 +58,9 @@ bundle exec erd
 RAILS_ENV=development ./redb.sh
 
 DISABLE_DATABASE_ENVIRONMENT_CHECK=1 RAILS_ENV=production ./redb.sh
+
+docker exec api bash -e DISABLE_DATABASE_ENVIRONMENT_CHECK=1 ./redb.sh
+
 ```
 
 
