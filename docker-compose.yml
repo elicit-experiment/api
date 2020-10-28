@@ -26,8 +26,8 @@ services:
     build:
         context: docker/experiment-frontend
         args:
-          - API_URL=${EXTERNAL_API_SCHEME}
-          - API_SCHEME=${API_SCHEME}
+          - API_URL=${API_URL}
+          - API_SCHEME=${EXTERNAL_API_SCHEME}
           - ELICIT_LANDING_URL=${ELICIT_URL}\/participant
     volumes:
       - 'fe_public:/var/www/frontend/public'
