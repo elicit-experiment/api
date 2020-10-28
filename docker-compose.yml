@@ -26,7 +26,7 @@ services:
     build:
         context: docker/experiment-frontend
         args:
-          - API_URL=${API_URL}
+          - API_URL=${EXTERNAL_API_SCHEME}
           - API_SCHEME=${API_SCHEME}
           - ELICIT_LANDING_URL=${ELICIT_URL}\/participant
     volumes:
@@ -37,7 +37,7 @@ services:
     build:
         context: docker/revproxy
         args:
-          - API_SCHEME=${API_SCHEME}
+          - API_SCHEME=${EXTERNAL_API_SCHEME}
           - SITE_SUFFIX=${SITE_SUFFIX}
     volumes:
       - 'app_public:/var/www/app/public'

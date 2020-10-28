@@ -65,6 +65,7 @@ This file specifies fundamental configuration parameters for the server:
 ```
 cat > .env
 API_SCHEME=https
+EXTERNAL_API_SCHEME=https
 API_URL=elicit.compute.dtu.dk
 ELICIT_URL=elicit.compute.dtu.dk
 SITE_SUFFIX=compute.dtu.dk
@@ -77,13 +78,14 @@ REDIS_PASSWORD=<choose a safe password>
 
 | ENV Var           | Meaning |
 |-------------------|------:|
-| API_SCHEME        | Protocol scheme; `http` or `https` |
-| API_URL           | URL of the API service |
-| SITE_SUFFIX       | Domain name suffix for the API and frontend endpoints. |
-| POSTGRES_USER     | Postgres DB engine user name |
-| POSTGRES_PASSWORD | Postgres DB engine user password |
-| POSTGRES_DB       | Name of postgres DB to use |
-| REDIS_PASSWORD    | Password for redis |
+| API_SCHEME          | Protocol scheme for ingress; `http` or `https` |
+| EXTERNAL_API_SCHEME | Protocol scheme for external access; `http` or `https` |
+| API_URL             | URL of the API service |
+| SITE_SUFFIX         | Domain name suffix for the API and frontend endpoints. |
+| POSTGRES_USER       | Postgres DB engine user name |
+| POSTGRES_PASSWORD   | Postgres DB engine user password |
+| POSTGRES_DB         | Name of postgres DB to use |
+| REDIS_PASSWORD      | Password for redis |
 
 
 ## Build the Docker Images
