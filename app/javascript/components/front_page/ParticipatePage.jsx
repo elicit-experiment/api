@@ -18,7 +18,14 @@ class FrontPage extends Component {
     render() {
         const {anonymous_protocols} = this.props;
 
-        let loggedInStudies;
+      if (!this.props.anonymous_protocols.sync) {
+        if (!this.props.anonymous_protocols.loading) {
+          this.props.loadAnonymousProtocols()
+        }
+        return (<div><h1>Loading...</h1></div>)
+      }
+
+      let loggedInStudies;
         if (this.props.current_user.data.role === undefined) {
             loggedInStudies =
                 <p> Log in using the header button or <Link to="/participant">click here</Link> to login and see the
@@ -44,7 +51,7 @@ class FrontPage extends Component {
             <div id="wrap" className="admin-app-container container">
                 <div className="row">
                     <div className="offset-1 col-11">
-                        <h2>Studies you can take...</h2>
+                        <h1 className="text-center">Studies You Can Take</h1>
 
                         <h3>
                             Anonymous Studies
@@ -73,8 +80,7 @@ FrontPage.propTypes = {
 FrontPage.defaultProps = {
   syncCurrentUser: () => {
   },
-  loadAnonymousProtocols: () => {
-  },
+  loadAnonymousProtocols: () => {},
 };
 
 const mapStateToProps = (state) => ({

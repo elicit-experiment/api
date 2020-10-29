@@ -10,9 +10,6 @@ import FooterContainer from "../nav/FooterContainer.jsx";
 import {tokenStatus} from '../../reducers/selector';
 
 import ProtocolPreviewContainer from "./ProtocolPreviewContainer"
-import AnonymousProtocolLandingPageContainer from "../front_page/AnonymousProtocolLandingPageContainer";
-import ParticipatePage from "../front_page/ParticipatePage";
-import FrontPageContainer from "../front_page/FrontPageContainer";
 
 class AdminApp extends React.Component {
 	constructor(props) {

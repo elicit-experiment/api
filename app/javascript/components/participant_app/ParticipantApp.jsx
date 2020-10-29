@@ -1,6 +1,6 @@
 //Import React and Dependencies
 import React from 'react';
-import {Redirect, Route} from 'react-router-dom'
+import {Redirect} from 'react-router-dom'
 import ParticipantProtocolList from './ParticipantProtocolList'
 import { connect } from "react-redux";
 

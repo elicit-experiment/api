@@ -37,6 +37,7 @@ module Api::V1
         clean_up_passwords resource
         set_minimum_password_length
         e = ElicitError.new("Cannot create user", :unprocessable_entity, details: resource.errors)
+        Rails.logger.info resource.errors.ai
         render_elicit_error e
       else
         render json: resource, status: :created

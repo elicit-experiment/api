@@ -68,7 +68,7 @@ class _Protocol extends React.Component {
       };
 
     return (
-      <div className="row card " key={this.props.protocol.id}>
+      <div className="row card p-4 " key={this.props.protocol.id}>
         <div
           className="protocol-row container protocol-header-row"
           key={"t" + this.props.protocol.id}
@@ -77,7 +77,12 @@ class _Protocol extends React.Component {
             <b>{this.props.protocol.id}  —{" "}
             {this.props.protocol.name}</b>
           </div>
-          <div className="col-8 study-action-bar">
+
+        </div>
+
+        <div className="protocol-row row" key={"d" + this.props.protocol.id}>
+          <div className="col-12 "><p className="col-12" {...htmlDescription}></p></div>
+          <div className="col-12 study-action-bar">
             <Link to={`/admin/studies/${this.props.study.id}/protocols/${this.props.protocol.id}`} className="active btn btn-primary">
               Preview
             </Link>
@@ -103,10 +108,6 @@ class _Protocol extends React.Component {
               width="100"
               checked={this.state.active}></BootstrapSwitchButton>
           </div>
-        </div>
-
-        <div className="protocol-row " key={"d" + this.props.protocol.id}>
-          <div className="col-12" {...htmlDescription}></div>
         </div>
       </div>
     );
@@ -256,10 +257,20 @@ class Study extends React.Component {
             </button>
             <div className="row study-info-row">
               <div className="col-2" />
-              <div className="col-5">
+
+              <div className="col-8">
+                <BootstrapSwitchButton
+                  onlabel='Anon'
+                  offlabel='Registered'
+                  size="md"
+                  offstyle="danger"
+                  onstyle="success"
+                  disabled
+                  width="100"
+                  checked={this.props.study.allow_anonymous_users}></BootstrapSwitchButton>
                 <button
                   onClick={() => this.setState({ deleteVerify: true })}
-                  className="active btn btn-danger"
+                  className="active btn btn-danger ml-2"
                 >
                   Delete Study
                 </button>
