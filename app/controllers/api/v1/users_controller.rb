@@ -11,7 +11,11 @@ module Api::V1
     end
     before_action :authenticate_scope!, only: [:edit, :destroy]
     before_action only: [:update] do |controller|
-      autenticate_user! unless controller.request.format.json?
+      authenticate_user! unless controller.request.format.json?
+    end
+
+    rescue_from CanCan::AccessDenied do |exception|
+      head :forbidden
     end
 
     respond_to :json
@@ -19,6 +23,13 @@ module Api::V1
     rescue_from ElicitError, :with => :render_elicit_error
 
     def create
+      if sign_up_params[:role] == User::ROLES[:admin]
+        authorize! :create_admin, User
+      elsif sign_up_params[:role] == User::ROLES[:investigator]
+        authorize! :create_investigator, User
+      else
+        authorize! :create_standard, User
+      end
       build_resource(sign_up_params)
       resource.save
       yield resource if block_given?
@@ -34,6 +45,7 @@ module Api::V1
 
     def update
       @user = current_resource_owner
+      authorize! :upgrade, @user if user_params.has_key? :role
       if @user.update(user_params)
         render json: @user
       else
@@ -46,7 +58,7 @@ module Api::V1
         @users = User.all()
       else
         username_query = { username: /#{params[:query]}/i }
-        email_query = {email: params[:query]}
+        email_query = { email: params[:query] }
         @users = User.or(username_query, email_query).all()
       end
 

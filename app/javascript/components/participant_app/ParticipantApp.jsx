@@ -13,8 +13,6 @@ import { tokenStatus } from '../../reducers/selector';
 
 // Import API
 import elicitApi from "../../api/elicit-api.js";
-import ProtocolPreviewContainer from "../admin_app/ProtocolPreviewContainer";
-import StudyManagement from "../admin_app/StudyManagement";
 
 class ParticipantApp extends React.Component {
   render() {

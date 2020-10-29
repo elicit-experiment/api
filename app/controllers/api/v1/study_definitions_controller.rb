@@ -36,6 +36,15 @@ module Api::V1
       respond_with instance_variable_get(plural_resource_name), :include => response_includes
     end
 
+    def create
+      logger.info study_definition_params
+      if current_user.role != 'admin' && study_definition_params[:principal_investigator_user_id] != current_user.id
+        Rails.logger.error "Attempt to create study component not owned by callee #{current_api_user.id}"
+        permission_denied
+      end
+
+      super
+    end
     private
 
     def query_includes
@@ -47,8 +56,8 @@ module Api::V1
     end
 
     def study_definition_params
-      permit_json_params(params[:study_definition], :study_definition) do
-        params.require(:study_definition).permit(STUDY_DEFINITION_FIELDS)
+      permitted_params = permit_json_params(params[:study_definition], :study_definition) do
+        params.require(:study_definition).permit(STUDY_DEFINITION_FIELDS).with_defaults(principal_investigator_user_id: current_user.id)
       end
     end
   end

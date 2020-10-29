@@ -5,45 +5,42 @@ import elicitApi from '../../api/elicit-api.js';
 import {connect} from 'react-redux';
 import {ExperimentDetails} from './ExperimentDetails.jsx';
 import TakeProtocolLink from './TakeProtocolLink.jsx';
+import Modal from "react-bootstrap/Modal";
+import Button from "react-bootstrap/Button";
 
-class Modal extends React.Component {
-  static propTypes = {
-    handleHideModal: PropTypes.func.isRequired,
-  };
+class SimpleModal extends React.Component {
 
-  componentDidMount() {
-    const element = ReactDOM.findDOMNode(this);
-    $(element).modal('show');
-    $(element).on('hidden.bs.modal', this.props.handleHideModal);
+  constructor(props) {
+    super(props);
   }
-
   render() {
     return (
-        <div className="modal fade">
-          <div className="modal-dialog">
-            <div className="modal-content">
-              <div className="modal-header">
-                <button type="button" className="close" data-dismiss="modal"
-                        aria-label="Close"><span
-                    aria-hidden="true">&times;</span></button>
-                <h4 className="modal-title">{this.props.title}</h4>
-              </div>
-              <div className="modal-body">
-                <p>{this.props.subtitle}</p>
-                <hr/>
-                <p>{this.props.body}</p>
-              </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-primary"
-                        data-dismiss="modal">Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+    <Modal show={this.props.show}>
+      <Modal.Header>
+        <h4>{this.props.title}</h4>
+      </Modal.Header>
+      <Modal.Body>
+        <p>{this.props.subtitle}</p>
+        <hr/>
+        <p>{this.props.body}</p>
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={this.props.handleHideModal}>
+          Close
+        </Button>
+      </Modal.Footer>
+    </Modal>
     );
   }
 }
+
+SimpleModal.propTypes = PropTypes.shape({
+  title: PropTypes.string.isRequired,
+  subtitle: PropTypes.string.isRequired,
+  body: PropTypes.string.isRequired,
+  show: PropTypes.string.isRequired,
+  handleHideModal: PropTypes.func.isRequired,
+}).isRequired;
 
 class ParticipantProtocol extends React.Component {
   constructor(props) {
@@ -71,8 +68,8 @@ class ParticipantProtocol extends React.Component {
                                         take_protocol={this.props.take_protocol}/>;
     }
     return (
-        <div className='protocols-wrapper row' key={this.props.protocol.id}>
-          <div className='well show protocol-summary'
+        <div className='protocols-wrapper row col-12 my-2' key={this.props.protocol.id}>
+          <div className='card show protocol-summary col-12 p-4'
                data-protocol_id={this.props.protocol.id}>
             <div className='row'>
               <b className="col-2">Protocol:</b>
@@ -108,12 +105,12 @@ class ParticipantProtocol extends React.Component {
               </div>
             </div>
           </div>
-          {this.state.view.showModal ?
-              <Modal title={`Study ${this.props.study.id} Details`}
+              <SimpleModal
+                show={this.state.view.showModal}
+                title={`Study ${this.props.study.id} Details`}
                      subtitle={this.props.study.title}
                      body={this.props.study.description}
-                     handleHideModal={this.handleHideModal.bind(this)}/> :
-              null}
+                     handleHideModal={this.handleHideModal.bind(this)}/>
         </div>
     );
   }

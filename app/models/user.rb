@@ -5,7 +5,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable
   devise :doorkeeper
 
-  ROLES={:admin => 'admin', :registered => 'registered_user', :anonymous => 'anonymous_user'}
+  ROLES={:admin => 'admin', :investigator => 'investigator', :registered => 'registered_user', :anonymous => 'anonymous_user'}
 
   validates :role, acceptance: { accept: ROLES.values() }
 

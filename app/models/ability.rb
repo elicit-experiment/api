@@ -31,13 +31,17 @@ class Ability
     # See the wiki for details:
     # https://github.com/CanCanCommunity/cancancan/wiki/Defining-Abilities
 
-    if user.present?
-      if ['admin'].include?(user.role)
-        can :upgrade_user, :all
-      end
+    return unless user.present?
 
+    can :upgrade, User if [User::ROLES[:admin]].include?(user.role)
 
+    if [User::ROLES[:admin]].include?(user.role)
+      can :create_admin, User
+      can :create_investigator, User
     end
 
+    can :create_standard, User if [User::ROLES[:admin], User::ROLES[:investigator]].include?(user.role)
+
+    can :create_studies, :all if [User::ROLES[:admin], User::ROLES[:investigator]].include?(user.role)
   end
 end

@@ -13,10 +13,7 @@ module StudyCreation
     end
 
     before_action only: [:create] do # must be admin to create
-      if current_api_user.role != 'admin'
-        Rails.logger.error "Attempt to create study component by #{current_api_user.id} who is a #{current_api_user.role}"
-        permission_denied
-      end
+      authorize! :create_studies, resource_name.classify.constantize
     end
 
     before_action :authenticate_user!

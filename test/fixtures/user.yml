@@ -20,3 +20,15 @@ subject2:
   anonymous: false
   role: registered_user
   username: subject2
+admin:
+  email: admin@elicit.dk
+  anonymous: false
+  role: admin
+investigator:
+  email: investigator@elicit.dk
+  anonymous: false
+  role: investigator
+registered_user:
+  email: registered@elicit.dk
+  anonymous: false
+  role: registered_user

@@ -101,3 +101,5 @@ gem "memory-profiler", "~> 1.0"
 gem "stackprof", "~> 0.2.12"
 
 gem "dotenv-rails", "~> 2.7"
+
+gem "capybara", "~> 3.33"

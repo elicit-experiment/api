@@ -10,3 +10,13 @@ learning_study:
   enable_previous: 1
   no_of_trials:
   trials_completed:
+one:
+  title: MyString
+  principal_investigator: admin
+  created_at: <%= 5.day.ago.to_s(:db) %>
+  updated_at: <%= 5.day.ago.to_s(:db) %>
+two:
+  title: MyString
+  principal_investigator: admin
+  created_at: <%= 5.day.ago.to_s(:db) %>
+  updated_at: <%= 5.day.ago.to_s(:db) %>

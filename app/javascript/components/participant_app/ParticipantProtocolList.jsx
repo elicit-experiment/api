@@ -14,14 +14,12 @@ class ParticipantProtocolList extends React.Component {
 
         const protocols = this.props.eligeable_protocols.data.map((protocol_user) => {
             return (
-                <div className="row col-12" key={protocol_user.protocol_definition.id}>
                     <ParticipantProtocol protocol={protocol_user.protocol_definition}
                                          study={protocol_user.study_definition}
                                          users={this.props.users}
                                          experiment={protocol_user.experiment}
                                          key={protocol_user.protocol_definition.id}>
                     </ParticipantProtocol>
-                </div>
             )
         });
 
