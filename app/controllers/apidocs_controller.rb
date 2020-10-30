@@ -9,7 +9,7 @@ class ApidocsController < ActionController::Base
       key :description, 'The API for the Elicit app'
       key :termsOfService, 'http://tbd.com/terms/'
       contact do
-        key :name, 'DTU CogSci'
+        key :name, 'Elicit'
       end
       license do
         key :name, 'MIT'
