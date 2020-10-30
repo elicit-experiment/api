@@ -19,9 +19,10 @@ import ProfilePageContainer from './components/profile_page/ProfilePageContainer
 import { requestClientToken } from './actions/tokens_actions';
 
 // Import Selectors
-import { clientToken, userToken } from './reducers/selector';
+import {clientToken, currentUser, userToken} from './reducers/selector';
 
 import { logoutUser } from "./actions/tokens_actions";
+import elicitApi from "./api/elicit-api";
 
 export const tokenStatus = (clientToken, userToken, requestClientToken) => {
   let token_status = 'none';
@@ -48,6 +49,10 @@ export const tokenStatus = (clientToken, userToken, requestClientToken) => {
 const RawRootRoutes = (props) => {
   let token_status = tokenStatus(props.clientToken, props.userToken, props.requestClientToken);
 
+  if (token_status === 'user' && !props.currentUser.sync && !props.currentUser.loading) {
+    props.getCurrentUser();
+  }
+
   console.dir(`ROOT RERENDERING ${token_status}`);
   if (token_status) {
     return (
@@ -72,10 +77,12 @@ const RawRootRoutes = (props) => {
 const mapStateToProps = (state) => ( {
   clientToken: clientToken(state),
   userToken: userToken(state),
+  currentUser: currentUser(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({
   requestClientToken: () => dispatch(requestClientToken( () => { } )),
+  getCurrentUser: () => { dispatch(elicitApi.actions.current_user()) },
   logoutUser: () => dispatch(logoutUser()),
 });
 

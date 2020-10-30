@@ -36,7 +36,7 @@ class Header extends React.Component {
     </NavDropdown>
     return (
       <Navbar bg="light" expand="lg">
-        <Navbar.Brand href="#home"><span className="navbar-brand" href="/">Elicit</span></Navbar.Brand>
+        <Navbar.Brand href="/"><span className="navbar-brand">Elicit</span></Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto">
