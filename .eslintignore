@@ -1,5 +1,5 @@
-/docker/**
-/vendor/**
-/node_modules/**
-/config/**
+/docker/*
+/vendor/*
+/node_modules/*
+/config/*
 

@@ -1,0 +1,59 @@
+require:
+- rubocop-performance
+- rubocop-rails
+Style/GlobalVars:
+  AllowedVariables:
+  - $redis
+  - $worker_redis
+  - $elasticsearch
+Layout/LineLength:
+  Max: 160
+Metrics/CyclomaticComplexity:
+  Max: 13
+Metrics/PerceivedComplexity:
+  Max: 13
+Metrics/ClassLength:
+  Max: 300
+Metrics/MethodLength:
+  Max: 60
+Metrics/AbcSize:
+  Max: 60
+Metrics/BlockLength:
+  Max: 60
+Style/AsciiComments:
+  Enabled: false
+Style/HashEachMethods:
+  Enabled: true
+Style/HashTransformKeys:
+  Enabled: true
+Style/HashTransformValues:
+  Enabled: true
+Style/Documentation:
+  Exclude:
+  - app/models/**/*
+  Include:
+  - lib/**/*
+Metrics/ParameterLists:
+  CountKeywordArgs: false
+Rails/SkipsModelValidations:
+  Enabled: false
+Lint/RaiseException:
+  Enabled: true
+Lint/StructNewOverride:
+  Enabled: true
+Layout/SpaceAroundMethodCallOperator:
+  Enabled: true
+Style/ExponentialNotation:
+  Enabled: true
+AllCops:
+  TargetRubyVersion: 2.6.6
+  DisplayCopNames: true
+  Exclude:
+  - '**/*.yml'
+  - 'db/**/*'
+  - 'config/**/*'
+  - 'test/**/*'
+  - 'doc/**/*'
+  - 'bin/**/*'
+  - 'node_modules/**/*'
+  - 'gems/**/*'

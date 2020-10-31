@@ -1,8 +1,9 @@
-class ElicitError < StandardError
+# frozen_string_literal: true
 
+class ElicitError < StandardError
   attr_accessor :code, :message, :details
 
-  def initialize(message, code=500, details=nil)
+  def initialize(message, code = 500, details = nil)
     self.code = code
     self.message = message
     self.details = details
@@ -10,16 +11,16 @@ class ElicitError < StandardError
   end
 
   def to_json(options = nil)
-    x = { :message => self.message,
-          :code => Rack::Utils::SYMBOL_TO_STATUS_CODE[self.code],
-          :details => self.details }
+    x = { message: message,
+          code: Rack::Utils::SYMBOL_TO_STATUS_CODE[code],
+          details: details }
     ActiveSupport::JSON.encode(x, options)
   end
 
   include Swagger::Blocks
 
   swagger_schema :ElicitError do
-    key :required, [:code, :message]
+    key :required, %i[code message]
     property :code do
       key :type, :integer
       key :format, :int64
@@ -31,5 +32,4 @@ class ElicitError < StandardError
       key :type, :object
     end
   end
-
 end

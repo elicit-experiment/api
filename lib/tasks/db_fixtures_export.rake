@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 # lib/tasks/db_fixtures_export.rake
 namespace 'db:fixtures' do
-  desc "generate fixtures from the current database"
+  desc 'generate fixtures from the current database'
 
-  task :export => :environment do
+  task export: :environment do
     Rails.application.eager_load!
     models = defined?(ApplicationRecord) ? ApplicationRecord.descendants : ActiveRecord::Base.descendants
     models.each do |model|

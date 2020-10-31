@@ -1,5 +1,6 @@
 import React from "react";
 import FormattedDate from "../ui_elements/FormattedDate.jsx";
+import { ExperimentType } from "../../types";
 
 export class ExperimentDetails extends React.Component {
   constructor(props) {
@@ -27,7 +28,7 @@ export class ExperimentDetails extends React.Component {
             <b className="col-2">Status:</b>
             <div className="col-10">
               <div>
-                You already participated in this experiment. Thank you!. (You can't change your answers or take it again).
+                You already participated in this experiment. Thank you!. (You can&apos;t change your answers or take it again).
               </div>
               <div>
                 Started on <FormattedDate date={exp.started_at || exp.created_at} />
@@ -78,4 +79,8 @@ export class ExperimentDetails extends React.Component {
       </div>
     );
   }
+}
+
+ExperimentDetails.propTypes = {
+  experiment: ExperimentType.isRequired,
 }

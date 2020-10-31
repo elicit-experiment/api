@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 module Api::V1
   class ProtocolDefinitionsController < ApiController
-
     include StudyCreation
 
     skip_before_action :authenticate_user!, only: :take
@@ -16,7 +17,7 @@ module Api::V1
       return if performed?
 
       unless @protocol_user
-        render json: ElicitError.new("Cannot find user for protocol.", :unauthorized), status: :unauthorized unless performed?
+        render json: ElicitError.new('Cannot find user for protocol.', :unauthorized), status: :unauthorized unless performed?
         return
       end
 
@@ -26,19 +27,19 @@ module Api::V1
       end
 
       session_guid = SecureRandom.uuid
-      query_params = {session_guid: session_guid}.merge(request.query_parameters)
-      query_string = "?" + query_params.map {|k, v| "#{k}=#{v}"}.join('&')
+      query_params = { session_guid: session_guid }.merge(request.query_parameters)
+      query_string = '?' + query_params.map { |k, v| "#{k}=#{v}" }.join('&')
       hash_string = "#Experiment/#{@protocol_definition_id}"
 
       pfe = Rails.configuration.elicit['participant_frontend']
       session_params = {
-          :user_id => @protocol_user.user_id,
-          :session_guid => session_guid,
-          :url => "#{pfe['scheme']}://#{pfe['host']}:#{pfe['port']}/#{query_string}#{hash_string}",
-          :expires_at => Date.today + 1.day,
-          :study_definition_id => @study_definition_id,
-          :protocol_definition_id => @protocol_definition_id,
-          :protocol_user_id => @protocol_user.id
+        user_id: @protocol_user.user_id,
+        session_guid: session_guid,
+        url: "#{pfe['scheme']}://#{pfe['host']}:#{pfe['port']}/#{query_string}#{hash_string}",
+        expires_at: Date.today + 1.day,
+        study_definition_id: @study_definition_id,
+        protocol_definition_id: @protocol_definition_id,
+        protocol_user_id: @protocol_user.id
       }
       session = Chaos::ChaosSession.new(session_params)
 
@@ -50,7 +51,7 @@ module Api::V1
         respond_with session
       else
         logger.error session.errors.ai
-        render json: ElicitError.new("Failed to create session", :unprocessable_entity), status: :unprocessable_entity
+        render json: ElicitError.new('Failed to create session', :unprocessable_entity), status: :unprocessable_entity
       end
     end
 
@@ -70,21 +71,21 @@ module Api::V1
 
       Rails.logger.info "WORKERID: #{worker_id}"
 
-      unless worker_id.blank? || !%r{[A-Z0-9]+}.match(worker_id)
+      unless worker_id.blank? || !/[A-Z0-9]+/.match(worker_id)
         Rails.logger.info "Not logged in during take, but workerId specified as #{worker_id}; trying anonymous protocol."
 
-        user = create_and_sign_in_anonymous_participant(study_definition, worker_id, "mturk.elicit.dk")
+        user = create_and_sign_in_anonymous_participant(study_definition, worker_id, 'mturk.elicit.dk')
 
         return unless user
 
-        protocol_user = ProtocolUser.find_or_create_by(protocol_definition_id: @protocol_definition_id, user_id: user.id, group_name: "MTurkAnonymous")
+        protocol_user = ProtocolUser.find_or_create_by(protocol_definition_id: @protocol_definition_id, user_id: user.id, group_name: 'MTurkAnonymous')
 
         @protocol_user = protocol_user if protocol_user.save
 
         return
       end
 
-      Rails.logger.info "Not logged in during take; trying anonymous protocol by stealing a predefined ProtocolUser..."
+      Rails.logger.info 'Not logged in during take; trying anonymous protocol by stealing a predefined ProtocolUser...'
 
       candidate_protocol_users = ProtocolUser.free_for_anonymous(@protocol_definition_id)
 
@@ -94,13 +95,13 @@ module Api::V1
 
       @protocol_user = candidate_protocol_users.take
 
-      render json: ElicitError.new("Maximum participants exceeded.", :not_found), status: :not_found unless performed? || @protocol_user
+      render json: ElicitError.new('Maximum participants exceeded.', :not_found), status: :not_found unless performed? || @protocol_user
     end
 
     private
 
-    def create_and_sign_in_anonymous_participant(study_definition, username, email_domain = "elicit.dk")
-      user_params = {:email => "#{username}@#{email_domain}".downcase, :username => username, :role => User::ROLES[:anonymous]}
+    def create_and_sign_in_anonymous_participant(study_definition, username, email_domain = 'elicit.dk')
+      user_params = { email: "#{username}@#{email_domain}".downcase, username: username, role: User::ROLES[:anonymous] }
 
       user = User.find_or_initialize_by(user_params) do |user|
         Rails.logger.info "Trying to create new anonymous user #{username}"
@@ -122,7 +123,7 @@ module Api::V1
           else
             Rails.logger.warn "No budget remains for creating anonymous user: #{study_definition.auto_created_user_count}/#{study_definition.max_auto_created_users} taken"
             user = nil
-            render json: ElicitError.new("Maximum participants exceeded.", :not_found), status: :unauthorized unless performed?
+            render json: ElicitError.new('Maximum participants exceeded.', :not_found), status: :unauthorized unless performed?
           end
         end
         user
@@ -133,29 +134,29 @@ module Api::V1
 
         sign_in(:user, user)
       else
-        Rails.logger.warn "No suitable user found/created in create_and_sign_in_anonymous_participant"
+        Rails.logger.warn 'No suitable user found/created in create_and_sign_in_anonymous_participant'
       end
 
       user
     end
 
     def query_params
-      {:study_definition_id => params[:study_definition_id]}
+      { study_definition_id: params[:study_definition_id] }
     end
 
     def query_includes
-      {:phase_definitions => :trial_definitions}
+      { phase_definitions: :trial_definitions }
     end
 
     def response_includes
-      {:phase_definitions => {:include => :trial_definitions}}
+      { phase_definitions: { include: :trial_definitions } }
     end
 
     def protocol_definition_params
       params.require(:study_definition_id)
       permit_json_params(params[:protocol_definition], :protocol_definition) do
-        params.require(:protocol_definition).permit([:definition_data, :type, :name, :summary, :description, :active])
-            .merge(:study_definition_id => params[:study_definition_id])
+        params.require(:protocol_definition).permit(%i[definition_data type name summary description active])
+              .merge(study_definition_id: params[:study_definition_id])
       end
     end
   end

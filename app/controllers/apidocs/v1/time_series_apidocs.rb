@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Apidocs::V1::TimeSeriesApidocs
   include Swagger::Blocks
 
@@ -7,10 +9,10 @@ class Apidocs::V1::TimeSeriesApidocs
       key :description, 'Returns all time series from the system to which the user has access'
       key :operationId, 'findTimeSeries'
       key :produces, [
-          'application/json'
+        'application/json'
       ]
       key :tags, [
-          'Study Results', 'Time Series'
+        'Study Results', 'Time Series'
       ]
       parameter do
         key :name, :authorization
@@ -98,10 +100,10 @@ class Apidocs::V1::TimeSeriesApidocs
       key :description, 'Creates a time Series'
       key :operationId, 'addTimeSeries'
       key :produces, [
-          'application/json'
+        'application/json'
       ]
       key :tags, [
-          'Study Results', 'Time Series'
+        'Study Results', 'Time Series'
       ]
       parameter do
         key :name, :authorization
@@ -135,7 +137,6 @@ class Apidocs::V1::TimeSeriesApidocs
     end
   end
 
-
   # Get Time Series Object Content
   swagger_path '/study_results/time_series/{id}/content' do
     operation :get do
@@ -143,10 +144,10 @@ class Apidocs::V1::TimeSeriesApidocs
       key :description, 'Gets the content of a time Series'
       key :operationId, 'getTimeSeriesContent'
       key :produces, [
-          'application/text'
+        'application/text'
       ]
       key :tags, [
-          'Study Results', 'Time Series'
+        'Study Results', 'Time Series'
       ]
       parameter do
         key :name, :authorization
@@ -232,10 +233,10 @@ class Apidocs::V1::TimeSeriesApidocs
       key :description, 'Gets a time Series'
       key :operationId, 'getTimeSeries'
       key :produces, [
-          'application/json'
+        'application/json'
       ]
       key :tags, [
-          'Study Results', 'Time Series'
+        'Study Results', 'Time Series'
       ]
       parameter do
         key :name, :authorization
@@ -322,58 +323,58 @@ class Apidocs::V1::TimeSeriesApidocs
       end
     end
 
-      operation :put do
-        key :description, 'Updates a Time Series'
-        key :summary, 'Updates a Time Series'
-        key :operationId, 'updateTimeSeries'
-        key :tags, [
-            'Study Results', 'Time Series'
-        ]
-        parameter do
-          key :name, :authorization
-          key :in, :header
-          key :description, "Authenticated User's access token"
-          key :required, true
-          key :type, :string
-          key :default, 'Bearer PASTE_ACCESS_TOKEN_HERE'
-        end
-        parameter do
-          key :name, :id
-          key :in, :path
-          key :description, 'ID of time Series to fetch'
-          key :required, true
-          key :type, :integer
-          key :format, :int64
-        end
-        parameter do
-          key :name, :time_series
-          key :in, :body
-          key :description, 'Time Series Object to update'
-          key :required, true
-          schema do
-            key :'$ref', :TimeSeries
-          end
-        end
-
-        response 200 do
-          key :description, 'Time Series Object'
-          schema do
-            key :'$ref', :TimeSeries
-          end
-        end
-        response 401 do
-          key :description, 'Unauthorized Request'
-        end
-        response 403 do
-          key :description, "Insufficient Scope (tip: ensure access_token was obtained with 'password' grant_type)"
-        end
-        response :default do
-          key :description, 'Returned when an unexpected error occurs'
-          schema do
-            key :'$ref', :ElicitError
-          end
+    operation :put do
+      key :description, 'Updates a Time Series'
+      key :summary, 'Updates a Time Series'
+      key :operationId, 'updateTimeSeries'
+      key :tags, [
+        'Study Results', 'Time Series'
+      ]
+      parameter do
+        key :name, :authorization
+        key :in, :header
+        key :description, "Authenticated User's access token"
+        key :required, true
+        key :type, :string
+        key :default, 'Bearer PASTE_ACCESS_TOKEN_HERE'
+      end
+      parameter do
+        key :name, :id
+        key :in, :path
+        key :description, 'ID of time Series to fetch'
+        key :required, true
+        key :type, :integer
+        key :format, :int64
+      end
+      parameter do
+        key :name, :time_series
+        key :in, :body
+        key :description, 'Time Series Object to update'
+        key :required, true
+        schema do
+          key :'$ref', :TimeSeries
         end
       end
+
+      response 200 do
+        key :description, 'Time Series Object'
+        schema do
+          key :'$ref', :TimeSeries
+        end
+      end
+      response 401 do
+        key :description, 'Unauthorized Request'
+      end
+      response 403 do
+        key :description, "Insufficient Scope (tip: ensure access_token was obtained with 'password' grant_type)"
+      end
+      response :default do
+        key :description, 'Returned when an unexpected error occurs'
+        schema do
+          key :'$ref', :ElicitError
+        end
+      end
+    end
   end
 
   # Delete Time Series Object
@@ -383,7 +384,7 @@ class Apidocs::V1::TimeSeriesApidocs
       key :summary, 'Deletes a Time Series'
       key :operationId, 'deleteTimeSeries'
       key :tags, [
-          'Study Results', 'Time Series'
+        'Study Results', 'Time Series'
       ]
       parameter do
         key :name, :authorization
@@ -479,5 +480,4 @@ class Apidocs::V1::TimeSeriesApidocs
       key :format, :"date-time"
     end
   end
-
 end

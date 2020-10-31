@@ -1,8 +1,9 @@
+# frozen_string_literal: true
+
 class Apidocs::V1::TrialOrderApidocs
   include Swagger::Blocks
 
   swagger_path '/study_definitions/{study_definition_id}/protocol_definitions/{protocol_definition_id}/phase_definitions/{phase_definition_id}/trial_order' do
-
     operation :post do
       key :summary, 'New Trial Order'
       key :description, 'Creates a new trial order'

@@ -22,9 +22,8 @@ class ProtocolPreviewContainer extends React.Component {
             {protocol_info}
           </div>
       )
-    } else {
-
     }
+
     return <div>Loading Protocol {this.state.protocol_id} information</div>
   }
 

@@ -8,6 +8,7 @@ import {currentUser} from '../../reducers/selector';
 // Import Actions
 import {logoutUser} from '../../actions/tokens_actions';
 import elicitApi from "../../api/elicit-api.js";
+import { UserType} from "../../types";
 
 class HeaderContainer extends React.Component {
     constructor(props) {
@@ -36,3 +37,7 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps,
 )(HeaderContainer);
+
+HeaderContainer.propTypes = {
+  current_user: UserType.isRequired,
+}

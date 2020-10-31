@@ -1,4 +1,6 @@
+# frozen_string_literal: true
+
 # config/initializers/lograge.rb
 Rails.application.configure do
-   config.lograge.base_controller_class = 'ActionController::API'
+  config.lograge.base_controller_class = 'ActionController::API'
 end

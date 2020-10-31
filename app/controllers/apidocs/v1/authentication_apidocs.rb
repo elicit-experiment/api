@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Apidocs::V1
   class AuthenticationApidocs
     include Swagger::Blocks
@@ -6,7 +8,7 @@ module Apidocs::V1
     # ENDPONTS DOUCMENTATION
     # -----------------------------------------
     def self.apps_list_url
-       "<a target='_new' href='#{Rails.application.routes.url_helpers.oauth_applications_url(:only_path => true)}'>Applications List</a>"
+      "<a target='_new' href='#{Rails.application.routes.url_helpers.oauth_applications_url(only_path: true)}'>Applications List</a>"
     end
     swagger_path '/oauth/token' do
       operation :post do
@@ -46,15 +48,15 @@ module Apidocs::V1
     # SCHEMAS
     # -----------------------------------------
     swagger_schema :AuthRequestInput do
-      key :required, [:client_id, :client_secret,:grant_type]
+      key :required, %i[client_id client_secret grant_type]
       property :client_id do
         key :in, :formData
-        key :description, "Application ID -- See #{AuthenticationApidocs::apps_list_url}"
+        key :description, "Application ID -- See #{AuthenticationApidocs.apps_list_url}"
         key :type, :string
         key :default, Rails.configuration.swagger_default_client_id
       end
       property :client_secret do
-        key :description, "Application Secret -- See #{AuthenticationApidocs::apps_list_url}"
+        key :description, "Application Secret -- See #{AuthenticationApidocs.apps_list_url}"
         key :type, :string
         key :default, Rails.configuration.swagger_default_client_secret
       end
@@ -78,7 +80,7 @@ module Apidocs::V1
     end
 
     swagger_schema :AccessToken do
-      key :required, [:access_token, :token_type,:expires_in,:created_at]
+      key :required, %i[access_token token_type expires_in created_at]
       property :expires_in do
         key :type, :integer
         key :format, :int32

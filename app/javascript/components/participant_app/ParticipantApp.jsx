@@ -1,8 +1,10 @@
 //Import React and Dependencies
+import PropTypes from 'prop-types'
 import React from 'react';
 import {Redirect} from 'react-router-dom'
 import ParticipantProtocolList from './ParticipantProtocolList'
 import { connect } from "react-redux";
+import { UserType } from "../../types";
 
 // Import Containers
 import HeaderContainer from "../nav/HeaderContainer";
@@ -55,3 +57,9 @@ const mapDispatchToProps = (dispatch) => ({
 const connectedParticipantApp = connect(mapStateToProps, mapDispatchToProps)(ParticipantApp);
 
 export { connectedParticipantApp as ParticipantApp };
+
+ParticipantApp.propTypes = {
+  current_user: UserType.isRequired,
+  loadCurrentUser: PropTypes.func,
+  tokenStatus: PropTypes.string,
+}

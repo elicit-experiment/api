@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 module ChaosApi::V6
   class AnswerController < ApplicationController
-
     include ActionController::MimeResponds
 
     before_action :cors_preflight_check
@@ -11,7 +12,7 @@ module ChaosApi::V6
 
       session_guid = params[:sessionGUID]
 
-      @chaos_session = Chaos::ChaosSession.where({:session_guid => session_guid}).first
+      @chaos_session = Chaos::ChaosSession.where(session_guid: session_guid).first
 
       question_id = params[:questionId].split(':')
       study_definition_id = question_id[0].to_i
@@ -30,11 +31,11 @@ module ChaosApi::V6
       output = JSON.parse(params[:output])
 
       datapoint_query_fields = {
-          :stage_id => @chaos_session.stage&.id,
-          :protocol_user_id => @chaos_session.protocol_user_id,
-          :phase_definition_id => @component.phase_definition_id,
-          :trial_definition_id => @component.trial_definition_id,
-          :component_id => @component.id,
+        stage_id: @chaos_session.stage&.id,
+        protocol_user_id: @chaos_session.protocol_user_id,
+        phase_definition_id: @component.phase_definition_id,
+        trial_definition_id: @component.trial_definition_id,
+        component_id: @component.id
       }
 
       new_datapoints = StudyResult::DataPoint.from_chaos_output(datapoint_query_fields, output)
@@ -44,8 +45,8 @@ module ChaosApi::V6
         logger.info new_datapoints.ai
 
         respond_to do |format|
-          format.xml {render :xml => ''}
-          format.json {render :json => @response.to_json}
+          format.xml { render xml: '' }
+          format.json { render json: @response.to_json }
         end
 
         return
@@ -58,29 +59,29 @@ module ChaosApi::V6
         # ones didn't.
         # Note that because state entities are updated separately, we don't nuke those.
         StudyResult::DataPoint.where(datapoint_query_fields)
-            .where.not({:point_type => 'State'})
-            .delete_all
+                              .where.not(point_type: 'State')
+                              .delete_all
         new_datapoints.each(&:save!)
       end
 
-      if output["Context"]
-        context = StudyResult::Context.find_or_create_by({
-                                                             :context_type => output["Context"]["Type"],
-                                                             :data => output["Context"]["Data"],
-                                                         })
+      if output['Context']
+        context = StudyResult::Context.find_or_create_by(
+          context_type: output['Context']['Type'],
+          data: output['Context']['Data']
+        )
         context.save!
       end
 
       respond_to do |format|
-        format.xml {render :xml => ''}
-        format.json {render :json => @response.to_json}
+        format.xml { render xml: '' }
+        format.json { render json: @response.to_json }
       end
     end
 
     private
 
     def post_params
-      #validate POST parameters
+      # validate POST parameters
       params.require(:experiment).permit(:author_id, :name)
     end
   end

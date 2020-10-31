@@ -3,9 +3,9 @@ import {connect} from 'react-redux';
 import elicitApi from '../../api/elicit-api';
 import PropTypes from 'prop-types';
 import {
+  GenerateApiResultPropTypeFor,
   AnonymousProtocolsType,
-  MatchType,
-  ProtocolDefinitionType,
+  MatchType, ProtocolUserType,
 } from '../../types';
 import AnonymousProtocolLandingPage from './AnonymousProtocolLandingPage';
 
@@ -23,7 +23,7 @@ class AnonymousProtocolLandingPageContainer extends React.Component {
       return <div>Loading Protocol {this.state.protocol_id} information</div>;
     }
 
-    console.log(JSON.stringify(this.props.take_protocol));
+    console.log(JSON.stringify(this.props.takeProtocol));
 
     if (this.props.take_protocol &&
         !this.props.take_protocol.loading &&
@@ -72,11 +72,14 @@ class AnonymousProtocolLandingPageContainer extends React.Component {
 }
 
 AnonymousProtocolLandingPageContainer.propTypes = {
-  anonymous_protocols: AnonymousProtocolsType,
+  anonymous_protocols: GenerateApiResultPropTypeFor(PropTypes.arrayOf(AnonymousProtocolsType).isRequired),
+  current_user_email: PropTypes.string,
+  current_user_role: PropTypes.string,
   loadAnonymousProtocols: PropTypes.func.isRequired,
-  takeProtocol: PropTypes.func.isRequired,
   match: MatchType,
-};
+  takeProtocol: PropTypes.func.isRequired,
+  take_protocol: GenerateApiResultPropTypeFor(PropTypes.arrayOf(ProtocolUserType).isRequired),
+}
 
 AnonymousProtocolLandingPageContainer.defaultProps = {
   current_user_role: undefined,

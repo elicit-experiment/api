@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User < ApplicationRecord
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -5,18 +7,18 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable
   devise :doorkeeper
 
-  ROLES={:admin => 'admin', :investigator => 'investigator', :registered => 'registered_user', :anonymous => 'anonymous_user'}
+  ROLES = { admin: 'admin', investigator: 'investigator', registered: 'registered_user', anonymous: 'anonymous_user' }.freeze
 
-  validates :role, acceptance: { accept: ROLES.values() }
+  validates :role, acceptance: { accept: ROLES.values }
 
   has_many :study_definitions
 
   class << self
-     def authenticate(email, password)
-       user = User.find_for_authentication(email: email)
-       user = User.find_for_authentication(username: email) if user.nil?
-       user.try(:valid_password?, password) ? user : nil
-     end
+    def authenticate(email, password)
+      user = User.find_for_authentication(email: email)
+      user = User.find_for_authentication(username: email) if user.nil?
+      user.try(:valid_password?, password) ? user : nil
+    end
   end
 
   include Swagger::Blocks
@@ -33,9 +35,9 @@ class User < ApplicationRecord
     property :username do
       key :type, :string
     end
-#    property :role do
-#      key :enum, User::ROLES.values
-#    end
+    #    property :role do
+    #      key :enum, User::ROLES.values
+    #    end
     property :role do
       key :type, :string
     end
@@ -52,7 +54,7 @@ class User < ApplicationRecord
   end
 
   swagger_schema :UserDefinition do
-    key :required, [:email, :password, :password_confirmation]
+    key :required, %i[email password password_confirmation]
     property :id do
       key :type, :integer
       key :format, :int64
@@ -63,9 +65,9 @@ class User < ApplicationRecord
     property :username do
       key :type, :string
     end
-#    property :role do
-#      key :enum, User::ROLES.values
-#    end
+    #    property :role do
+    #      key :enum, User::ROLES.values
+    #    end
     property :role do
       key :type, :string
     end
@@ -80,5 +82,4 @@ class User < ApplicationRecord
       key :type, :string
     end
   end
-
 end

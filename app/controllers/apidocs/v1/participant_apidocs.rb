@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Apidocs::V1::ParticipantApidocs
   include Swagger::Blocks
 
@@ -48,7 +50,4 @@ class Apidocs::V1::ParticipantApidocs
       end
     end
   end
-
-
-
 end

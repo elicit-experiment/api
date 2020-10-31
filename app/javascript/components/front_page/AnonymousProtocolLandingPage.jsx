@@ -25,6 +25,7 @@ class AnonymousProtocolLandingPage extends React.Component {
       try {
         instructionsHtml = (JSON.parse(this.props.protocol.definition_data) || {}).instructionsHtml;
       } catch (e) {
+        console.warn("Error parsing instructions");
       }
       if (instructionsHtml) {
         const htmlInstructions = {

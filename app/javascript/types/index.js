@@ -113,6 +113,15 @@ export const ProtocolUserType = PropTypes.shape({
     user_id: PropTypes.number.isRequired,
 });
 
+export const GenerateApiResultPropTypeFor = (obj) => PropTypes.shape({
+  data: obj,
+  error: PropTypes.any,
+  loading: PropTypes.bool.isRequired,
+  request: PropTypes.shape({}).isRequired,
+  sync: PropTypes.bool.isRequired,
+  syncing: PropTypes.bool.isRequired,
+});
+
 export const EligibleProtocolsType = PropTypes.shape({
     data: PropTypes.arrayOf(ProtocolUserType).isRequired,
     error: PropTypes.any,
@@ -121,4 +130,5 @@ export const EligibleProtocolsType = PropTypes.shape({
     sync: PropTypes.bool.isRequired,
     syncing: PropTypes.bool.isRequired,
 });
+
 export const AnonymousProtocolsType = ApiReturnCollectionOf(ProtocolDefinitionType);

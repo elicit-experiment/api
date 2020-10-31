@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Apidocs::V1::ExperimentsApidocs
   include Swagger::Blocks
 
@@ -273,5 +275,4 @@ class Apidocs::V1::ExperimentsApidocs
       key :format, :"date-time"
     end
   end
-
 end

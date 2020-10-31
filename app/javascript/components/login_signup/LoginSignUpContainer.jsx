@@ -1,4 +1,5 @@
 // Import Dependencies
+import PropTypes from 'prop-types'
 import {connect} from 'react-redux';
 import React from 'react';
 import $ from 'jquery'
@@ -14,8 +15,8 @@ import {clientToken, userToken, userTokenState, currentUser, tokenStatus} from '
 
 import elicitApi from '../../api/elicit-api.js';
 
-import ReactDOM from 'react-dom'
-import {Switch, Route, BrowserRouter, Redirect} from 'react-router-dom'
+import {Redirect} from 'react-router-dom'
+import {CurrentUserType} from "../../types";
 
 class LoginSignUpContainer extends React.Component {
   constructor(props) {
@@ -59,7 +60,8 @@ class LoginSignUpContainer extends React.Component {
 
   render() {
     if (this.showLoginSignup() && this.showPleaseWait()) {
-      debugger;
+      // debugger;
+      console.error('invalid state');
     }
     if (this.props.tokenStatus === 'user') {
       if (this.props.currentUser && this.props.currentUser.sync) {
@@ -101,7 +103,7 @@ class LoginSignUpContainer extends React.Component {
   }
 }
 
-//Map State to Props
+// Map State to Props
 const mapStateToProps = (state) => ({
   clientToken: clientToken(state),
   userToken: userToken(state),
@@ -121,3 +123,10 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(LoginSignUpContainer);
+
+LoginSignUpContainer.propTypes = {
+  currentUser: CurrentUserType(),
+  getCurrentUser: PropTypes.func.isRequired,
+  tokenStatus: PropTypes.string.isRequired,
+  userTokenState: PropTypes.string.isRequired,
+}

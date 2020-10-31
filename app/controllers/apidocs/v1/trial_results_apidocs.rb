@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Apidocs::V1::TrialResultsApidocs
   include Swagger::Blocks
 
@@ -7,10 +9,10 @@ class Apidocs::V1::TrialResultsApidocs
       key :description, 'Returns all TrialResult results the user has access to'
       key :operationId, 'findTrialResults'
       key :produces, [
-          'application/json'
+        'application/json'
       ]
       key :tags, [
-          'TrialResult', 'Study Results'
+        'TrialResult', 'Study Results'
       ]
       parameter do
         key :name, :authorization
@@ -77,10 +79,10 @@ class Apidocs::V1::TrialResultsApidocs
       key :description, 'Creates a new TrialResult'
       key :operationId, 'addTrialResult'
       key :produces, [
-          'application/json'
+        'application/json'
       ]
       key :tags, [
-          'TrialResult', 'Study Results'
+        'TrialResult', 'Study Results'
       ]
       parameter do
         key :name, :authorization
@@ -128,7 +130,7 @@ class Apidocs::V1::TrialResultsApidocs
       key :summary, 'Updates a TrialResult result'
       key :operationId, 'updateTrialResult'
       key :tags, [
-          'TrialResult', 'Study Results'
+        'TrialResult', 'Study Results'
       ]
       parameter do
         key :name, :authorization
@@ -181,7 +183,7 @@ class Apidocs::V1::TrialResultsApidocs
       key :summary, 'Deletes a TrialResult result'
       key :operationId, 'deleteTrialResult'
       key :tags, [
-          'TrialResult', 'Study Results'
+        'TrialResult', 'Study Results'
       ]
       parameter do
         key :name, :authorization
@@ -233,7 +235,7 @@ class Apidocs::V1::TrialResultsApidocs
   end
 
   swagger_schema :TrialResult do
-    key :required, [:experiment_id, :phase_definition_id, :trial_definition_id]
+    key :required, %i[experiment_id phase_definition_id trial_definition_id]
     property :id do
       key :type, :integer
       key :format, :int64
@@ -270,5 +272,4 @@ class Apidocs::V1::TrialResultsApidocs
       key :format, :"date-time"
     end
   end
-
 end

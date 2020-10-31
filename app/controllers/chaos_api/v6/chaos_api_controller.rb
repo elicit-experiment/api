@@ -1,6 +1,7 @@
+# frozen_string_literal: true
+
 module ChaosApi::V6
   class ChaosApiController < ApplicationController
-
     include ActionController::MimeResponds
 
     include ActionController::Cookies
@@ -10,12 +11,9 @@ module ChaosApi::V6
     def get_session
       sessionGUID = params[:sessionGUID] || cookies[:session_guid]
 
-      @chaos_session = Chaos::ChaosSession.where({:session_guid => sessionGUID}).take
+      @chaos_session = Chaos::ChaosSession.where(session_guid: sessionGUID).take
 
-      unless @chaos_session
-        head :unauthorized
-      end
+      head :unauthorized unless @chaos_session
     end
-
   end
 end

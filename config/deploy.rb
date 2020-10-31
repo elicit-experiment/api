@@ -1,17 +1,19 @@
-# config valid for current version and patch releases of Capistrano
-lock "~> 3.11.0"
+# frozen_string_literal: true
 
-set :application, "elicit"
-set :repo_url, "https://lab.compute.dtu.dk/elicit/api.git"
-set :fe_repo_url, "git@lab.compute.dtu.dk:elicit/experiment-frontend.git"
-set :git_https_username, "iaibrys"
-set :git_https_password, "Ht6ge3E9"
+# config valid for current version and patch releases of Capistrano
+lock '~> 3.11.0'
+
+set :application, 'elicit'
+set :repo_url, 'https://lab.compute.dtu.dk/elicit/api.git'
+set :fe_repo_url, 'git@lab.compute.dtu.dk:elicit/experiment-frontend.git'
+set :git_https_username, 'iaibrys'
+set :git_https_password, 'Ht6ge3E9'
 
 # Default branch is :master
 ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Default deploy_to directory is /var/www/my_app_name
-#set :deploy_to, "/var/www/elicit"
+# set :deploy_to, "/var/www/elicit"
 
 # Default value for :format is :airbrussh.
 # set :format, :airbrussh
@@ -53,7 +55,7 @@ task :build do
 end
 
 desc 'go'
-task :go => ['build', 'deploy']
+task go: %w[build deploy]
 
 desc 'deploy'
 task :deploy do

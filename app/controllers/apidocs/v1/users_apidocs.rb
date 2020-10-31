@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Apidocs::V1::UsersApidocs
   include Swagger::Blocks
 
@@ -48,7 +50,6 @@ class Apidocs::V1::UsersApidocs
       end
     end
   end
-
 
   swagger_path '/users' do
     operation :post do
@@ -136,8 +137,8 @@ class Apidocs::V1::UsersApidocs
 
   swagger_path '/users/{id}' do
     operation :get do
-      key :description, "Returns a specific user object"
-      key :summary, "Returns specific user object"
+      key :description, 'Returns a specific user object'
+      key :summary, 'Returns specific user object'
       key :operationId, 'findUser'
       key :tags, [
         'Users'
@@ -172,15 +173,13 @@ class Apidocs::V1::UsersApidocs
     end
   end
 
-
-
   swagger_path '/users/current' do
     operation :get do
       key :description, "Returns authenticated user's user object"
       key :summary, "Returns the authenticated (i.e. the user whose access token is making the request) user's user object"
       key :operationId, 'getCurrentUser'
-      key :tags, [
-        'Users', 'Authentication'
+      key :tags, %w[
+        Users Authentication
       ]
       response 200 do
         key :description, 'User Object'
@@ -209,7 +208,6 @@ class Apidocs::V1::UsersApidocs
   # SCHEMAS
   # -----------------------
 
-
   swagger_schema :UserResponseObject do
     property :id do
       key :type, :string
@@ -225,5 +223,4 @@ class Apidocs::V1::UsersApidocs
       key :'$ref', :UserDefinition
     end
   end
-
 end

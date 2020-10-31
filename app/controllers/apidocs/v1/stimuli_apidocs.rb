@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Apidocs::V1::StimuliApidocs
   include Swagger::Blocks
 
@@ -229,7 +231,7 @@ class Apidocs::V1::StimuliApidocs
   end
 
   swagger_schema :StimulusInputBody do
-    key :required, [:definition_data, :name]
+    key :required, %i[definition_data name]
     property :id do
       key :type, :integer
       key :format, :int64
@@ -241,5 +243,4 @@ class Apidocs::V1::StimuliApidocs
       key :type, :string
     end
   end
-
 end

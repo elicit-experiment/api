@@ -1,5 +1,6 @@
-class TimeSeriesUploader < CarrierWave::Uploader::Base
+# frozen_string_literal: true
 
+class TimeSeriesUploader < CarrierWave::Uploader::Base
   process :unzip
 
   storage :file
@@ -8,7 +9,7 @@ class TimeSeriesUploader < CarrierWave::Uploader::Base
     command = "gunzip --force #{filename}"
     success = system(command)
 
-    success && $?.exitstatus == 0
+    success && $CHILD_STATUS.exitstatus == 0
   end
 
   # Override the directory where uploaded files will be stored.
@@ -18,9 +19,9 @@ class TimeSeriesUploader < CarrierWave::Uploader::Base
   end
 
   def unzip
-    gzip_content = @file.content_type.ends_with? "+gzip"
+    gzip_content = @file.content_type.ends_with? '+gzip'
     file_suffix = File.extname(@filename)
-    file_gzip = file_suffix.ends_with? "gz"
+    file_gzip = file_suffix.ends_with? 'gz'
 
     Rails.logger.info("filename #{@filename} #{file_suffix} #{file_gzip}")
 
@@ -60,7 +61,7 @@ class TimeSeriesUploader < CarrierWave::Uploader::Base
 
   # Add a white list of extensions which are allowed to be uploaded.
   # For images you might use something like this:
-   def extension_whitelist
-     %w(csv tsv gz)
-   end
+  def extension_whitelist
+    %w[csv tsv gz]
+  end
 end

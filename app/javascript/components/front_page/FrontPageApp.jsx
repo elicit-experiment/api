@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { MatchType, UserTokenType, CurrentUserType } from 'types';
-import {Redirect, Route} from 'react-router-dom';
 import {connect} from "react-redux";
 import elicitApi from "../../api/elicit-api.js";
 import {tokenStatus} from '../../reducers/selector';
@@ -10,6 +9,7 @@ import FooterContainer from "../nav/FooterContainer.jsx";
 import AnonymousProtocolLandingPageContainer from "./AnonymousProtocolLandingPageContainer";
 import FrontPageContainer from "./FrontPageContainer";
 import ParticipatePage from "./ParticipatePage";
+import { Route} from "react-router-dom";
 
 class FrontPageApp extends React.Component {
   constructor(props) {

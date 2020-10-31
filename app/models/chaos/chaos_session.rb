@@ -1,36 +1,40 @@
+# frozen_string_literal: true
+
 module Chaos
   class ChaosSession < ApplicationRecord
-    belongs_to :user, :class_name => "User", :foreign_key => "user_id"
-    belongs_to :study_definition, :class_name => "StudyDefinition", :foreign_key => "study_definition_id"
-    belongs_to :protocol_definition, :class_name => "ProtocolDefinition", :foreign_key => "protocol_definition_id"
-    belongs_to :phase_definition, :class_name => "PhaseDefinition", :foreign_key => "phase_definition_id"
-    belongs_to :protocol_user, :class_name => "ProtocolUser", :foreign_key => "protocol_user_id", optional: true
-    belongs_to :phase_definition, :class_name => "PhaseDefinition", :foreign_key => "phase_definition_id"
-    belongs_to :study_result, :class_name => "StudyResult::StudyResult", :foreign_key => "study_result_id", optional: true
-    belongs_to :experiment, :class_name => "StudyResult::Experiment", :foreign_key => "experiment_id", optional: true
-    belongs_to :stage, :class_name => "StudyResult::Stage", :foreign_key => "stage_id", optional: true
-    belongs_to :trial_result, :class_name => "StudyResult::TrialResult", :foreign_key => "trial_result_id", optional: true
+    belongs_to :user, class_name: 'User', foreign_key: 'user_id'
+    belongs_to :study_definition, class_name: 'StudyDefinition', foreign_key: 'study_definition_id'
+    belongs_to :protocol_definition, class_name: 'ProtocolDefinition', foreign_key: 'protocol_definition_id'
+    belongs_to :phase_definition, class_name: 'PhaseDefinition', foreign_key: 'phase_definition_id'
+    belongs_to :protocol_user, class_name: 'ProtocolUser', foreign_key: 'protocol_user_id', optional: true
+    belongs_to :phase_definition, class_name: 'PhaseDefinition', foreign_key: 'phase_definition_id'
+    belongs_to :study_result, class_name: 'StudyResult::StudyResult', foreign_key: 'study_result_id', optional: true
+    belongs_to :experiment, class_name: 'StudyResult::Experiment', foreign_key: 'experiment_id', optional: true
+    belongs_to :stage, class_name: 'StudyResult::Stage', foreign_key: 'stage_id', optional: true
+    belongs_to :trial_result, class_name: 'StudyResult::TrialResult', foreign_key: 'trial_result_id', optional: true
 
     def preview?
       protocol_user.nil? || study_result.nil?
     end
 
     def self.clear_expired!
-      ChaosSession.where("expires_at < ?", Date.new).delete_all
+      ChaosSession.where('expires_at < ?', Date.new).delete_all
     end
 
     def populate(custom_parameters)
       Rails.logger.info "chaos_session#populate #{custom_parameters.ai}"
-      study_result = StudyResult::StudyResult.where({
-        :user_id => self.user_id,
-        :study_definition_id => study_definition_id}).first_or_initialize
+      study_result = StudyResult::StudyResult.where(
+        user_id: user_id,
+        study_definition_id: study_definition_id
+      ).first_or_initialize
 
       study_result.save!
       self.study_result_id = study_result.id
 
-      experiment = StudyResult::Experiment.where({
-        :study_result_id => study_result.id,
-        :protocol_user_id => protocol_user.id }).first_or_initialize do |e|
+      experiment = StudyResult::Experiment.where(
+        study_result_id: study_result.id,
+        protocol_user_id: protocol_user.id
+      ).first_or_initialize do |e|
         # we need to have a real experiment with an ID for later
         e.started_at = DateTime.now
         e.custom_parameters = custom_parameters.to_json
@@ -42,79 +46,86 @@ module Chaos
         stage.started_at = DateTime.now
       else
         stage = experiment.current_stage
-        self.phase_definition_id  = stage.phase_definition_id
+        self.phase_definition_id = stage.phase_definition_id
       end
 
-      stage.save! if stage
+      stage&.save!
 
       self.experiment_id = experiment.id
       self.stage_id = stage ? stage.id : nil
     end
 
     def next_stage(experiment = nil)
-      experiment = StudyResult::Experiment.where({
-        :study_result_id => study_result_id,
-        :protocol_user_id => protocol_user.id }).first_or_initialize if experiment.nil?
+      if experiment.nil?
+        experiment = StudyResult::Experiment.where(
+          study_result_id: study_result_id,
+          protocol_user_id: protocol_user.id
+        ).first_or_initialize
+      end
 
-      completed_stages = StudyResult::Stage.where({
-        :experiment_id => experiment.id,
-        :protocol_user_id => experiment.protocol_user_id }).where.not({:completed_at => nil})
+      completed_stages = StudyResult::Stage.where(
+        experiment_id: experiment.id,
+        protocol_user_id: experiment.protocol_user_id
+      ).where.not(completed_at: nil)
 
       experiment.num_stages_completed = completed_stages.count
 
-      phases = PhaseDefinition.where({
-        :study_definition_id => study_definition_id,
-        :protocol_definition_id => protocol_definition_id})
+      phases = PhaseDefinition.where(
+        study_definition_id: study_definition_id,
+        protocol_definition_id: protocol_definition_id
+      )
 
-      phase_order = PhaseOrder.where({
-        :study_definition_id => study_definition_id,
-        :protocol_definition_id => protocol_definition_id,
-        :user_id => protocol_user.user_id }).first
+      phase_order = PhaseOrder.where(
+        study_definition_id: study_definition_id,
+        protocol_definition_id: protocol_definition_id,
+        user_id: protocol_user.user_id
+      ).first
 
       phase_sequence = PhaseOrder.default_sequence(phases)
 
-      if phase_order != nil
+      unless phase_order.nil?
         custom_phase_sequence = phase_order.sequence_data.split(',').map(&:to_i)
-        custom_phases = custom_phase_sequence.map{ |phase_id| phases.detect{ |phase| phase.id == phase_id} }
-        unless (custom_phases.all?)
-          Rails.logger.error "Phase order #{phase_order.id} sequence #{custom_phase_sequence.ai} contains invalid ids #{custom_phases.ai}"
-        else
+        custom_phases = custom_phase_sequence.map { |phase_id| phases.detect { |phase| phase.id == phase_id } }
+        if custom_phases.all?
           phase_sequence = custom_phase_sequence
+        else
+          Rails.logger.error "Phase order #{phase_order.id} sequence #{custom_phase_sequence.ai} contains invalid ids #{custom_phases.ai}"
         end
       end
 
       completed_phase_id_set = Set.new completed_stages.map(&:phase_definition_id)
 
-      next_phase_ids = phase_sequence.reject{ |phase_id| completed_phase_id_set.include? phase_id }
+      next_phase_ids = phase_sequence.reject { |phase_id| completed_phase_id_set.include? phase_id }
 
       experiment.num_stages_remaining = next_phase_ids.count
 
       next_phase_id = next_phase_ids.first
 
-      next_phase = phases.detect{ |phase| phase.id == next_phase_id}
+      next_phase = phases.detect { |phase| phase.id == next_phase_id }
 
       Rails.logger.info "Next Phase: #{next_phase.ai}"
 
       stage = nil
 
       if next_phase.nil?
-        Rails.logger.info "No next phase; ending experiment"
+        Rails.logger.info 'No next phase; ending experiment'
         self.stage_id = nil
         experiment.current_stage_id = nil
         experiment.completed_at = DateTime.now
         self.phase_definition_id = nil
 
       else
-        next_stage = StudyResult::Stage.where({
-                                                  :experiment_id => experiment.id,
-                                                  :protocol_user_id => experiment.protocol_user_id,
-                                                  :phase_definition_id => next_phase.id}).first_or_initialize
+        next_stage = StudyResult::Stage.where(
+          experiment_id: experiment.id,
+          protocol_user_id: experiment.protocol_user_id,
+          phase_definition_id: next_phase.id
+        ).first_or_initialize
 
         self.stage_id = next_stage.id
         unless next_stage.num_trials
-          trial_params = {:study_definition_id => study_definition_id,
-                          :protocol_definition_id => protocol_definition_id,
-                          :phase_definition_id => next_phase.id}
+          trial_params = { study_definition_id: study_definition_id,
+                           protocol_definition_id: protocol_definition_id,
+                           phase_definition_id: next_phase.id }
           trials = TrialDefinition.where(trial_params)
           next_stage.num_trials = trials.count
         end
@@ -123,17 +134,17 @@ module Chaos
         self.phase_definition_id = next_stage.id
 
         Rails.logger.info "Next STAGE: #{trials.entries.ai}"
-        Rails.logger.info "#{next_stage.ai}"
+        Rails.logger.info next_stage.ai.to_s
         next_stage.save!
         stage = next_stage
 
         self.phase_definition_id = next_phase.id
-        self.save!
+        save!
       end
 
       experiment.save!
 
-      return experiment, stage
+      [experiment, stage]
     end
   end
 end

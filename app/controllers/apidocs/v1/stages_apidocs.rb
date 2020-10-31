@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Apidocs::V1::StagesApidocs
   include Swagger::Blocks
 
@@ -233,7 +235,7 @@ class Apidocs::V1::StagesApidocs
   end
 
   swagger_schema :Stage do
-    key :required, [:experiment_id, :phase_definition_id]
+    key :required, %i[experiment_id phase_definition_id]
     property :id do
       key :type, :integer
       key :format, :int64
@@ -291,5 +293,4 @@ class Apidocs::V1::StagesApidocs
       key :format, :"date-time"
     end
   end
-
 end

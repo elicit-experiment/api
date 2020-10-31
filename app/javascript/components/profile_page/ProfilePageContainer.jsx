@@ -1,7 +1,7 @@
 //Import React and Dependencies
 import React from 'react'
 import { connect } from 'react-redux';
-import {Redirect, Route} from 'react-router-dom'
+import {Redirect} from 'react-router-dom'
 
 // Import Components
 import HeaderContainer from "../nav/HeaderContainer"
@@ -14,9 +14,7 @@ import { tokenStatus } from '../../reducers/selector';
 // Import API
 import elicitApi from "../../api/elicit-api.js";
 import PropTypes from "prop-types";
-import { MatchType, RequestShapeType, CurrentUserType, UserTokenType } from "types";
-import ProtocolPreviewContainer from "../admin_app/ProtocolPreviewContainer";
-import StudyManagement from "../admin_app/StudyManagement";
+import { CurrentUserType, UserTokenType } from "types";
 
 class ProfilePageContainer extends React.Component {
   constructor(props){
@@ -35,10 +33,11 @@ class ProfilePageContainer extends React.Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  getDerivedStateFromProps(nextProps) {
     if (nextProps.current_user.sync) {
-        this.setState({ loading_user: false });
+        return{ loading_user: false };
     }
+    return null;
   }
 
   render() {
@@ -65,7 +64,7 @@ class ProfilePageContainer extends React.Component {
     )
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (!this.props.current_user.sync) {
       this.setState({ loading_user: true });
       this.props.syncCurrentUser();

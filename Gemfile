@@ -49,10 +49,10 @@ gem 'swagger-blocks', '1.3.1'
 gem 'swagger_ui_engine'
 
 # authentication
+gem 'cancancan'
 gem 'devise', '~> 4.4.0'
 gem 'devise-doorkeeper'
 gem 'doorkeeper'
-gem 'cancancan'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -90,16 +90,14 @@ gem 'json-schema-generator'
 gem 'carrierwave'
 gem 'carrierwave-base64'
 
-
 gem 'rack-mini-profiler', require: false
 
+gem 'flamegraph', '~> 0.9.5'
 
-gem "flamegraph", "~> 0.9.5"
+gem 'memory-profiler', '~> 1.0'
 
-gem "memory-profiler", "~> 1.0"
+gem 'stackprof', '~> 0.2.12'
 
-gem "stackprof", "~> 0.2.12"
+gem 'dotenv-rails', '~> 2.7'
 
-gem "dotenv-rails", "~> 2.7"
-
-gem "capybara", "~> 3.33"
+gem 'capybara', '~> 3.33'

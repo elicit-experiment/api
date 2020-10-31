@@ -1,10 +1,12 @@
-class Stimulus < ApplicationRecord
-  belongs_to :study_definition, :class_name => "StudyDefinition", :foreign_key => "study_definition_id"
-  belongs_to :protocol_definition, :class_name => "ProtocolDefinition", :foreign_key => "protocol_definition_id"
-  belongs_to :phase_definition, :class_name => "PhaseDefinition", :foreign_key => "phase_definition_id"
-  belongs_to :trial_definition, :class_name => "TrialDefinition", :foreign_key => "trial_definition_id"
+# frozen_string_literal: true
 
- include Swagger::Blocks
+class Stimulus < ApplicationRecord
+  belongs_to :study_definition, class_name: 'StudyDefinition', foreign_key: 'study_definition_id'
+  belongs_to :protocol_definition, class_name: 'ProtocolDefinition', foreign_key: 'protocol_definition_id'
+  belongs_to :phase_definition, class_name: 'PhaseDefinition', foreign_key: 'phase_definition_id'
+  belongs_to :trial_definition, class_name: 'TrialDefinition', foreign_key: 'trial_definition_id'
+
+  include Swagger::Blocks
 
   swagger_schema :Stimulus do
     property :id do

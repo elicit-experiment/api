@@ -1,11 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
 import update from "react-addons-update";
-import { AppRoutes } from "./AdminApp";
 import { Link } from "react-router-dom";
 import elicitApi from "../../api/elicit-api.js";
 import { connect } from "react-redux";
-import $ from "jquery";
 import BootstrapSwitchButton from 'bootstrap-switch-button-react'
 import {StudyDefinitionType, ProtocolDefinitionType, ApiReturnCollectionOf} from '../../types';
 import {CopyToClipboard} from 'react-copy-to-clipboard';
@@ -37,11 +35,11 @@ class _Protocol extends React.Component {
       active: props.protocol.active,
     };
   }
-  componentWillReceiveProps(nextProps) {
-    this.setState({ active: nextProps.protocol.active });
+  getDerivedStateFromProps(nextProps, _state) {
+    return { active: nextProps.protocol.active };
   }
   onToggle() {
-    this.setState((prevState, props) => {
+    this.setState((prevState, _props) => {
       const newActive = !prevState.active;
       const newData = update(this.props.protocol, {
         active: { $set: newActive },
@@ -106,7 +104,7 @@ class _Protocol extends React.Component {
               offstyle="danger"
               onstyle="success"
               width="100"
-              checked={this.state.active}></BootstrapSwitchButton>
+              checked={this.state.active}/>
           </div>
         </div>
       </div>
@@ -119,7 +117,7 @@ _Protocol.propTypes = {
   study: StudyDefinitionType,
 };
 
-const Protocol = connect(state => ({}))(_Protocol);
+const Protocol = connect(_state => ({}))(_Protocol);
 
 
 class ProtocolEdit extends React.Component {
@@ -184,11 +182,11 @@ class Study extends React.Component {
     return text.length > 0 && text.length < 64;
   }
 
-  dropDownOnChange(x) {}
+  dropDownOnChange(_x) {}
 
   render() {
     let protocols_row, study_class;
-    if (true || this.props.edit_protocols) {
+    if (this.props.edit_protocols) {
       protocols_row = (
         <ProtocolEdit
           study={this.props.study}
@@ -267,7 +265,7 @@ class Study extends React.Component {
                   onstyle="success"
                   disabled
                   width="100"
-                  checked={this.props.study.allow_anonymous_users}></BootstrapSwitchButton>
+                  checked={this.props.study.allow_anonymous_users}/>
                 <button
                   onClick={() => this.setState({ deleteVerify: true })}
                   className="active btn btn-danger ml-2"
@@ -300,6 +298,6 @@ Study.defaultProps = {
   edit_protocols: false,
 };
 
-const mapStateToProps = state => ({});
+const mapStateToProps = _state => ({});
 
 export default connect(mapStateToProps)(Study);

@@ -1,5 +1,6 @@
-class ChaosController < ApplicationController
+# frozen_string_literal: true
 
+class ChaosController < ApplicationController
   include ActionController::MimeResponds
 
   respond_to :json
@@ -12,7 +13,7 @@ class ChaosController < ApplicationController
 
     Rails.logger.info "Ending Experiment for #{session_guid}"
 
-    chaos_session = Chaos::ChaosSession.where({session_guid: session_guid})
+    chaos_session = Chaos::ChaosSession.where(session_guid: session_guid)
 
     unless chaos_session.first
       redirect_to client_app_participant_path
@@ -31,6 +32,4 @@ class ChaosController < ApplicationController
 
     redirect_to study_definition.redirect_close_on_url
     end
-
-
 end

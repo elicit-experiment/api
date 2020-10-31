@@ -1,8 +1,9 @@
+# frozen_string_literal: true
+
 require 'securerandom'
 
 module Api::V1
   class MediaFilesController < ApiController
-
     private
 
     def media_files_params

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Apidocs::V1::ProtocolUsersApidocs
   include Swagger::Blocks
 
@@ -20,7 +22,7 @@ class Apidocs::V1::ProtocolUsersApidocs
       parameter do
         key :name, :study_definition_id
         key :in, :path
-        key :description, "Study Definition ID"
+        key :description, 'Study Definition ID'
         key :required, true
         key :type, :integer
         key :format, :int64
@@ -28,7 +30,7 @@ class Apidocs::V1::ProtocolUsersApidocs
       parameter do
         key :name, :protocol_definition_id
         key :in, :path
-        key :description, "Protocol Definition ID"
+        key :description, 'Protocol Definition ID'
         key :required, true
         key :type, :integer
         key :format, :int64
@@ -65,7 +67,6 @@ class Apidocs::V1::ProtocolUsersApidocs
     end
   end
 
-
   swagger_path '/study_definitions/{study_definition_id}/protocol_definitions/{protocol_definition_id}/users' do
     operation :post do
       key :description, 'Creates new ProtocolUser'
@@ -85,7 +86,7 @@ class Apidocs::V1::ProtocolUsersApidocs
       parameter do
         key :name, :study_definition_id
         key :in, :path
-        key :description, "Study Definition ID"
+        key :description, 'Study Definition ID'
         key :required, true
         key :type, :integer
         key :format, :int64
@@ -93,7 +94,7 @@ class Apidocs::V1::ProtocolUsersApidocs
       parameter do
         key :name, :protocol_definition_id
         key :in, :path
-        key :description, "Protocol Definition ID"
+        key :description, 'Protocol Definition ID'
         key :required, true
         key :type, :integer
         key :format, :int64
@@ -123,12 +124,10 @@ class Apidocs::V1::ProtocolUsersApidocs
     end
   end
 
-
-
   swagger_path '/study_definitions/{study_definition_id}/protocol_definitions/{protocol_definition_id}/users/{user_id}' do
     operation :get do
-      key :description, "Get ProtocolUser object for a specific user in the given protocol"
-      key :summary, "Get ProtocolUser"
+      key :description, 'Get ProtocolUser object for a specific user in the given protocol'
+      key :summary, 'Get ProtocolUser'
       key :tags, [
         'Users', 'Study Creation'
       ]
@@ -151,7 +150,7 @@ class Apidocs::V1::ProtocolUsersApidocs
       parameter do
         key :name, :study_definition_id
         key :in, :path
-        key :description, "Study Definition ID"
+        key :description, 'Study Definition ID'
         key :required, true
         key :type, :integer
         key :format, :int64
@@ -159,7 +158,7 @@ class Apidocs::V1::ProtocolUsersApidocs
       parameter do
         key :name, :protocol_definition_id
         key :in, :path
-        key :description, "Protocol Definition ID"
+        key :description, 'Protocol Definition ID'
         key :required, true
         key :type, :integer
         key :format, :int64
@@ -181,8 +180,8 @@ class Apidocs::V1::ProtocolUsersApidocs
 
   swagger_path '/study_definitions/{study_definition_id}/protocol_definitions/{protocol_definition_id}/users/{user_id}' do
     operation :delete do
-      key :description, "Delete a protocol user"
-      key :summary, "Delete a protocol user"
+      key :description, 'Delete a protocol user'
+      key :summary, 'Delete a protocol user'
       key :tags, [
         'Users', 'Study Creation'
       ]
@@ -205,7 +204,7 @@ class Apidocs::V1::ProtocolUsersApidocs
       parameter do
         key :name, :study_definition_id
         key :in, :path
-        key :description, "Study Definition ID"
+        key :description, 'Study Definition ID'
         key :required, true
         key :type, :integer
         key :format, :int64
@@ -213,7 +212,7 @@ class Apidocs::V1::ProtocolUsersApidocs
       parameter do
         key :name, :protocol_definition_id
         key :in, :path
-        key :description, "Protocol Definition ID"
+        key :description, 'Protocol Definition ID'
         key :required, true
         key :type, :integer
         key :format, :int64
@@ -230,13 +229,12 @@ class Apidocs::V1::ProtocolUsersApidocs
     end
   end
 
-
   # -----------------------
   # SCHEMAS
   # -----------------------
   swagger_schema :ProtocolUserPostObject do
     property :user do
-      key :required, [:user_id, :protocol_definition_id]
+      key :required, %i[user_id protocol_definition_id]
       property :user_id do
         key :type, :integer
       end
@@ -248,5 +246,4 @@ class Apidocs::V1::ProtocolUsersApidocs
       end
     end
   end
-
 end

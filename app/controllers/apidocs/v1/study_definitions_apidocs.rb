@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Apidocs::V1::StudyDefinitionsApidocs
   include Swagger::Blocks
 

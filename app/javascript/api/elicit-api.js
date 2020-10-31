@@ -125,7 +125,8 @@ const make_entity_def = (singular, plural, endpoint) => {
                           _response,
                       }) {
                 if (!request) {
-                    debugger;
+                  console.error('NO REQUEST');
+                    // debugger;
                 }
                 if (!request.params) {
                     //console.warn(`no request params for ${plural} ${singular}; OK if this was a GET`);

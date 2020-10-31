@@ -1,14 +1,16 @@
+# frozen_string_literal: true
+
 class StudyDefinition < ApplicationRecord
-  belongs_to :principal_investigator, :class_name => "User", :foreign_key => "principal_investigator_user_id"
+  belongs_to :principal_investigator, class_name: 'User', foreign_key: 'principal_investigator_user_id'
 
-  has_many :study_result, :class_name => "StudyResult::StudyResult", :dependent => :destroy
+  has_many :study_result, class_name: 'StudyResult::StudyResult', dependent: :destroy
 
-  has_many :protocol_definitions, :dependent => :destroy
+  has_many :protocol_definitions, dependent: :destroy
 
   include Swagger::Blocks
 
   swagger_schema :StudyDefinition do
-    key :required, [:principal_investigator_user_id, :title]
+    key :required, %i[principal_investigator_user_id title]
     property :id do
       key :type, :integer
       key :format, :int64

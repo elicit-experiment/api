@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module StudyResult
   def self.table_name_prefix
     'study_result_'

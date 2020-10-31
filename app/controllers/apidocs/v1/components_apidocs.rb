@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Apidocs::V1::ComponentsApidocs
   include Swagger::Blocks
 
@@ -7,10 +9,10 @@ class Apidocs::V1::ComponentsApidocs
       key :description, 'Returns a simple component matching the id'
       key :operationId, 'getComponent'
       key :produces, [
-          'application/json'
+        'application/json'
       ]
       key :tags, [
-          'Component', 'Study Creation'
+        'Component', 'Study Creation'
       ]
       parameter do
         key :name, :authorization

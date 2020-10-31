@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddAutoCreateUsersToStudyDefinition < ActiveRecord::Migration[5.1]
   def change
     add_column :study_definitions, :auto_created_user_count, :integer, default: 0

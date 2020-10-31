@@ -1,10 +1,8 @@
 // Import React and Dependencies
 import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
 // Import components
 import FrontPagePreface from './FrontPagePreface.html';
 import PropTypes from "prop-types";
-import AnonymousParticipantProtocolList from "../anonymous_participant_protocol_list/AnonymousParticipantProtocolList";
 import {AnonymousProtocolsType} from "../../types";
 
 const htmlDoc = {__html: FrontPagePreface};

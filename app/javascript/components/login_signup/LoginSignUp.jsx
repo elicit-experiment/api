@@ -1,4 +1,5 @@
 //Import Dependencies
+import PropTypes from 'prop-types'
 import React from 'react';
 import Modal from "react-bootstrap/Modal";
 
@@ -62,9 +63,6 @@ class LogInSignUp extends React.Component {
 
   // Generates the HTML for the login form
   logInForm() {
-
-    let data_dismiss = this.state.dismissable ? "modal" : "";
-
     var error = <div></div>;
     if (this.props.userTokenState && this.props.userTokenState.error) {
       var error_text="";
@@ -189,3 +187,11 @@ class LogInSignUp extends React.Component {
 }
 
 export default LogInSignUp;
+
+LogInSignUp.propTypes = {
+  createUser: PropTypes.func.isRequired,
+  dismissable: PropTypes.bool.isRequired,
+  logInUser: PropTypes.func.isRequired,
+  loginUser: PropTypes.func.isRequired,
+  userTokenState: PropTypes.string.isRequired,
+}

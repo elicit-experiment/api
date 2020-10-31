@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 require_relative 'boot'
-require "sprockets/railtie"
+require 'sprockets/railtie'
 require 'rails/all'
 
 # Require the gems listed in Gemfile, including any gems
@@ -28,17 +30,17 @@ module ElicitApi
     port = nil if elicit_portal[:scheme] == 'https' && port == 443
     port = nil if elicit_portal[:scheme] == 'http' && port == 80
     default_url_options_config = {
-        :protocol => elicit_portal[:scheme],
-        :host => elicit_portal[:host]
+      protocol: elicit_portal[:scheme],
+      host: elicit_portal[:host]
     }
     default_url_options_config[:port] = port if port
     Rails.application.routes.default_url_options = default_url_options_config
 
     config.environment = {
-        public_facing?: (elicit_portal[:host].include?('compute.dtu.dk') || false)
-#        external_host: "#{elicit_portal[:host]}",
-#        external_hostname: "#{elicit_portal[:scheme]}://#{elicit_portal[:host] + port}",
-#        external_protocol: elicit_portal[:scheme]
+      public_facing?: (elicit_portal[:host].include?('compute.dtu.dk') || false)
+      #        external_host: "#{elicit_portal[:host]}",
+      #        external_hostname: "#{elicit_portal[:scheme]}://#{elicit_portal[:host] + port}",
+      #        external_protocol: elicit_portal[:scheme]
     }
 
     logger               = ActiveSupport::Logger.new(STDOUT)
@@ -62,10 +64,10 @@ module ElicitApi
           exception = wrapper.exception
           if exception.is_a?(ActionController::RoutingError)
             data = {
-                method: env['REQUEST_METHOD'],
-                path: env['REQUEST_PATH'],
-                status: wrapper.status_code,
-                error: "#{exception.class.name}: #{exception.message}"
+              method: env['REQUEST_METHOD'],
+              path: env['REQUEST_PATH'],
+              status: wrapper.status_code,
+              error: "#{exception.class.name}: #{exception.message}"
             }
             formatted_message = Lograge.formatter.call(data)
             logger(env).send(Lograge.log_level, formatted_message)
@@ -75,6 +77,5 @@ module ElicitApi
         end
       end
     end
-
   end
 end

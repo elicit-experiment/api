@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import elicitApi from '../../api/elicit-api.js';
 import {connect} from 'react-redux';
@@ -7,6 +6,7 @@ import {ExperimentDetails} from './ExperimentDetails.jsx';
 import TakeProtocolLink from './TakeProtocolLink.jsx';
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
+import {ExperimentType, ProtocolDefinitionType, StudyDefinitionType} from "../../types";
 
 class SimpleModal extends React.Component {
 
@@ -126,3 +126,17 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(mapStateToProps, mapDispatchToProps)(
     ParticipantProtocol);
 
+SimpleModal.propTypes = {
+  body: PropTypes.string.isRequired,
+  handleHideModal: PropTypes.func.isRequired,
+  show: PropTypes.bool.isRequired,
+  subtitle: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+}
+
+ParticipantProtocol.propTypes = {
+  experiment: ExperimentType.isRequired,
+  protocol: ProtocolDefinitionType.isRequired,
+  study: StudyDefinitionType.isRequired,
+  take_protocol: PropTypes.func,
+}

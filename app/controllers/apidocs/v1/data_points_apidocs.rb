@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Apidocs::V1::DataPointsApidocs
   include Swagger::Blocks
 
@@ -87,9 +89,7 @@ class Apidocs::V1::DataPointsApidocs
     end
   end
 
-
   swagger_path '/study_results/{study_result_id}/data_points' do
-
     operation :post do
       key :summary, 'New DataPoint'
       key :description, 'Creates a new data_point'
@@ -251,9 +251,8 @@ class Apidocs::V1::DataPointsApidocs
     end
   end
 
-
   swagger_schema :DataPoint do
-    key :required, [:stage_id, :protocol_user_id, :phase_definition_id, :trial_definition_id, :component_id]
+    key :required, %i[stage_id protocol_user_id phase_definition_id trial_definition_id component_id]
     property :stage_id do
       key :type, :integer
       key :format, :int64
@@ -305,5 +304,4 @@ class Apidocs::V1::DataPointsApidocs
       key :format, :"date-time"
     end
   end
-
 end

@@ -1,1 +1,3 @@
-json.partial! "protocols/protocol", protocol: @protocol
+# frozen_string_literal: true
+
+json.partial! 'protocols/protocol', protocol: @protocol

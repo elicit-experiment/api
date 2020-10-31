@@ -1,7 +1,9 @@
+import PropTypes from 'prop-types'
 import React from 'react'
 import { find } from 'lodash/find'
 import update from 'react-addons-update'
 import Study from './Study'
+import { MatchType, StudyDefinitionType, ProtocolDefinitionType } from "../../types";
 
 class EditStudy extends React.Component {
   constructor(props) {
@@ -44,7 +46,7 @@ class EditStudy extends React.Component {
     return (text.length > 0 && text.length < 64);
   }
 
-  dropDownOnChange(x) {
+  dropDownOnChange(_x) {
   }
 
   render() {
@@ -70,3 +72,11 @@ class EditStudy extends React.Component {
 }
 
 export default EditStudy;
+
+EditStudy.propTypes = {
+  match: MatchType.isRequired,
+  protocols: PropTypes.arrayOf(ProtocolDefinitionType).isRequired,
+  studies: PropTypes.arrayOf(StudyDefinitionType).isRequired,
+  study: StudyDefinitionType.isRequired,
+  study_protocols: PropTypes.arrayOf(ProtocolDefinitionType).isRequired,
+}

@@ -13,6 +13,7 @@ export default class DropDown extends React.Component {
         ),
         valueField: PropTypes.string,
         labelField: PropTypes.string,
+        className: PropTypes.string,
         onChange: PropTypes.func,
     };
 
@@ -31,14 +32,14 @@ export default class DropDown extends React.Component {
             selected: selected,
         }
     }
-    
-    componentWillReceiveProps(nextProps) {
+
+    getDerivedStateFromProps(nextProps) {
         var selected = this.getSelectedFromProps(nextProps);
-        this.setState({
+        return {
            selected: selected,
-        });
+        };
     }
-    
+
     getSelectedFromProps(props) {
         var selected;
         if (props.value === null && props.options.length !== 0) {
@@ -59,9 +60,9 @@ export default class DropDown extends React.Component {
             )
         });
         return (
-            <select id={this.props.id} 
+            <select id={this.props.id}
                     className={this.props.className + ' '}
-                    value={this.state.selected} 
+                    value={this.state.selected}
                     onChange={this.handleChange}>
                 {options}
             </select>

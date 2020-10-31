@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module PaginationHeaderLinks
   def page_params
-    if action_name == "index"
-      page = params[:page] || self.default_page
-      page_size = params[:page_size] || self.default_page_size
-      { :page => page, :page_size => page_size}
+    if action_name == 'index'
+      page = params[:page] || default_page
+      page_size = params[:page_size] || default_page_size
+      { page: page, page_size: page_size }
     end
   end
 
@@ -15,9 +17,9 @@ module PaginationHeaderLinks
     1
   end
 
-  def set_pagination_headers(scope, options = {})
+  def set_pagination_headers(scope, _options = {})
     request_params = request.query_parameters
-    url_without_params = request.original_url.slice(0..(request.original_url.index("?")-1)) unless request_params.empty?
+    url_without_params = request.original_url.slice(0..(request.original_url.index('?') - 1)) unless request_params.empty?
     url_without_params ||= request.original_url
 
     page = {}
@@ -28,9 +30,9 @@ module PaginationHeaderLinks
 
     pagination_links = []
     page.each do |k, v|
-      new_request_hash= request_params.merge({:page => v})
+      new_request_hash = request_params.merge(page: v)
       pagination_links << "<#{url_without_params}?#{new_request_hash.to_param}>; rel=\"#{k}\""
     end
-    headers["Link"] = pagination_links.join(", ")
+    headers['Link'] = pagination_links.join(', ')
   end
 end

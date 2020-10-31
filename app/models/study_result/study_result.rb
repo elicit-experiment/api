@@ -1,13 +1,15 @@
+# frozen_string_literal: true
+
 module StudyResult
   def self.table_name_prefix
     'study_result_'
   end
 
   class StudyResult < ApplicationRecord
-    belongs_to :study_definition, :class_name => "StudyDefinition", :foreign_key => "study_definition_id"
-    belongs_to :user, :class_name => "User", :foreign_key => "user_id"
+    belongs_to :study_definition, class_name: 'StudyDefinition', foreign_key: 'study_definition_id'
+    belongs_to :user, class_name: 'User', foreign_key: 'user_id'
 
-    has_many :experiments, :class_name => "StudyResult::Experiment", :dependent => :destroy
+    has_many :experiments, class_name: 'StudyResult::Experiment', dependent: :destroy
 
     include Swagger::Blocks
 

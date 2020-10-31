@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Doorkeeper.configure do
   # Change the ORM that doorkeeper will use (needs plugins)
   orm :active_record
@@ -6,14 +8,14 @@ Doorkeeper.configure do
 
   # This block will be called to check whether the resource owner is authenticated or not.
   resource_owner_authenticator do
-    fail "Please configure doorkeeper resource_owner_authenticator block located in #{__FILE__}"
+    raise "Please configure doorkeeper resource_owner_authenticator block located in #{__FILE__}"
     # Put your resource owner authentication logic here.
     # Example implementation:
     #   User.find_by_id(session[:user_id]) || redirect_to(new_user_session_url)
   end
 
   resource_owner_from_credentials do |_routes|
-     User.authenticate(params[:email], params[:password])
+    User.authenticate(params[:email], params[:password])
   end
 
   # If you want to restrict access to the web interface for adding oauth authorized applications, you need to declare the block below.
@@ -63,8 +65,8 @@ Doorkeeper.configure do
   default_scopes  :public
   optional_scopes :write
 
-  #scopes_flows_whitelist :public => [:all], :write => [:password, :assertion, :refresh_token]
-  #flows_default_scopes :password => [:public, :write], :assertion => [:public, :write], :client_credentials => [:public], :refresh_token => [:public, :write]
+  # scopes_flows_whitelist :public => [:all], :write => [:password, :assertion, :refresh_token]
+  # flows_default_scopes :password => [:public, :write], :assertion => [:public, :write], :client_credentials => [:public], :refresh_token => [:public, :write]
 
   # Change the way client credentials are retrieved from the request object.
   # By default it retrieves first from the `HTTP_AUTHORIZATION` header, then
@@ -108,7 +110,7 @@ Doorkeeper.configure do
   #   http://tools.ietf.org/html/rfc6819#section-4.4.3
   #
   # grant_flows %w(authorization_code client_credentials)
-  grant_flows %w(password client_credentials)
+  grant_flows %w[password client_credentials]
 
   # Under some circumstances you might want to have applications auto-approved,
   # so that the user skips the authorization step.
