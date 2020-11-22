@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import TransitionGroup from 'react-transition-group/TransitionGroup'
 import CSSTransition from 'react-transition-group/CSSTransition';
 import Study from './Study'
-import {StudyDefinitionType, ProtocolDefinitionType, ApiReturnCollectionOf, UserType} from '../../types';
+import {StudyDefinitionType, ProtocolDefinitionType, ApiReturnCollectionOf} from '../../types';
 import pluralize from 'pluralize';
 
 const Fade = ({ children, ...props }) => (
@@ -18,8 +18,6 @@ const Fade = ({ children, ...props }) => (
 
 class StudyList extends React.Component {
   render() {
-    console.log(JSON.stringify(this.props, null, 2));
-
     if (!this.props.studies || !this.props.studies.data) {
       return (<div><h1>Loading...</h1></div>)
     }
@@ -27,7 +25,7 @@ class StudyList extends React.Component {
       return(
         <Fade key={study.id} appear={true} >
           <div>
-            <Study study={study} users={this.props.users} protocol_definitions={this.props.protocol_definitions} key={study.id}> </Study>
+            <Study study={study} editProtocols={true} protocols={this.props.protocol_definitions} key={study.id}> </Study>
           </div>
         </Fade>
       )
@@ -43,8 +41,6 @@ class StudyList extends React.Component {
   }
 
   componentDidMount() {
-    console.log("StudyList MOUNT");
-
     if (!this.props.studies.sync && !this.props.studies.loading) {
       this.props.loadStudies()
     }
@@ -55,7 +51,6 @@ StudyList.propTypes = {
   protocol_definitions: ApiReturnCollectionOf(ProtocolDefinitionType),
   studies: ApiReturnCollectionOf(StudyDefinitionType),
   loadStudies: PropTypes.func,
-  users: PropTypes.arrayOf(UserType).isRequired,
 }
 
 export default StudyList;

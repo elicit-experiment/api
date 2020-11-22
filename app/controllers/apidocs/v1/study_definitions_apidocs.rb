@@ -37,7 +37,7 @@ class Apidocs::V1::StudyDefinitionsApidocs
         key :type, :integer
       end
       response 200 do
-        key :description, 'Array of StudyDefintiion objects matching the query'
+        key :description, 'Array of StudyDefinition objects matching the query'
         schema do
           key :type, :array
           items do

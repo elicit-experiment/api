@@ -1,0 +1,6 @@
+# frozen_string_literal: true
+
+json.partial! 'api/v1/shared/protocol_definition', protocol_definition: protocol_definition
+
+json.anonymous_candidate_users_count protocol_definition.anonymous_candidate_users_count
+json.has_remaining_anonymous_slots protocol_definition.has_remaining_anonymous_slots

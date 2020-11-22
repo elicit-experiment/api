@@ -4762,6 +4762,11 @@ ignore@^4.0.2, ignore@^4.0.6:
   resolved "https://registry.yarnpkg.com/ignore/-/ignore-4.0.6.tgz#750e3db5862087b4737ebac8207ffd1ef27b25fc"
   integrity sha512-cyFDKrqc/YdcWFniJhzI42+AzS+gNwmUzOSFcRCQYwySuBBBy/KjuxWLZ/FHEH6Moq1NizMOBWyTcv8O4OZIMg==
 
+immutable@^4.0.0-rc.12:
+  version "4.0.0-rc.12"
+  resolved "https://registry.yarnpkg.com/immutable/-/immutable-4.0.0-rc.12.tgz#ca59a7e4c19ae8d9bf74a97bdf0f6e2f2a5d0217"
+  integrity sha512-0M2XxkZLx/mi3t8NVwIm1g8nHoEmM9p9UBl/G9k4+hm0kBgOVdMV/B3CY5dQ8qG8qc80NN4gDV4HQv6FTJ5q7A==
+
 import-cwd@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/import-cwd/-/import-cwd-2.1.0.tgz#aa6cf36e722761285cb371ec6519f53e2435b0a9"
@@ -7972,17 +7977,15 @@ react-copy-to-clipboard@^5.0.1:
     copy-to-clipboard "^3"
     prop-types "^15.5.8"
 
-react-data-grid-addons@^2.0.80:
-  version "2.0.80"
-  resolved "https://registry.yarnpkg.com/react-data-grid-addons/-/react-data-grid-addons-2.0.80.tgz#d9a4c08cf14d5a6e170fcacb3da7bf210f5dcc8a"
-  integrity sha1-2aTAjPFNWm4XD8rLPae/IQ9dzIo=
-  dependencies:
-    react-data-grid "^2.0.80"
+react-data-grid-addons@^v5.0.4:
+  version "5.0.5"
+  resolved "https://registry.yarnpkg.com/react-data-grid-addons/-/react-data-grid-addons-5.0.5.tgz#b8c0b3483324d76a6f0fdeeb8610e137dba1c7cf"
+  integrity sha512-TrgGzty1ok1qrLWxE3tGWwETfy/nBuH+AxrxsRUw8BZoF4GpuNUrfLhae5YqBEwXwaA/8ezz9WQTHN1FCyPkVw==
 
-react-data-grid@^2.0.80:
-  version "2.0.80"
-  resolved "https://registry.yarnpkg.com/react-data-grid/-/react-data-grid-2.0.80.tgz#e6ee6eb33ac9421ec8bd7ddb760f43537f6a1c1d"
-  integrity sha1-5u5uszrJQh7IvX3bdg9DU39qHB0=
+react-data-grid@^v5.0.4:
+  version "5.0.5"
+  resolved "https://registry.yarnpkg.com/react-data-grid/-/react-data-grid-5.0.5.tgz#529f5acd4750ae0461e9da66f9f30d6f597eed76"
+  integrity sha512-OR4LDoOpN4yj3NexaxYFS2OEIYFUk2V5lascPTHgtTMwwkb163tEPqQSertkv2YAJu+YBzIm8epW8+UMip1LPw==
 
 react-dom@^16.7.0:
   version "16.13.1"

@@ -1,15 +1,20 @@
+import PropTypes from 'prop-types'
 import React from 'react';
 import ReactDataGrid from 'react-data-grid';
 const { Editors, Toolbar } = require('react-data-grid-addons');
 const { DropDownEditor } = Editors;
 import UserConstants from '../../constants/UserConstants';
 import update from 'react-addons-update';
+import elicitApi from "../../api/elicit-api";
+import {connect} from "react-redux";
+import {UserType} from "../../types";
 
 class UserList extends React.Component {
   constructor(props) {
     super(props);
     this.rows = [];
-    this.state = this.props.users || { rows: [] };
+    console.dir(props.users);
+    this.state = { rows: this.props.users || [] };
     this._columns = [
       {
         key: 'id',
@@ -49,7 +54,7 @@ class UserList extends React.Component {
   getColumns() {
     let clonedColumns = this._columns.slice();
     clonedColumns[2].events = {
-      onClick: (ev, args) => {
+      onClick: (_ev, args) => {
         const idx = args.idx;
         const rowIdx = args.rowIdx;
         this.grid.openCellEditor(rowIdx, idx);
@@ -64,20 +69,20 @@ class UserList extends React.Component {
     for (let i = fromRow; i <= toRow; i++) {
       let rowToUpdate = rows[i];
       let updatedRow = /* React.addons.*/update(rowToUpdate, {$merge: updated});
-      UserStore.updateItem(updatedRow);
+      this.props.updateUser(updatedRow.id, updatedRow);
       rows[i] = updatedRow;
     }
 
 //    this.setState({ rows });
   }
 
-  handleAddRow({ newRowIndex }) {
+  handleAddRow() { // ({ newRowIndex }) {
     const newRow = {
       email: 'test@example.com',
       name: 'New User',
       role: 'registered_user',
     };
-    UserStore.newItem(newRow);
+    this.props.createUser(newRow);
 
 //    let rows = this.state.rows.slice();
 //    rows = /* React.addons.*/update(rows, {$push: [newRow]});
@@ -120,21 +125,37 @@ class UserList extends React.Component {
   }
 
   componentDidMount() {
-    console.dir(this);
-    UserStore.loadItems();
-    UserStore.on('change', this.handleChangedEvent.bind(this), this);
-  }
-
-  handleChangedEvent(event) {
-    let users = {rows: UserStore.getList().list };
-    this.setState(users)
+    this.props.loadUsers();
   }
 }
 
-const UserManagement = () => (
+UserList.propTypes = {
+  loadUsers: PropTypes.func,
+  createUser: PropTypes.func,
+  updateUser: PropTypes.func,
+  deleteUser: PropTypes.func,
+  users: PropTypes.arrayOf(UserType),
+}
+
+const UserManagement = (props) => (
   <div>
-    <UserList users={ {rows: UserStore.getList().list } } ></UserList>
+    <UserList users={ {users: props.users } } {...props} ></UserList>
   </div>
 );
 
-export default UserManagement
+UserManagement.propTypes = {
+  users: PropTypes.arrayOf(UserType),
+}
+
+const mapStateToProps = (state) => ({
+  users: state.users.data,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  loadUsers: () => dispatch(elicitApi.actions.users()),
+  createUser: (user) => dispatch(elicitApi.actions.users.post(user)),
+  updateUser: (user_id, user) => dispatch(elicitApi.actions.protocol_definition.patch({id: user_id}, { body: JSON.stringify(user) })),
+  deleteUser: (user_id) => dispatch(elicitApi.actions.protocol_definition.delete({id: user_id})),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(UserManagement)

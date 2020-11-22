@@ -125,7 +125,7 @@ export default connect(
 )(LoginSignUpContainer);
 
 LoginSignUpContainer.propTypes = {
-  currentUser: CurrentUserType(),
+  currentUser: CurrentUserType,
   getCurrentUser: PropTypes.func.isRequired,
   tokenStatus: PropTypes.string.isRequired,
   userTokenState: PropTypes.string.isRequired,

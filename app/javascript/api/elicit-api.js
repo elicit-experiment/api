@@ -1,7 +1,7 @@
 import "isomorphic-fetch";
-import reduxApi, {transformers} from "redux-api";
+import reduxApi, { transformers } from "redux-api";
 import adapterFetch from "redux-api/lib/adapters/fetch";
-import _ from 'lodash'
+import _ from 'lodash';
 
 import {logInUser, logoutUser, refreshUserToken, resetUserToken} from "../actions/tokens_actions"
 import {store} from '../store/store';
@@ -85,9 +85,9 @@ const make_entity_def = (singular, plural, endpoint) => {
                 };
             }
             if (action.type === `@@redux-api@${plural}_update_${singular}`) {
+              if (!action.id) console.warn('update requires id');
                 if (state.data.findIndex((el) => (el.id === action.id)) == -1) {
                     // append if it doesn't exist
-                    console.dir(action);
                     return {
                         ...state,
                         data: state.data.concat(action.updates[0]),
@@ -180,19 +180,27 @@ const take_protocol = {
             headers: _.extend({}, default_headers),
         },
         prefetch: [
-// Because of anonymous protocols, we don't need to be logged in for this
-            //            refreshTokenIfExpired,
+          // Because of anonymous protocols, we don't need to be logged in for this
+          // refreshTokenIfExpired,
         ],
         postfetch: [
             function ({
                           data,
                           _actions,
-                          _dispatch,
+                          dispatch,
                           _getState,
-                          _request,
+                          request,
                           _response,
                       }) {
-                window.location.href = data.url
+                if ('url' in data) {
+                  window.location.href = data.url
+                } else {
+                 dispatch({type: `@@redux-api@anonymous_protocols_update_anonymous_protocol`,
+                   id: request.pathvars.protocol_definition_id,
+                   data: {
+                     has_remaining_anonymous_slots: false,
+                   }})
+                }
             },
         ],
     },
@@ -220,6 +228,23 @@ const anonymous_protocols = {
         },
         prefetch: [
         ],
+      reducer(state, action) {
+        if (action.type === '@@redux-api@anonymous_protocols_update_anonymous_protocol') {
+          const entryIndex = state.data.findIndex((el) => el.id === action.id);
+          return {
+            ...state,
+            data: [
+              ...state.data.slice(0, entryIndex), // everything before current post
+              {
+                ...state.data[entryIndex],
+                ...action.data,
+              },
+              ...state.data.slice(entryIndex + 1), // everything after current post
+            ],
+          }
+        }
+        return state;
+      },
     },
 };
 
@@ -257,6 +282,7 @@ const api = reduxApi(_.extend({},
     take_protocol,
     eligeable_protocol,
     anonymous_protocols,
+    make_entity_def('user', 'users', 'users'),
     make_entity_def('study_definition', 'studies', 'study_definitions'),
     make_entity_def('protocol_definition', 'protocol_definitions', '/study_definitions/:study_definition_id/protocol_definitions'),
     make_entity_def('phase_definitions', 'phase_definitions', '/study_definitions/:study_definition_id/protocol_definitions/:protocol_definition_id/phase_definitions'),
@@ -287,7 +313,7 @@ const api = reduxApi(_.extend({},
     return default_headers;
 }).use("responseHandler",
     (err, data) => {
-        //console.log(`RESPONSE; err: ${JSON.stringify(err)} data: ${JSON.stringify(data)}`);
+        // console.log(`RESPONSE; err: ${JSON.stringify(err)} data: ${JSON.stringify(data)}`);
 
         if (err) {
             if (err.error === 'invalid_token') {
@@ -297,11 +323,11 @@ const api = reduxApi(_.extend({},
 
             if (err.status === 401) { // if we get a permission denied, then just logout
                 store.dispatch(logoutUser());
+              // this is necessary because just returning the (undefined) data
+              // will still cause the postfetch hook to run.
+              throw err;
             }
 
-            // this is necessary because just returning the (undefined) data
-            // will still cause the postfetch hook to run.
-            throw err;
         }
 
         if (data !== undefined) {

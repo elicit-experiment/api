@@ -95,7 +95,7 @@ module Api::V1
 
       @protocol_user = candidate_protocol_users.take
 
-      render json: ElicitError.new('Maximum participants exceeded.', :not_found), status: :not_found unless performed? || @protocol_user
+      render json: ElicitError.new('Maximum participant exceeded.', :gone), status: :ok unless performed? || @protocol_user
     end
 
     private
@@ -123,7 +123,7 @@ module Api::V1
           else
             Rails.logger.warn "No budget remains for creating anonymous user: #{study_definition.auto_created_user_count}/#{study_definition.max_auto_created_users} taken"
             user = nil
-            render json: ElicitError.new('Maximum participants exceeded.', :not_found), status: :unauthorized unless performed?
+            render json: ElicitError.new('Maximum participant exceeded.', :not_found), status: :unauthorized unless performed?
           end
         end
         user

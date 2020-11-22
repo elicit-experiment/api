@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 import {connect} from "react-redux"
 import elicitApi from "../../api/elicit-api"
 import ProtocolPreview from "./ProtocolPreview"
-import {ApiReturnValueOf, ProtocolDefinitionType, MatchType} from '../../types';
+import {ApiReturnCollectionOf, ProtocolDefinitionType, MatchType} from '../../types';
 
 class ProtocolPreviewContainer extends React.Component {
   constructor(props) {
     super(props);
+    console.log('ProtocolPreviewContainer')
     this.state = {
       protocol_id: parseInt(this.props.match.params.protocol_id),
     }
@@ -41,7 +42,7 @@ class ProtocolPreviewContainer extends React.Component {
 }
 
 ProtocolPreviewContainer.propTypes = {
-  protocol_definition: ApiReturnValueOf(ProtocolDefinitionType),
+  protocol_definition: ApiReturnCollectionOf(ProtocolDefinitionType),
   loadProtocolDefinition: PropTypes.func,
   match: MatchType,
 };

@@ -1,9 +1,15 @@
-import PropTypes from 'prop-types'
 import React from 'react'
-import { find } from 'lodash/find'
 import update from 'react-addons-update'
+import PropTypes from "prop-types";
 import Study from './Study'
-import { MatchType, StudyDefinitionType, ProtocolDefinitionType } from "../../types";
+import {
+  MatchType,
+  StudyDefinitionType,
+  ProtocolDefinitionType,
+  ApiReturnCollectionOf,
+} from "../../types";
+import elicitApi from "../../api/elicit-api";
+import {connect} from "react-redux";
 
 class EditStudy extends React.Component {
   constructor(props) {
@@ -13,23 +19,14 @@ class EditStudy extends React.Component {
     this.state = this.buildState(props);
   }
 
-  componentWillReceiveProps(nextProps) {
-    let newState = this.buildState(nextProps);
-    //if (newState.study_id !== this.state.study_id || !this.state.study) {
-      this.setState(newState);
-    //}
-  }
-
   buildState(props) {
-    let study_id = props.match.params.study_id;
-    let study = find(props.studies, (study) => study_id == study.id);
-    console.dir(props);
-    let study_protocols = props.study_protocols.filter((sp) => sp.study_id !== study_id );
-    console.dir(study_protocols);
+    let studyId = props.match.params.studyId;
+    let study = this.props.study;
+    let studyProtocols = props.study.protocol_definitions;
     return {
-        study_id: study_id,
+        studyId: studyId,
         study: study,
-        study_protocols: study_protocols,
+        studyProtocols: studyProtocols,
         protocols: props.protocols,
     }
   }
@@ -38,7 +35,7 @@ class EditStudy extends React.Component {
       const newData = update(this.props.study, {
         title: {$set: data.title},
       });
-      StudyStore.updateItem(newData);
+      this.props.updateStudyDefinition(this.props.study.id, newData);
       this.setState({...data});
   }
 
@@ -50,33 +47,48 @@ class EditStudy extends React.Component {
   }
 
   render() {
+
+    console.log(this.props.protocols)
     if (this.state.study) {
       return (
         <div>
           <h1></h1>
-          <Study {...this.props} study={this.state.study} study_protocols={this.state.study_protocols} protocols={this.state.protocols} edit_protocols={true} />
+          <Study {...this.props} study={this.state.study} studyProtocols={this.state.studyProtocols} protocols={this.props.protocols} edit_protocols={true} />
         </div>
       )
     } else {
       return (
         <div>
-          <h1>Unknown study {this.study_id}</h1>
+          <h1>Unknown study {this.studyId}</h1>
         </div>
       )
     }
   }
 
   deleteItem(/*itm*/) {
-    StudyStore.removeItem(this.state.study.id)
+    this.props.deleteStudyById(this.state.study.id);
   }
 }
 
-export default EditStudy;
+const mapStateToProps = _state => ({});
+
+const mapDispatchToProps = (dispatch) => ({
+  deleteStudyById: (id) => dispatch(elicitApi.actions.study_definition.delete({ id })),
+  updateStudyDefinition: (id, newData) =>
+    dispatch(
+      elicitApi.actions.study_definition.patch(
+        { id },
+        { body: JSON.stringify({ study_definition: newData }) }
+      )
+    ),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(EditStudy);
 
 EditStudy.propTypes = {
-  match: MatchType.isRequired,
-  protocols: PropTypes.arrayOf(ProtocolDefinitionType).isRequired,
-  studies: PropTypes.arrayOf(StudyDefinitionType).isRequired,
+  match: MatchType,
+  protocols: ApiReturnCollectionOf(ProtocolDefinitionType).isRequired,
   study: StudyDefinitionType.isRequired,
-  study_protocols: PropTypes.arrayOf(ProtocolDefinitionType).isRequired,
+  deleteStudyById: PropTypes.func,
+  updateStudyDefinition: PropTypes.func,
 }

@@ -7,8 +7,29 @@ class ProtocolDefinition < ApplicationRecord
   has_many :protocol_users, dependent: :destroy
   has_many :phase_orders, dependent: :destroy
 
+  scope :with_anonymous_candidate_users, -> {
+    sql = <<-SQL
+SELECT *, (
+    SELECT COUNT(*) from protocol_users
+                      JOIN users ON protocol_users.user_id = users.id
+                      LEFT OUTER JOIN study_result_experiments ON study_result_experiments.protocol_user_id = protocol_users.id
+    WHERE protocol_users.protocol_definition_id = protocol_definitions.id AND
+          (users.role = ? AND study_result_experiments.protocol_user_id IS NULL)
+) AS protocol_users_count from protocol_definitions;
+    SQL
+    find_by_sql([sql, User::ROLES[:anonymous]])
+  }
+
   def principal_investigator_user_id
     study_definition.principal_investigator_user_id
+  end
+
+  def anonymous_candidate_users_count
+    protocol_users.free_for_anonymous(id).size
+  end
+
+  def has_remaining_anonymous_slots
+    anonymous_candidate_users_count.positive?
   end
 
   include Swagger::Blocks
