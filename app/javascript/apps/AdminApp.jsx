@@ -2,16 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {CurrentUserType, MatchType, UserTokenType} from 'types';
 import {Redirect, Route} from 'react-router-dom';
-import StudyManagement from './StudyManagement';
+import StudyManagement from '../components/admin_app/pages/StudyManagement';
 import {connect} from "react-redux";
-import elicitApi from "../../api/elicit-api.js";
-import HeaderContainer from "../nav/HeaderContainer.jsx";
-import FooterContainer from "../nav/FooterContainer.jsx";
-import {tokenStatus} from '../../reducers/selector';
+import elicitApi from "../api/elicit-api.js";
+import HeaderContainer from "../components/nav/HeaderContainer.jsx";
+import FooterContainer from "../components/nav/FooterContainer.jsx";
+import {tokenStatus} from '../reducers/selector';
 
-import ProtocolPreviewContainer from "./ProtocolPreviewContainer"
-import UserManagement from "./UserManagement";
-import EditStudyContainer from "./EditStudyContainer";
+import ProtocolPreviewContainer from "../components/admin_app/pages/ProtocolPreviewContainer"
+import UserManagement from "../components/admin_app/pages/UserManagement";
+import EditStudyContainer from "../components/admin_app/pages/EditStudyContainer";
 
 function AdminApp(props) {
   if (props.tokenStatus !== 'user') {

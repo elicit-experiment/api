@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types';
 import {connect} from "react-redux"
-import elicitApi from "../../api/elicit-api"
-import EditStudy from "./EditStudy"
-import {ApiReturnValueOf, StudyDefinitionType, ProtocolDefinitionType, MatchType} from '../../types';
+import elicitApi from "../../../api/elicit-api"
+import EditStudy from "../components/EditStudyCard"
+import {ApiReturnValueOf, StudyDefinitionType, ProtocolDefinitionType, MatchType} from '../../../types';
 
 class EditStudyContainer extends React.Component {
   constructor(props) {

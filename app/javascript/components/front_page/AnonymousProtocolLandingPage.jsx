@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {ProtocolDefinitionType} from '../../types';
-import TakeProtocolLink from '../participant_app/TakeProtocolLink';
+import TakeProtocolLink from '../participant_app/components/TakeProtocolLink';
 
 class AnonymousProtocolLandingPage extends React.Component {
   constructor(props) {

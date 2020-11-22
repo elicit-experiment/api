@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import TransitionGroup from 'react-transition-group/TransitionGroup'
 import CSSTransition from 'react-transition-group/CSSTransition';
-import Study from './Study'
-import {StudyDefinitionType, ProtocolDefinitionType, ApiReturnCollectionOf} from '../../types';
+import Study from './StudyCard'
+import {StudyDefinitionType, ProtocolDefinitionType, ApiReturnCollectionOf} from '../../../types';
 import pluralize from 'pluralize';
 
 const Fade = ({ children, ...props }) => (
@@ -16,7 +16,7 @@ const Fade = ({ children, ...props }) => (
  </CSSTransition>
 );
 
-class StudyList extends React.Component {
+class StudyCardList extends React.Component {
   render() {
     if (!this.props.studies || !this.props.studies.data) {
       return (<div><h1>Loading...</h1></div>)
@@ -47,13 +47,13 @@ class StudyList extends React.Component {
   }
 }
 
-StudyList.propTypes = {
+StudyCardList.propTypes = {
   protocol_definitions: ApiReturnCollectionOf(ProtocolDefinitionType),
   studies: ApiReturnCollectionOf(StudyDefinitionType),
   loadStudies: PropTypes.func,
 }
 
-export default StudyList;
+export default StudyCardList;
 
 Fade.propTypes = {
   children: PropTypes.any,

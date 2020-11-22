@@ -1,11 +1,11 @@
 import React from 'react'
-import StudyList from './StudyList'
+import StudyCardList from '../components/StudyCardList'
 import { connect } from "react-redux"
-import elicitApi from "../../api/elicit-api";
+import elicitApi from "../../../api/elicit-api";
 
 const StudyManagement = (props) => (
   <div>
-    <StudyList {...props} />
+    <StudyCardList {...props} />
   </div>
 );
 

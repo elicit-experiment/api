@@ -1,5 +1,5 @@
 import React from 'react';
-import ParticipantProtocol from "../participant_app/ParticipantProtocol";
+import ParticipantProtocol from "../participant_app/components/ParticipantProtocol";
 import {AnonymousProtocolsType} from "../../types";
 
 export default class AnonymousParticipantProtocolList extends React.Component {

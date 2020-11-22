@@ -2,19 +2,19 @@
 import PropTypes from 'prop-types'
 import React from 'react';
 import {Redirect} from 'react-router-dom'
-import ParticipantProtocolList from './ParticipantProtocolList'
+import ParticipantProtocolList from '../components/participant_app/components/ParticipantProtocolList'
 import { connect } from "react-redux";
-import { UserType } from "../../types";
+import { UserType } from "../types";
 
 // Import Containers
-import HeaderContainer from "../nav/HeaderContainer";
-import FooterContainer from "../nav/FooterContainer";
+import HeaderContainer from "../components/nav/HeaderContainer";
+import FooterContainer from "../components/nav/FooterContainer";
 
 // Import Selectors
-import { tokenStatus } from '../../reducers/selector';
+import { tokenStatus } from '../reducers/selector';
 
 // Import API
-import elicitApi from "../../api/elicit-api.js";
+import elicitApi from "../api/elicit-api.js";
 
 class ParticipantApp extends React.Component {
   render() {

@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types';
 import {connect} from "react-redux"
-import elicitApi from "../../api/elicit-api"
-import ProtocolPreview from "./ProtocolPreview"
-import {ApiReturnCollectionOf, ProtocolDefinitionType, MatchType} from '../../types';
+import elicitApi from "../../../api/elicit-api"
+import ProtocolPreview from "../components/ProtocolPreview"
+import {ApiReturnCollectionOf, ProtocolDefinitionType, MatchType} from '../../../types';
 
 class ProtocolPreviewContainer extends React.Component {
   constructor(props) {

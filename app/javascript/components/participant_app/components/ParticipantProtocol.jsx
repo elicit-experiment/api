@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import elicitApi from '../../api/elicit-api.js';
+import elicitApi from '../../../api/elicit-api.js';
 import {connect} from 'react-redux';
 import {ExperimentDetails} from './ExperimentDetails.jsx';
 import TakeProtocolLink from './TakeProtocolLink.jsx';
-import {ExperimentType, ProtocolDefinitionType, StudyDefinitionType} from "../../types";
-import {SimpleModal} from "../ui_elements/SimpleModal";
+import {ExperimentType, ProtocolDefinitionType, StudyDefinitionType} from "../../../types";
+import {SimpleModal} from "../../ui_elements/SimpleModal";
 
 class ParticipantProtocol extends React.Component {
   constructor(props) {

@@ -3,11 +3,11 @@ import React from 'react';
 import ReactDataGrid from 'react-data-grid';
 const { Editors, Toolbar } = require('react-data-grid-addons');
 const { DropDownEditor } = Editors;
-import UserConstants from '../../constants/UserConstants';
+import UserConstants from '../../../constants/UserConstants';
 import update from 'react-addons-update';
-import elicitApi from "../../api/elicit-api";
+import elicitApi from "../../../api/elicit-api";
 import {connect} from "react-redux";
-import {UserType} from "../../types";
+import {UserType} from "../../../types";
 
 class UserList extends React.Component {
   constructor(props) {

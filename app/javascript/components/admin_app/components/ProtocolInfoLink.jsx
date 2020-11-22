@@ -1,7 +1,7 @@
 import {Link} from "react-router-dom";
 import React from "react";
 import PropTypes from "prop-types";
-import {ProtocolDefinitionType, StudyDefinitionType} from "../../types";
+import {ProtocolDefinitionType, StudyDefinitionType} from "../../../types";
 
 export const ProtocolInfoLink = props => (
   <div className="row study-info-row">

@@ -1,15 +1,15 @@
 import React from "react";
 import PropTypes from "prop-types";
 import update from "react-addons-update";
-import elicitApi from "../../api/elicit-api.js";
+import elicitApi from "../../../api/elicit-api.js";
 import {connect} from "react-redux";
 import BootstrapSwitchButton from 'bootstrap-switch-button-react'
-import {ApiReturnCollectionOf, ProtocolDefinitionType, StudyDefinitionType} from '../../types';
+import {ApiReturnCollectionOf, ProtocolDefinitionType, StudyDefinitionType} from '../../../types';
 import SweetAlert from 'sweetalert2-react';
 import {ProtocolInfoLink} from "./ProtocolInfoLink";
-import {ProtocolEdit} from "./ProtocolDetail";
+import {ProtocolEdit} from "./ProtocolDetailCard";
 
-class Study extends React.Component {
+class StudyCard extends React.Component {
   constructor(props) {
     super(props);
     this.titleChanged = this.titleChanged.bind(this);
@@ -135,7 +135,7 @@ class Study extends React.Component {
   }
 }
 
-Study.propTypes = {
+StudyCard.propTypes = {
   protocols: ApiReturnCollectionOf(ProtocolDefinitionType),
   study: StudyDefinitionType,
   editProtocols: PropTypes.bool,
@@ -143,7 +143,7 @@ Study.propTypes = {
   updateStudyDefinition: PropTypes.func,
 };
 
-Study.defaultProps = {
+StudyCard.defaultProps = {
   editProtocols:   false,
 };
 
@@ -160,4 +160,4 @@ const mapDispatchToProps = (dispatch) => ({
   ),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Study);
+export default connect(mapStateToProps, mapDispatchToProps)(StudyCard);

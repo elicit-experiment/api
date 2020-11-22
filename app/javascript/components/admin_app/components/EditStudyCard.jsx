@@ -1,17 +1,17 @@
 import React from 'react'
 import update from 'react-addons-update'
 import PropTypes from "prop-types";
-import Study from './Study'
+import Study from './StudyCard'
 import {
   MatchType,
   StudyDefinitionType,
   ProtocolDefinitionType,
   ApiReturnCollectionOf,
-} from "../../types";
-import elicitApi from "../../api/elicit-api";
+} from "../../../types";
+import elicitApi from "../../../api/elicit-api";
 import {connect} from "react-redux";
 
-class EditStudy extends React.Component {
+class EditStudyCard extends React.Component {
   constructor(props) {
     super(props);
     this.titleChanged = this.titleChanged.bind(this);
@@ -83,9 +83,9 @@ const mapDispatchToProps = (dispatch) => ({
     ),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditStudy);
+export default connect(mapStateToProps, mapDispatchToProps)(EditStudyCard);
 
-EditStudy.propTypes = {
+EditStudyCard.propTypes = {
   match: MatchType,
   protocols: ApiReturnCollectionOf(ProtocolDefinitionType).isRequired,
   study: StudyDefinitionType.isRequired,

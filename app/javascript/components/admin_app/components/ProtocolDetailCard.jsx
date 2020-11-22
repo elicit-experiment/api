@@ -1,10 +1,10 @@
 import React from "react";
 import update from "react-addons-update";
-import elicitApi from "../../api/elicit-api";
+import elicitApi from "../../../api/elicit-api";
 import {Link} from "react-router-dom";
 import {CopyToClipboard} from "react-copy-to-clipboard";
 import BootstrapSwitchButton from "bootstrap-switch-button-react";
-import {ApiReturnCollectionOf, ProtocolDefinitionType, StudyDefinitionType} from "../../types";
+import {ApiReturnCollectionOf, ProtocolDefinitionType, StudyDefinitionType} from "../../../types";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
 

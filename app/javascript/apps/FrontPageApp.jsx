@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { MatchType, UserTokenType, CurrentUserType } from 'types';
 import {connect} from "react-redux";
-import elicitApi from "../../api/elicit-api.js";
-import {tokenStatus} from '../../reducers/selector';
-import HeaderContainer from "../nav/HeaderContainer.jsx";
-import FooterContainer from "../nav/FooterContainer.jsx";
-import AnonymousProtocolLandingPageContainer from "./AnonymousProtocolLandingPageContainer";
-import FrontPageContainer from "./FrontPageContainer";
-import ParticipatePage from "./ParticipatePage";
+import elicitApi from "../api/elicit-api.js";
+import {tokenStatus} from '../reducers/selector';
+import HeaderContainer from "../components/nav/HeaderContainer.jsx";
+import FooterContainer from "../components/nav/FooterContainer.jsx";
+import AnonymousProtocolLandingPageContainer from "../components/front_page/AnonymousProtocolLandingPageContainer";
+import FrontPageContainer from "../components/front_page/FrontPageContainer";
+import ParticipatePage from "../components/front_page/ParticipatePage";
 import { Route} from "react-router-dom";
 
 class FrontPageApp extends React.Component {
