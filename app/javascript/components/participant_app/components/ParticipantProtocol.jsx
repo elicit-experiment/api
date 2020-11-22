@@ -26,6 +26,8 @@ class ParticipantProtocol extends React.Component {
       dangerouslySetInnerHTML: {__html: this.props.protocol.description},
     };
 
+    const signedInExperiment = 'experiment' in this.props;
+
     const alreadyTaken = (study_id, protocol_id) => {
       if (this.props.taken_protocol && this.props.taken_protocol.data?.code === 410 /* HTTP GONE */ && this.props.taken_protocol?.request) {
         const { study_definition_id,  protocol_definition_id } = this.props.taken_protocol.request.pathvars;
@@ -47,7 +49,7 @@ class ParticipantProtocol extends React.Component {
       take_protocol = <TakeProtocolLink study_id={this.props.study.id}
                                         protocol_id={this.props.protocol.id}
                                         take_protocol={this.props.take_protocol}
-                                        available={!!this.props.protocol.has_remaining_anonymous_slots}
+                                        available={signedInExperiment || !!this.props.protocol.has_remaining_anonymous_slots}
                                         taken_protocol={this.props.taken_protocol}/>;
     }
     return (
