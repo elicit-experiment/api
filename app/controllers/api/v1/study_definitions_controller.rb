@@ -27,7 +27,14 @@ module Api::V1
 
     def index
       plural_resource_name = "@#{resource_name.pluralize}"
-      resources = StudyDefinition.includes(query_includes).joins(:principal_investigator).order(created_at: :desc)
+
+      if current_user.role == User::ROLES[:admin]
+        resources = StudyDefinition.all
+      elsif current_user.role == User::ROLES[:investigator]
+        resources = StudyDefinition.where(principal_investigator_user_id: current_user.id)
+      end
+
+      resources = resources.includes(query_includes).joins(:principal_investigator).order(created_at: :desc)
 
       unless page_params.nil?
         resources = resources.page(page_params[:page])
@@ -39,7 +46,7 @@ module Api::V1
 
     def create
       logger.info study_definition_params
-      if current_user.role != 'admin' && study_definition_params[:principal_investigator_user_id] != current_user.id
+      if current_user.role != User::ROLES[:admin] && study_definition_params[:principal_investigator_user_id] != current_user.id
         Rails.logger.error "Attempt to create study component not owned by callee #{current_api_user.id}"
         permission_denied
       end
@@ -55,6 +62,10 @@ module Api::V1
 
     def response_includes
       [:principal_investigator, { protocol_definitions: { include: :phase_definitions } }]
+    end
+
+    def single_response_includes
+      [:principal_investigator, { protocol_definitions: { include: [:phase_definitions, protocol_users: {include:[:user, :experiment]} ] } }]
     end
 
     def study_definition_params

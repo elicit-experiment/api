@@ -81,9 +81,12 @@ GEM
       carrierwave (>= 0.8.0)
       mime-types (~> 3.0)
     choice (0.2.0)
-    coderay (1.1.2)
+    coderay (1.1.3)
     concurrent-ruby (1.1.7)
     crass (1.0.6)
+    debase (0.2.4.1)
+      debase-ruby_core_source (>= 0.10.2)
+    debase-ruby_core_source (0.10.11)
     devise (4.4.3)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -168,9 +171,14 @@ GEM
       ast (~> 2.4.0)
     pg (1.2.3)
     powerpack (0.1.2)
-    pry (0.11.3)
+    pry (0.12.2)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
+    pry-byebug (3.6.0)
+      byebug (~> 10.0)
+      pry (~> 0.10)
+    pry-rails (0.3.9)
+      pry (>= 0.10.4)
     public_suffix (3.0.3)
     puma (3.12.0)
     rack (2.2.3)
@@ -250,6 +258,8 @@ GEM
       rainbow (>= 2.2.2, < 4.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 1.4.0)
+    ruby-debug-ide (0.7.2)
+      rake (>= 0.8.1)
     ruby-graphviz (1.2.3)
     ruby-progressbar (1.10.0)
     sass (3.6.0)
@@ -312,6 +322,7 @@ DEPENDENCIES
   capybara (~> 3.33)
   carrierwave
   carrierwave-base64
+  debase (~> 0.2.4)
   devise (~> 4.4.0)
   devise-doorkeeper
   doorkeeper
@@ -326,7 +337,8 @@ DEPENDENCIES
   memory-profiler (~> 1.0)
   mocha
   pg (~> 1.2)
-  pry
+  pry-byebug
+  pry-rails
   puma (~> 3.0)
   rack-cors
   rack-mini-profiler
@@ -335,6 +347,7 @@ DEPENDENCIES
   responders
   rspec-rails
   rubocop
+  ruby-debug-ide (~> 0.7.2)
   spring
   sqlite3
   stackprof (~> 0.2.12)

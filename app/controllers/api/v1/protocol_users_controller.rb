@@ -6,6 +6,10 @@ module Api::V1
 
     private
 
+    def response_includes
+      [:user]
+    end
+
     def protocol_user_params
       params.require(%i[study_definition_id protocol_definition_id])
       permit_json_params(params[:protocol_user], :protocol_user) do

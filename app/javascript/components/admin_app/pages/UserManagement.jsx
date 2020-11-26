@@ -9,50 +9,53 @@ import elicitApi from "../../../api/elicit-api";
 import {connect} from "react-redux";
 import {UserType} from "../../../types";
 
+const COLUMNS = [
+  {
+    key: 'id',
+    name: 'ID',
+    width: 80,
+    resizable: true,
+  },
+  {
+    key: 'name',
+    name: 'Name',
+    editable: true,
+    width: 200,
+    resizable: true,
+  },
+  {
+    key: 'email',
+    name: 'Email',
+    editable: true,
+    width: 200,
+    resizable: true,
+  },
+  {
+    key: 'role',
+    name: 'Role',
+    editor: <DropDownEditor options={UserConstants.roles}/>,
+    editable: true,
+    width: 200,
+    resizable: true,
+  },
+  {
+    key: 'auto_created',
+    name: 'How Created?',
+    formatter: (col) => (col.value ? 'Auto Created' : 'Investigator Specified'),
+    editable: false,
+    width: 200,
+    resizable: true,
+  },
+];
+
 class UserList extends React.Component {
   constructor(props) {
     super(props);
-    this.rows = [];
-    console.dir(props.users);
-    this.state = { rows: this.props.users || [] };
-    this._columns = [
-      {
-        key: 'id',
-        name: 'ID',
-        width: 80,
-        resizable: true,
-      },
-      {
-        key: 'name',
-        name: 'Name',
-        editable: true,
-        width: 200,
-        resizable: true,
-      },
-      {
-        key: 'email',
-        name: 'Email',
-        editable: true,
-        width: 200,
-        resizable: true,
-      },
-      {
-        key: 'role',
-        name: 'Role',
-        editor: <DropDownEditor options={UserConstants.roles}/>,
-        editable: true,
-        width: 200,
-        resizable: true,
-      },
-    ];
-  }
-
-  rowGetter(i) {
-    return this._rows[i];
+    this.state = { rows: [] };
   }
 
   getColumns() {
-    let clonedColumns = this._columns.slice();
+    let clonedColumns = COLUMNS.slice();
     clonedColumns[2].events = {
       onClick: (_ev, args) => {
         const idx = args.idx;
@@ -68,7 +71,7 @@ class UserList extends React.Component {
     let rows = this.state.rows.slice();
     for (let i = fromRow; i <= toRow; i++) {
       let rowToUpdate = rows[i];
-      let updatedRow = /* React.addons.*/update(rowToUpdate, {$merge: updated});
+      let updatedRow = update(rowToUpdate, {$merge: updated});
       this.props.updateUser(updatedRow.id, updatedRow);
       rows[i] = updatedRow;
     }
@@ -77,22 +80,23 @@ class UserList extends React.Component {
   }
 
   handleAddRow() { // ({ newRowIndex }) {
+    console.log(`CNT ${this.state.rows.length + 2}`)
     const newRow = {
-      email: 'test@example.com',
+      email: `user${this.state.rows.length + 2 + Math.random(100)}@elicit.com`,
       name: 'New User',
       role: 'registered_user',
+      password: 'password',
+      password_confirmation: 'password',
     };
     this.props.createUser(newRow);
-
-//    let rows = this.state.rows.slice();
-//    rows = /* React.addons.*/update(rows, {$push: [newRow]});
-//   this.setState({ rows });
+    newRow.id = 0;
+    /*
+    const rows = update(this.state.rows, {$push: [newRow]});
+    this.setState({ rows });
+     */
   }
 
   getSize() {
-    if (!this.state || !this.state.rows) {
-      return 0
-    }
     return this.state.rows.length
   }
 
@@ -105,6 +109,13 @@ class UserList extends React.Component {
   }
 
   render() {
+    if (!this.props.users.sync){
+      if (!this.props.users.loading && !this.props.users.error) {
+        this.props.loadUsers();
+      }
+      return <div>Loading.</div>;
+    }
+
     return (
       <div>
         <h1>{this.getSize()} Users</h1>
@@ -124,8 +135,21 @@ class UserList extends React.Component {
       );
   }
 
-  componentDidMount() {
-    this.props.loadUsers();
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const combinedRows = [...prevState.rows, ...nextProps.users.data].sort((a, b) => (a.id - b.id));
+    const rows = combinedRows.slice(1).reduce((accumulatedRows, currentElement) => {
+      const lastAccum = accumulatedRows[accumulatedRows.length - 1];
+      if (lastAccum.id !== currentElement.id) {
+        return [...accumulatedRows, currentElement];
+      } else {
+        if (lastAccum.updated_at > currentElement.updated_at) {
+          return accumulatedRows;
+        }
+        return accumulatedRows.splice((accumulatedRows.length - 1), 1, currentElement)
+      }
+    }, combinedRows.slice(0,1)).filter(Boolean);
+
+    return { rows };
   }
 }
 
@@ -148,14 +172,14 @@ UserManagement.propTypes = {
 }
 
 const mapStateToProps = (state) => ({
-  users: state.users.data,
+  users: state.users,
 });
 
 const mapDispatchToProps = (dispatch) => ({
   loadUsers: () => dispatch(elicitApi.actions.users()),
-  createUser: (user) => dispatch(elicitApi.actions.users.post(user)),
-  updateUser: (user_id, user) => dispatch(elicitApi.actions.protocol_definition.patch({id: user_id}, { body: JSON.stringify(user) })),
-  deleteUser: (user_id) => dispatch(elicitApi.actions.protocol_definition.delete({id: user_id})),
+  createUser: (user) => { console.log(elicitApi); return dispatch(elicitApi.actions.user.post({}, {body: JSON.stringify({user})})) },
+  updateUser: (user_id, user) => dispatch(elicitApi.actions.user.patch({id: user_id}, { body: JSON.stringify(user) })),
+  deleteUser: (user_id) => dispatch(elicitApi.actions.user.delete({id: user_id})),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserManagement)

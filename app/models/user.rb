@@ -13,6 +13,18 @@ class User < ApplicationRecord
 
   has_many :study_definitions
 
+  # This was poorly-named; we already have a role for anonymous.
+  # TODO: change the name in the DB and clean up
+  alias_attribute :auto_created, :anonymous
+
+  def serializable_hash(options = {})
+    options[:methods] ||= []
+    options[:methods] += [:auto_created]
+    options[:except] ||= []
+    options[:except] += [:anonymous]
+    super options
+  end
+
   class << self
     def authenticate(email, password)
       user = User.find_for_authentication(email: email)
@@ -71,7 +83,7 @@ class User < ApplicationRecord
     property :role do
       key :type, :string
     end
-    property :anonymous do
+    property :auto_created do
       key :type, :boolean
     end
     property :password do

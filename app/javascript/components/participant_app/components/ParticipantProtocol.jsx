@@ -66,7 +66,7 @@ class ParticipantProtocol extends React.Component {
                 <button className="active btn btn-link"
                         onClick={this.handleShowModal.bind(this)}>
                   <span>Study</span>&nbsp;
-                  <span className="glyphicon glyphicon-info-sign"
+                  <span className="fas fa-info-circle"
                         aria-hidden="true"/>
                 </button>
               </div>

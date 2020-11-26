@@ -82,7 +82,7 @@ module Api::V1
 
     # GET /api/{plural_resource_name}/:id
     def show
-      respond_with get_resource
+      respond_with get_resource, include: send(:single_response_includes)
     end
 
     # PATCH/PUT /api/{plural_resource_name}/1
@@ -134,6 +134,11 @@ module Api::V1
     # The includes for the (JSON) response
     def response_includes
       []
+    end
+
+    # The includes for single queries
+    def single_response_includes
+      response_includes
     end
 
     def order_params

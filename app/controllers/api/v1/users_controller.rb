@@ -24,13 +24,20 @@ module Api::V1
     rescue_from ElicitError, with: :render_elicit_error
 
     def create
-      if sign_up_params[:role] == User::ROLES[:admin]
-        authorize! :create_admin, User
-      elsif sign_up_params[:role] == User::ROLES[:investigator]
-        authorize! :create_investigator, User
+      if current_resource_owner
+        # Create user via api...
+        if sign_up_params[:role] == User::ROLES[:admin]
+          authorize! :create_admin, User
+        elsif sign_up_params[:role] == User::ROLES[:investigator]
+          authorize! :create_investigator, User
+        else
+          authorize! :create_standard, User
+        end
       else
-        authorize! :create_standard, User
+        # Create user via sign up
+        sign_up_params[:role] = User::ROLES[:registered_user]
       end
+
       build_resource(sign_up_params)
       resource.save
       yield resource if block_given?
@@ -96,7 +103,7 @@ module Api::V1
     end
 
     def user_params
-      x = params.require(:user).permit(:email, :username, :password, :password_confirmation, :role, :anonymous)
+      x = params.require(:user).permit(:email, :username, :password, :password_confirmation, :role, :auto_created)
       Rails.logger.info x.ai
       x
     end

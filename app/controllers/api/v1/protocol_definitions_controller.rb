@@ -108,7 +108,7 @@ module Api::V1
         user.password = 'abcd12_'
         user.password_confirmation = 'abcd12_'
         user.sign_in_count = 0
-        user.anonymous = true
+        user.auto_created = true
 
         StudyDefinition.transaction do
           study_definition.reload

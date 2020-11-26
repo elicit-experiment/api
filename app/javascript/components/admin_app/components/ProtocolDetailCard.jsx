@@ -26,7 +26,7 @@ class _Protocol extends React.Component {
       const newData = update(this.props.protocol, {
         active: {$set: newActive},
       });
-      this.updateProtocol(this.props.protocol, newData);
+      this.props.updateProtocol(this.props.protocol, newData);
       return {count: newActive}
     })
   }
@@ -56,13 +56,14 @@ class _Protocol extends React.Component {
                   className="active btn btn-primary">
               Preview
             </Link>
+
             <CopyToClipboard
               text={`${window.location.origin}/studies/${this.props.study.id}/protocols/${this.props.protocol.id}`}
               onCopy={() => this.setState({copied: true})}>
               <button type="button" className="btn btn-primary">
                 {this.state.copied ? <span style={{color: 'red'}}>Copied.</span> : <span>Get Link</span>}
                 &nbsp;
-                <i className="glyphicon glyphicon-link" aria-hidden="true"/>
+                <i className="fas fa-link" aria-hidden="true"/>
               </button>
             </CopyToClipboard>
 
@@ -81,6 +82,8 @@ class _Protocol extends React.Component {
               checked={this.state.active}/>
           </div>
         </div>
+
+        {this.props.children && <div className="protocol-row row" >{this.props.children}</div>}
       </div>
     );
   }
@@ -89,6 +92,11 @@ class _Protocol extends React.Component {
 _Protocol.propTypes = {
   protocol: ProtocolDefinitionType,
   study: StudyDefinitionType,
+  updateProtocol: PropTypes.func,
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
 };
 
 const mapDispatchToProps = (dispatch) => ({
@@ -103,32 +111,30 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 
-const Protocol = connect(_state => ({}), mapDispatchToProps)(_Protocol);
+export const EditableProtocolCard = connect(_state => ({}), mapDispatchToProps)(_Protocol);
 
-export class ProtocolEdit extends React.Component {
-  render() {
-    let protocol_list = this.props.study_protocols.map((protocol, _i) => {
-      // This is a little gross.  Because the protocol_defnitions inside the study definitions
-      // don't get updated when we patch the protocol definition, we need to check if there's
-      // a protocol_definition in the protocol_definitions state which matches the id, and treat
-      // that as authoritative.
-      let protocol_def = this.props.protocols.data.filter((p) => (p.id == protocol.id));
-      if (protocol_def && (protocol_def.length > 0)) {
-        protocol = protocol_def[0]
-      }
-      return <Protocol protocol={protocol} study={this.props.study} key={protocol.id}/>;
-    });
+export function EditableProtocolList(props) {
+  let protocol_list = props.study_protocols.map((protocol, _i) => {
+    // This is a little gross.  Because the protocol_definitions inside the study definitions
+    // don't get updated when we patch the protocol definition, we need to check if there's
+    // a protocol_definition in the protocol_definitions state which matches the id, and treat
+    // that as authoritative.
+    let protocol_def = props.protocols.data.filter((p) => (p.id == protocol.id));
+    if (protocol_def && (protocol_def.length > 0)) {
+      protocol = protocol_def[0]
+    }
+    return <EditableProtocolCard protocol={protocol} study={props.study} key={protocol.id}/>;
+  });
 
-    return (
-      <div className="row study-info-row" key={"new-protocol"}>
-        <b className="col-2">Protocols:</b>
-        <div className="col-10">{protocol_list}</div>
-      </div>
-    );
-  }
+  return (
+    <div className="row study-info-row" key={"new-protocol"}>
+      <b className="col-2">Protocols:</b>
+      <div className="col-10">{protocol_list}</div>
+    </div>
+  );
 }
 
-ProtocolEdit.propTypes = {
+EditableProtocolList.propTypes = {
   study_protocols: PropTypes.arrayOf(ProtocolDefinitionType),
   protocols: ApiReturnCollectionOf(ProtocolDefinitionType),
   study: StudyDefinitionType,

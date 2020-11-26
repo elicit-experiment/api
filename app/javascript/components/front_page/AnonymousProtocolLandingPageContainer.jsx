@@ -23,7 +23,6 @@ class AnonymousProtocolLandingPageContainer extends React.Component {
       return <div>Loading Protocol {this.state.protocol_id} information</div>;
     }
 
-    console.log(JSON.stringify(this.props.takeProtocol));
 
     if (this.props.take_protocol &&
         !this.props.take_protocol.loading &&

@@ -57,11 +57,12 @@ gem 'doorkeeper'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
+  gem 'pry-rails'
+  gem 'pry-byebug'
   gem 'mocha'
 end
 
 group :development do
-  gem 'pry'
   gem 'rails-erd', require: false, group: :development
   gem 'rubocop'
   gem 'spring'
@@ -101,3 +102,7 @@ gem 'stackprof', '~> 0.2.12'
 gem 'dotenv-rails', '~> 2.7'
 
 gem 'capybara', '~> 3.33'
+
+gem "debase", "~> 0.2.4"
+
+gem "ruby-debug-ide", "~> 0.7.2"

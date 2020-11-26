@@ -248,31 +248,50 @@ const anonymous_protocols = {
     },
 };
 
-let user_entity = make_entity_def('user', 'user', 'users');
+let user_entity = make_entity_def('user', 'users', 'users');
 
 // for users, make sure when we post (sign up) we chain the login action)
 user_entity.user.postfetch.push(function ({
                                               _data,
                                               _actions,
                                               dispatch,
-                                              _getState,
+                                              getState,
                                               request,
                                               _response,
                                           }) {
     if (!request || !request.params) {
-        return
+      return
     }
+    const {
+      tokens: {
+        userToken: userToken,
+        userTokenIsLoading: userTokenIsLoading,
+      },
+    } = getState();
+
+    // if we're just signing up, go ahead and sign in
     if (request.params.method === "POST") {
+      if (!userToken && !userTokenIsLoading) {
         const creds = JSON.parse(request.params.body).user;
         dispatch(logInUser(creds));
+      }
     }
-});
+  });
 
-// no token required to POST a sign-up
+// no token required to POST a sign-up, but pass it if there is one (i.e. admin create scenario)
 user_entity.user.prefetch[0] = function(args, cb) {
   if (args.request.params.method === "POST") {
-     cb();
-     return;
+    const {
+      tokens: {
+        userToken: userToken,
+        userTokenIsLoading: userTokenIsLoading,
+      },
+    } = args.getState();
+
+    if (!userToken || !userTokenIsLoading) {
+      cb();
+      return;
+    }
   }
   refreshTokenIfExpired(args, cb);
 }
@@ -282,9 +301,9 @@ const api = reduxApi(_.extend({},
     take_protocol,
     eligeable_protocol,
     anonymous_protocols,
-    make_entity_def('user', 'users', 'users'),
-    make_entity_def('study_definition', 'studies', 'study_definitions'),
+    make_entity_def('study_definition', 'studies', 'study_definitions', '/study_definitions'),
     make_entity_def('protocol_definition', 'protocol_definitions', '/study_definitions/:study_definition_id/protocol_definitions'),
+    make_entity_def('protocol_user', 'protocol_users', '/study_definitions/:study_definition_id/protocol_definitions/:protocol_definition_id/users'),
     make_entity_def('phase_definitions', 'phase_definitions', '/study_definitions/:study_definition_id/protocol_definitions/:protocol_definition_id/phase_definitions'),
     user_entity)).use("options", (_url, _params, getState) => {
     const {

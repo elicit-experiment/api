@@ -24,6 +24,8 @@ import {clientToken, currentUser, userToken} from './reducers/selector';
 import { logoutUser } from "./actions/tokens_actions";
 import elicitApi from "./api/elicit-api";
 
+import "@fortawesome/fontawesome-free/css/all.css";
+
 export const tokenStatus = (clientToken, userToken, requestClientToken) => {
   let token_status = 'none';
 

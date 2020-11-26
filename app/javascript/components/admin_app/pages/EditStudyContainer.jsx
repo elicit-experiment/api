@@ -1,72 +1,65 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import PropTypes from 'prop-types';
 import {connect} from "react-redux"
 import elicitApi from "../../../api/elicit-api"
-import EditStudy from "../components/EditStudyCard"
-import {ApiReturnValueOf, StudyDefinitionType, ProtocolDefinitionType, MatchType} from '../../../types';
+import EditStudyPanel from "../components/EditStudyPanel"
+import {ApiReturnCollectionOf, MatchType, StudyDefinitionType} from '../../../types';
 
-class EditStudyContainer extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      study_id: parseInt(this.props.match.params.study_id),
-    }
+const ensureSyncableLoaded = (syncable, expectedDatum, load) => {
+  if (syncable.loading) return 'loading';
+  if (syncable.error) return 'error';
+  if (!syncable.sync) {
+    console.log('sync1');
+    load();
+    return 'loading';
   }
-  render() {
-    let studyDefinition = this.props.study_definition.data[0];
-    let protocolDefinition = this.props.protocol_definition;
-    if (studyDefinition && (studyDefinition.id == this.state.study_id)) {
-      return (
-        <EditStudy study={studyDefinition} protocols={protocolDefinition} match={this.props.match}></EditStudy>
-      )
-    }
-
-    return <div>Loading Study {this.state.study_id} information</div>
+  if (syncable.sync && (!syncable.data.map((d) => expectedDatum(d)).reduce((a,b)  => a&&b, true))) {
+    console.log('sync2');
+    load();
+    return 'loading';
   }
+  return 'loaded';
+}
 
-  ensureStudyDefinitionLoaded() {
-    if ((!this.props.study_definition.sync && !this.props.study_definition.loading) ||
-        (this.props.study_definition.data[0].id !== this.state.study_id)) {
-      this.props.loadStudyDefinition(this.props.match.params.study_id,
-          this.props.match.params.study_id)
-    }
-  }
+function EditStudyContainer(props) {
+  const {match} = props;
+  const studyId = parseInt(match.params.study_id);
 
-  ensureProtocolDefinitionLoaded() {
-    if ((!this.props.protocol_definition.sync && !this.props.protocol_definition.loading) ||
-      (this.props.protocol_definition.data[0].id !== this.state.protocol_id)) {
-      this.props.loadProtocolDefinition(this.props.match.params.study_id,
-        this.props.match.params.protocol_id)
-    }
+  const studyDefinitionState = ensureSyncableLoaded(props.study_definition,
+    (studyDefinition) => studyDefinition.id === studyId,
+    () => useEffect(() => { props.loadStudyDefinition(studyId); return undefined; }));
+
+  if (studyDefinitionState !== 'loaded') {
+    return <div>Loading Study Information</div>
   }
 
-  componentDidMount() {
-    this.ensureStudyDefinitionLoaded();
-    this.ensureProtocolDefinitionLoaded();
-  }
+  let studyDefinition = props.study_definition.data[0];
+  return (
+     <EditStudyPanel study={studyDefinition} match={match}></EditStudyPanel>
+  )
 }
 
 EditStudyContainer.propTypes = {
-  study_definition: ApiReturnValueOf(StudyDefinitionType),
-  protocol_definition: ApiReturnValueOf(ProtocolDefinitionType),
+  study_definition: ApiReturnCollectionOf(StudyDefinitionType),
   loadStudyDefinition: PropTypes.func,
-  loadProtocolDefinition: PropTypes.func,
+  loadProtocolDefinitions: PropTypes.func,
   match: MatchType,
 };
 
 const mapStateToProps = (state) => ({
   study_definition: state.study_definition,
-  protocol_definition: state.protocol_definition,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  loadProtocolDefinition: (study_definition_id, protocol_definition_id) => dispatch(elicitApi.actions.protocol_definition({
-    study_definition_id: study_definition_id,
-    protocol_definition_id: protocol_definition_id,
-  })),
-  loadStudyDefinition: (study_definition_id) => dispatch(elicitApi.actions.study_definition({
-    study_definition_id: study_definition_id,
-  })),
+  loadStudyDefinition: (id) => dispatch(elicitApi.actions.study_definition({ id })),
+  deleteStudyById: (id) => dispatch(elicitApi.actions.study_definition.delete({ id })),
+  updateStudyDefinition: (id, newData) =>
+    dispatch(
+      elicitApi.actions.study_definition.patch(
+        { id },
+        { body: JSON.stringify({ study_definition: newData }) }
+      )
+    ),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditStudyContainer)

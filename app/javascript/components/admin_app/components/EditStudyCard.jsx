@@ -47,8 +47,6 @@ class EditStudyCard extends React.Component {
   }
 
   render() {
-
-    console.log(this.props.protocols)
     if (this.state.study) {
       return (
         <div>

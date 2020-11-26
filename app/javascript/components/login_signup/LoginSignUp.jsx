@@ -80,13 +80,13 @@ class LogInSignUp extends React.Component {
     return(
       <Modal show={true}>
         <Modal.Header>
-          <h4><span className="glyphicon glyphicon-lock"></span> Login</h4>
+          <h4><span className="fas fa-lock"></span> Login</h4>
           {error}
         </Modal.Header>
         <Modal.Body>
           <form role="form" onSubmit={this.logInUser()}>
             <div className="form-group">
-              <label htmlFor="usrname"><span className="glyphicon glyphicon-user glyphicon-envelope"></span> Username or Email</label>
+              <label htmlFor="usrname"><span className="fas fa-user fa-envelope"></span> Username or Email</label>
               <input type="text"
                      className="form-control"
                      id="email"
@@ -95,7 +95,7 @@ class LogInSignUp extends React.Component {
                      onChange={this.updateState('email')}/>
             </div>
             <div className="form-group">
-              <label htmlFor="psw"><span className="glyphicon glyphicon-eye-open"></span> Password</label>
+              <label htmlFor="psw"><span className="fas fa-eye"></span> Password</label>
               <input type="password"
                      className="form-control"
                      id="psw"
@@ -103,7 +103,7 @@ class LogInSignUp extends React.Component {
                      autoComplete="current-password"
                      onChange={this.updateState('password')}/>
             </div>
-            <button type="submit" className="btn btn-success btn-block"><span className="glyphicon glyphicon-off"></span> Login</button>
+            <button type="submit" className="btn btn-success btn-block"><span className="fas fa-power-off"></span> Login</button>
           </form>
         </Modal.Body>
         <Modal.Footer>
@@ -119,12 +119,12 @@ class LogInSignUp extends React.Component {
     return(
       <Modal show={true}>
            <Modal.Header>
-              <h4><span className="glyphicon glyphicon-lock"></span> Sign Up</h4>
+              <h4><span className="fas fa-lock"></span> Sign Up</h4>
             </Modal.Header>
             <Modal.Body>
               <form role="form" onSubmit={this.signUpUser()}>
                 <div className="form-group">
-                  <label htmlFor="usrname"><span className="glyphicon glyphicon-user"></span> User Name</label>
+                  <label htmlFor="usrname"><span className="fas fa-user"></span> User Name</label>
                   <input type="text"
                          className="form-control"
                          id="usrname"
@@ -133,7 +133,7 @@ class LogInSignUp extends React.Component {
                          onChange={this.updateState('username')}/>
                 </div>
                 <div className="form-group">
-                  <label htmlFor="usremail"><span className="glyphicon glyphicon-envelope"></span> Email</label>
+                  <label htmlFor="usremail"><span className="fas fa-envelope"></span> Email</label>
                   <input type="text"
                          className="form-control"
                          id="usremail"
@@ -141,7 +141,7 @@ class LogInSignUp extends React.Component {
                          onChange={this.updateState('email')}/>
                 </div>
                 <div className="form-group">
-                  <label htmlFor="psw"><span className="glyphicon glyphicon-eye-open"></span> Password</label>
+                  <label htmlFor="psw"><span className="fas fa-eye"></span> Password</label>
                   <input type="password"
                          className="form-control"
                          id="psw"
@@ -150,7 +150,7 @@ class LogInSignUp extends React.Component {
                          onChange={this.updateState('password')}/>
                 </div>
                 <div className="form-group">
-                  <label htmlFor="psw"><span className="glyphicon glyphicon-eye-open"></span> Confirm Password</label>
+                  <label htmlFor="psw"><span className="fas fa-eye"></span> Confirm Password</label>
                   <input type="password"
                          className="form-control"
                          id="pswConf"
@@ -161,7 +161,7 @@ class LogInSignUp extends React.Component {
                 <div className="checkbox">
                   <label><input type="checkbox" value=""/>Remember me</label>
                 </div>
-                  <button type="submit" className="btn btn-success btn-block"><span className="glyphicon glyphicon-off"></span> Sign Up</button>
+                  <button type="submit" className="btn btn-success btn-block"><span className="fas fa-power-off"></span> Sign Up</button>
               </form>
             </Modal.Body>
             <Modal.Footer>

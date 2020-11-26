@@ -7,7 +7,8 @@ import BootstrapSwitchButton from 'bootstrap-switch-button-react'
 import {ApiReturnCollectionOf, ProtocolDefinitionType, StudyDefinitionType} from '../../../types';
 import SweetAlert from 'sweetalert2-react';
 import {ProtocolInfoLink} from "./ProtocolInfoLink";
-import {ProtocolEdit} from "./ProtocolDetailCard";
+import {EditableProtocolList} from "./ProtocolDetailCard";
+import {Link} from "react-router-dom";
 
 class StudyCard extends React.Component {
   constructor(props) {
@@ -33,12 +34,19 @@ class StudyCard extends React.Component {
 
   dropDownOnChange(_x) {}
 
+  onToggle() {
+    const newValue = !this.props.study.allow_anonymous_users;
+    this.props.updateStudyDefinition(this.props.study.id, {
+      allow_anonymous_users: newValue,
+    });
+  }
+
   render() {
     let protocols_row, study_class;
 
     if (this.props.editProtocols) {
       protocols_row = (
-        <ProtocolEdit
+        <EditableProtocolList
           study={this.props.study}
           study_protocols={this.props.study.protocol_definitions}
           protocols={this.props.protocols}
@@ -57,7 +65,7 @@ class StudyCard extends React.Component {
     }
 
     // TODO: style sweetalert or replace it with a bootstrap modal doing the same thing
-    // (and maybe using the same interface)
+    // (and maybe using the same interface?)
     const deleteAlert = <SweetAlert
         show={this.state.deleteVerify}
         title="Really delete?"
@@ -107,15 +115,20 @@ class StudyCard extends React.Component {
               <div className="col-2" />
 
               <div className="col-8">
+                <Link to={`/admin/studies/${this.props.study.id}/edit`} className="mr-4">
+                  <div className="fas fa-edit" style={{width:'1em'}} aria-hidden="true"/> Edit
+                </Link>
+
                 <BootstrapSwitchButton
-                  onlabel='Anon'
-                  offlabel='Registered'
+                  onlabel='Allow Anonymous Access'
+                  offlabel='Registered Users Only'
                   size="md"
                   offstyle="danger"
                   onstyle="success"
-                  disabled
-                  width="100"
-                  checked={this.props.study.allow_anonymous_users}/>
+                  width="240"
+                  checked={this.props.study.allow_anonymous_users}
+                  onChange={this.onToggle.bind(this)}
+                />
                 <button
                   onClick={() => this.setState({ deleteVerify: true })}
                   className="active btn btn-danger ml-2"

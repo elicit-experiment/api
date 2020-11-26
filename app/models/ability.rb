@@ -44,5 +44,7 @@ class Ability
     can :create_standard, User if [User::ROLES[:admin], User::ROLES[:investigator]].include?(user.role)
 
     can :create_studies, :all if [User::ROLES[:admin], User::ROLES[:investigator]].include?(user.role)
+
+    can :index, StudyDefinition if [User::ROLES[:admin], User::ROLES[:investigator]].include?(user.role)
   end
 end

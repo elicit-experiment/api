@@ -6,3 +6,4 @@ end
 
 json.extract! protocol_user, :experiment
 json.extract! protocol_user, :study_definition
+

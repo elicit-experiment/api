@@ -8,7 +8,7 @@ export const ProtocolInfoLink = props => (
     <b className="col-2">Protocols:</b>
     <div className="col-2">
       <Link to={`/admin/studies/${props.study.id}/edit`} className="active">
-        <i className="glyphicon glyphicon-edit" aria-hidden="true"/> Edit
+        <i className="fas fa-edit" aria-hidden="true"/> Edit
       </Link>
     </div>
     <b className="col-1 study-info-protocols-count">

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {CurrentUserType, MatchType, UserTokenType} from 'types';
-import {Redirect, Route} from 'react-router-dom';
+import {Redirect, Route, Switch} from 'react-router-dom';
 import StudyManagement from '../components/admin_app/pages/StudyManagement';
 import {connect} from "react-redux";
 import elicitApi from "../api/elicit-api.js";
@@ -12,6 +12,9 @@ import {tokenStatus} from '../reducers/selector';
 import ProtocolPreviewContainer from "../components/admin_app/pages/ProtocolPreviewContainer"
 import UserManagement from "../components/admin_app/pages/UserManagement";
 import EditStudyContainer from "../components/admin_app/pages/EditStudyContainer";
+
+import { NavTab } from "react-router-tabs";
+import "react-router-tabs/styles/react-router-tabs.css";
 
 function AdminApp(props) {
   if (props.tokenStatus !== 'user') {
@@ -44,12 +47,24 @@ function AdminApp(props) {
     <div className="page-wrapper d-flex flex-column">
       <HeaderContainer></HeaderContainer>
       <main id="wrap" className="admin-app-container app-container container flex-fill">
+        <div>
+          <NavTab to="/admin/studies">Studies</NavTab>
+          <NavTab to="/admin/users">Users</NavTab>
+
+          <Switch>
+            <Route
+              exact
+              path={`${props.match.path}`}
+              render={() => <Redirect replace to={`${props.match.path}/studies`} />}
+            />
+            <Route exact path={`${props.match.path}/studies`} component={StudyManagement} />
+            <Route path={`${props.match.path}/users`} component={UserManagement} />
+          </Switch>
+        </div>
         <Route path={`${props.match.url}/studies/:study_id/protocols/:protocol_id`}
                component={ProtocolPreviewContainer}/>
         <Route path={`${props.match.url}/studies/:study_id/edit`}
                component={EditStudyContainer}/>
-        <Route exact path={`${props.match.url}/users`} component={UserManagement}/>
-        <Route exact path={`${props.match.url}`} component={StudyManagement}/>
       </main>
       <FooterContainer></FooterContainer>
     </div>
