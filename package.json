@@ -5,6 +5,9 @@
     "webpack:analyze": "mkdir -p public/packs && node_modules/@rails/webpacker/node_modules/.bin/webpack --config config/webpack/production.js --profile --json > public/packs/stats.json && node_modules/.bin/webpack-bundle-analyzer public/packs/stats.json"
   },
   "dependencies": {
+    "@babel/core": "^7.0.0-0",
+    "@babel/preset-env": "^7.12.7",
+    "babel-eslint": "^10.0.1",
     "@babel/plugin-proposal-object-rest-spread": "^7.11.0",
     "@babel/plugin-transform-react-jsx": "^7.10.4",
     "@babel/preset-react": "^7.10.4",
@@ -12,6 +15,7 @@
     "@rails/webpacker": "^5.0",
     "babel-plugin-lodash": "^3.3.4",
     "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-loader": "^8.2.2",
     "bootstrap": "^4.3.1",
     "bootstrap-switch-button-react": "^1.2.0",
     "caniuse-lite": "^1.0.30000697",
@@ -46,10 +50,6 @@
     "sweetalert2-react": "^0.7.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0-0",
-    "@babel/preset-env": "^7.12.7",
-    "babel-eslint": "^10.0.1",
-    "babel-loader": "^8.2.1",
     "eslint": "^5.8.0",
     "eslint-config-airbnb": "^17.1.0",
     "eslint-config-standard": "^12.0.0",
