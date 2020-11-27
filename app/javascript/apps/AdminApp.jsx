@@ -48,7 +48,7 @@ function AdminApp(props) {
       <HeaderContainer></HeaderContainer>
       <main id="wrap" className="admin-app-container app-container container flex-fill">
         <div>
-          <NavTab to="/admin/studies">Studies</NavTab>
+          <NavTab allowClickOnActive={true} to="/admin/studies">Studies</NavTab>
           <NavTab to="/admin/users">Users</NavTab>
 
           <Switch>
@@ -59,12 +59,12 @@ function AdminApp(props) {
             />
             <Route exact path={`${props.match.path}/studies`} component={StudyManagement} />
             <Route path={`${props.match.path}/users`} component={UserManagement} />
+            <Route path={`${props.match.url}/studies/:study_id/protocols/:protocol_id`}
+                   component={ProtocolPreviewContainer}/>
+            <Route path={`${props.match.url}/studies/:study_id/edit`}
+                   component={EditStudyContainer}/>
           </Switch>
         </div>
-        <Route path={`${props.match.url}/studies/:study_id/protocols/:protocol_id`}
-               component={ProtocolPreviewContainer}/>
-        <Route path={`${props.match.url}/studies/:study_id/edit`}
-               component={EditStudyContainer}/>
       </main>
       <FooterContainer></FooterContainer>
     </div>

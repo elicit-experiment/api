@@ -126,7 +126,7 @@ class UserList extends React.Component {
         rowGetter={this.getRowAt.bind(this)}
         rowsCount={this.getSize()}
         onGridRowsUpdated={this.handleGridRowsUpdated.bind(this)}
-        toolbar={<Toolbar onAddRow={this.handleAddRow.bind(this)}/>}
+        toolbar={<Toolbar addRowButtonText={<span><i className="fas fa-plus"></i> Add User</span>} onAddRow={this.handleAddRow.bind(this)}/>}
         enableRowSelect={true}
         rowHeight={50}
         minHeight={600}
