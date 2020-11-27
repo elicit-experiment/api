@@ -3,5 +3,6 @@ module.exports = {
     "admin",
     "registered_user",
     "anonymous_user",
+    "investigator",
   ],
 };

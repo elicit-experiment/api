@@ -55,7 +55,7 @@ export function ExperimentStatus(props) {
 
 export function UserRoleIcon(props) {
   switch (props.role) {
-    case 'anonymous':
+    case 'anonymous_user':
       return <a title="Anonymous" ><i className="fas fa-ghost"/></a>;
     case 'registered_user':
       return <a title="Registered" ><i className="fas fa-user-check"/></a>;
@@ -64,6 +64,7 @@ export function UserRoleIcon(props) {
     case 'investigator':
       return <a title="Investigator" ><i className="fas fa-clipboard"/></a>;
   }
+  return null;
 }
 
 export function DetailProtocolList(props) {
