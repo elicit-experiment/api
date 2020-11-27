@@ -37,7 +37,7 @@ class _Protocol extends React.Component {
     };
 
     return (
-      <div className="row card p-4 mb-4 " key={this.props.protocol.id}>
+      <div className="container card p-4 mb-4 " key={this.props.protocol.id}>
         <div
           className="protocol-row container protocol-header-row"
           key={"t" + this.props.protocol.id}

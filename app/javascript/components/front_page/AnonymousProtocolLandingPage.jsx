@@ -16,6 +16,7 @@ class AnonymousProtocolLandingPage extends React.Component {
     const takeProtocol = <TakeProtocolLink
         study_id={this.props.protocol.study_definition_id}
         protocol_id={this.props.protocol.id}
+        available={this.props.protocol.has_remaining_anonymous_slots}
         take_protocol={this.props.takeProtocol}/>;
 
     let instructions = '';

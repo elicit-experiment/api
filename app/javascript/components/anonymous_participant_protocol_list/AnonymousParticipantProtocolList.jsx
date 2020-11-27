@@ -14,7 +14,6 @@ export default class AnonymousParticipantProtocolList extends React.Component {
                     <ParticipantProtocol protocol={protocol_def}
                                          study={protocol_def.study_definition}
                                          users={[]}
-                                         experiment={undefined}
                                          key={protocol_def.id}>
                     </ParticipantProtocol>
                 </div>

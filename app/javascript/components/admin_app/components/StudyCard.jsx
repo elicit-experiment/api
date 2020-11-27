@@ -42,26 +42,26 @@ class StudyCard extends React.Component {
   }
 
   render() {
-    let protocols_row, study_class;
+    let protocolsRow, studyClass;
 
     if (this.props.editProtocols) {
-      protocols_row = (
+      protocolsRow = (
         <EditableProtocolList
           study={this.props.study}
           study_protocols={this.props.study.protocol_definitions}
           protocols={this.props.protocols}
         />
       );
-      study_class = "card show study-detail my-4";
+      studyClass = "card show study-detail my-4";
     } else {
-      protocols_row = (
+      protocolsRow = (
         <ProtocolInfoLink
           study={this.props.study}
           study_protocols={this.props.study.protocol_definitions}
           protocol_definitions={this.props.protocols}
         />
       );
-      study_class = "card show study-summary my-4";
+      studyClass = "card show study-summary my-4";
     }
 
     // TODO: style sweetalert or replace it with a bootstrap modal doing the same thing
@@ -82,16 +82,28 @@ class StudyCard extends React.Component {
         }}
     />
 
+    const created = new Date(Date.parse(this.props.study.created_at));
     return (
       <div className="study-wrapper" key={this.props.study.id}>
         {deleteAlert}
-        <div className={study_class} data-studyid={this.props.study.id}>
+        <div className={studyClass} data-studyid={this.props.study.id}>
           <div className="container">
+            <div className="row study-info-row">
+              <b className="col-2">ID:</b>
+              <div className="col-5">
+                {this.props.study.id}
+              </div>
+            </div>
             <div className="row study-info-row">
               <b className="col-2">Title:</b>
               <div className="col-5">
-                {this.props.study.id} — {this.props.study.title}
-
+                {this.props.study.title}
+              </div>
+            </div>
+            <div className="row study-info-row">
+              <b className="col-2">Created:</b>
+              <div className="col-5">
+                {`${created.toLocaleDateString()}  ${created.toLocaleTimeString()}`}
               </div>
             </div>
             <div className="row study-info-row">
@@ -106,7 +118,7 @@ class StudyCard extends React.Component {
                 {this.props.study.description}
               </div>
             </div>
-            {protocols_row}
+            {protocolsRow}
             <button className="btn btn-danger remove-study" onClick={() => this.setState({ deleteVerify: true })}>
               {" "}
               &times;{" "}

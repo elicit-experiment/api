@@ -42,7 +42,7 @@ export default class FrontPage extends Component {
                     <div className="card p-2">
                       <h5 className="card-title text-primary">Participants</h5>
                       <p className="card-text" style={{height:'5em'}}>Participate in a study!</p>
-                      <a className="btn btn-link" href={'/participate'}>Participate</a>
+                      <a className="btn btn-link" href={'/participate'}>Participate Anonymously</a>
                     </div>
                   </div>
                 </div>
