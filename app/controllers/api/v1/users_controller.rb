@@ -53,9 +53,11 @@ module Api::V1
     end
 
     def update
-      @user = current_resource_owner
+      @user = User.find(params[:id])
+      logger.info @user.role
+      logger.info [User::ROLES[:admin]].include?(@user.role)
       authorize! :upgrade, @user if user_params.key? :role
-      if @user.update(user_params)
+      if @user.update!(user_params)
         render json: @user
       else
         render json: @user.errors, status: :unauthorized

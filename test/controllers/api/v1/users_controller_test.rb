@@ -33,7 +33,7 @@ module Api::V1
     test 'admin can create any kind of user' do
       %i[investigator admin registered_user].each do |role|
         as_user(user(:admin)) do |headers|
-          post users_url, params: { user: { email: "new-#{role}@elicit.dk", anonymous: false, role: role.to_s, password: 'abcd12_', password_confirmation: 'abcd12_' } }, as: :json, headers: headers
+          post users_url, params: { user: { email: "new-#{role}@elicit.com", anonymous: false, role: role.to_s, password: 'abcd12_', password_confirmation: 'abcd12_' } }, as: :json, headers: headers
           assert_response :created, "Admin failed to create #{role}"
         end
       end
@@ -42,7 +42,7 @@ module Api::V1
     test 'investigator cannot create admin or other investigator' do
       %i[investigator admin].each do |role|
         as_user(user(:investigator)) do |headers|
-          post users_url, params: { user: { email: 'admin2@elicit.dk', anonymous: false, role: role.to_s, password: 'abcd12_', password_confirmation: 'abcd12_' } }, as: :json, headers: headers
+          post users_url, params: { user: { email: 'admin2@elicit.com', anonymous: false, role: role.to_s, password: 'abcd12_', password_confirmation: 'abcd12_' } }, as: :json, headers: headers
           assert_response :forbidden, "Failed to disallow create of #{role} by investigator"
         end
       end
@@ -51,7 +51,7 @@ module Api::V1
     test 'investigator or admin can create registered user' do
       %i[investigator admin].each do |role|
         as_user(user(role)) do |headers|
-          post users_url, params: { user: { email: "newby#{role}@elicit.dk", anonymous: false, role: 'registered_user', password: 'abcd12_', password_confirmation: 'abcd12_' } }, as: :json, headers: headers
+          post users_url, params: { user: { email: "newby#{role}@elicit.com", anonymous: false, role: 'registered_user', password: 'abcd12_', password_confirmation: 'abcd12_' } }, as: :json, headers: headers
           assert_response :created, "#{role} failed to create registered user"
         end
       end
@@ -60,7 +60,7 @@ module Api::V1
     test 'registered user cannot create any user' do
       %i[investigator admin registered_user].each do |role|
         as_user(user(:registered_user)) do |headers|
-          post users_url, params: { user: { email: 'noouser@elicit.dk', anonymous: false, role: role.to_s, password: 'abcd12_', password_confirmation: 'abcd12_' } }, as: :json, headers: headers
+          post users_url, params: { user: { email: 'noouser@elicit.com', anonymous: false, role: role.to_s, password: 'abcd12_', password_confirmation: 'abcd12_' } }, as: :json, headers: headers
           assert_response :forbidden
         end
       end

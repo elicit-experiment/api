@@ -1,34 +1,34 @@
 ---
 admin_user:
-  email: admin@elicit.dk
+  email: admin@elicit.com
   encrypted_password: "$2a$11$DqI/9D7OgXVpC1cRlM4AEuS/KZ6O9Au7eLHy8hVe0IwgVV52sCTKW"
   sign_in_count: 0
   anonymous: false
   role: admin
   username: admin
 subject1:
-  email: subject1@elicit.dk
+  email: subject1@elicit.com
   encrypted_password: "$2a$11$YKrsjxwCzhC3bcSLgZbpq.FD2mmVsuFBTsVIwlKwJHFk8nfUkXo56"
   sign_in_count: 0
   anonymous: false
   role: registered_user
   username: subject1
 subject2:
-  email: subject2@elicit.dk
+  email: subject2@elicit.com
   encrypted_password: "$2a$11$ceAwJWx6CA7Adm.AirI02unwltlYtk1EG1K027Z7vvJjt0SouPPCy"
   sign_in_count: 0
   anonymous: false
   role: registered_user
   username: subject2
 admin:
-  email: admin@elicit.dk
+  email: admin@elicit.com
   anonymous: false
   role: admin
 investigator:
-  email: investigator@elicit.dk
+  email: investigator@elicit.com
   anonymous: false
   role: investigator
 registered_user:
-  email: registered@elicit.dk
+  email: registered@elicit.com
   anonymous: false
   role: registered_user

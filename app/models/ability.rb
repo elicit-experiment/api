@@ -34,6 +34,7 @@ class Ability
 
     return unless user.present?
 
+    Rails.logger.info "AUTH: #{user.ai}"
     can :upgrade, User if [User::ROLES[:admin]].include?(user.role)
 
     if [User::ROLES[:admin]].include?(user.role)

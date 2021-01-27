@@ -86,6 +86,8 @@ const make_entity_def = (singular, plural, endpoint) => {
             }
             if (action.type === `@@redux-api@${plural}_update_${singular}`) {
               if (!action.id) console.warn('update requires id');
+              if (!action.updates || action.updates.length == 0) return state;
+
                 if (state.data.findIndex((el) => (el.id === action.id)) == -1) {
                     // append if it doesn't exist
                     return {
@@ -117,13 +119,12 @@ const make_entity_def = (singular, plural, endpoint) => {
         ],
         postfetch: [
             function ({
-                          data,
-                          _actions,
-                          dispatch,
-                          _getState,
-                          request,
-                          _response,
-                      }) {
+                        data,
+                        _actions,
+                        dispatch,
+                        _getState,
+                        request,
+                      } ) {
                 if (!request) {
                   console.error('NO REQUEST');
                     // debugger;
@@ -144,7 +145,7 @@ const make_entity_def = (singular, plural, endpoint) => {
                         id: request.pathvars.id,
                     });
                 }
-                if (request.params.method === "PATCH") {
+                if (request.params.method === "PATCH" && data) {
                     dispatch({
                         type: `@@redux-api@${plural}_update_${singular}`,
                         id: request.pathvars.id,
@@ -257,7 +258,6 @@ user_entity.user.postfetch.push(function ({
                                               dispatch,
                                               getState,
                                               request,
-                                              _response,
                                           }) {
     if (!request || !request.params) {
       return

@@ -74,7 +74,7 @@ module Api::V1
       unless worker_id.blank? || !/[A-Z0-9]+/.match(worker_id)
         Rails.logger.info "Not logged in during take, but workerId specified as #{worker_id}; trying anonymous protocol."
 
-        user = create_and_sign_in_anonymous_participant(study_definition, worker_id, 'mturk.elicit.dk')
+        user = create_and_sign_in_anonymous_participant(study_definition, worker_id, 'mturk.elicit.com')
 
         return unless user
 
@@ -100,7 +100,7 @@ module Api::V1
 
     private
 
-    def create_and_sign_in_anonymous_participant(study_definition, username, email_domain = 'elicit.dk')
+    def create_and_sign_in_anonymous_participant(study_definition, username, email_domain = 'elicit.com')
       user_params = { email: "#{username}@#{email_domain}".downcase, username: username, role: User::ROLES[:anonymous] }
 
       user = User.find_or_initialize_by(user_params) do |user|

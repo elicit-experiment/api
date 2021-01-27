@@ -33,7 +33,7 @@ class ProfilePageContainer extends React.Component {
     }
   }
 
-  getDerivedStateFromProps(nextProps) {
+  static getDerivedStateFromProps(nextProps) {
     if (nextProps.current_user.sync) {
         return{ loading_user: false };
     }
@@ -41,7 +41,7 @@ class ProfilePageContainer extends React.Component {
   }
 
   render() {
-    if (this.props.tokenStatus != 'user') {
+    if (this.props.tokenStatus !== 'user') {
       return <Redirect to='/login'></Redirect>
     }
 

@@ -3,21 +3,21 @@ import {
   LOGOUT_USER,
 } from '../actions/tokens_actions';
 
-//Import Dependencies
+// Import Dependencies
 import {
   combineReducers,
 } from 'redux';
 
 import elicitApi from "../api/elicit-api";
 
-//Import Individual Reducers
+// Import Individual Reducers
 import TokensReducer from './tokens_reducer';
 
 const reducers = extend({
   tokens: TokensReducer,
 }, elicitApi.reducers);
 
-//Combine Reducers
+// Combine Reducers
 const appReducer = combineReducers(reducers);
 
 const RootReducer = (state, action) => {

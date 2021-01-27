@@ -80,7 +80,6 @@ class UserList extends React.Component {
   }
 
   handleAddRow() { // ({ newRowIndex }) {
-    console.log(`CNT ${this.state.rows.length + 2}`)
     const newRow = {
       email: `user${this.state.rows.length + 2 + Math.random(100)}@elicit.com`,
       name: 'New User',
@@ -121,6 +120,7 @@ class UserList extends React.Component {
         <h1>{this.getSize()} Users</h1>
         <ReactDataGrid
         ref={ node => this.grid = node }
+        onChange={x => console.log(x) }
         enableCellSelect={true}
         columns={this.getColumns()}
         rowGetter={this.getRowAt.bind(this)}
@@ -142,10 +142,10 @@ class UserList extends React.Component {
       if (lastAccum.id !== currentElement.id) {
         return [...accumulatedRows, currentElement];
       } else {
-        if (lastAccum.updated_at > currentElement.updated_at) {
-          return accumulatedRows;
+        if (lastAccum.updated_at < currentElement.updated_at) {
+          accumulatedRows.splice((accumulatedRows.length - 1), 1, currentElement)
         }
-        return accumulatedRows.splice((accumulatedRows.length - 1), 1, currentElement)
+        return accumulatedRows;
       }
     }, combinedRows.slice(0,1)).filter(Boolean);
 
@@ -178,7 +178,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
   loadUsers: () => dispatch(elicitApi.actions.users()),
   createUser: (user) => { console.log(elicitApi); return dispatch(elicitApi.actions.user.post({}, {body: JSON.stringify({user})})) },
-  updateUser: (user_id, user) => dispatch(elicitApi.actions.user.patch({id: user_id}, { body: JSON.stringify(user) })),
+  updateUser: (user_id, user) => dispatch(elicitApi.actions.user.patch({id: user_id}, { body: JSON.stringify({user}) })),
   deleteUser: (user_id) => dispatch(elicitApi.actions.user.delete({id: user_id})),
 });
 
