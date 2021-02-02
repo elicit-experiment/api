@@ -83,9 +83,9 @@ class LoginSignUpContainer extends React.Component {
       }
     }
 
-    return <div>
-      <h1 className="elicit-title">Elicit</h1>
-      <h3 className="elicit-subtitle">dtu</h3>
+    return <div className="single-page">
+      <h1 className="elicit-bg-title">Elicit</h1>
+      <h3 className="elicit-subtitle"></h3>
       <LoginSignUp {...this.props} showLoginSignup={this.showLoginSignup()} dismissable={false}></LoginSignUp>
       <Modal show={this.showPleaseWait()}>
         <Modal.Header><h1>Logging in...</h1></Modal.Header>

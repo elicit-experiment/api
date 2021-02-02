@@ -66,21 +66,22 @@ module Api::V1
 
     def index
       if !params.key?(:query) || (params[:query].length < 3)
-        @users = User.all
+        @all_users = User.all
       else
         username_query = { username: /#{params[:query]}/i }
         email_query = { email: params[:query] }
-        @users = User.or(username_query, email_query).all
+        @all_users = User.or(username_query, email_query).all
       end
 
       unless page_params.nil?
-        @users = @users.page(page_params[:page])
+        @users = @all_users.page(page_params[:page])
                        .per(page_params[:page_size])
       end
 
-      render json: @users
+      # render json: { page: page_params[:page], total_items: @all_users.size }
+      set_pagination_headers @users, @all_users, page_params
 
-      set_pagination_headers @users
+      render json: @users
     end
 
     def show

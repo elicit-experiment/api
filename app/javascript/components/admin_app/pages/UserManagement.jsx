@@ -7,7 +7,7 @@ import UserConstants from '../../../constants/UserConstants';
 import update from 'react-addons-update';
 import elicitApi from "../../../api/elicit-api";
 import {connect} from "react-redux";
-import {UserType} from "../../../types";
+import {ApiReturnCollectionOf, UserType} from "../../../types";
 
 const COLUMNS = [
   {
@@ -53,7 +53,7 @@ class UserList extends React.Component {
     super(props);
     this.state = { rows: [] };
   }
-
+//    this.props.reset();
   getColumns() {
     let clonedColumns = COLUMNS.slice();
     clonedColumns[2].events = {
@@ -100,24 +100,49 @@ class UserList extends React.Component {
   }
 
   getRowAt(index) {
-    if (index < 0 || index > this.getSize()) {
-      return undefined;
+    const lastLoadedRow = this.props.users.currentPage * this.props.users.pageSize;
+
+    // Time to load more rows?
+    if (this.props.users.sync && !this.props.users.loading ) {
+      const target = Math.min(index + this.props.users.pageSize, this.props.users.totalItems);  // don't try to load past end of data
+      if (target > lastLoadedRow) {
+        console.log("Triggered reload at getRow " + index);
+        this.props.loadNext();
+      }
     }
 
-    return this.state.rows[index];
+    // Return the row if we have it
+    if (index < this.getSize()) {
+      return this.state.rows[index];
+    } else {
+      return this.emptyRow();
+    }
+
+  }
+
+  emptyRow() {
+    return {
+      auto_created: null,
+      created_at:  null,
+      email:  null,
+      id:  null,
+      role:  null,
+      updated_at:  null,
+      username:  null,
+    }
   }
 
   render() {
-    if (!this.props.users.sync){
-      if (!this.props.users.loading && !this.props.users.error) {
-        this.props.loadUsers();
+    if (!this.props.users.sync) {
+      if (!this.props.users.loading && this.props.users.error) {
+        return <div>Error. Please reload page and contact support if this problem persists.</div>;
       }
       return <div>Loading.</div>;
     }
 
     return (
       <div>
-        <h1>{this.getSize()} Users</h1>
+        <h1>{this.props.users.totalItems} Users</h1>
         <ReactDataGrid
         ref={ node => this.grid = node }
         onChange={x => console.log(x) }
@@ -133,6 +158,19 @@ class UserList extends React.Component {
         rowScrollTimeout={200} />
       </div>
       );
+  }
+
+  ensureUsersLoaded() {
+    if (!this.props.users.sync) {
+      if (!this.props.users.loading && !this.props.users.error) {
+        this.props.loadNext();
+      }
+    }
+  }
+
+  componentDidMount() {
+    // this.reset();
+    this.ensureUsersLoaded()
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -154,11 +192,13 @@ class UserList extends React.Component {
 }
 
 UserList.propTypes = {
+  reset: PropTypes.func,
   loadUsers: PropTypes.func,
+  loadNext: PropTypes.func,
   createUser: PropTypes.func,
   updateUser: PropTypes.func,
   deleteUser: PropTypes.func,
-  users: PropTypes.arrayOf(UserType),
+  users: ApiReturnCollectionOf(UserType),
 }
 
 const UserManagement = (props) => (
@@ -168,16 +208,18 @@ const UserManagement = (props) => (
 );
 
 UserManagement.propTypes = {
-  users: PropTypes.arrayOf(UserType),
+  users: ApiReturnCollectionOf(UserType),
 }
 
 const mapStateToProps = (state) => ({
-  users: state.users,
+  users: state.paginated.users,
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  reset: () => dispatch(elicitApi.actions.paginated.users.reset()),
+  loadNext: () => dispatch(elicitApi.actions.paginated.users.loadNextPage()),
   loadUsers: () => dispatch(elicitApi.actions.users()),
-  createUser: (user) => { console.log(elicitApi); return dispatch(elicitApi.actions.user.post({}, {body: JSON.stringify({user})})) },
+  createUser: (user) => { return dispatch(elicitApi.actions.user.post({}, {body: JSON.stringify({user})})) },
   updateUser: (user_id, user) => dispatch(elicitApi.actions.user.patch({id: user_id}, { body: JSON.stringify({user}) })),
   deleteUser: (user_id) => dispatch(elicitApi.actions.user.delete({id: user_id})),
 });
