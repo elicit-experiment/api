@@ -143,6 +143,7 @@ class UserList extends React.Component {
     const loadingGlyph = this.props.users.loading ?
       <span style={{fontSize: '50%', opacity: 0.6}}><i className="fas fa-sync"></i></span> : '';
 
+
     return (
       <div>
         <h1>{this.props.users.totalItems} Users {loadingGlyph}</h1>
@@ -157,7 +158,7 @@ class UserList extends React.Component {
         toolbar={<Toolbar addRowButtonText={<span><i className="fas fa-plus"></i> Add User</span>} onAddRow={this.handleAddRow.bind(this)}/>}
         enableRowSelect={true}
         rowHeight={50}
-        minHeight={200}
+        minHeight={(Math.floor(window.innerHeight*0.65/50)*50)}
         rowScrollTimeout={200} />
       </div>
       );

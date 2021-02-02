@@ -10,7 +10,7 @@ module PaginationHeaderLinks
   end
 
   def default_page_size
-    10
+    20
   end
 
   def default_page
