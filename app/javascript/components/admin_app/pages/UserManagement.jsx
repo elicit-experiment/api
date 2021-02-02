@@ -133,16 +133,19 @@ class UserList extends React.Component {
   }
 
   render() {
-    if (!this.props.users.sync) {
+    if (!this.props.users.sync && this.state.rows.length === 0) {
       if (!this.props.users.loading && this.props.users.error) {
         return <div>Error. Please reload page and contact support if this problem persists.</div>;
       }
       return <div>Loading.</div>;
     }
 
+    const loadingGlyph = this.props.users.loading ?
+      <span style={{fontSize: '50%', opacity: 0.6}}><i className="fas fa-sync"></i></span> : '';
+
     return (
       <div>
-        <h1>{this.props.users.totalItems} Users</h1>
+        <h1>{this.props.users.totalItems} Users {loadingGlyph}</h1>
         <ReactDataGrid
         ref={ node => this.grid = node }
         onChange={x => console.log(x) }
@@ -154,7 +157,7 @@ class UserList extends React.Component {
         toolbar={<Toolbar addRowButtonText={<span><i className="fas fa-plus"></i> Add User</span>} onAddRow={this.handleAddRow.bind(this)}/>}
         enableRowSelect={true}
         rowHeight={50}
-        minHeight={600}
+        minHeight={200}
         rowScrollTimeout={200} />
       </div>
       );
