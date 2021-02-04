@@ -34,10 +34,17 @@ class StudyCard extends React.Component {
 
   dropDownOnChange(_x) {}
 
-  onToggle() {
+  onToggleAllowAnonymousUsers() {
     const newValue = !this.props.study.allow_anonymous_users;
     this.props.updateStudyDefinition(this.props.study.id, {
       allow_anonymous_users: newValue,
+    });
+  }
+
+  onToggleShowInStudyList() {
+    const newValue = !this.props.study.show_in_study_list;
+    this.props.updateStudyDefinition(this.props.study.id, {
+      show_in_study_list: newValue,
     });
   }
 
@@ -127,20 +134,35 @@ class StudyCard extends React.Component {
               <div className="col-2" />
 
               <div className="col-8">
-                <Link to={`/admin/studies/${this.props.study.id}/edit`} className="mr-4">
+                <Link to={`/admin/studies/${this.props.study.id}/edit`}
+                      className="mr-2">
                   <div className="fas fa-edit" style={{width:'1em'}} aria-hidden="true"/> Edit
                 </Link>
-
+                <span className="ml-2">
                 <BootstrapSwitchButton
-                  onlabel='Allow Anonymous Access'
+                  onlabel='Allow Anonymous'
                   offlabel='Registered Users Only'
-                  size="md"
+                  className="ml-4"
+                  size="sm"
                   offstyle="danger"
                   onstyle="success"
-                  width="240"
+                  width="180"
                   checked={this.props.study.allow_anonymous_users}
-                  onChange={this.onToggle.bind(this)}
+                  onChange={this.onToggleAllowAnonymousUsers.bind(this)}
                 />
+                </span>
+                <span className="ml-2">
+                  <BootstrapSwitchButton
+                    onlabel='Show in Study List'
+                    offlabel='Hide in Study List'
+                    size="sm"
+                    offstyle="danger"
+                    onstyle="success"
+                    width="150"
+                    checked={this.props.study.show_in_study_list}
+                    onChange={this.onToggleShowInStudyList.bind(this)}
+                  />
+                </span>
                 <button
                   onClick={() => this.setState({ deleteVerify: true })}
                   className="active btn btn-danger ml-2"

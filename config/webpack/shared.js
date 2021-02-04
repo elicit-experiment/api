@@ -15,6 +15,12 @@ const extensionGlob = `**/*{${settings.extensions.join(',')}}*`;
 const entryPath = join(settings.source_path, settings.source_entry_path);
 const packPaths = sync(join(entryPath, extensionGlob));
 
+const dotenv = require('./dotenv');
+
+dotenv.loadEnv();
+
+throw 'this file is no longer used';
+
 module.exports = {
   entry: packPaths.reduce(
     (map, entry) => {
@@ -39,7 +45,7 @@ TODO: investigate
   },
 
   plugins: [
-    new webpack.EnvironmentPlugin(JSON.parse(JSON.stringify(env))),
+    new webpack.EnvironmentPlugin(JSON.parse(JSON.stringify(process.env))),
     new MiniCssExtractPlugin({
       filename: (env.NODE_ENV === 'production' ? '[name]-[hash].css' : '[name].css'),
       chunkFilename: "[id].css"
@@ -49,7 +55,7 @@ TODO: investigate
       writeToDisk: true,
       publicPath: output.publicPath,
       writeToFileEmit: true
-    })
+    }),
   ],
 
   resolve: {

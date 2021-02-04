@@ -11,11 +11,14 @@ services:
           - SITE_SUFFIX=${SITE_SUFFIX}
           - SECRET_KEY_BASE=${SECRET_KEY_BASE}
           - API_SCHEME=${EXTERNAL_API_SCHEME}
+          - WEB_CLIENT_SECRET=${WEB_CLIENT_SECRET}
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - SITE_SUFFIX=${SITE_SUFFIX}
       - SECRET_KEY_BASE=${SECRET_KEY_BASE}
+      - WEB_CLIENT_SECRET=${WEB_CLIENT_SECRET}
     volumes:
       - app_public:/var/www/app/public
     expose:

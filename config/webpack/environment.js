@@ -1,6 +1,13 @@
+const webpack = require('webpack');
 const { environment } = require('@rails/webpacker')
 const marked = require("marked");
 const renderer = new marked.Renderer();
+
+const dotenv = require('./dotenv');
+
+dotenv.loadEnv();
+
+environment.plugins.append('env', new webpack.EnvironmentPlugin(process.env));
 
 environment.loaders.append('html', {
   test: /\.html$/,

@@ -160,15 +160,10 @@ const api = reduxApi(_.extend({},
 
 const usersApi = makePaginatedApi(userApiDefinition, 'user');
 
-console.log(api)
-console.log(usersApi)
-
 const combinedApi = {
   events: [api, usersApi].reduce((all, element) => ({...all, ...element.events}), {}),
   reducers: [api, usersApi].reduce((all, element) => ({...all, ...element.reducers}), {}),
   actions: [api, usersApi].reduce((all, element) => ({...all, ...element.actions}), {}),
 }
-
-console.log(combinedApi)
 
 export default combinedApi;

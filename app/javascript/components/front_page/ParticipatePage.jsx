@@ -78,8 +78,7 @@ FrontPage.propTypes = {
 };
 
 FrontPage.defaultProps = {
-  syncCurrentUser: () => {
-  },
+  syncCurrentUser: () => {},
   loadAnonymousProtocols: () => {},
 };
 
@@ -90,7 +89,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
   syncCurrentUser: () => dispatch(elicitApi.actions.current_user.sync()),
-  loadAnonymousProtocols: () => dispatch(elicitApi.actions.anonymous_protocols()),
+  loadAnonymousProtocols: () => dispatch(elicitApi.actions.anonymous_protocols({public: true})),
 });
 
 export default connect(

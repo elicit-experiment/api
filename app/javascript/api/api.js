@@ -1,8 +1,8 @@
 import _ from 'lodash';
 
 const api_root = '/api/v1';
-const public_client_id = 'admin_public';
-const public_client_secret = 'czZCaGRSa3F0MzpnWDFmQmF0M2JW';
+export const public_client_id = 'webapp_public';
+export const public_client_secret = process.env.WEBAPP_CLIENT_SECRET;
 const default_headers = {
   'Accept': 'application/json',
   'Content-Type': 'application/json',

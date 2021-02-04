@@ -91,7 +91,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  loadAnonymousProtocols: () => dispatch(elicitApi.actions.anonymous_protocols()),
+  loadAnonymousProtocols: () => dispatch(elicitApi.actions.anonymous_protocols({public: true})),
   takeProtocol: (s) => { dispatch(elicitApi.actions.take_protocol(s)) },
 });
 

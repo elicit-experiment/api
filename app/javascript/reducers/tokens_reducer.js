@@ -28,10 +28,10 @@ const TokensReducer = (state = {
     case RECEIVE_CLIENT_TOKEN:
       //Set clientToken to sessionStorage to maintain token in event of page refresh
       sessionStorage.setItem("clientToken", JSON.stringify(action.clientToken, 2));
-      console.dir(JSON.stringify(state, null, 2));
+      // console.dir(JSON.stringify(state, null, 2));
       newState = cloneDeep(state);
       newState.clientToken = action.clientToken;
-      console.dir(JSON.stringify(newState, null, 2));
+      // console.dir(JSON.stringify(newState, null, 2));
       return newState;
     case RECEIVE_USER_TOKEN:
       //Set userToken to sessionStorage to maintain token in event of page refresh

@@ -18,7 +18,7 @@ import elicitApi from "../api/elicit-api.js";
 
 class ParticipantApp extends React.Component {
   render() {
-    if (this.props.tokenStatus != 'user') {
+    if (this.props.tokenStatus !== 'user') {
       return <Redirect to='/login'></Redirect>
     }
 
@@ -50,7 +50,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  loadEligeableProtocols: () => dispatch(elicitApi.actions.eligeable_protocols()),
+  loadEligeableProtocols: () => dispatch(elicitApi.actions.eligeable_protocols({public:true})),
   loadCurrentUser: () => dispatch(elicitApi.actions.current_user()),
 });
 
