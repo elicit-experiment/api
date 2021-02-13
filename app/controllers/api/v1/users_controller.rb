@@ -77,6 +77,12 @@ module Api::V1
         @all_users = User.where(email: params[:query]).or(User.where(username: params[:query]))
       end
 
+      authorize! :read, User
+
+      unless current_user.is_admin?
+        @all_users = @all_users.where.not(role: User::ROLES[:admin]).where.not(role: User::ROLES[:investigator])
+      end
+
       unless page_params.nil?
         @users = @all_users.page(page_params[:page])
                        .per(page_params[:page_size])
