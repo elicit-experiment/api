@@ -40,6 +40,7 @@ class Ability
     if [User::ROLES[:admin]].include?(user.role)
       can :create_admin, User
       can :create_investigator, User
+      can :manage, :all
     end
 
     can :create_standard, User if [User::ROLES[:admin], User::ROLES[:investigator]].include?(user.role)

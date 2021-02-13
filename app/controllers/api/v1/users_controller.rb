@@ -66,11 +66,15 @@ module Api::V1
 
     def index
       if !params.key?(:query) || (params[:query].length < 3)
-        @all_users = User.all
+        if params.key?(:q)
+          username_query = { username: /#{params[:q]}/i }
+          email_query = { email: params[:q] }
+          @all_users = User.or(username_query, email_query).all
+        else
+          @all_users = User.all
+        end
       else
-        username_query = { username: /#{params[:query]}/i }
-        email_query = { email: params[:query] }
-        @all_users = User.or(username_query, email_query).all
+        @all_users = User.where(email: params[:query]).or(User.where(username: params[:query]))
       end
 
       unless page_params.nil?

@@ -37,7 +37,7 @@ function AdminApp(props) {
     return <div>Loading...</div>
   }
 
-  if (props.current_user.data.role !== 'admin') {
+  if ((props.current_user.data.role !== 'admin') && (props.current_user.data.role !== 'investigator')) {
     console.log('user is not an admin');
     console.log(props.current_user);
     return <Redirect to='/participant'></Redirect>

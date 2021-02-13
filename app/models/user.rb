@@ -33,6 +33,12 @@ class User < ApplicationRecord
     end
   end
 
+  ROLES.keys.each do |attribute|
+    define_method :"is_#{attribute}?" do
+      ROLES[attribute] == role
+    end
+  end
+
   include Swagger::Blocks
 
   swagger_schema :User do

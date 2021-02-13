@@ -33,6 +33,27 @@ class Apidocs::V1::UsersApidocs
         key :required, false
         key :type, :integer
       end
+      parameter do
+        key :name, 'query'
+        key :in, :query
+        key :description, 'query by username or email substring'
+        key :required, false
+        key :type, :string
+      end
+      parameter do
+        key :name, 'q[username]'
+        key :in, :query
+        key :description, 'query by username substring'
+        key :required, false
+        key :type, :string
+      end
+      parameter do
+        key :name, 'q[email]'
+        key :in, :query
+        key :description, 'query by email substring'
+        key :required, false
+        key :type, :string
+      end
       response 200 do
         key :description, 'Array of user objects matching the query'
         schema do

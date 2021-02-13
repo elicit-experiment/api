@@ -6,7 +6,7 @@ class Header extends React.Component {
   render() {
     let admin = <div></div>;
 
-    if (this.props.current_user_role == 'admin') {
+    if ((this.props.current_user_role == 'admin') || ((this.props.current_user_role == 'investigator'))) {
       admin = <Nav.Link href='/admin'>Admin</Nav.Link>
     }
 
