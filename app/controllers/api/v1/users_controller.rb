@@ -35,7 +35,7 @@ module Api::V1
         end
       else
         # Create user via sign up
-        sign_up_params[:role] = User::ROLES[:registered_user]
+        sign_up_params[:role] = User::ROLES[:registered]
       end
 
       build_resource(sign_up_params)
@@ -116,13 +116,13 @@ module Api::V1
     end
 
     def user_params
-      x = params.require(:user).permit(:email, :username, :password, :password_confirmation, :role, :auto_created)
-      Rails.logger.info x.ai
-      x
+      @user_params ||= params.require(:user).permit(:email, :username, :password, :password_confirmation, :role, :auto_created)
+      @user_params
     end
 
     def sign_up_params
-      user_params
+      @sign_up_params ||= user_params
+      @sign_up_params
     end
 
     def current_resource_owner

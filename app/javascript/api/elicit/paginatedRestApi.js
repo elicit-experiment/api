@@ -74,6 +74,7 @@ export function makePaginatedApi(restApiDefinition, entityName, entityPluralName
 
   function makePagingReducerFor(api, entityPluralName) {
     return function pagingReducer(state = initialState, action) {
+      let updatedItem;
       const newState = Object.assign(state);
       switch(action.type) {
         case api.events.paginated[entityPluralName].reset:
@@ -117,12 +118,18 @@ export function makePaginatedApi(restApiDefinition, entityName, entityPluralName
               };
             }
 
+            updatedItem = action.updates[0];
+
+            if ('data' in updatedItem) {
+//              debugger;
+            }
+
             // merge if it does
             return {
               ...state,
               data: state.data.map((item) => {
                 if (item.id === action.id) {
-                  return action.updates[0].data
+                  return updatedItem
                 } else {
                   return item
                 }

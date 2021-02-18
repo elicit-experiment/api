@@ -17,7 +17,7 @@ const COLUMNS = [
     resizable: true,
   },
   {
-    key: 'name',
+    key: 'username',
     name: 'Name',
     editable: true,
     width: 200,
@@ -179,6 +179,7 @@ class UserList extends React.Component {
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const combinedRows = [...prevState.rows, ...nextProps.users.data].sort((a, b) => (a.id - b.id));
+    if (combinedRows.length < 2) { return { rows: combinedRows } }
     const rows = combinedRows.slice(1).reduce((accumulatedRows, currentElement) => {
       const lastAccum = accumulatedRows[accumulatedRows.length - 1];
       if (lastAccum.id !== currentElement.id) {

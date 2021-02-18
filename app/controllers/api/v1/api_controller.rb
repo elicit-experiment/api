@@ -88,8 +88,7 @@ module Api::V1
     # PATCH/PUT /api/{plural_resource_name}/1
     def update
       if get_resource.update(resource_params)
-        render json: get_resource, include: response_includes, status: :ok
-      #         respond_with get_resource, :includes => response_includes, status: :ok
+        render json: get_resource, include: send(:single_response_includes), status: :ok
       else
         render json: get_resource.errors, status: :unprocessable_entity
       end

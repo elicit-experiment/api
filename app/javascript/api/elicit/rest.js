@@ -41,7 +41,6 @@ export const makeEntityApiDefinition = (apiRoot, defaultHeaders, singular, plura
         if (!action.id) console.warn('update requires id');
         if (!action.updates || action.updates.length === 0) return state;
 
-        console.dir(state);
         if (state.data.findIndex((el) => (el.id === action.id)) === -1) {
           // append if it doesn't exist
           return {
@@ -49,9 +48,12 @@ export const makeEntityApiDefinition = (apiRoot, defaultHeaders, singular, plura
             data: state.data.concat(action.updates[0]),
           };
         }
+        return state;
         let newData = state.data.map((item) => {
           if (item.id === action.id) {
-            return action.updates[0]
+            console.dir(action.updates[0])
+            console.dir(item)
+            return Object.assign({}, item, action.updates[0])
           } else {
             return item
           }

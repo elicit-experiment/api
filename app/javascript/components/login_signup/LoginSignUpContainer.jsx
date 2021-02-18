@@ -128,5 +128,5 @@ LoginSignUpContainer.propTypes = {
   currentUser: CurrentUserType,
   getCurrentUser: PropTypes.func.isRequired,
   tokenStatus: PropTypes.string.isRequired,
-  userTokenState: PropTypes.string.isRequired,
+  userTokenState: PropTypes.string,
 }

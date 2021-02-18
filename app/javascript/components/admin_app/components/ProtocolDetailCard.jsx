@@ -119,7 +119,7 @@ export function EditableProtocolList(props) {
     // don't get updated when we patch the protocol definition, we need to check if there's
     // a protocol_definition in the protocol_definitions state which matches the id, and treat
     // that as authoritative.
-    let protocol_def = props.protocols.data.filter((p) => (p.id == protocol.id));
+    let protocol_def = props.protocols.data.filter((p) => (p.id === protocol.id));
     if (protocol_def && (protocol_def.length > 0)) {
       protocol = protocol_def[0]
     }

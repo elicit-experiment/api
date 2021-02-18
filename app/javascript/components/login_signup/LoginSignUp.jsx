@@ -43,7 +43,7 @@ class LogInSignUp extends React.Component {
                           username: this.state.username,
                           password: this.state.password,
                           password_confirmation: this.state.passwordConfirmation };
-      this.props.createUser({user: credentials}).then(()=>{this.props.loginUser(credentials)});
+      this.props.createUser({user: credentials}).then(()=>{this.props.logInUser(credentials)});
     };
   }
 
@@ -192,6 +192,5 @@ LogInSignUp.propTypes = {
   createUser: PropTypes.func.isRequired,
   dismissable: PropTypes.bool.isRequired,
   logInUser: PropTypes.func.isRequired,
-  loginUser: PropTypes.func.isRequired,
-  userTokenState: PropTypes.string.isRequired,
+  userTokenState: PropTypes.string,
 }

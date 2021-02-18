@@ -40,7 +40,6 @@ export function ExperimentStatus(props) {
     const pct = props.experiment.num_stages_completed / (props.experiment.num_stages_remaining + props.experiment.num_stages_completed);
     const strokeDasharray = `${fullRadius*pct} ${fullRadius*(1-pct)}`;
 
-    console.log(props.experiment)
     return <svg viewBox="0 0 32 32" width="1.5rem" height="1.5rem">
       <circle r="14" cx="16" cy="16" stroke="black" strokeWidth="2" fill="none"></circle>
       <g transform="translate(16,16)">
@@ -68,6 +67,8 @@ export function UserRoleIcon(props) {
 }
 
 export function DetailProtocolList(props) {
+  console.dir(props.study_protocols);
+  console.dir(props.protocols);
   let protocolList = props.study_protocols.map((protocol, _i) => {
     // This is a little gross.  Because the protocol_definitions inside the study definitions
     // don't get updated when we patch the protocol definition, we need to check if there's
