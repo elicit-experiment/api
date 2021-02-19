@@ -13,14 +13,14 @@ class AnonymousProtocolLandingPageContainer extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      protocol_id: parseInt(this.props.match.params.protocol_id),
+      protocolId: parseInt(this.props.match.params.protocol_id),
     };
   }
 
   render() {
-    if ((!this.props.anonymous_protocols.sync &&
-      this.props.anonymous_protocols.loading)) {
-      return <div>Loading Protocol {this.state.protocol_id} information</div>;
+    if ((!this.props.anonymous_protocol.sync &&
+      this.props.anonymous_protocol.loading)) {
+      return <div>Loading Protocol {this.state.protocolId} information</div>;
     }
 
 
@@ -37,7 +37,7 @@ class AnonymousProtocolLandingPageContainer extends React.Component {
     }
 
     let protocol = this.getProtocol();
-    console.dir(`Rendering protocol ${this.state.protocol_id} with ${protocol}`);
+    console.dir(`Rendering protocol ${this.state.protocolId} with ${protocol}`);
     console.dir(protocol);
     if (protocol) {
       const protocol_info = <AnonymousProtocolLandingPage protocol={protocol} takeProtocol={this.props.takeProtocol}></AnonymousProtocolLandingPage>;
@@ -53,15 +53,15 @@ class AnonymousProtocolLandingPageContainer extends React.Component {
   }
 
   getProtocol() {
-    const protocols = this.props.anonymous_protocols.data.filter((p) => p.id === this.state.protocol_id );
+    const protocols = this.props.anonymous_protocol.data.filter((p) => p.id === this.state.protocolId );
     return protocols.length > 0 ? protocols[0] : null;
   }
 
   ensureProtocolDefinitionLoaded() {
-    if ((!this.props.anonymous_protocols.sync &&
-        !this.props.anonymous_protocols.loading) ||
+    if ((!this.props.anonymous_protocol.sync &&
+        !this.props.anonymous_protocol.loading) ||
         (!this.getProtocol())) {
-      this.props.loadAnonymousProtocols();
+      this.props.loadAnonymousProtocol(this.state.protocolId);
     }
   }
 
@@ -71,10 +71,10 @@ class AnonymousProtocolLandingPageContainer extends React.Component {
 }
 
 AnonymousProtocolLandingPageContainer.propTypes = {
-  anonymous_protocols: GenerateApiResultPropTypeFor(PropTypes.arrayOf(AnonymousProtocolsType).isRequired),
+  anonymous_protocol: GenerateApiResultPropTypeFor(PropTypes.arrayOf(AnonymousProtocolsType).isRequired),
   current_user_email: PropTypes.string,
   current_user_role: PropTypes.string,
-  loadAnonymousProtocols: PropTypes.func.isRequired,
+  loadAnonymousProtocol: PropTypes.func.isRequired,
   match: MatchType,
   takeProtocol: PropTypes.func.isRequired,
   take_protocol: GenerateApiResultPropTypeFor(PropTypes.arrayOf(ProtocolUserType).isRequired),
@@ -86,12 +86,12 @@ AnonymousProtocolLandingPageContainer.defaultProps = {
 };
 
 const mapStateToProps = (state) => ({
-  anonymous_protocols: state.anonymous_protocols,
+  anonymous_protocol: state.anonymous_protocol,
   take_protocol: state.take_protocol,
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  loadAnonymousProtocols: () => dispatch(elicitApi.actions.anonymous_protocols({public: true})),
+  loadAnonymousProtocol: (id) => dispatch(elicitApi.actions.anonymous_protocol({id, public: true})),
   takeProtocol: (s) => { dispatch(elicitApi.actions.take_protocol(s)) },
 });
 

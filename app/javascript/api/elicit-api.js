@@ -99,6 +99,35 @@ const anonymousProtocolsApiDefinition = {
     },
 };
 
+const anonymousProtocolApiDefinition = {
+  anonymous_protocol: {
+    url: `${apiRoot}/participant/anonymous_protocols/:id`,
+    transformer: transformers.array,
+    options: {
+      headers: _.extend({}, defaultHeaders),
+    },
+    prefetch: [
+    ],
+    reducer(state, action) {
+      if (action.type === '@@redux-api@anonymous_protocols_update_anonymous_protocol') {
+        const entryIndex = state.data.findIndex((el) => el.id === action.id);
+        return {
+          ...state,
+          data: [
+            ...state.data.slice(0, entryIndex), // everything before current post
+            {
+              ...state.data[entryIndex],
+              ...action.data,
+            },
+            ...state.data.slice(entryIndex + 1), // everything after current post
+          ],
+        }
+      }
+      return state;
+    },
+  },
+};
+
 let userApiDefinition = makeEntityApiDefinition(apiRoot, defaultHeaders, 'user', 'users', 'users');
 
 // for users, make sure when we post (sign up) we chain the login action)
@@ -152,6 +181,7 @@ const api = reduxApi(_.extend({},
     takeProtocolApiDefinition,
     eligeableProtocolApiDefinition,
     anonymousProtocolsApiDefinition,
+    anonymousProtocolApiDefinition,
     makeEntityApiDefinition(apiRoot, defaultHeaders, 'study_definition', 'studies', 'study_definitions', '/study_definitions'),
     makeEntityApiDefinition(apiRoot, defaultHeaders, 'protocol_definition', 'protocol_definitions', '/study_definitions/:study_definition_id/protocol_definitions'),
     makeEntityApiDefinition(apiRoot, defaultHeaders, 'protocol_user', 'protocol_users', '/study_definitions/:study_definition_id/protocol_definitions/:protocol_definition_id/users'),

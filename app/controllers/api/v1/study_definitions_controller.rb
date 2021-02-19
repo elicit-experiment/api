@@ -4,7 +4,7 @@ require 'securerandom'
 
 module Api::V1
   class StudyDefinitionsController < ApiController
-    STUDY_DEFINITION_FIELDS = %w[
+    STUDY_DEFINITION_FIELDS = %i[
       principal_investigator_user_id
       title
       description
@@ -21,7 +21,7 @@ module Api::V1
       auto_created_user_count
       max_auto_created_users
       max_concurrent_users
-    ].map(&:to_sym)
+    ]
 
     include StudyCreation
 

@@ -32,6 +32,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       get 'participant/eligeable_protocols' => 'participant#eligeable_protocols'
       get 'participant/anonymous_protocols' => 'participant#anonymous_protocols'
+      get 'participant/anonymous_protocols/:id' => 'participant#anonymous_protocol'
       resources :study_results, controller: 'study_results', defaults: { format: 'json' }, only: %i[show destroy create index] do
         resources :experiments, controller: 'experiments', defaults: { format: 'json' }, only: %i[show destroy create index]
         resources :stages, controller: 'stages', defaults: { format: 'json' }, only: %i[show destroy create index]
