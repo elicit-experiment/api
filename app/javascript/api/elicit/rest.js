@@ -48,11 +48,9 @@ export const makeEntityApiDefinition = (apiRoot, defaultHeaders, singular, plura
             data: state.data.concat(action.updates[0]),
           };
         }
-        return state;
+
         let newData = state.data.map((item) => {
           if (item.id === action.id) {
-            console.dir(action.updates[0])
-            console.dir(item)
             return Object.assign({}, item, action.updates[0])
           } else {
             return item
