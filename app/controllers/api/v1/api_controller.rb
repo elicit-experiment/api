@@ -2,6 +2,7 @@
 
 module Api::V1
   class ApiController < ApplicationController
+    include Authenticatable
     include ElicitErrors
 
     include PaginationHeaderLinks
@@ -92,31 +93,6 @@ module Api::V1
       else
         render json: get_resource.errors, status: :unprocessable_entity
       end
-    end
-
-    def current_api_user
-      User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token&.resource_owner_id
-    end
-
-    def current_api_user_id
-      doorkeeper_token&.resource_owner_id
-    end
-
-    def current_user
-      @current_user ||= if doorkeeper_token
-                          User.find(doorkeeper_token.resource_owner_id)
-                        else
-                          warden.authenticate(scope: :user, store: false)
-                        end
-    end
-
-    def authenticate_scope!
-      send(:"authenticate_#{resource_name}!", force: true)
-      self.resource = send(:"current_#{resource_name}")
-    end
-
-    def authenticate_user!(force: false)
-      raise 'unauthorized' unless doorkeeper_token.present?
     end
 
     rescue_from CanCan::AccessDenied do |_exception|

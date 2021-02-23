@@ -3,6 +3,8 @@
 class ProtocolPreviewController < ApplicationController
   include ActionController::MimeResponds
 
+  include Authenticatable
+
   respond_to :json
   respond_to :html
 
@@ -44,4 +46,4 @@ class ProtocolPreviewController < ApplicationController
       render json: ElicitError.new('Failed to create session', :unprocessable_entity), status: :unprocessable_entity
     end
   end
-  end
+end
