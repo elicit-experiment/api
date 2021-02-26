@@ -25,7 +25,21 @@ Rails.application.routes.draw do
     get '/*' => redirect('/')
   end
 
-  get 'chaos/endexperiment' => 'chaos#endexperiment'
+  scope :chaos do
+    get 'endexperiment' => 'chaos#endexperiment', as: :chaos_endexperiment
+
+    scope '/(:session_guid)/v6' do
+      get 'Session/Create' => 'chaos_api/v6/sessions#create', :defaults => { format: 'json' }
+      get 'Experiment/Get' => 'chaos_api/v6/experiments#show', :defaults => { format: 'json' }
+      get 'Question/Get' => 'chaos_api/v6/question#show', :defaults => { format: 'json' }
+      post 'Answer/Set' => 'chaos_api/v6/answer#create', :defaults => { format: 'json' }
+      get 'Answer/Set' => 'chaos_api/v6/answer#create', :defaults => { format: 'json' }
+      get 'Slide/Completed' => 'chaos_api/v6/slide#get', :defaults => { format: 'json' }
+      match 'Answer/Set', to: 'chaos_api/v6/answer#cors_set_access_control_headers', via: :options
+      post 'time_series/:series_type' => 'chaos_api/v6/time_series#create', :defaults => { format: 'json' }
+      post 'time_series/:series_type/file' => 'chaos_api/v6/time_series#append'
+    end
+  end
 
   # API
   namespace :api do

@@ -36,6 +36,7 @@ module ChaosApi::V6
       end
       session_guids[:cookie] = request.cookies['session_guid']
       session_guids[:query_param] = params[:sessionGUID]
+      session_guids[:path] = params[:session_guid]
       session_guid = session_guids.values.reject(&:blank?).first
 
       Rails.logger.info("#{session_guids.ai} -> #{session_guid}")
