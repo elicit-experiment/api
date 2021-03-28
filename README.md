@@ -64,3 +64,6 @@ docker exec api bash -e DISABLE_DATABASE_ENVIRONMENT_CHECK=1 ./redb.sh
 ```
 
 
+* anonymous is all auto-created; with or without identifier
+* registered is either a fixed set of existing users, or N registered users of any kind
+
