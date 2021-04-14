@@ -10,6 +10,7 @@ module ChaosApi::V6
     # TODO: Add fetching the SessionGUID to the chaosApiController base controller
     # TODO: Add quick error json response method to ChaosApiController
 
+    # /v6/Slide/Completed
     def get
       params.require([:sessionGUID, :questionaireId, :slideIndex])
 
