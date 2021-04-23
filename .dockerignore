@@ -2,12 +2,10 @@ frontend/**/*
 docker/**/*
 notes/**/*
 doc/**/*
-./Gemfile.lock
 README.md
 README.rdoc
 .git/
 .idea/
-Gemfile.lock
 LICENSE
 tmp/
 log/

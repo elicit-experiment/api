@@ -17,6 +17,8 @@ class Hash
 end
 
 class ExperimentXmlTest < ActiveSupport::TestCase
+
+=begin
   experiment_xml_files = ['freetexttest.xml', 'checkboxgrouptest.xml', 'likertscaletest.xml', 'radiobottongrouptest.xml', 'onedscaletest.xml']
 
   experiment_xml_files.each do |experiment_xml|
@@ -73,4 +75,5 @@ class ExperimentXmlTest < ActiveSupport::TestCase
       end
     end
   end
+=end
 end

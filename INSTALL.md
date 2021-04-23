@@ -97,7 +97,7 @@ docker-compose build
 # Run Elicit
 
 ```
-docker-compose up -d
+docker-compose --env-file .env.production.local up -d
 ```
 
 

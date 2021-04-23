@@ -52,7 +52,7 @@ module ChaosApi::V6
           value: session_guid,
           # expires: 60.minutes.from_now,
           path: '/',
-          secure: Rails.configuration.elicit['participant_frontend']['scheme'] == 'https',
+          secure: Rails.configuration.elicit[:participant_frontend][:scheme] == 'https',
           httponly: true
         )
 

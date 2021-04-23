@@ -96,7 +96,7 @@ Rails.application.routes.draw do
       }
       devise_scope :user do
         get 'users/current' => 'api/v1/users#show_current_user'
-        resources :users, only: %i[show index update delete], controller: 'api/v1/users', defaults: { format: 'json' }, constraints: { id: %r{[^/]+} } do
+        resources :users, only: %i[show index update delete], controller: 'api/v1/users', defaults: { format: 'json' }, constraints: { id: %r{[0-9]+} } do
         end
       end
       use_doorkeeper

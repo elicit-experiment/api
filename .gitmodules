@@ -2,3 +2,6 @@
 	path = docker/experiment-frontend
 	url = https://github.com/elicit-experiment/frontend.git
 	branch = master
+[submodule "gems/swagger_ui_engine"]
+	path = gems/swagger_ui_engine
+	url = https://github.com/freeroamingsolutions/swagger_ui_engine

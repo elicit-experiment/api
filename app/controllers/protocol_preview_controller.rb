@@ -18,7 +18,8 @@ class ProtocolPreviewController < ApplicationController
     phase_definition_id = params[:phase_definition_id]
     trial_definition_id = params[:trial_definition_id]
 
-    @url = "#{Rails.configuration.elicit['participant_frontend']['scheme']}://#{Rails.configuration.elicit['participant_frontend']['host']}:#{Rails.configuration.elicit['participant_frontend']['port']}/?session_guid=#{session_guid}#Experiment/#{protocol_definition_id}"
+    pfe = Rails.configuration.elicit[:participant_frontend]
+    @url = "#{pfe[:scheme]}://#{pfe[:host]}:#{pfe[:port]}/?session_guid=#{session_guid}#Experiment/#{protocol_definition_id}"
 
     session_params = {
       user_id: current_user.id,
@@ -34,7 +35,7 @@ class ProtocolPreviewController < ApplicationController
     }
     session = Chaos::ChaosSession.new(session_params)
 
-    Rails.logger.info "Taking session #{session.ai} #{session.valid?}"
+    Rails.logger.info "Taking session #{session.ai} #{session.valid?} #{@url}"
 
     if session.save
       respond_with do |format|

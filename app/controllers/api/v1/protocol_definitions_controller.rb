@@ -31,11 +31,11 @@ module Api::V1
       query_string = '?' + query_params.map { |k, v| "#{k}=#{v}" }.join('&')
       hash_string = "#Experiment/#{@protocol_definition_id}"
 
-      pfe = Rails.configuration.elicit['participant_frontend']
+      pfe = Rails.configuration.elicit[:participant_frontend]
       session_params = {
         user_id: @protocol_user.user_id,
         session_guid: session_guid,
-        url: "#{pfe['scheme']}://#{pfe['host']}:#{pfe['port']}/#{query_string}#{hash_string}",
+        url: "#{pfe[:scheme]}://#{pfe[:host]}:#{pfe[:port]}/#{query_string}#{hash_string}",
         expires_at: Date.today + 1.day,
         study_definition_id: @study_definition_id,
         protocol_definition_id: @protocol_definition_id,

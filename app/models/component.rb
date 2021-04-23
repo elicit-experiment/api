@@ -13,9 +13,17 @@ class Component < ApplicationRecord
   swagger_schema :ComponentDefinition do
     property :Inputs do
       key :type, :array
+      items do  # TODO: put actual schema here
+        key :type, :integer
+        key :format, :int64
+      end
     end
     property :Outputs do
       key :type, :array
+      items do # TODO: put actual schema here
+        key :type, :integer
+        key :format, :int64
+      end
     end
   end
   swagger_schema :Component do

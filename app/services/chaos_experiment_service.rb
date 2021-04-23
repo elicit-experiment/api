@@ -65,9 +65,9 @@ class ChaosExperimentService
     current_trial_idx = trial_ids.index(trial_definition_id)
 
     elicit_config = Rails.configuration.elicit['elicit_portal']
-    url = elicit_config['scheme'] + '://' +
-          elicit_config['host'] + ':' +
-          elicit_config['port'].to_s + '/admin/studies/' +
+    url = elicit_config[:scheme] + '://' +
+          elicit_config[:host] + ':' +
+          elicit_config[:port].to_s + '/admin/studies/' +
           @study_definition.id.to_s + '/protocols/' +
           @protocol_definition.id.to_s
 

@@ -1,5 +1,5 @@
 # Base image:
-FROM ruby:2.5.7
+FROM ruby:3.0.1
 
 ARG SITE_SUFFIX
 ARG API_SCHEME
@@ -36,6 +36,8 @@ WORKDIR $RAILS_ROOT
 
 # Gems:
 COPY Gemfile Gemfile
+COPY Gemfile.lock Gemfile.lock
+COPY gems gems
 RUN gem install bundler
 RUN bundle install
 

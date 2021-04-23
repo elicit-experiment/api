@@ -2,7 +2,7 @@
 
 require 'test_helper'
 require 'minitest/unit'
-require 'mocha/mini_test'
+require 'mocha/minitest'
 require 'minitest/mock'
 
 class StubToken

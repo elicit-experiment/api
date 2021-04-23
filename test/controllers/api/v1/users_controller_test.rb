@@ -2,7 +2,7 @@
 
 require 'test_helper'
 require 'minitest/unit'
-require 'mocha/mini_test'
+require 'mocha/minitest'
 require 'minitest/mock'
 
 class StubToken
@@ -17,7 +17,7 @@ module Api::V1
     test 'admin can upgrade user' do
       as_user(user(:admin)) do |headers|
         target_user = user(:registered_user)
-        patch users_url(target_user), params: { user: { role: 'admin' } }, as: :json, headers: headers
+        patch user_url(target_user), params: { user: { id: target_user.id, role: 'admin' } }, as: :json, headers: headers
         assert_response :success, 'investigator was not able to upgrade user to investigator'
       end
     end
@@ -25,7 +25,7 @@ module Api::V1
     test 'investigator cannot upgrade user' do
       as_user(user(:investigator)) do |headers|
         target_user = user(:registered_user)
-        patch users_url(target_user), params: { user: { role: 'admin' } }, as: :json, headers: headers
+        patch user_url(target_user), params: { user: { id: target_user.id, role: 'admin' } }, as: :json, headers: headers
         assert_response :forbidden, 'investigator was able to upgrade user to investigator'
       end
     end

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class ApplicationController < ActionController::API
+  include PreloadHeaders
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   #  protect_from_forgery with: :exception
@@ -13,9 +14,8 @@ class ApplicationController < ActionController::API
 
   # TODO: make this less open when we actually go to deploy
   def cors_set_access_control_headers
-    Rails.logger.info 'access control yo'
-    pfe = Rails.configuration.elicit['participant_frontend']
-    url = "#{pfe['host']}:#{pfe['port']}"
+    pfe = Rails.configuration.elicit[:participant_frontend]
+    url = "#{pfe[:host]}:#{pfe[:port]}"
 
     headers['Access-Control-Allow-Origin'] = '*'
     headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
@@ -26,8 +26,8 @@ class ApplicationController < ActionController::API
   def cors_preflight_check
     Rails.logger.info 'preflight'
     if request.method == :options
-      pfe = Rails.configuration.elicit['participant_frontend']
-      url = "#{pfe['host']}:#{pfe['port']}"
+      pfe = Rails.configuration.elicit[:participant_frontend]
+      url = "#{pfe[:host]}:#{pfe[:port]}"
 
       headers['Access-Control-Allow-Origin'] = '*'
       headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, OPTIONS'

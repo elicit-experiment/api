@@ -2,7 +2,8 @@
 
 source 'https://rubygems.org'
 
-ruby '2.5.7'
+# ruby '2.7.3'
+ruby '3.0.1' # needs new debug gems
 
 git_source(:github) do |repo_name|
   repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?('/')
@@ -10,12 +11,13 @@ git_source(:github) do |repo_name|
 end
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.2'
+gem 'rails', '~> 6'
+# 6.0 is incompatible with swagger_ui_engine https://github.com/zuzannast/swagger_ui_engine/issues/43
 gem 'webpacker'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 # Use Puma as the app server
-gem 'puma', '~> 3.0'
+gem 'puma', '~> 5.2'
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
@@ -43,14 +45,15 @@ gem 'rack-cors'
 gem 'kaminari'
 
 # for api doc
-gem 'apivore'
+# gem 'apivore'
 gem 'rspec-rails'
-gem 'swagger-blocks', '1.3.1'
-gem 'swagger_ui_engine'
+gem 'swagger-blocks', '~> 3'
+# gem 'swagger_ui_engine', git: 'https://github.com/azelenets/swagger_ui_engine'
+gem 'swagger_ui_engine', path: 'gems/swagger_ui_engine'
 
 # authentication
 gem 'cancancan'
-gem 'devise', '~> 4.4.0'
+gem 'devise', '~> 4.7'
 gem 'devise-doorkeeper'
 gem 'doorkeeper'
 
@@ -93,16 +96,16 @@ gem 'carrierwave-base64'
 
 gem 'rack-mini-profiler', require: false
 
-gem 'flamegraph', '~> 0.9.5'
+# gem 'flamegraph', '~> 0.9.5'
 
-gem 'memory-profiler', '~> 1.0'
+# gem 'memory-profiler', '~> 1.0'
 
-gem 'stackprof', '~> 0.2.12'
+# gem 'stackprof', '~> 0.2.12'
 
 gem 'dotenv-rails', '~> 2.7'
 
 gem 'capybara', '~> 3.33'
 
-gem "debase", "~> 0.2.4"
+# gem "debase", "~> 0.2.4"
 
-gem "ruby-debug-ide", "~> 0.7.2"
+# gem "ruby-debug-ide", "~> 0.7.2"

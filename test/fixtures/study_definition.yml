@@ -3,7 +3,7 @@ learning_study:
   title: Learning Study - WebGazer
   description: "Study of learning, using eye gaze tracking from WebGazer \n                        This
     version calibrates on the video page"
-  principal_investigator_user_id: admin
+  principal_investigator: admin
   version: 1
   data: Put some data here, we don't really care about it.
   lock_question: 1

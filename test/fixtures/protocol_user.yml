@@ -1,17 +1,17 @@
 ---
 learning_study_1:
-  user_id: subject1
+  user: subject1
   protocol_definition: learning_study
   group_name:
 learning_study_2:
-  user_id: subject2
+  user: subject2
   protocol_definition: learning_study
   group_name:
 learning_study_3:
-  user_id: subject3
+  user: subject3
   protocol_definition: learning_study
   group_name:
 learning_study_4:
-  user_id: subject4
+  user: subject4
   protocol_definition: learning_study
   group_name:
