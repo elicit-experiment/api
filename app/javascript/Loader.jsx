@@ -8,7 +8,6 @@ import ReactDOM from 'react-dom'
 //Store and Root Component
 import { configureStore } from './store/store';
 import ElicitRoot from './ElicitRoot';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import 'packs/main.scss'
 
 const getToken = (tok) => {

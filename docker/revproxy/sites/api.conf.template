@@ -21,6 +21,14 @@ location @app {
 
 location ^~ /assets/ {
   gzip_static on;
+  # brotli_static on;
+  expires max;
+  add_header Cache-Control public;
+}
+
+location ^~ /packs/ {
+  gzip_static on;
+  # brotli_static on;
   expires max;
   add_header Cache-Control public;
 }

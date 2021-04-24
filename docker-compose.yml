@@ -42,6 +42,7 @@ services:
         args:
           - API_SCHEME=${API_SCHEME}
           - SITE_SUFFIX=${SITE_SUFFIX}
+          - ENABLED_MODULES=brotli
     volumes:
       - 'app_public:/var/www/app/public'
       - 'fe_public:/var/www/frontend/public'

@@ -1,5 +1,5 @@
 # Base image:
-FROM nginx:1.19.2-alpine
+FROM nginx:1.20-alpine
 
 ARG SITE_SUFFIX
 ARG API_SCHEME

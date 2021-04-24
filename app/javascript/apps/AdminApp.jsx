@@ -14,7 +14,7 @@ import UserManagement from "../components/admin_app/pages/UserManagement";
 import EditStudyContainer from "../components/admin_app/pages/EditStudyContainer";
 
 import { NavTab } from "react-router-tabs";
-import "react-router-tabs/styles/react-router-tabs.css";
+import "../scss/react-router-tabs.scss";
 
 function AdminApp(props) {
   if (props.tokenStatus !== 'user') {

@@ -2,11 +2,13 @@
 <html>
   <head>
     <title>Elicit</title>
-    <link rel="shortcut icon" type="image/png" href="/favicon.png" >
-    <%= stylesheet_link_tag "https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" %>
+    <%= favicon_link_tag '/favicon.png' %>
     <%= stylesheet_pack_tag 'application' %>
     <%= javascript_pack_tag 'application' %>
-    <link href="https://fonts.googleapis.com/css?family=Leckerli+One" rel="stylesheet">
+    <%
+    # <link href="https://fonts.googleapis.com/css?family=Leckerli+One&display=swap" rel="stylesheet">
+    %>
+    <link rel="preload" href="https://fonts.gstatic.com/s/leckerlione/v11/V8mCoQH8VCsNttEnxnGQ-1idKpZdJNE9Fg.woff2" as="font">
   </head>
   <body>
   <div id="elicit-app"/>

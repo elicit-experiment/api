@@ -32,7 +32,14 @@ module Api::V1
                                        }
                                 )
 
-      respond_with @protocol_definitions, :include => [:study_definition]
+
+      expires_in 5.seconds, must_revalidate: false
+
+      if stale? @protocol_definitions
+        #respond_with @protocol_definitions, :include => [:study_definition]
+      else
+        Rails.logger.info "!STALE"
+      end
     end
 
 
