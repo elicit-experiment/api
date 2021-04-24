@@ -1,5 +1,5 @@
 //Import React and Dependencies
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Route, Redirect, Switch, BrowserRouter, withRouter } from 'react-router-dom';
 import history from './packs/history.js'
 import { connect } from 'react-redux';
@@ -7,7 +7,8 @@ import { Provider } from 'react-redux';
 import PropTypes from "prop-types";
 
 // Import Components
-import { AdminApp } from './apps/AdminApp';
+//import { AdminApp } from './apps/AdminApp';
+const AdminApp = React.lazy(() => import('./apps/AdminApp'));
 import { ParticipantApp } from './apps/ParticipantApp';
 import LoginSignUpContainer from './components/login_signup/LoginSignUpContainer.jsx';
 import AboutPageContainer from './components/about_page/AboutPageContainer.jsx';
@@ -48,6 +49,12 @@ export const tokenStatus = (clientToken, userToken, requestClientToken) => {
   return token_status
 };
 
+const AdminAppWrapper = (props) => {
+  return <Suspense fallback={<div>Loading...</div>}>
+    <AdminApp {...props} />
+  </Suspense>
+}
+
 //Define Root Component and Router
 const RawRootRoutes = (props) => {
   let token_status = tokenStatus(props.clientToken, props.userToken, props.requestClientToken);
@@ -60,7 +67,7 @@ const RawRootRoutes = (props) => {
   if (token_status) {
     return (
       <Switch>
-        <Route path="/admin" component={AdminApp}/>
+        <Route path="/admin" component={AdminAppWrapper}/>
         <Route exact path="/participant" component={ParticipantApp}/>
         <Route exact path="/login" component={LoginSignUpContainer}/>
         <Route exact path="/about" component={AboutPageContainer}/>

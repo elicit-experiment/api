@@ -93,4 +93,5 @@ const mapDispatchToProps = (dispatch) => ({
 
 const connectedAdminApp = connect(mapStateToProps, mapDispatchToProps)(AdminApp);
 
+export default connectedAdminApp;
 export {connectedAdminApp as AdminApp};
