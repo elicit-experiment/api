@@ -19,30 +19,30 @@ export default class FrontPage extends Component {
                 <div className="mx-auto lead font-wordmark title-wordmark" >E</div>
               </div>
                 <div className="row">
-                    <div className="col-12 mx-auto text-center text-primary" dangerouslySetInnerHTML={htmlDoc}/>
+                    <div className="col-12 mx-auto text-center text-secondary" dangerouslySetInnerHTML={htmlDoc}/>
                 </div>
                 <div className="row wrap">
-                  <div className="col-sm-4">
-                  <div className="card p-2">
-                    <h5 className="card-title text-primary">About</h5>
-                    <p className="card-text" style={{height:'5em'}}>
-                      Elicit is a web framework for creating psychological studies.
-                    </p>
-                    <a className="btn btn-link" href={'/about'}>Learn More</a>
-                  </div>
-                  </div>
-                  <div className="col-sm-4">
-                    <div className="card p-2">
-                      <h5 className="card-title text-primary">Investigators</h5>
-                      <p className="card-text" style={{height:'5em'}}>Investigators can create their own surveys, request participants and analyze the results.</p>
-                      <button className="btn btn-link">Request Access</button>
+                  <div className="col-lg-4 mb-4">
+                    <div className="feature-card card shadow-sm rounded-lg p-2">
+                      <h5 className="card-title text-secondary">About</h5>
+                      <p className="card-text" style={{height:'5em'}}>
+                        Elicit is a web framework for creating psychological studies.
+                      </p>
+                      <a className="btn btn-primary m-auto" href={'/about'}>Learn More</a>
                     </div>
                   </div>
-                  <div className="col-sm-4">
-                    <div className="card p-2">
-                      <h5 className="card-title text-primary">Participants</h5>
+                  <div className="col-lg-4  mb-4">
+                    <div className="feature-card card shadow-sm rounded-lg p-2">
+                      <h5 className="card-title text-secondary">Investigators</h5>
+                      <p className="card-text" style={{height:'5em'}}>Investigators can create their own surveys, request participants and analyze the results.</p>
+                      <button className="btn btn-primary m-auto">Request Access</button>
+                    </div>
+                  </div>
+                  <div className="col-lg-4 mb-4">
+                    <div className="feature-card card shadow-sm rounded-lg p-2">
+                      <h5 className="card-title text-secondary">Participants</h5>
                       <p className="card-text" style={{height:'5em'}}>Participate in a study!</p>
-                      <a className="btn btn-link" href={'/participate'}>Participate Anonymously</a>
+                      <a className="btn btn-primary m-auto" href={'/participate'}>Participate Anonymously</a>
                     </div>
                   </div>
                 </div>

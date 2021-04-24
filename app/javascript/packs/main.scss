@@ -7,10 +7,6 @@ $font-family-base:       $font-family-sans-serif !default;
 @import "../scss/long-shadow-mixin.scss";
 @import "bootstrap-toggle/css/bootstrap2-toggle.min";
 
-.btn-link, .text-primary {
-  color: darkblue !important;
-}
-
 .navbar-light .navbar-nav .nav-link {
   color: rgba(0, 0, 0, .7);
 }
@@ -284,4 +280,10 @@ h1 {
 
 .modal-content {
   margin-top: -50%;
+}
+
+.feature-card  {
+  min-height: 12rem;
+  max-width: 20rem;
+  margin: auto;
 }
