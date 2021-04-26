@@ -28,7 +28,6 @@ class LoginSignUpContainer extends React.Component {
   }
 
   componentWillUnmount() {
-    this.unbindAll()
   }
 
   componentDidUpdate() {
@@ -60,11 +59,6 @@ class LoginSignUpContainer extends React.Component {
     if (this.props.tokenStatus === 'user') {
       if (this.props.currentUser && this.props.currentUser.sync) {
         if ((this.state.pleaseWait === 'hidden') && (this.state.loginSignup === 'hidden')) {
-          this.unbindAll();
-
-          // Hack for previous issues with timing of navigation vs. modal dismissal animation
-          //$('.modal-backdrop').remove()
-
           console.log('Loaded current user!');
           console.dir(this.props.currentUser);
 
@@ -79,8 +73,8 @@ class LoginSignUpContainer extends React.Component {
 
     return <div className="single-page">
       <h1 className="elicit-bg-title">Elicit</h1>
-      <h3 className="elicit-subtitle"></h3>
-      <LoginSignUp {...this.props} showLoginSignup={this.showLoginSignup()} dismissable={false}></LoginSignUp>
+      <h3 className="elicit-subtitle"/>
+      <LoginSignUp {...this.props} showLoginSignup={this.showLoginSignup()} dismissable={false}/>
       <Modal show={this.showPleaseWait()}>
         <Modal.Header><h1>Logging in...</h1></Modal.Header>
         <Modal.Body>
