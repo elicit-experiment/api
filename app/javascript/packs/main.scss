@@ -265,7 +265,6 @@ h1 {
   float: right;
 }
 
-
 .swal2-popup .swal2-content {
   font-size: 14px;
   font-weight: normal;
@@ -283,6 +282,9 @@ h1 {
 }
 
 .feature-card  {
+  > h2 {
+    font-size: 1.2rem;
+  }
   min-height: 12rem;
   max-width: 20rem;
   margin: auto;

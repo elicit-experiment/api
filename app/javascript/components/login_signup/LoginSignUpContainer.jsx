@@ -2,7 +2,6 @@
 import PropTypes from 'prop-types'
 import {connect} from 'react-redux';
 import React from 'react';
-import $ from 'jquery'
 
 // Import Component
 import LoginSignUp from './LoginSignUp';
@@ -34,11 +33,6 @@ class LoginSignUpContainer extends React.Component {
 
   componentDidUpdate() {
     this.setModalState()
-  }
-
-  unbindAll() {
-    $('#pleaseWaitDialog').off();
-    $('#logInModal').off()
   }
 
   setModalState() {

@@ -1,6 +1,8 @@
-import $ from 'jquery'
 
+/*
+import $ from 'jquery'
 window.jQuery = $;
+ */
 
 import React from 'react'
 import ReactDOM from 'react-dom'
