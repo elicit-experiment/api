@@ -42,8 +42,7 @@ module ChaosApi::V6
       @response = svc.make_slide(trial_index, nil, @trial_definition)
 
       unless @chaos_session.preview?
-        trial_definition = svc.trial_definition
-        if trial_definition
+        if (trial_definition = svc.trial_definition)
           if @chaos_session.phase_definition_id != trial_definition.phase_definition.id
             Rails.logger.warn "Inconsistent phase definition #{@chaos_session.phase_definition_id} #{trial_definition.phase_definition.id}"
           end
