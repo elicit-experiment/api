@@ -68,6 +68,7 @@ end
 group :development do
   gem 'rails-erd', require: false, group: :development
   gem 'rubocop'
+  gem 'rubocop-performance'
   gem 'spring'
 end
 

@@ -14,15 +14,17 @@ module ChaosApi::V6
 
       @chaos_session = Chaos::ChaosSession.where(session_guid: session_guid).first
 
-      question_id = params[:questionId].split(':')
-      study_definition_id = question_id[0].to_i
-      component_definition_id = question_id[1].to_i
+      study_definition_id, component_definition_id, trial_definition_id = params[:questionId].split(':').map(&:to_i)
 
-      @component = Component.find(component_definition_id)
+      # we must have the study definition, but we can have either the component or trial definition (c.f. ChaosExperimentService#make_slide)
 
       @study_definition = StudyDefinition.find(study_definition_id)
 
-      if @component.nil? || @study_definition.nil?
+      @trial_definition = TrialDefinition.find(trial_definition_id) if trial_definition_id.present? && !trial_definition_id.zero?
+
+      @component = Component.find(component_definition_id) if component_definition_id.present? && !component_definition_id.zero?
+
+      if @component.nil? || (@study_definition.nil? && @trial_definition.nil?)
         logger.error "Invalid answer #{params[:questionId]}"
         head :unprocessable_entity
         return
@@ -33,9 +35,9 @@ module ChaosApi::V6
       datapoint_query_fields = {
         stage_id: @chaos_session.stage&.id,
         protocol_user_id: @chaos_session.protocol_user_id,
-        phase_definition_id: @component.phase_definition_id,
-        trial_definition_id: @component.trial_definition_id,
-        component_id: @component.id
+        phase_definition_id: (@component || @trial_definition).phase_definition_id,
+        trial_definition_id: @component&.trial_definition_id || @trial_definition.id,
+        component_id: @component&.id || 0
       }
 
       new_datapoints = StudyResult::DataPoint.from_chaos_output(datapoint_query_fields, output)

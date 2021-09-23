@@ -34,6 +34,7 @@ Rails.application.routes.draw do
       get 'Question/Get' => 'chaos_api/v6/question#show', :defaults => { format: 'json' }
       post 'Answer/Set' => 'chaos_api/v6/answer#create', :defaults => { format: 'json' }
       get 'Answer/Set' => 'chaos_api/v6/answer#create', :defaults => { format: 'json' }
+      post 'Slide/DataPoint' => 'chaos_api/v6/time_series#create', :defaults => { format: 'json' }
       get 'Slide/Completed' => 'chaos_api/v6/slide#get', :defaults => { format: 'json' }
       match 'Answer/Set', to: 'chaos_api/v6/answer#cors_set_access_control_headers', via: :options
       post 'time_series/:series_type' => 'chaos_api/v6/time_series#create', :defaults => { format: 'json' }
