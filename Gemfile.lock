@@ -274,6 +274,10 @@ GEM
     rubocop-performance (1.11.5)
       rubocop (>= 1.7.0, < 2.0)
       rubocop-ast (>= 0.4.0)
+    rubocop-rails (2.12.2)
+      activesupport (>= 4.2.0)
+      rack (>= 1.1)
+      rubocop (>= 1.7.0, < 2.0)
     ruby-graphviz (1.2.5)
       rexml
     ruby-progressbar (1.11.0)
@@ -355,6 +359,7 @@ DEPENDENCIES
   rspec-rails
   rubocop
   rubocop-performance
+  rubocop-rails
   spring
   sqlite3
   swagger-blocks (~> 3)

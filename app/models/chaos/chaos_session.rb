@@ -4,18 +4,18 @@ module Chaos
   class ChaosSession < ApplicationRecord
     self.table_name = 'chaos_sessions'
 
-    attr_reader :protocol_user_id
+    # attr_accessor :study_definition_id, :protocol_definition_id, :protocol_user_id, :user_id, :study_result_id, :experiment_id, :stage_id, :trial_result_id
 
-    belongs_to :user, class_name: 'User', foreign_key: 'user_id'
-    belongs_to :study_definition, class_name: 'StudyDefinition', foreign_key: 'study_definition_id'
-    belongs_to :protocol_definition, class_name: 'ProtocolDefinition', foreign_key: 'protocol_definition_id'
-    belongs_to :phase_definition, class_name: 'PhaseDefinition', foreign_key: 'phase_definition_id'
-    belongs_to :protocol_user, class_name: 'ProtocolUser', foreign_key: 'protocol_user_id', optional: true
-    belongs_to :phase_definition, class_name: 'PhaseDefinition', foreign_key: 'phase_definition_id'
-    belongs_to :study_result, class_name: 'StudyResult::StudyResult', foreign_key: 'study_result_id', optional: true
-    belongs_to :experiment, class_name: 'StudyResult::Experiment', foreign_key: 'experiment_id', optional: true
-    belongs_to :stage, class_name: 'StudyResult::Stage', foreign_key: 'stage_id', optional: true
-    belongs_to :trial_result, class_name: 'StudyResult::TrialResult', foreign_key: 'trial_result_id', optional: true
+    belongs_to :user, class_name: 'User'
+    belongs_to :study_definition, class_name: 'StudyDefinition'
+    belongs_to :protocol_definition, class_name: 'ProtocolDefinition'
+    belongs_to :phase_definition, class_name: 'PhaseDefinition'
+    belongs_to :protocol_user, class_name: 'ProtocolUser', optional: true
+    belongs_to :phase_definition, class_name: 'PhaseDefinition'
+    belongs_to :study_result, class_name: 'StudyResult::StudyResult', optional: true
+    belongs_to :experiment, class_name: 'StudyResult::Experiment', optional: true
+    belongs_to :stage, class_name: 'StudyResult::Stage', optional: true
+    belongs_to :trial_result, class_name: 'StudyResult::TrialResult', optional: true
 
     def preview?
       protocol_user.nil? || study_result.nil?
