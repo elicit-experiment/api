@@ -25,7 +25,7 @@ module ChaosApi
 
         @component = Component.find(component_definition_id) if component_definition_id.present? && !component_definition_id.zero?
 
-        unless [@component, (@study_definition || @trial_definition)].all?(&:present?)
+        unless [@study_definition, (@component || @trial_definition)].all?(&:present?)
           logger.error "Invalid answer #{params[:questionId]} #{[study_definition_id, component_definition_id, trial_definition_id].ai}"
           head :unprocessable_entity
           return
