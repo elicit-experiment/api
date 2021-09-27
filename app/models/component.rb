@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 class Component < ApplicationRecord
-  belongs_to :study_definition, class_name: 'StudyDefinition', foreign_key: 'study_definition_id'
-  belongs_to :protocol_definition, class_name: 'ProtocolDefinition', foreign_key: 'protocol_definition_id'
-  belongs_to :phase_definition, class_name: 'PhaseDefinition', foreign_key: 'phase_definition_id'
-  belongs_to :trial_definition, class_name: 'TrialDefinition', foreign_key: 'trial_definition_id'
+  belongs_to :study_definition, class_name: 'StudyDefinition'
+  belongs_to :protocol_definition, class_name: 'ProtocolDefinition'
+  belongs_to :phase_definition, class_name: 'PhaseDefinition'
+  belongs_to :trial_definition, class_name: 'TrialDefinition'
 
   has_many :data_point, class_name: 'StudyResult::DataPoint', dependent: :destroy
 
@@ -13,7 +13,7 @@ class Component < ApplicationRecord
   swagger_schema :ComponentDefinition do
     property :Inputs do
       key :type, :array
-      items do  # TODO: put actual schema here
+      items do # TODO: put actual schema here
         key :type, :integer
         key :format, :int64
       end

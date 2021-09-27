@@ -6,25 +6,25 @@ module StudyResult
   end
 
   class TimeSeries < ApplicationRecord
-    belongs_to :stage, class_name: 'Stage', foreign_key: 'stage_id'
-    belongs_to :study_definition, class_name: 'StudyDefinition', foreign_key: 'study_definition_id'
-    belongs_to :protocol_definition, class_name: 'ProtocolDefinition', foreign_key: 'protocol_definition_id'
-    belongs_to :phase_definition, class_name: 'PhaseDefinition', foreign_key: 'phase_definition_id'
-    belongs_to :component, class_name: 'Component', foreign_key: 'component_id', optional: true
+    belongs_to :stage, class_name: 'Stage'
+    belongs_to :study_definition, class_name: 'StudyDefinition'
+    belongs_to :protocol_definition, class_name: 'ProtocolDefinition'
+    belongs_to :phase_definition, class_name: 'PhaseDefinition'
+    belongs_to :component, class_name: 'Component', optional: true
 
     mount_uploader :file, TimeSeriesUploader
 
     def append_to_tsv(append_text, headers, filename)
       rows = append_text.split("\n").size
       if !file.file
-        self.file = FileIO.new(headers.map(&:to_s).join("\t") + "\n" + append_text + "\n", filename)
+        self.file = FileIO.new("#{headers.map(&:to_s).join("\t")}\n#{append_text}\n", filename)
         logger.info "Creating initial time series with #{rows} rows to #{file.path}"
       else
         unless File.exist? file.path
           logger.warn "Time Series file doesn't exist: #{file.path}"
           dir = File.dirname(file.path)
           FileUtils.mkdir_p dir
-          File.open(file.path, 'w') { |file| file.write(headers.map(&:to_s).join("\t") + "\n") }
+          File.open(file.path, 'w') { |file| file.write("#{headers.map(&:to_s).join("\t")}\n") }
         end
         open(self.file.path, 'a') do |f|
           f.puts append_text
@@ -35,7 +35,7 @@ module StudyResult
 
     def append_file_to_tsv(append_file, headers, filename)
       unless file.file
-        self.file = FileIO.new(headers.map(&:to_s).join("\t") + "\n", filename)
+        self.file = FileIO.new("#{headers.map(&:to_s).join("\t")}\n", filename)
         logger.info "Creating initial time series with header to #{file.path}"
         save!
       end
@@ -47,13 +47,13 @@ module StudyResult
         dir = File.dirname(filepath)
         FileUtils.mkdir_p dir
         File.open(filepath, 'w') do |file|
-          file.write(headers.map(&:to_s).join("\t") + "\n")
+          file.write("#{headers.map(&:to_s).join("\t")}\n")
         end
       end
 
       blocks = 0
       File.open(filepath, 'a') do |outfile|
-        while buffer = append_file.read(4096)
+        while (buffer = append_file.read(4096))
           outfile << buffer
           blocks += 1
         end

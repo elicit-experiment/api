@@ -30,7 +30,7 @@ class TobiiParser
 
       protocol_users = ProtocolUser.includes(:user).where(protocol_user_args)
       Rails.logger.info protocol_users.ai
-      protocol_users_map = protocol_users.map { |pu| [pu.user.username, pu] }.to_h
+      protocol_users_map = protocol_users.index_by { |pu| pu.user.username }
     end
 
     unless all_trials
@@ -69,17 +69,13 @@ class TobiiParser
         row_user = row[metadata['user_field']]
 
         unless all_users
-          if query_params[:user_name]
-            next unless row_user.eql? query_params[:user_name]
-          end
+          next if query_params[:user_name] && !(row_user.eql? query_params[:user_name])
 
-          if protocol_users_map
-            next unless protocol_users_map.key?(row_user)
-          end
+          next if protocol_users_map && !protocol_users_map.key?(row_user)
         end
 
         unless all_trials
-          date_time_str = row[metadata['date_field']] + ' ' + row[metadata['time_field']]
+          date_time_str = "#{row[metadata['date_field']]} #{row[metadata['time_field']]}"
           date_time = DateTime.strptime(date_time_str, '%d-%m-%Y %H:%M:%S.%L')
 
           matching_trial = false

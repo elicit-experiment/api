@@ -3,9 +3,7 @@
 # class to encapsulate a response for the Chaos Portal client
 
 class ChaosResponse
-  attr_accessor :Body
-  attr_accessor :Error
-  attr_accessor :Header
+  attr_accessor :Body, :Error, :Header
 
   def initialize(results, error_msg = nil)
     @Body = {

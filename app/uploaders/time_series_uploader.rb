@@ -9,7 +9,7 @@ class TimeSeriesUploader < CarrierWave::Uploader::Base
     command = "gunzip --force #{filename}"
     success = system(command)
 
-    success && $CHILD_STATUS.exitstatus == 0
+    success && $CHILD_STATUS.exitstatus.zero?
   end
 
   # Override the directory where uploaded files will be stored.

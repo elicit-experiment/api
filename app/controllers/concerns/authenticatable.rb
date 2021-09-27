@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Authenticatable
   def current_api_user
     User.find(doorkeeper_token.resource_owner_id) if doorkeeper_token&.resource_owner_id
@@ -21,6 +23,6 @@ module Authenticatable
   end
 
   def authenticate_user!(force: false)
-    raise 'unauthorized' unless doorkeeper_token.present?
+    raise 'unauthorized' if doorkeeper_token.blank?
   end
 end

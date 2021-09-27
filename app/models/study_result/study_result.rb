@@ -6,8 +6,8 @@ module StudyResult
   end
 
   class StudyResult < ApplicationRecord
-    belongs_to :study_definition, class_name: 'StudyDefinition', foreign_key: 'study_definition_id'
-    belongs_to :user, class_name: 'User', foreign_key: 'user_id'
+    belongs_to :study_definition, class_name: 'StudyDefinition'
+    belongs_to :user, class_name: 'User'
 
     has_many :experiments, class_name: 'StudyResult::Experiment', dependent: :destroy
 

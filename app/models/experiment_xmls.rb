@@ -3,17 +3,21 @@
 require 'nokogiri'
 
 # https://stackoverflow.com/questions/1230741/convert-a-nokogiri-document-to-a-ruby-hash
-class Nokogiri::XML::Node
-  TYPENAMES = { 1 => 'element', 2 => 'attribute', 3 => 'text', 4 => 'cdata', 8 => 'comment' }.freeze
-  def to_hash
-    { kind: TYPENAMES[node_type], name: name }.tap do |h|
-      if namespace
-        h[:nshref] = namespace.href
-        h[:nsprefix] = namespace.prefix
+module Nokogiri
+  module XML
+    class Node
+      TYPENAMES = { 1 => 'element', 2 => 'attribute', 3 => 'text', 4 => 'cdata', 8 => 'comment' }.freeze
+      def to_hash
+        { kind: TYPENAMES[node_type], name: name }.tap do |h|
+          if namespace
+            h[:nshref] = namespace.href
+            h[:nsprefix] = namespace.prefix
+          end
+          h[:text] = text
+          h[:attr] = attribute_nodes.map(&:to_hash) if element?
+          h.merge! kids: children.map(&:to_hash) if element?
+        end
       end
-      h[:text] = text
-      h[:attr] = attribute_nodes.map(&:to_hash) if element?
-      h.merge! kids: children.map(&:to_hash) if element?
     end
   end
 end
@@ -23,10 +27,7 @@ class ExperimentXmls
 
   include Denilize
 
-  attr_accessor :experiments
-  attr_accessor :experiments_n
-  attr_accessor :experiment_by_id
-  attr_accessor :experiment_n_by_id
+  attr_accessor :experiments, :experiments_n, :experiment_by_id, :experiment_n_by_id
 
   def initialize
     @experiments = []
@@ -83,7 +84,9 @@ class ExperimentXmls
     id = exp['Experiment']['Id']
     no_of_trials = exp['Experiment']['NoOfTrials'].to_i
     trial_elements = exp_n.css('//Experiment/Trials/Trial').count
-    Rails.logger.error("#{no_of_trials} vs #{trial_elements} for #{experiment_file} #{exp_n.css('Experiment>Trials').children}") unless trial_elements == no_of_trials
+    unless trial_elements == no_of_trials
+      Rails.logger.error("#{no_of_trials} vs #{trial_elements} for #{experiment_file} #{exp_n.css('Experiment>Trials').children}")
+    end
     @experiments << exp
     @experiment_by_id[id] = exp
     @experiments_n << exp_n
@@ -115,11 +118,9 @@ class ExperimentXmls
     num_trials = trial_els.count
     Rails.logger.info "Trials #{id} #{experiment.css('Experiment>Name').text} #{num_trials} -- #{trial_no}"
     base_question_no = 0
-    if trial_no > 0
-      base_question_no = (0..(trial_no - 1)).map { |t| trial_els[t].children.count }.reduce(&:+)
-    end
+    base_question_no = (0..(trial_no - 1)).map { |t| trial_els[t].children.count }.reduce(&:+) if trial_no.positive?
     trial = trial_els[trial_no].children
-    results = trial.reject { |e| e.name.eql?('text') && e.text.blank? }.each_with_index.map do |element, index|
+    trial.reject { |e| e.name.eql?('text') && e.text.blank? }.each_with_index.map do |element, index|
       # ap element.css("Inputs").children.map{|x| x.to_s}.reject{ |s| s =~ /^\s*$/ }.map{ |s| Hash.from_xml(URI.unescape(s)) }
       input = element.css('Inputs').map { |i| i.children.map { |x| URI.unescape(x.to_s) }.reject { |s| s =~ /^\s*$/ }.map { |s| Hash.from_xml(s) } }.first
       output = element.css('Outputs').map do |o|
@@ -127,15 +128,13 @@ class ExperimentXmls
           h = Hash.from_xml(s)
           h.delete('Validation')
           h = h.compact
-        end .reject(&:empty?)
+        end.reject(&:empty?)
       end.reject(&:empty?).flatten
       output = output.reduce({}, :merge)['Value'] || {}
       output = {} unless element.name.eql? 'Monitor'
       output = Denilize.denilize(output)
 
-      if (output == {}) && input.nil?
-        Rails.logger.error(" invalid text: #{element.to_xml.ai}")
-      end
+      Rails.logger.error(" invalid text: #{element.to_xml.ai}") if (output == {}) && input.nil?
       question_no = base_question_no + index
       {
         'Fullname' => 'Question, 1.0.0',
@@ -146,7 +145,5 @@ class ExperimentXmls
         'UserAnswer' => nil
       }
     end
-
-    results
   end
 end

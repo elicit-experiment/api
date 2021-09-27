@@ -60,12 +60,10 @@ module Chaos
     end
 
     def next_stage(experiment = nil)
-      if experiment.nil?
-        experiment = StudyResult::Experiment.where(
-          study_result_id: study_result_id,
-          protocol_user_id: protocol_user.id
-        ).first_or_initialize
-      end
+      experiment ||= StudyResult::Experiment.find_or_initialize_by(
+        study_result_id: study_result_id,
+        protocol_user_id: protocol_user.id
+      )
 
       completed_stages = StudyResult::Stage.where(
         experiment_id: experiment.id,
@@ -119,11 +117,11 @@ module Chaos
         self.phase_definition_id = nil
 
       else
-        next_stage = StudyResult::Stage.where(
+        next_stage = StudyResult::Stage.find_or_initialize_by(
           experiment_id: experiment.id,
           protocol_user_id: experiment.protocol_user_id,
           phase_definition_id: next_phase.id
-        ).first_or_initialize
+        )
 
         self.stage_id = next_stage.id
         unless next_stage.num_trials
@@ -137,7 +135,7 @@ module Chaos
         experiment.current_stage = next_stage
         self.phase_definition_id = next_stage.id
 
-        Rails.logger.info "Next STAGE: #{trials.entries.ai}"
+        Rails.logger.info "Next STAGE: #{trials&.entries&.ai}"
         Rails.logger.info next_stage.ai.to_s
         next_stage.save!
         stage = next_stage

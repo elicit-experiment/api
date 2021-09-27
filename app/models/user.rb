@@ -33,7 +33,7 @@ class User < ApplicationRecord
     end
   end
 
-  ROLES.keys.each do |attribute|
+  ROLES.each_key do |attribute|
     define_method :"is_#{attribute}?" do
       ROLES[attribute] == role
     end

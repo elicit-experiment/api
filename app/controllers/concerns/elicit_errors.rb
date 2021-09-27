@@ -13,8 +13,8 @@ module ElicitErrors
     raise ElicitError.new('permission denied', :unauthorized)
   end
 
-  def render_elicit_error(e)
-    render json: e, status: e.code
+  def render_elicit_error(error)
+    render json: error, status: error.code
     true
   end
 end

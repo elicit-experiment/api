@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class ProtocolUser < ApplicationRecord
-  belongs_to :protocol_definition, class_name: 'ProtocolDefinition', foreign_key: 'protocol_definition_id'
+  belongs_to :protocol_definition, class_name: 'ProtocolDefinition'
   has_one :study_definition, through: :protocol_definition
-  belongs_to :user, class_name: 'User', foreign_key: 'user_id'
+  belongs_to :user, class_name: 'User'
 
   has_one :experiment, class_name: 'StudyResult::Experiment', dependent: :destroy
 

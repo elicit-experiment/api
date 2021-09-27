@@ -1,65 +1,65 @@
-module Api::V1
-  class ParticipantController < ApiController
-    before_action :doorkeeper_authorize!, except: [:anonymous_protocols, :anonymous_protocol] # Requires access token for all actions
+# frozen_string_literal: true
 
-    def eligeable_protocols
-      @public = params[:public] == 'true'
-      @protocol_users = ProtocolUser
+module Api
+  module V1
+    class ParticipantController < ApiController
+      before_action :doorkeeper_authorize!, except: %i[anonymous_protocols anonymous_protocol] # Requires access token for all actions
+
+      def eligeable_protocols
+        @public = params[:public] == 'true'
+        @protocol_users = ProtocolUser
                           .joins(:protocol_definition)
                           .joins(:study_definition)
-                          .merge(ProtocolDefinition.where(:active => true))
+                          .merge(ProtocolDefinition.where(active: true))
                           .left_outer_joins(:experiment)
-                          .where({ :user_id => current_api_user_id })
+                          .where({ user_id: current_api_user_id })
 
-      @protocol_users = @protocol_users.where({ study_definitions: {show_in_study_list: true} }) if @public
-      @protocol_users = @protocol_users.includes([:study_definition, { :experiment => :current_stage }])
+        @protocol_users = @protocol_users.where({ study_definitions: { show_in_study_list: true } }) if @public
+        @protocol_users = @protocol_users.includes([:study_definition, { experiment: :current_stage }])
 
-      respond_with @protocol_users, :include => [:protocol_definition, :study_definition, { :experiment => { include: :current_stage } }]
-    end
+        respond_with @protocol_users, include: [:protocol_definition, :study_definition, { experiment: { include: :current_stage } }]
+      end
 
-    def anonymous_protocols
-      @public = params[:public] == 'true'
+      def anonymous_protocols
+        @public = params[:public] == 'true'
 
-      study_definition_filter                      = { :allow_anonymous_users => true }
+        study_definition_filter                      = { allow_anonymous_users: true }
 
-      study_definition_filter[:show_in_study_list] = true if @public
+        study_definition_filter[:show_in_study_list] = true if @public
 
-      @protocol_definitions = ProtocolDefinition
+        @protocol_definitions = ProtocolDefinition
                                 .joins(:study_definition)
                                 .where({
-                                         active:            true,
+                                         active: true,
                                          study_definitions: study_definition_filter
-                                       }
-                                )
+                                       })
 
+        expires_in 5.seconds, must_revalidate: false
 
-      expires_in 5.seconds, must_revalidate: false
-
-      if stale? @protocol_definitions
-        #respond_with @protocol_definitions, :include => [:study_definition]
-      else
-        Rails.logger.info "!STALE"
+        if stale? @protocol_definitions
+          # respond_with @protocol_definitions, :include => [:study_definition]
+        else
+          Rails.logger.info '!STALE'
+        end
       end
-    end
 
+      def anonymous_protocol
+        @public = params[:public] == 'true'
+        @id = params[:id]
 
-    def anonymous_protocol
-      @public = params[:public] == 'true'
-      @id = params[:id]
+        study_definition_filter = { allow_anonymous_users: true }
 
-      study_definition_filter                      = { :allow_anonymous_users => true }
+        study_definition_filter[:id] = @id
 
-      study_definition_filter[:id] = @id
-
-      @protocol_definitions = ProtocolDefinition
+        @protocol_definitions = ProtocolDefinition
                                 .joins(:study_definition)
                                 .where({
-                                         active:            true,
+                                         active: true,
                                          study_definitions: study_definition_filter
-                                       }
-                                )
+                                       })
 
-      respond_with @protocol_definitions, :include => [:study_definition]
+        respond_with @protocol_definitions, include: [:study_definition]
       end
+    end
   end
 end

@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class PhaseDefinition < ApplicationRecord
-  belongs_to :study_definition, class_name: 'StudyDefinition', foreign_key: 'study_definition_id'
-  belongs_to :protocol_definition, class_name: 'ProtocolDefinition', foreign_key: 'protocol_definition_id'
+  belongs_to :study_definition, class_name: 'StudyDefinition'
+  belongs_to :protocol_definition, class_name: 'ProtocolDefinition'
 
   has_many :trial_definitions, dependent: :destroy
   has_many :trial_orders, dependent: :destroy
@@ -19,8 +19,7 @@ class PhaseDefinition < ApplicationRecord
 
     trial_order_id = TrialOrderSelectionMapping
                      .where(user_id: user_id, phase_definition: self)
-                     .pluck(:trial_order_id)
-                     .first
+                     .pick(:trial_order_id)
 
     trial_order = TrialOrder.find(trial_order_id) if trial_order_id
 
@@ -28,23 +27,24 @@ class PhaseDefinition < ApplicationRecord
 
     return trial_order if trial_order
 
-    if trial_ordering == 'RandomWithReplacement'
-      trial_order = TrialOrder
-                    .where(trial_query_params.merge(user_id: nil))
-                    .order('RANDOM()')
-                    .first
-    elsif trial_ordering == 'RandomWithoutReplacement'
-      trial_order = TrialOrder
-                    .where(trial_query_params.merge(user_id: nil))
-                    .left_joins(:trial_order_selection_mappings)
-                    .where(trial_order_selection_mappings: { id: nil })
-                    .first
-    else
-      trial_order = TrialOrder
-                    .where(trial_query_params.merge(user_id: nil))
-                    .order('RANDOM()')
-                    .first
-    end
+    trial_order = case trial_ordering
+                  when 'RandomWithReplacement'
+                    TrialOrder
+                  .where(trial_query_params.merge(user_id: nil))
+                  .order('RANDOM()')
+                  .first
+                  when 'RandomWithoutReplacement'
+                    TrialOrder
+                  .where(trial_query_params.merge(user_id: nil))
+                  .left_joins(:trial_order_selection_mappings)
+                  .where(trial_order_selection_mappings: { id: nil })
+                  .first
+                  else
+                    TrialOrder
+                  .where(trial_query_params.merge(user_id: nil))
+                  .order('RANDOM()')
+                  .first
+                  end
 
     if trial_order.nil?
       all_trial_orders = TrialOrder.where(trial_query_params)

@@ -32,7 +32,7 @@ class Ability
     # See the wiki for details:
     # https://github.com/CanCanCommunity/cancancan/wiki/Defining-Abilities
 
-    return unless user.present?
+    return if user.blank?
 
     Rails.logger.info "AUTH: #{user.ai}"
     can :upgrade, User if [User::ROLES[:admin]].include?(user.role)

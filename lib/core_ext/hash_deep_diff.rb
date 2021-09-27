@@ -8,22 +8,20 @@ class Hash
       if a[k] != b[k] && exceptions.none? { |key| k.include?(key) }
         if a[k].respond_to?(:deep_diff) && b[k].respond_to?(:deep_diff)
           diff[k] = a[k].deep_diff(b[k])
-        else
-          if a[k].present? && b[k].present?
-            if a[k].instance_of?(Array) && a[k].first.instance_of?(Hash)
-              a[k].each_with_index do |hash, index|
-                diff[k] = if (b[k][index]).present?
-                            hash.deep_diff(b[k][index])
-                          else
-                            [a[k], b[k]]
-                          end
-              end
-            else
-              diff[k] = [a[k], b[k]]
+        elsif a[k].present? && b[k].present?
+          if a[k].instance_of?(Array) && a[k].first.instance_of?(Hash)
+            a[k].each_with_index do |hash, index|
+              diff[k] = if (b[k][index]).present?
+                          hash.deep_diff(b[k][index])
+                        else
+                          [a[k], b[k]]
+                        end
             end
           else
             diff[k] = [a[k], b[k]]
           end
+        else
+          diff[k] = [a[k], b[k]]
         end
       end
       diff.delete_blank

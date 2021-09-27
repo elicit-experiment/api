@@ -31,5 +31,5 @@ class ChaosController < ApplicationController
     end
 
     redirect_to study_definition.redirect_close_on_url
-    end
+  end
 end
