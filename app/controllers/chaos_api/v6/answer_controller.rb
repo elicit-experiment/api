@@ -65,7 +65,7 @@ module ChaosApi
                                 .where.not(point_type: 'State')
                                 .delete_all
           new_datapoints.each(&:save!)
-        end
+        end if @component
 
         if output['Context']
           context = StudyResult::Context.find_or_create_by(
