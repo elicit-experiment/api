@@ -55,17 +55,19 @@ module ChaosApi
           return
         end
 
-        StudyResult::DataPoint.transaction do
-          # because CHAOS' semantics are to republish everything, blow away existing data points.
-          # We can't easily go incremental because of chaos' rate limiting, which means some updates
-          # might not fire, and it's not easy to keep track of which ones made it to the server and which
-          # ones didn't.
-          # Note that because state entities are updated separately, we don't nuke those.
-          StudyResult::DataPoint.where(datapoint_query_fields)
-                                .where.not(point_type: 'State')
-                                .delete_all
-          new_datapoints.each(&:save!)
-        end if @component
+        if @component
+          StudyResult::DataPoint.transaction do
+            # because CHAOS' semantics are to republish everything, blow away existing data points.
+            # We can't easily go incremental because of chaos' rate limiting, which means some updates
+            # might not fire, and it's not easy to keep track of which ones made it to the server and which
+            # ones didn't.
+            # Note that because state entities are updated separately, we don't nuke those.
+            StudyResult::DataPoint.where(datapoint_query_fields)
+                                  .where.not(point_type: 'State')
+                                  .delete_all
+            new_datapoints.each(&:save!)
+          end
+        end
 
         if output['Context']
           context = StudyResult::Context.find_or_create_by(
