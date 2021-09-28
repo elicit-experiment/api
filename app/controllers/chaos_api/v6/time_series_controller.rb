@@ -34,9 +34,9 @@ module ChaosApi
           return
         end
 
-        time_series = time_series
-
-        @response_status = :created
+        # created is better but Chaos thinks it's an error
+        # @response_status = :created
+        @response_status = :ok
 
         if params[:points]
           append_from_json(time_series)
@@ -59,7 +59,9 @@ module ChaosApi
           return
         end
 
-        @response_status = :created
+        # created is better but Chaos thinks it's an error
+        # @response_status = :created
+        @response_status = :ok
 
         if params[:points]
           append_from_json(time_series)
