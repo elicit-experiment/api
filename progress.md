@@ -1,7 +1,7 @@
 
 ## OneDScaleT
 
-Complete
+Complete. Example client code in `tests/Testcase_instrument2_stimuli.py`
 
 ## Push YouTube API events
 
@@ -12,7 +12,7 @@ Now they events from a YouTube video look like:
   "Tags":[{"Id":"2","Label":"indifferent"},{"Id":"2","Label":"middle"}],
   "Events":[
     {"Id":"Video","Type":"UNSTARTED","EntityType":"Stimulus","Method":"/Instrument/Stimulus","Data":"Video","DateTime":"2021-05-23T17:41:06.094Z"},
-    {"Id":"Video","Type":"BUFFERING","EntityType":"Stimulus","Method":"/Instrument/Stimulus","Data":"Video","DateTime":"2021-05-23T17:41:06.095Z"},
+    {"Id":"Video","Type":"BUFFERING","  EntityType":"Stimulus","Method":"/Instrument/Stimulus","Data":"Video","DateTime":"2021-05-23T17:41:06.095Z"},
     {"Id":"Video","Type":"PLAYING","EntityType":"Stimulus","Method":"/Instrument/Stimulus","Data":"Video","DateTime":"2021-05-23T17:41:06.592Z"},
     {"Id":"Video","Type":"Start","EntityType":"Stimulus","Method":"/Instrument/Stimulus","Data":"video/youtube","DateTime":"2021-05-23T17:41:06.592Z"},
     {"Id":"Video","Type":"ENDED","EntityType":"Stimulus","Method":"/Instrument/Stimulus","Data":"Video","DateTime":"2021-05-23T17:41:16.894Z"},
