@@ -3,7 +3,7 @@ import update from "react-addons-update";
 import elicitApi from "../../../api/elicit-api";
 import {Link} from "react-router-dom";
 import {CopyToClipboard} from "react-copy-to-clipboard";
-import BootstrapSwitchButton from "bootstrap-switch-button-react";
+import BootstrapRoutesButton from "bootstrap-switch-button-react";
 import {ApiReturnCollectionOf, ProtocolDefinitionType, StudyDefinitionType} from "../../../types";
 import PropTypes from "prop-types";
 import {connect} from "react-redux";
@@ -71,7 +71,7 @@ class _Protocol extends React.Component {
               Phases &nbsp; <span
               className="badge badge-secondary">{this.props.protocol.phase_definitions.length}</span>
             </button>
-            <BootstrapSwitchButton
+            <BootstrapRoutesButton
               onChange={this.onToggle.bind(this)}
               onlabel='Active'
               offlabel='Inactive'

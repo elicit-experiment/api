@@ -1,7 +1,7 @@
 //Import React and Dependencies
 import React from 'react'
 import { connect } from 'react-redux';
-import {Redirect} from 'react-router-dom'
+import {Navigate} from 'react-router-dom'
 
 // Import Components
 import HeaderContainer from "../nav/HeaderContainer"
@@ -42,7 +42,7 @@ class ProfilePageContainer extends React.Component {
 
   render() {
     if (this.props.tokenStatus !== 'user') {
-      return <Redirect to='/login'></Redirect>
+      return <Navigate to='/login'></Navigate>
     }
 
     if (this.state.loading_user) {
@@ -50,7 +50,7 @@ class ProfilePageContainer extends React.Component {
     }
 
     if (!this.props.current_user.sync) {
-      return <Redirect to='/login'></Redirect>
+      return <Navigate to='/login'></Navigate>
     }
 
     return(

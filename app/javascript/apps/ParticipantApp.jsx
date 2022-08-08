@@ -1,7 +1,7 @@
 //Import React and Dependencies
 import PropTypes from 'prop-types'
 import React from 'react';
-import {Redirect} from 'react-router-dom'
+import {Navigate} from 'react-router-dom'
 import ParticipantProtocolList from '../components/participant_app/components/ParticipantProtocolList'
 import { connect } from "react-redux";
 import { UserType } from "../types";
@@ -19,7 +19,7 @@ import elicitApi from "../api/elicit-api.js";
 class ParticipantApp extends React.Component {
   render() {
     if (this.props.tokenStatus !== 'user') {
-      return <Redirect to='/login'></Redirect>
+      return <Navigate to='/login'></Navigate>
     }
 
     if (!this.props.current_user.sync) {

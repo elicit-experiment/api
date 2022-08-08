@@ -9,35 +9,31 @@ import FooterContainer from "../components/nav/FooterContainer.jsx";
 import AnonymousProtocolLandingPageContainer from "../components/front_page/AnonymousProtocolLandingPageContainer";
 import FrontPageContainer from "../components/front_page/FrontPageContainer";
 import ParticipatePage from "../components/front_page/ParticipatePage";
-import { Route} from "react-router-dom";
+import {Route, Routes, useLocation} from "react-router-dom";
 
-class FrontPageApp extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
-  render() {
-    const landingPageUrl = `${this.props.match.url}studies/:study_id/protocols/:protocol_id`;
-    const participatePageUrl = `${this.props.match.url}participate`;
+const FrontPageApp = (props) => {
+  const { pathname } = useLocation();
+    const landingPageUrl = `${pathname}studies/:study_id/protocols/:protocol_id`;
+    const participatePageUrl = `${pathname}participate`;
     return (
         <div className="page-wrapper d-flex flex-column">
           <HeaderContainer></HeaderContainer>
           <main id="wrap" className="home-page-app-container app-container container flex-fill">
-            <Route path={landingPageUrl}
-                   component={AnonymousProtocolLandingPageContainer}/>
-            <Route path={participatePageUrl}
-                   component={ParticipatePage}/>
-            <Route exact path={`${this.props.match.url}`} component={FrontPageContainer}/>
+            <Routes>
+              <Route element={landingPageUrl}
+                     component={<AnonymousProtocolLandingPageContainer/>}/>
+              <Route element={participatePageUrl}
+                     component={<ParticipatePage/>}/>
+              <Route exact path="/" element={<FrontPageContainer/>}/>
+            </Routes>
           </main>
           <FooterContainer></FooterContainer>
         </div>
     )
-  }
 }
 
 FrontPageApp.propTypes = {
   current_user: CurrentUserType,
-  match: MatchType,
   tokenStatus: PropTypes.string.isRequired,
   userToken: UserTokenType,
   loadStudies: PropTypes.func.isRequired,
@@ -55,6 +51,4 @@ const mapDispatchToProps = (dispatch) => ({
   loadCurrentUser: () => dispatch(elicitApi.actions.current_user()),
 });
 
-const connectedAdminApp = connect(mapStateToProps, mapDispatchToProps)(FrontPageApp);
-
-export {connectedAdminApp as FrontPageApp};
+export default connect(mapStateToProps, mapDispatchToProps)(FrontPageApp);

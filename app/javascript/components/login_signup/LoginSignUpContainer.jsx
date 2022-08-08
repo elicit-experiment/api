@@ -14,7 +14,7 @@ import {clientToken, userToken, userTokenState, currentUser, tokenStatus} from '
 
 import elicitApi from '../../api/elicit-api.js';
 
-import {Redirect} from 'react-router-dom'
+import {Navigate} from 'react-router-dom'
 import {CurrentUserType} from "../../types";
 
 class LoginSignUpContainer extends React.Component {
@@ -63,9 +63,9 @@ class LoginSignUpContainer extends React.Component {
           console.dir(this.props.currentUser);
 
           if (this.props.currentUser.data.role === 'admin') {
-            return <Redirect to="/admin"/>
+            return <Navigate to="/admin"/>
           } else {
-            return <Redirect to="/participant"/>
+            return <Navigate to="/participant"/>
           }
         }
       }

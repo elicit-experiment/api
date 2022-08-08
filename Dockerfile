@@ -1,5 +1,5 @@
 # Base image:
-FROM ruby:3.0.1
+FROM ruby:3.1.2
 
 ARG SITE_SUFFIX
 ARG API_SCHEME
@@ -11,8 +11,8 @@ RUN cat /etc/os-release
 # Install dependencies
 RUN apt-get update -qq && apt-get install -y build-essential libpq-dev
 
-# Install node 12
-RUN curl -sL https://deb.nodesource.com/setup_12.x | bash -
+# Install node 18
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash -
 RUN apt-get -y install nodejs
 RUN node --version
 RUN npm --version

@@ -26,6 +26,10 @@ $font-family-base:       $font-family-sans-serif !default;
   min-height: 100vh;
 }
 
+.page-wrapper {
+  background-color: #efeff6;
+}
+
 .single-page {
   position: fixed;
   width: 100%;

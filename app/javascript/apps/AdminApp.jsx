@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {CurrentUserType, MatchType, UserTokenType} from 'types';
-import {Redirect, Route, Switch} from 'react-router-dom';
+import {CurrentUserType, UserTokenType} from 'types';
+import {Navigate, Route, Routes, NavLink, useResolvedPath, useMatch } from 'react-router-dom';
 import StudyManagement from '../components/admin_app/pages/StudyManagement';
 import {connect} from "react-redux";
 import elicitApi from "../api/elicit-api.js";
@@ -13,12 +13,23 @@ import ProtocolPreviewContainer from "../components/admin_app/pages/ProtocolPrev
 import UserManagement from "../components/admin_app/pages/UserManagement";
 import EditStudyContainer from "../components/admin_app/pages/EditStudyContainer";
 
-import { NavTab } from "react-router-tabs";
 import "../scss/react-router-tabs.scss";
 
-function AdminApp(props) {
+const NavBarLink = (props) => {
+  let resolved = useResolvedPath(props.to);
+  let match = useMatch({ path: resolved.pathname, end: true });
+
+  return (
+    <li className={`nav-tab nav-item ${match ? 'active' : ''}`}>
+      <NavLink to={props.to} className="nav-link">{props.title}</NavLink>
+    </li>
+  )
+}
+
+const AdminApp = (props) => {
+  console.log('AdminApp')
   if (props.tokenStatus !== 'user') {
-    return <Redirect to='/login'></Redirect>
+    return <Navigate to='/login'></Navigate>
   }
 
   if (!props.current_user.sync) {
@@ -30,7 +41,7 @@ function AdminApp(props) {
         console.log(`No current user: ${JSON.stringify(props.current_user.error)}`);
         // TODO: all 400 errors?
         if (props.current_user.error.status === 401) {
-          return <Redirect to='/logout'></Redirect>
+          return <Navigate to='/logout'></Navigate>
         }
       }
     }
@@ -38,9 +49,9 @@ function AdminApp(props) {
   }
 
   if ((props.current_user.data.role !== 'admin') && (props.current_user.data.role !== 'investigator')) {
-    console.log('user is not an admin');
-    console.log(props.current_user);
-    return <Redirect to='/participant'></Redirect>
+    console.error('user is not an admin');
+    console.error(props.current_user);
+    return <Navigate to='/participant'></Navigate>
   }
 
   return (
@@ -48,22 +59,24 @@ function AdminApp(props) {
       <HeaderContainer></HeaderContainer>
       <main id="wrap" className="admin-app-container app-container container flex-fill">
         <div>
-          <NavTab allowClickOnActive={true} to="/admin/studies">Studies</NavTab>
-          <NavTab to="/admin/users">Users</NavTab>
+          <nav className="navbar navbar-expand navbar-light">
+            <div>
+              <ul className="navbar-nav">
+                <NavBarLink to="studies" title="Studies"></NavBarLink>
+                <NavBarLink to="users" title="Users"></NavBarLink>
+              </ul>
+            </div>
+          </nav>
 
-          <Switch>
-            <Route
-              exact
-              path={`${props.match.path}`}
-              render={() => <Redirect replace to={`${props.match.path}/studies`} />}
-            />
-            <Route exact path={`${props.match.path}/studies`} component={StudyManagement} />
-            <Route path={`${props.match.path}/users`} component={UserManagement} />
-            <Route path={`${props.match.url}/studies/:study_id/protocols/:protocol_id`}
-                   component={ProtocolPreviewContainer}/>
-            <Route path={`${props.match.url}/studies/:study_id/edit`}
-                   component={EditStudyContainer}/>
-          </Switch>
+          <Routes>
+            <Route exact path="/" element={<Navigate to="./studies" />} />
+            <Route exact path="/studies" element={<StudyManagement/>} />
+            <Route path="/users" element={<UserManagement/>} />
+            <Route path="/studies/:studyId/protocols/:protocolId"
+                   element={<ProtocolPreviewContainer/>}/>
+            <Route path="/studies/:studyId/edit"
+                   element={<EditStudyContainer/>}/>
+          </Routes>
         </div>
       </main>
       <FooterContainer></FooterContainer>
@@ -73,7 +86,6 @@ function AdminApp(props) {
 
 AdminApp.propTypes = {
 	current_user: CurrentUserType,
-	match: MatchType,
 	tokenStatus: PropTypes.string.isRequired,
 	userToken: UserTokenType,
 	loadStudies: PropTypes.func.isRequired,

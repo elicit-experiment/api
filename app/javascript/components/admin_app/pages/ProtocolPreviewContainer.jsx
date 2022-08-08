@@ -1,50 +1,42 @@
-import React from 'react'
+import React from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import {connect} from "react-redux"
 import elicitApi from "../../../api/elicit-api"
 import ProtocolPreview from "../components/ProtocolPreview"
-import {ApiReturnCollectionOf, ProtocolDefinitionType, MatchType} from '../../../types';
+import {ApiReturnCollectionOf, ProtocolDefinitionType} from '../../../types';
+import {useParams} from "react-router-dom";
 
-class ProtocolPreviewContainer extends React.Component {
-  constructor(props) {
-    super(props);
-    console.log('ProtocolPreviewContainer')
-    this.state = {
-      protocol_id: parseInt(this.props.match.params.protocol_id),
-    }
-  }
-  render() {
-    let protocol = this.props.protocol_definition.data[0];
-    console.log(`Rendering protocol ${this.state.protocol_id} with ${protocol}`);
-    if (protocol && (protocol.id == this.state.protocol_id)) {
-      const protocol_info = <ProtocolPreview protocol={protocol} match={this.props.match}></ProtocolPreview>;
-      return (
-          <div>
-            {protocol_info}
-          </div>
-      )
-    }
+const ProtocolPreviewContainer = (props) => {
+  const { protocolId, studyId } = useParams()
 
-    return <div>Loading Protocol {this.state.protocol_id} information</div>
+  const [currentProtocolId, setCurrentProtocolId] = useState(() => (parseInt(protocolId, 10)))
+
+  const ensureProtocolDefinitionLoaded = () => {
+    props.loadProtocolDefinition(studyId, protocolId)
   }
 
-  ensureProtocolDefinitionLoaded() {
-    if ((!this.props.protocol_definition.sync && !this.props.protocol_definition.loading) ||
-        (this.props.protocol_definition.data[0].id !== this.state.protocol_id)) {
-      this.props.loadProtocolDefinition(this.props.match.params.study_id,
-          this.props.match.params.protocol_id)
-    }
+  if (!props.protocol_definition.loading && !( (props.protocol_definition.sync && (props.protocol_definition.data[0]?.id === currentProtocolId))))  {
+    ensureProtocolDefinitionLoaded()
   }
 
-  componentDidMount() {
-    this.ensureProtocolDefinitionLoaded()
+  console.dir(currentProtocolId);
+  let protocol = props.protocol_definition.data[0];
+  console.log(`Rendering protocol ${currentProtocolId} with ${protocol}`);
+  if (protocol && (protocol.id == currentProtocolId)) {
+    return (
+        <div>
+          <ProtocolPreview protocol={protocol} studyId={studyId} protocolId={currentProtocolId}></ProtocolPreview>
+        </div>
+    )
   }
+
+  return <div>Loading Protocol {currentProtocolId} information</div>
 }
 
 ProtocolPreviewContainer.propTypes = {
   protocol_definition: ApiReturnCollectionOf(ProtocolDefinitionType),
   loadProtocolDefinition: PropTypes.func,
-  match: MatchType,
 };
 
 const mapStateToProps = (state) => ({

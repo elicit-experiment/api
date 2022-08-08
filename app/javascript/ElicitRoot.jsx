@@ -1,6 +1,6 @@
 //Import React and Dependencies
 import React, { Suspense } from 'react';
-import { Route, Redirect, Switch, BrowserRouter, withRouter } from 'react-router-dom';
+import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import history from './packs/history.js'
 import { connect } from 'react-redux';
 import { Provider } from 'react-redux';
@@ -13,7 +13,7 @@ import { ParticipantApp } from './apps/ParticipantApp';
 import LoginSignUpContainer from './components/login_signup/LoginSignUpContainer.jsx';
 import AboutPageContainer from './components/about_page/AboutPageContainer.jsx';
 import LicensePageContainer from './components/license_page/LicensePageContainer.jsx';
-import { FrontPageApp } from './apps/FrontPageApp.jsx';
+import FrontPageApp from './apps/FrontPageApp.jsx';
 import ProfilePageContainer from './components/profile_page/ProfilePageContainer.jsx';
 
 // Import Actions
@@ -32,7 +32,7 @@ export const tokenStatus = (clientToken, userToken, requestClientToken) => {
   let token_status = 'none';
 
   if (!clientToken || !clientToken.access_token) {
-    console.log("no client token");
+    console.warn("no client token");
     if (typeof requestClientToken === 'function') {
       requestClientToken()
     }
@@ -41,7 +41,7 @@ export const tokenStatus = (clientToken, userToken, requestClientToken) => {
   }
 
   if (!userToken || !userToken.access_token) {
-    console.log("no user token");
+    console.warn("no user token");
     console.dir(userToken);
   } else {
     token_status = 'user'
@@ -63,26 +63,26 @@ const RawRootRoutes = (props) => {
     props.getCurrentUser();
   }
 
-  console.dir(`ROOT RERENDERING ${token_status}`);
+  console.dir(`ROOT RE-RENDERING ${token_status}`);
   if (token_status) {
     return (
-      <Switch>
-        <Route path="/admin" component={AdminAppWrapper}/>
-        <Route exact path="/participant" component={ParticipantApp}/>
-        <Route exact path="/login" component={LoginSignUpContainer}/>
-        <Route exact path="/about" component={AboutPageContainer}/>
-        <Route exact path="/license" component={LicensePageContainer}/>
-        <Route exact path="/profile" component={ProfilePageContainer}/>
-        <Route path="/" component={FrontPageApp}/>
-        <Redirect from="*" to="/"/>
-      </Switch>
+      <Routes>
+        <Route exact path="/login" element={<LoginSignUpContainer/>}/>
+        <Route exact path="/profile" element={<ProfilePageContainer/>}/>
+        <Route exact path="/participant" element={<ParticipantApp/>}/>
+        <Route exact path="/about" element={<AboutPageContainer/>}/>
+        <Route exact path="/license" element={<LicensePageContainer/>}/>
+        <Route path="/admin/*" element={<AdminAppWrapper/>}/>
+        <Route path="/*" element={<FrontPageApp/>}/>
+      </Routes>
     )
+
+    //       <Navigate from="*" to="/"/>
   } else {
     // TODO: have a timeout here
     return <div>Loading...</div>
   }
 };
-
 
 const mapStateToProps = (state) => ( {
   clientToken: clientToken(state),
@@ -96,10 +96,11 @@ const mapDispatchToProps = (dispatch) => ({
   logoutUser: () => dispatch(logoutUser()),
 });
 
-const RootRoutes = withRouter(connect(
+const RootRoutes = connect(
     mapStateToProps,
     mapDispatchToProps
-)(RawRootRoutes));
+)(RawRootRoutes);
+//const RootRoutes = RawRootRoutes;
 
 const Root = (props) => {
   return (

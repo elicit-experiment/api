@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import update from "react-addons-update";
 import elicitApi from "../../../api/elicit-api.js";
 import {connect} from "react-redux";
-import BootstrapSwitchButton from 'bootstrap-switch-button-react'
+import BootstrapRoutesButton from 'bootstrap-switch-button-react'
 import {ApiReturnCollectionOf, ProtocolDefinitionType, StudyDefinitionType} from '../../../types';
 import SweetAlert from 'sweetalert2-react';
 import {ProtocolInfoLink} from "./ProtocolInfoLink";
@@ -139,7 +139,7 @@ class StudyCard extends React.Component {
                   <div className="fas fa-edit" style={{width:'1em'}} aria-hidden="true"/> Edit
                 </Link>
                 <span className="ml-2">
-                <BootstrapSwitchButton
+                <BootstrapRoutesButton
                   onlabel='Allow Anonymous'
                   offlabel='Registered Users Only'
                   className="ml-4"
@@ -152,7 +152,7 @@ class StudyCard extends React.Component {
                 />
                 </span>
                 <span className="ml-2">
-                  <BootstrapSwitchButton
+                  <BootstrapRoutesButton
                     onlabel='Show in Study List'
                     offlabel='Hide in Study List'
                     size="sm"

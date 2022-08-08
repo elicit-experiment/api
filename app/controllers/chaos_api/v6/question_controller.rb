@@ -52,7 +52,6 @@ module ChaosApi
             phase_definition_id: trial_definition.phase_definition.id,
             trial_definition_id: trial_definition.id
           }
-          logger.info parms.ai
           trial_result = StudyResult::TrialResult.where(parms).first_or_initialize do |tr|
             tr.started_at = DateTime.now unless tr.started_at
             tr.save!
