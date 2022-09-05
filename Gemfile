@@ -19,6 +19,10 @@ gem 'webpacker'
 gem 'sqlite3'
 # Use Puma as the app server
 gem 'puma', '~> 5.2'
+gem 'net-smtp', require: false
+gem 'net-imap', require: false
+gem 'net-pop', require: false
+
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 

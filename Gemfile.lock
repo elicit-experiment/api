@@ -186,6 +186,14 @@ GEM
     minitest (5.16.3)
     mocha (1.14.0)
     multi_json (1.15.0)
+    net-imap (0.2.3)
+      digest
+      net-protocol
+      strscan
+    net-pop (0.1.1)
+      digest
+      net-protocol
+      timeout
     net-protocol (0.1.2)
       io-wait
       timeout
@@ -325,6 +333,7 @@ GEM
       sprockets (>= 3.0.0)
     sqlite3 (1.4.4)
     ssrf_filter (1.0.7)
+    strscan (3.0.1)
     swagger-blocks (3.0.0)
     thor (1.2.1)
     tilt (2.0.11)
@@ -373,6 +382,8 @@ DEPENDENCIES
   lograge-sql (~> 2.0)
   logstash-event
   mocha
+  net-imap
+  net-pop
   net-smtp
   pg (~> 1.2)
   pry-byebug
