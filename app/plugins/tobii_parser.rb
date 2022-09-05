@@ -29,7 +29,7 @@ class TobiiParser
       protocol_user_args[:group_name] = query_params[:group_name] if query_params[:group_name]
 
       protocol_users = ProtocolUser.includes(:user).where(protocol_user_args)
-      Rails.logger.info protocol_users.ai
+      Rails.logger.info message: 'protocol_users', protocol_users: protocol_users
       protocol_users_map = protocol_users.index_by { |pu| pu.user.username }
     end
 
@@ -57,7 +57,7 @@ class TobiiParser
         [pu.user.username,
          trial_results.find_all { |tr| tr.protocol_user_id == pu.id }]
       end.to_h
-      Rails.logger.info("Trial_result_map #{trial_result_map.ai}")
+      Rails.logger.info message: 'Trial_result_map', trial_results: trial_result_map
     end
 
     input = CSV.open(time_series.file.file.file, csv_opts)

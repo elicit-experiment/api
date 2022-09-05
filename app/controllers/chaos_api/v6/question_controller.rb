@@ -56,7 +56,7 @@ module ChaosApi
             tr.started_at = DateTime.now unless tr.started_at
             tr.save!
           end
-          Rails.logger.info "START OF TRIAL: TrialResult: #{trial_result.ai}"
+          Rails.logger.info message: 'START OF TRIAL: TrialResult', trial_results: trial_result
           @chaos_session.trial_result_id = trial_result ? trial_result.id : nil
           @chaos_session.save!
         end

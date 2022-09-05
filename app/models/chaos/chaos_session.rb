@@ -26,7 +26,7 @@ module Chaos
     end
 
     def populate(custom_parameters)
-      Rails.logger.info "chaos_session#populate #{custom_parameters.ai}"
+      Rails.logger.info(message: 'populate chaos session')
       study_result = StudyResult::StudyResult.where(
         user_id: user_id,
         study_definition_id: study_definition_id
@@ -105,7 +105,7 @@ module Chaos
 
       next_phase = phases.detect { |phase| phase.id == next_phase_id }
 
-      Rails.logger.info "Next Phase: #{next_phase.ai}"
+      Rails.logger.info message: 'Next Phase', next_phase: next_phase
 
       stage = nil
 
@@ -135,8 +135,8 @@ module Chaos
         experiment.current_stage = next_stage
         self.phase_definition_id = next_stage.id
 
-        Rails.logger.info "Next STAGE: #{trials&.entries&.ai}"
-        Rails.logger.info next_stage.ai.to_s
+        Rails.logger.info(message: 'Next STAGE', trials: trials&.entries)
+        Rails.logger.info(message: 'Next stage', next_stage: next_stage)
         next_stage.save!
         stage = next_stage
 

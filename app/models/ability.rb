@@ -34,7 +34,7 @@ class Ability
 
     return if user.blank?
 
-    Rails.logger.info "AUTH: #{user.ai}"
+    Rails.logger.info message: 'AUTH', user: user.attributes
     can :upgrade, User if [User::ROLES[:admin]].include?(user.role)
 
     if [User::ROLES[:admin]].include?(user.role)

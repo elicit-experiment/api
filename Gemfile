@@ -89,7 +89,7 @@ group :production do
   gem 'pg', '~> 1.2'
 end
 
-gem 'lograge', '~> 0.4'
+gem 'lograge'
 gem 'logstash-event'
 
 gem 'json-schema'
@@ -113,3 +113,5 @@ gem 'capybara', '~> 3.33'
 # gem "debase", "~> 0.2.4"
 
 # gem "ruby-debug-ide", "~> 0.7.2"
+
+gem "lograge-sql", "~> 2.0"

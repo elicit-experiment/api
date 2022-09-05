@@ -13,7 +13,7 @@ class PhaseDefinition < ApplicationRecord
   def trial_order_for_user(user_id)
     trial_order = TrialOrder.where(trial_query_params.merge(user_id: user_id)).first
 
-    Rails.logger.debug "Found suitable user TrialOrder #{trial_order.ai}" if trial_order
+    Rails.logger.debug message: 'Found suitable user TrialOrder', trial_order: trial_order if trial_order
 
     return trial_order if trial_order
 
@@ -23,7 +23,7 @@ class PhaseDefinition < ApplicationRecord
 
     trial_order = TrialOrder.find(trial_order_id) if trial_order_id
 
-    Rails.logger.debug "Found suitable non-user TrialOrder via TrialOrderSelectionMapping #{trial_order.ai}" if trial_order
+    Rails.logger.debug message: 'Found suitable non-user TrialOrder via TrialOrderSelectionMapping', trial_order: trial_order if trial_order
 
     return trial_order if trial_order
 
@@ -48,11 +48,13 @@ class PhaseDefinition < ApplicationRecord
 
     if trial_order.nil?
       all_trial_orders = TrialOrder.where(trial_query_params)
-      Rails.logger.error "Cannot find suitable non-user TrialOrder or user trial for #{user_id} amongst #{all_trial_orders.ai}"
+      Rails.logger.error message: "Cannot find suitable non-user TrialOrder or user trial for #{user_id}",
+                         trial_orders: all_trial_orders
       return nil
     end
 
-    Rails.logger.info "Found suitable non-user TrialOrder or user trial for #{user_id} using trial_ordering #{trial_ordering}: #{trial_order.ai} "
+    Rails.logger.info message: "Found suitable non-user TrialOrder or user trial for #{user_id} using trial_ordering #{trial_ordering}",
+                      trial_order: trial_order
 
     TrialOrderSelectionMapping.create!(trial_order: trial_order,
                                        user_id: user_id,

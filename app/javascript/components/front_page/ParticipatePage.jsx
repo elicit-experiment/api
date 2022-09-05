@@ -10,7 +10,7 @@ import elicitApi from "../../api/elicit-api";
 import connect from "react-redux/lib/connect/connect";
 import {CurrentUserType} from "types";
 
-class FrontPage extends Component {
+class ParticipatePage extends Component {
     constructor(props) {
         super(props);
     }
@@ -70,14 +70,14 @@ class FrontPage extends Component {
     }
 }
 
-FrontPage.propTypes = {
+ParticipatePage.propTypes = {
   syncCurrentUser: PropTypes.func,
   loadAnonymousProtocols: PropTypes.func,
   anonymous_protocols: AnonymousProtocolsType,
   current_user: CurrentUserType,
 };
 
-FrontPage.defaultProps = {
+ParticipatePage.defaultProps = {
   syncCurrentUser: () => {},
   loadAnonymousProtocols: () => {},
 };
@@ -95,4 +95,4 @@ const mapDispatchToProps = (dispatch) => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(FrontPage);
+)(ParticipatePage);

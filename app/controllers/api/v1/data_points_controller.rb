@@ -18,7 +18,7 @@ module Api
                         .map { |p| { p.to_sym => params[p].to_i } }
                         .reduce(&:merge)
 
-        Rails.logger.info "DataPoint where: #{filter_fields.ai}"
+        Rails.logger.info message: 'Datapoint filter', filter_fields: filter_fields
 
         resources = StudyResult::DataPoint.where(filter_fields).includes(:component)
 

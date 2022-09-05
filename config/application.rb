@@ -17,6 +17,8 @@ require "rails"
   end
 end
 
+require './lib/elicit_log_formatter'
+
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
@@ -56,39 +58,9 @@ module ElicitApi
       #        external_protocol: elicit_portal[:scheme]
     }
 
+    config.log_formatter = ElicitLogFormatter.new
     logger               = ActiveSupport::Logger.new(STDOUT)
     logger.formatter     = config.log_formatter
-    config.logger        = ActiveSupport::TaggedLogging.new(logger)
-
-    config.lograge.enabled = true
-    unless Rails.env.production?
-      # log rage doesn't log params by default.
-      # For production, though, the params can be HUGE (e.g. webgazer datapoints, so let's be cautious)
-      config.lograge.custom_options = lambda do |event|
-        exceptions = %w[controller action format id points]
-        { params: event.payload[:params].except(*exceptions) }
-      end
-    end
-    if config.lograge.enabled
-      class ActionDispatch::DebugExceptions
-        alias old_log_error log_error
-
-        def log_error(env, wrapper)
-          exception = wrapper.exception
-          if exception.is_a?(ActionController::RoutingError)
-            data = {
-              method: env['REQUEST_METHOD'],
-              path: env['REQUEST_PATH'],
-              status: wrapper.status_code,
-              error: "#{exception.class.name}: #{exception.message}"
-            }
-            formatted_message = Lograge.formatter.call(data)
-            logger(env).send(Lograge.log_level, formatted_message)
-          else
-            old_log_error env, wrapper
-          end
-        end
-      end
-    end
+    config.logger        = logger
   end
 end

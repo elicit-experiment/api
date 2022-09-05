@@ -54,7 +54,6 @@ module Api::V1
       as_user(user(:investigator)) do |headers|
         assert_no_difference('StudyDefinition.count') do
           params = { study_definition: { title: 'test study', principal_investigator_user_id: user(:admin).id } }
-          Rails.logger.info params
           post api_v1_study_definitions_url, params: params, as: :json, headers: headers
         end
 

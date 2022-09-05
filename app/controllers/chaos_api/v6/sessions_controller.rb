@@ -29,7 +29,7 @@ module ChaosApi
         # TODO: make this the "get session guid pre-action"
         referrer = request.referer
         Rails.logger.debug "Referer: #{referrer}"
-        Rails.logger.debug request.cookies.ai
+        Rails.logger.debug cookies: request.cookies
         session_guids = {}
         if referrer.present?
           qp = Rack::Utils.parse_nested_query URI(referrer).query

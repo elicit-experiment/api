@@ -11,17 +11,17 @@ RUN cat /etc/os-release
 # Install dependencies
 RUN apt-get update -qq && apt-get install -y build-essential libpq-dev
 
-# Install node 18
-RUN curl -sL https://deb.nodesource.com/setup_18.x | bash -
+# Install node 16
+RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -
 RUN apt-get -y install nodejs
 RUN node --version
 RUN npm --version
 
-# Install arn
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
+# Install yarn
 RUN apt-get update
-RUN apt-get install yarn
+RUN npm install -g yarn
+RUN yarn set version 3.2.2
+RUN yarn --version
 
 # Install dev conveniences
 RUN apt-get install -y postgresql-client
@@ -66,7 +66,7 @@ RUN mkdir log
 # fake DB per https://iprog.com/posting/2013/07/errors-when-precompiling-assets-in-rails-4-0
 RUN rm -rf public/assets
 RUN rm -rf public/packs
-RUN RAILS_ENV=production PRECOMPILE=1 DATABASE_URL=postgresql://user:pass@127.0.0.1/dbname bundle exec rake assets:precompile
+RUN RAILS_ENV=production PRECOMPILE=1 DATABASE_URL=postgresql://user:pass@127.0.0.1/dbname bundle exec rails assets:precompile
 RUN ls -als public/packs
 
 # TODO: undisable these; we can't use sqllite because of jsonb columns, so we need a postgres DB to run the tests

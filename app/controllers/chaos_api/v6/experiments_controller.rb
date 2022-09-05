@@ -8,7 +8,8 @@ module ChaosApi
       def index
         # show all experiments
         @experiments = StudyDefinition.all.map(&:to_chaos)
-        Rails.logger.info @experiments.ai.to_s
+        Rails.logger.info message: 'experiments', experiments: @experiments.ai
+
         respond_to do |format|
           format.json { render json: @experiments }
           format.xml  { render xml: @experiments }
@@ -35,7 +36,7 @@ module ChaosApi
           @results =  [@experiment]
           @response = ChaosResponse.new(@results)
         elsif @chaos_session.experiment.current_stage
-          Rails.logger.info "Current experiment: #{@chaos_session.experiment.ai}"
+          Rails.logger.info message: 'Current experiment', experiments: @chaos_session.experiment
           @experiment = service.make_experiment(@chaos_session.experiment)
 
           @results =  [@experiment]

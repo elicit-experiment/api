@@ -48,9 +48,9 @@ module ChaosApi
           }
 
           trial_result = StudyResult::TrialResult.find_by(parms)
-          Rails.logger.warn "Cannot find trial result for #{parms.ai} for slide #{@slideIndex}" if trial_result.nil?
+          Rails.logger.warn "Cannot find trial result in slide #{@slideIndex}" if trial_result.nil?
           trial_result.completed_at = DateTime.now
-          Rails.logger.info "END OF TRIAL: TrialResult: #{trial_result.ai}"
+          Rails.logger.info message: 'END OF TRIAL: TrialResult', trial_results: trial_result
           trial_result.save!
         end
 

@@ -44,9 +44,6 @@ module ChaosApi
         new_datapoints = StudyResult::DataPoint.from_chaos_output(datapoint_query_fields, output)
 
         if @chaos_session.preview
-          logger.info params.permit!.ai
-          logger.info new_datapoints.ai
-
           respond_to do |format|
             format.xml { render xml: '' }
             format.json { render json: @response.to_json }

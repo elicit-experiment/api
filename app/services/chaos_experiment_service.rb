@@ -16,7 +16,7 @@ class ChaosExperimentService
       study_definition_id: @study_definition.id
     ).first
     if @protocol_definition.nil?
-      Rails.logger.error "No protocols for study #{study_definition.ai}"
+      Rails.logger.error message: 'No protocols for study', study_definition: study_definition
       # TODO: we should handle malformed studies by erroring appropriately
     end
     @phase_definition ||= PhaseDefinition.where(
@@ -99,7 +99,10 @@ class ChaosExperimentService
     end
 
     unless @trial_definition
-      Rails.logger.error "Trial order #{@trial_order.ai} sequence #{@trial_sequence.ai} contains invalid ids #{@trials.ai} for trial index #{trial_no}"
+      Rails.logger.error message: 'Trial order sequence @trial_sequence contains invalid ids for trial index',
+                         trial_order: @trial_order,
+                         trials: @trials,
+                         trial_no: trial_no
     end
 
     @trial_definition

@@ -11,19 +11,20 @@ import FrontPageContainer from "../components/front_page/FrontPageContainer";
 import ParticipatePage from "../components/front_page/ParticipatePage";
 import {Route, Routes, useLocation} from "react-router-dom";
 
-const FrontPageApp = (props) => {
+const FrontPageApp = () => {
   const { pathname } = useLocation();
     const landingPageUrl = `${pathname}studies/:study_id/protocols/:protocol_id`;
-    const participatePageUrl = `${pathname}participate`;
+    const participatePageUrl = `/participate`;
+    console.log(participatePageUrl)
     return (
         <div className="page-wrapper d-flex flex-column">
           <HeaderContainer></HeaderContainer>
           <main id="wrap" className="home-page-app-container app-container container flex-fill">
             <Routes>
-              <Route element={landingPageUrl}
-                     component={<AnonymousProtocolLandingPageContainer/>}/>
-              <Route element={participatePageUrl}
-                     component={<ParticipatePage/>}/>
+              <Route path={landingPageUrl}
+                     element={<AnonymousProtocolLandingPageContainer/>}/>
+              <Route path={participatePageUrl}
+                     element={<ParticipatePage/>}/>
               <Route exact path="/" element={<FrontPageContainer/>}/>
             </Routes>
           </main>

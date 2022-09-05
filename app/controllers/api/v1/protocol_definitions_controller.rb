@@ -46,7 +46,7 @@ module Api
 
         session.populate request.query_parameters
 
-        Rails.logger.info "Taking session #{session.ai}"
+        Rails.logger.info({ message: 'Taking session', session: session })
 
         if session.save
           respond_with session
@@ -90,8 +90,6 @@ module Api
 
         candidate_protocol_users = ProtocolUser.free_for_anonymous(@protocol_definition_id)
 
-        Rails.logger.info candidate_protocol_users.explain
-
         Rails.logger.info "Anonymous protocol. Got #{candidate_protocol_users.size} candidates."
 
         @protocol_user = candidate_protocol_users.take
@@ -118,7 +116,7 @@ module Api
                 study_definition.increment!(:auto_created_user_count)
                 Rails.logger.info "Created anonymous user #{username} id=#{user.id}"
               else
-                Rails.logger.warn "User failed to save #{user.errors.ai}"
+                Rails.logger.warn({ message: 'User failed to save', errors: user.errors })
                 user = nil
               end
             else
@@ -131,7 +129,7 @@ module Api
         end
 
         if user
-          Rails.logger.info "Signing in anonymous user #{username} #{user.ai}."
+          Rails.logger.info message: "Signing in anonymous user #{username}"
 
           sign_in(:user, user)
         else
