@@ -62,6 +62,7 @@ COPY bin bin
 # Copy the main application.
 COPY . .
 RUN mkdir log
+RUN mkdir -p tmp/pids
 
 # fake DB per https://iprog.com/posting/2013/07/errors-when-precompiling-assets-in-rails-4-0
 RUN rm -rf public/assets

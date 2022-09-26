@@ -22,34 +22,19 @@ module ChaosApi
                             right_image_x right_image_y
                             right_width right_height].freeze
 
+      MOUSE_HEADERS = %i[x y timeStamp].freeze
+
+      HEADERS_SET = {
+        webgazer: WEBGAZER_HEADERS,
+        mouse: MOUSE_HEADERS
+      }.freeze
+
       def create
-        @response = ChaosResponse.new([])
-        @series_type = params[:series_type] || 'webgazer'
-
-        if @chaos_session.preview
-          respond_to do |format|
-            format.json { render json: @response.to_json }
-          end
-
-          return
-        end
-
-        # created is better but Chaos thinks it's an error
-        # @response_status = :created
-        @response_status = :ok
-
-        if params[:points]
-          append_from_json(time_series)
-        elsif params[:file]
-          append_from_file(time_series)
-        end
-
-        render json: @response.to_json, status: @response_status
+        append
       end
 
       def append
         @response = ChaosResponse.new([])
-        @series_type = params[:series_type] || 'webgazer'
 
         if @chaos_session.preview
           respond_to do |format|
@@ -78,10 +63,10 @@ module ChaosApi
         @data = post_params[:points]
 
         append_text = @data.map do |row|
-          WEBGAZER_HEADERS.map { |col| row[col] }.join("\t")
+          @header_set.map { |col| row[col] }.join("\t")
         end.join("\n")
 
-        time_series.append_to_tsv(append_text, WEBGAZER_HEADERS, 'webgazer.tsv')
+        time_series.append_to_tsv(append_text, @header_set, "#{@series_type}.tsv")
 
         unless time_series.save
           logger.error 'time series failed to save!'
@@ -99,7 +84,7 @@ module ChaosApi
 
         # check headers
         header = @file.tempfile.readline.chomp
-        if header != WEBGAZER_HEADERS.join("\t")
+        if header != @header_set.join("\t")
           logger.warn "invalid header passed through file: #{header}"
           @response = ChaosResponse.new([], 'failed to save')
           @response_status = :unprocessable_entity
@@ -110,7 +95,7 @@ module ChaosApi
 
         # puts File.read(@file.tempfile.path)
 
-        time_series.append_file_to_tsv(@file.tempfile, WEBGAZER_HEADERS, 'webgazer.tsv')
+        time_series.append_file_to_tsv(@file.tempfile, @header_set, "#{@series_type}.tsv")
 
         unless time_series.save
           logger.error 'time series failed to save!'
@@ -149,7 +134,10 @@ module ChaosApi
 
       def post_params
         # validate POST parameters
-        params.permit(:format, :sessionGUID, :series_type, :file, points: WEBGAZER_HEADERS)
+        @series_type = (params[:series_type] || 'webgazer').to_sym
+        @header_set = HEADERS_SET[@series_type]
+
+        params.permit(:format, :sessionGUID, :series_type, :file, points: @header_set)
       end
     end
   end
