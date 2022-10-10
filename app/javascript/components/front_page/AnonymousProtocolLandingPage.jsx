@@ -78,4 +78,5 @@ AnonymousProtocolLandingPage.propTypes = {
   takeProtocol: PropTypes.func.isRequired,
 };
 
+
 export default AnonymousProtocolLandingPage;

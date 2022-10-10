@@ -1,7 +1,6 @@
 //Import React and Dependencies
 import React, { Suspense } from 'react';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
-import history from './packs/history.js'
 import { connect } from 'react-redux';
 import { Provider } from 'react-redux';
 import PropTypes from "prop-types";
@@ -105,8 +104,8 @@ const RootRoutes = connect(
 const Root = (props) => {
   return (
 <Provider store={props.store}>
-    <BrowserRouter history={history}>
-      <RootRoutes history={history} {...props} />
+    <BrowserRouter>
+      <RootRoutes {...props} />
     </BrowserRouter>
 </Provider>
   );

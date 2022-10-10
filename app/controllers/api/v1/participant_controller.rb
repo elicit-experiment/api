@@ -13,6 +13,8 @@ module Api
                           .merge(ProtocolDefinition.where(active: true))
                           .left_outer_joins(:experiment)
                           .where({ user_id: current_api_user_id })
+                          .order(created_at: :desc)
+
 
         @protocol_users = @protocol_users.where({ study_definitions: { show_in_study_list: true } }) if @public
         @protocol_users = @protocol_users.includes([:study_definition, { experiment: :current_stage }])
@@ -33,6 +35,7 @@ module Api
                                          active: true,
                                          study_definitions: study_definition_filter
                                        })
+                                .order(created_at: :desc)
 
         expires_in 5.seconds, must_revalidate: false
 

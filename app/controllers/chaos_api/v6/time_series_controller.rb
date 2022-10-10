@@ -80,7 +80,7 @@ module ChaosApi
       end
 
       def append_from_file(time_series)
-        @file = params[:file]
+        @file = post_params[:file]
 
         # check headers
         header = @file.tempfile.readline.chomp
