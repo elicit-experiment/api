@@ -52,11 +52,10 @@ module Api
 
         study_definition_filter = { allow_anonymous_users: true }
 
-        study_definition_filter[:id] = @id
-
         @protocol_definitions = ProtocolDefinition
                                 .joins(:study_definition)
                                 .where({
+                                         id: @id,
                                          active: true,
                                          study_definitions: study_definition_filter
                                        })
