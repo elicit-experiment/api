@@ -3,6 +3,9 @@ client_max_body_size 4G;
 error_page 500 502 504 /500.html;
 error_page 503 @503;
 
+charset utf-8;
+source_charset utf-8;
+
 root /var/www;
 
 try_files /frontend/public/$uri/index.html /frontend/public/$uri /app/public/$uri/index.html /app/public/$uri  @frontend;
