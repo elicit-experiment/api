@@ -4,6 +4,7 @@ require 'securerandom'
 
 module Api
   module V1
+
     class StudyDefinitionsController < ApiController
       STUDY_DEFINITION_FIELDS = %i[
         principal_investigator_user_id
@@ -30,19 +31,22 @@ module Api
         plural_resource_name = "@#{resource_name.pluralize}"
 
         if current_user.role == User::ROLES[:admin]
-          resources = StudyDefinition.all
+          root_scope = StudyDefinition.all
         elsif current_user.role == User::ROLES[:investigator]
-          resources = StudyDefinition.where(principal_investigator_user_id: current_user.id)
+          root_scope = StudyDefinition.where(principal_investigator_user_id: current_user.id)
         end
 
-        resources = resources.includes(query_includes).joins(:principal_investigator).order(created_at: :desc)
+        resources = root_scope.includes(query_includes).joins(:principal_investigator).order(created_at: :desc)
 
         unless page_params.nil?
           resources = resources.page(page_params[:page])
                                .per(page_params[:page_size])
         end
+
         instance_variable_set(plural_resource_name, resources)
         respond_with instance_variable_get(plural_resource_name), include: response_includes
+
+        set_pagination_headers instance_variable_get(plural_resource_name), root_scope, page_params
       end
 
       def create

@@ -178,6 +178,8 @@ class UserList extends React.Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
+    if (!nextProps?.users?.data) return prevState;
+
     const combinedRows = [...prevState.rows, ...nextProps.users.data].sort((a, b) => (a.id - b.id));
     if (combinedRows.length < 2) { return { rows: combinedRows } }
     const rows = combinedRows.slice(1).reduce((accumulatedRows, currentElement) => {
@@ -216,13 +218,14 @@ UserManagement.propTypes = {
   users: ApiReturnCollectionOf(UserType),
 }
 
-const mapStateToProps = (state) => ({
-  users: state.paginated.users,
-});
+const mapStateToProps = (state) => {
+  return {
+  users: state.users_paginated,
+}}
 
 const mapDispatchToProps = (dispatch) => ({
-  reset: () => dispatch(elicitApi.actions.paginated.users.reset()),
-  loadNext: () => dispatch(elicitApi.actions.paginated.users.loadNextPage()),
+  reset: () => dispatch(elicitApi.actions.users_paginated.reset()),
+  loadNext: () => dispatch(elicitApi.actions.users_paginated.loadNextPage()),
   loadUsers: () => dispatch(elicitApi.actions.users()),
   createUser: (user) => { return dispatch(elicitApi.actions.user.post({}, {body: JSON.stringify({user})})) },
   updateUser: (user_id, user) => dispatch(elicitApi.actions.user.patch({id: user_id}, { body: JSON.stringify({user}) })),

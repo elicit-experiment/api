@@ -182,18 +182,19 @@ const api = reduxApi(_.extend({},
     eligeableProtocolApiDefinition,
     anonymousProtocolsApiDefinition,
     anonymousProtocolApiDefinition,
-    makeEntityApiDefinition(apiRoot, defaultHeaders, 'study_definition', 'studies', 'study_definitions', '/study_definitions'),
     makeEntityApiDefinition(apiRoot, defaultHeaders, 'protocol_definition', 'protocol_definitions', '/study_definitions/:study_definition_id/protocol_definitions'),
     makeEntityApiDefinition(apiRoot, defaultHeaders, 'protocol_user', 'protocol_users', '/study_definitions/:study_definition_id/protocol_definitions/:protocol_definition_id/users'),
     makeEntityApiDefinition(apiRoot, defaultHeaders, 'phase_definitions', 'phase_definitions', '/study_definitions/:study_definition_id/protocol_definitions/:protocol_definition_id/phase_definitions'),
     )).use("options", apiOptions).use("responseHandler",authErrorResponseHandler).use("fetch", adapterFetch(fetch));
 
+const studiesApi = makePaginatedApi(makeEntityApiDefinition(apiRoot, defaultHeaders, 'study_definition', 'studies', 'study_definitions', '/study_definitions'), 'study_definition', 'studies');
+
 const usersApi = makePaginatedApi(userApiDefinition, 'user');
 
 const combinedApi = {
-  events: [api, usersApi].reduce((all, element) => ({...all, ...element.events}), {}),
-  reducers: [api, usersApi].reduce((all, element) => ({...all, ...element.reducers}), {}),
-  actions: [api, usersApi].reduce((all, element) => ({...all, ...element.actions}), {}),
+  events: [api, usersApi, studiesApi].reduce((all, element) => ({...all, ...element.events}), {}),
+  reducers: [api, usersApi, studiesApi].reduce((all, element) => ({...all, ...element.reducers}), {}),
+  actions: [api, usersApi, studiesApi].reduce((all, element) => ({...all, ...element.actions}), {}),
 }
 
 export default combinedApi;

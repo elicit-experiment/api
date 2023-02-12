@@ -1,6 +1,12 @@
 import PropTypes from 'prop-types'
 import React from 'react'
-import {ApiReturnCollectionOf, MatchType, ProtocolDefinitionType, StudyDefinitionType} from "../../../types";
+import {
+  ApiReturnCollectionOf,
+  ExperimentType,
+  MatchType,
+  ProtocolDefinitionType,
+  StudyDefinitionType,
+} from "../../../types";
 import { EditableProtocolCard } from "./ProtocolDetailCard";
 // import { Tooltip } from "react-bootstrap";
 
@@ -52,6 +58,10 @@ export function ExperimentStatus(props) {
   }
 }
 
+ExperimentStatus.propTypes = {
+  experiment: ExperimentType,
+}
+
 export function UserRoleIcon(props) {
   switch (props.role) {
     case 'anonymous_user':
@@ -67,8 +77,6 @@ export function UserRoleIcon(props) {
 }
 
 export function DetailProtocolList(props) {
-  console.dir(props.study_protocols);
-  console.dir(props.protocols);
   let protocolList = props.study_protocols.map((protocol, _i) => {
     // This is a little gross.  Because the protocol_definitions inside the study definitions
     // don't get updated when we patch the protocol definition, we need to check if there's
@@ -143,7 +151,6 @@ function EditStudyPanel(props) {
 }
 
 EditStudyPanel.propTypes = {
-  match: MatchType,
   study: StudyDefinitionType.isRequired,
   deleteStudyById: PropTypes.func,
   updateStudyDefinition: PropTypes.func,
