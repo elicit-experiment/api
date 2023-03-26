@@ -119,3 +119,5 @@ gem 'capybara', '~> 3.33'
 # gem "ruby-debug-ide", "~> 0.7.2"
 
 gem "lograge-sql", "~> 2.0"
+
+gem "pg_search", "~> 2.3"

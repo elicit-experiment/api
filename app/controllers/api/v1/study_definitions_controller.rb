@@ -36,7 +36,11 @@ module Api
           root_scope = StudyDefinition.where(principal_investigator_user_id: current_user.id)
         end
 
-        resources = root_scope.includes(query_includes).joins(:principal_investigator).order(created_at: :desc)
+        resources = root_scope.includes(query_includes).joins(:principal_investigator).order(order_params)
+
+        if query_params[:filter].present?
+          resources = resources.search_study_definitions(query_params[:filter])
+        end
 
         unless page_params.nil?
           resources = resources.page(page_params[:page])
@@ -71,6 +75,12 @@ module Api
 
       def single_response_includes
         [:principal_investigator, { protocol_definitions: { include: [:phase_definitions, { protocol_users: { include: %i[user experiment] } }] } }]
+      end
+
+      def query_params
+        super if params[:filter].blank?
+
+        super.merge({ filter: params[:filter] })
       end
 
       def study_definition_params

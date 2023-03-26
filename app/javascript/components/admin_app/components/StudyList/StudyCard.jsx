@@ -2,13 +2,13 @@ import React from "react";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import update from "react-addons-update";
-import elicitApi from "../../../api/elicit-api.js";
+import elicitApi from "../../../../api/elicit-api.js";
 import {useDispatch} from "react-redux";
 import BootstrapRoutesButton from 'bootstrap-switch-button-react'
-import {ApiReturnCollectionOf, ProtocolDefinitionType, StudyDefinitionType} from '../../../types';
+import {ApiReturnCollectionOf, ProtocolDefinitionType, StudyDefinitionType} from '../../../../types';
 import SweetAlert from 'sweetalert2-react';
-import {ProtocolInfoLink} from "./ProtocolInfoLink";
-import {EditableProtocolList} from "./ProtocolDetailCard";
+import {ProtocolInfoLink} from "../ProtocolInfoLink";
+import {EditableProtocolList} from "../ProtocolDetailCard";
 import {Link} from "react-router-dom";
 
 const StudyCard = (props) =>  {

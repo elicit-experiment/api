@@ -1,6 +1,16 @@
 # frozen_string_literal: true
 
 class StudyDefinition < ApplicationRecord
+  include PgSearch::Model
+
+  pg_search_scope :search_study_definitions,
+                  against: { title: 'A', description: 'B' },
+                  using: {
+                    tsearch: {
+                      dictionary: 'english', tsvector_column: 'searchable'
+                    }
+                  }
+
   belongs_to :principal_investigator, class_name: 'User', foreign_key: 'principal_investigator_user_id'
 
   has_many :study_result, class_name: 'StudyResult::StudyResult', dependent: :destroy

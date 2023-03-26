@@ -3,12 +3,10 @@ import PropTypes from 'prop-types'
 import TransitionGroup from 'react-transition-group/TransitionGroup'
 import CSSTransition from 'react-transition-group/CSSTransition';
 import Study from './StudyCard'
-import {ProtocolDefinitionType, ApiReturnCollectionOf} from '../../../types';
-import pluralize from 'pluralize';
 import InfiniteScroll from 'react-infinite-scroll-component'
 import {useDispatch, useSelector} from "react-redux";
-import elicitApi from "../../../api/elicit-api";
-import {ensureSyncableListLoaded} from "../../../api/api-helpers";
+import elicitApi from "../../../../api/elicit-api";
+import { ensureSyncableListLoaded } from "../../../../api/api-helpers";
 
 const Fade = ({children, ...props}) => (
   <CSSTransition
@@ -20,10 +18,14 @@ const Fade = ({children, ...props}) => (
   </CSSTransition>
 );
 
-const StudyCardList = () => {
+const StudyCardList = (props) => {
   const dispatch = useDispatch();
-  const studiesList = useSelector(state => state.studies_paginated)
-  const studies = studiesList.data
+  const studiesList = useSelector(state => state.studies_paginated);
+  const studies = [...studiesList.data];
+
+  const queryArgs = { sort: props.sortOrder, filter: props.searchText };
+
+  useEffect(() => dispatch(elicitApi.actions.studies_paginated.ensureQueryArgs(queryArgs)) );
 
   const loadNextPage = () => {
     dispatch(elicitApi.actions.studies_paginated.loadNextPage());
@@ -33,7 +35,7 @@ const StudyCardList = () => {
 
   useEffect(() => {
     studiesState === 'start-load' && dispatch(elicitApi.actions.studies_paginated.loadNextPage())
-  }, [])
+  }, [studiesState])
   if (studiesState === 'start-load') {
     return (<div><h1>Loading...</h1></div>)
   }
@@ -43,11 +45,12 @@ const StudyCardList = () => {
 
   const hasMore = studies.length < studiesList.totalItems;
 
+  if (props.sortOrder === 'up') {
+    //studies.reverse()
+  }
+
   return (
     <div id="scrollableTarget" style={{}}>
-      <h1>{studiesList.totalItems} {pluralize('Study', studiesList.totalItems)} (showing {studies.length})</h1>
-
-
       {/*Put the scroll bar always on the bottom*/}
       <div style={{}}>
         <TransitionGroup>
@@ -64,7 +67,6 @@ const StudyCardList = () => {
                 </div>
               ))
             }
-
           </InfiniteScroll>
         </TransitionGroup>
       </div>
@@ -73,6 +75,8 @@ const StudyCardList = () => {
 }
 
 StudyCardList.propTypes = {
+  sortOrder: PropTypes.string,
+  searchText: PropTypes.string,
 }
 
 export default StudyCardList;

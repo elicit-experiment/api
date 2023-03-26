@@ -1,6 +1,5 @@
 import {apiOptions, authErrorResponseHandler} from "./tokens";
 import reduxApi, {transformers} from "redux-api";
-import {combineReducers} from "redux";
 
 const paginatedResponseHandler = (err, data) => {
   data = authErrorResponseHandler(err, data);
@@ -70,7 +69,7 @@ export function makePaginatedApi(restApiDefinition, entityName, entityPluralName
     .use("responseHandler", paginatedResponseHandler)
     .use("fetch",  paginatingAdapterFetch(fetch));
 
-  const makePaginationDefaultState = () => ({ currentPage: 0, totalItems: 0, pageSize: 0, sync: false, syncing: false, loading: false, data: [] })
+  const makePaginationDefaultState = () => ({ currentPage: 0, totalItems: 0, pageSize: 0, sort: null, filter: null, sync: false, syncing: false, loading: false, data: [] })
 
   const initialState = makePaginationDefaultState();
 
@@ -85,6 +84,10 @@ export function makePaginatedApi(restApiDefinition, entityName, entityPluralName
           return makePaginationDefaultState()
         case api.events[storeName].setNextPageAsLoading:
           return { ...state, loading: true, syncing: true, sync: false }
+        case api.events[storeName].setQueryArgs:
+          // eslint-disable-next-line no-case-declarations
+          const { sort, filter } = action.data;
+          return { ...makePaginationDefaultState(), sort, filter };
         case api.events[entityPluralName].actionSuccess:
           newState.data = newState.data.concat(action.data.data);
           if ('page' in action.request.pathvars) {
@@ -147,6 +150,7 @@ export function makePaginatedApi(restApiDefinition, entityName, entityPluralName
     return {
       reset: `@redux-api@paginated@${entityPluralName}@reset`,
       setNextPageAsLoading: `@redux-api@paginated@${entityPluralName}@setNextPageAsLoading`,
+      setQueryArgs: `@redux-api@paginated@${entityPluralName}@setQueryArgs`,
       setCurrentPage: `@redux-api@paginated@${entityPluralName}@setCurrentPage`,
     }
   }
@@ -156,15 +160,35 @@ export function makePaginatedApi(restApiDefinition, entityName, entityPluralName
       reset: () => ({
         type: api.events[storeName].reset,
       }),
+      setQueryArgs: (queryArgs) => ({
+        type: api.events[storeName].setQueryArgs,
+        data: queryArgs,
+      }),
       setNextPageAsLoading: () => ({type: api.events[storeName].setNextPageAsLoading}),
+      ensureQueryArgs: (queryArgs) => {
+        return function (dispatch, getState) {
+          const state = getState();
+          const sort = queryArgs.sort === 'up' ? 'up' : null;
+          const filter = queryArgs.filter.length > 0 ? queryArgs.filter : null;
+          console.dir(queryArgs)
+          if (state[storeName].sort !== sort || state[storeName].filter !== filter) {
+            dispatch(api.actions[storeName].setQueryArgs({sort, filter}));
+          }
+        }
+      },
       loadNextPage: () => {
         return function (dispatch, getState) {
           const state = getState();
-          const nextPage = state[storeName].currentPage + 1;
-          console.log(`page: ${state[storeName].currentPage} ${nextPage}`)
+          const { sort, filter, currentPage } = state[storeName];
+          const nextPage = currentPage + 1;
+
+          console.log(`page: ${currentPage} ${nextPage}`)
           if (state[storeName].loading) { return }
+
           dispatch(api.actions[storeName].setNextPageAsLoading())
-          dispatch(api.actions[entityPluralName].force({ page: nextPage }));
+          const queryParams = Object.fromEntries(Object.entries({ page: nextPage, sort, filter  })
+            .filter(([_, v]) => v != null));
+          dispatch(api.actions[entityPluralName].force(queryParams));
         }
       },
     }

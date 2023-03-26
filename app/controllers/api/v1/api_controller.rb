@@ -118,7 +118,8 @@ module Api
       end
 
       def order_params
-        { created_at: :desc }
+        order = params[:sort] == 'up' ? :asc : :desc
+        { created_at: order }
       end
 
       private

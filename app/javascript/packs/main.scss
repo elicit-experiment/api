@@ -7,6 +7,8 @@ $font-family-base:       $font-family-sans-serif !default;
 @import "../scss/long-shadow-mixin.scss";
 @import "bootstrap-toggle/css/bootstrap2-toggle.min";
 
+@import "../scss/StudyFilterBar.scss";
+
 .navbar-light .navbar-nav .nav-link {
   color: rgba(0, 0, 0, .7);
 }
