@@ -27,7 +27,7 @@ There are 3 separate servers required: the API, the admin/participant frontend a
 ```bash
 docker-compose --env-file .env.production.local up -d --build
 ```
-`
+
 #### API
 
 ```

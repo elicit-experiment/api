@@ -6,13 +6,6 @@ RUN apt-get update
 RUN apt-get install -y ruby-dev build-essential
 #RUN gem install compass --pre
 
-RUN npm install -g gulp
-RUN npm install gulp
-RUN npm install gulp-coffee
-RUN npm install gulp-concat
-RUN npm install gulp-uglify
-RUN npm install gulp-compass
-
 # Enable installing gems from git repos
 RUN apt-get install git
 
@@ -32,12 +25,8 @@ COPY . /experiment-frontend
 
 WORKDIR /experiment-frontend
 
-RUN sed -i'' -E "s/(\s+portalPath\: ).*/\1\"http:\/\/$API_URL\"/g" gulpfile.js 
-
-RUN cat gulpfile.js | grep portalPath
-
 RUN npm install
 
-RUN gulp build
+RUN npm run build build
 
 CMD ["/bin/bash", "./run.sh"]

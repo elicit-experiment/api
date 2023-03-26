@@ -6,13 +6,15 @@ module StudyResult
   end
 
   class TimeSeries < ApplicationRecord
-    belongs_to :stage, class_name: 'Stage'
+    belongs_to :stage, class_name: 'StudyResult::Stage'
     belongs_to :study_definition, class_name: 'StudyDefinition'
     belongs_to :protocol_definition, class_name: 'ProtocolDefinition'
     belongs_to :phase_definition, class_name: 'PhaseDefinition'
     belongs_to :component, class_name: 'Component', optional: true
 
     mount_uploader :file, TimeSeriesUploader
+
+    SERIES_TYPES = %i[webgazer mouse].freeze
 
     def append_to_tsv(append_text, headers, filename)
       rows = append_text.split("\n").size

@@ -29,6 +29,8 @@ module ChaosApi
         mouse: MOUSE_HEADERS
       }.freeze
 
+      before_action :post_params, only: %i[create append]
+
       def create
         append
       end
@@ -109,8 +111,12 @@ module ChaosApi
       end
 
       def time_series
+        return @time_series if @time_series.present?
+
         study_definition_id = @chaos_session.study_definition_id
         phase_definition_id = @chaos_session.phase_definition_id
+
+        unprocessable_entity "invalid series type #{@series_type}" unless StudyResult::TimeSeries::SERIES_TYPES.include? @series_type
 
         time_series_params = {
           stage_id: @chaos_session.stage_id,
@@ -121,7 +127,7 @@ module ChaosApi
           schema_metadata: nil
         }
 
-        StudyResult::TimeSeries.where(time_series_params).first_or_initialize
+        @time_series = StudyResult::TimeSeries.where(time_series_params).first_or_initialize
       end
 
       def respond_error(msg, status = :unprocessable_entity)

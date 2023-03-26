@@ -44,13 +44,11 @@ class ParticipantApp extends React.Component {
 
 const mapStateToProps = (state) => ({
   current_user: state.current_user,
-  eligeable_protocols: state.eligeable_protocols,
   userToken: state.tokens.userToken,
   tokenStatus: tokenStatus(state),
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  loadEligeableProtocols: () => dispatch(elicitApi.actions.eligeable_protocols({public:true})),
   loadCurrentUser: () => dispatch(elicitApi.actions.current_user()),
 });
 

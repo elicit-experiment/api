@@ -1,56 +1,78 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import PropTypes from 'prop-types'
 import TransitionGroup from 'react-transition-group/TransitionGroup'
 import CSSTransition from 'react-transition-group/CSSTransition';
 import Study from './StudyCard'
-import {StudyDefinitionType, ProtocolDefinitionType, ApiReturnCollectionOf} from '../../../types';
+import {ProtocolDefinitionType, ApiReturnCollectionOf} from '../../../types';
 import pluralize from 'pluralize';
+import InfiniteScroll from 'react-infinite-scroll-component'
+import {useDispatch, useSelector} from "react-redux";
+import elicitApi from "../../../api/elicit-api";
+import {ensureSyncableListLoaded} from "../../../api/api-helpers";
 
-const Fade = ({ children, ...props }) => (
- <CSSTransition
-   {...props}
-   timeout={500}
-   classNames="fade"
- >
-  {children}
- </CSSTransition>
+const Fade = ({children, ...props}) => (
+  <CSSTransition
+    {...props}
+    timeout={500}
+    classNames="fade"
+  >
+    {children}
+  </CSSTransition>
 );
 
-class StudyCardList extends React.Component {
-  render() {
-    if (!this.props.studies || !this.props.studies.data) {
-      return (<div><h1>Loading...</h1></div>)
-    }
-    const studies = this.props.studies.data.map( (study, _i) => {
-      return(
-        <Fade key={study.id} appear={true} >
-          <div>
-            <Study study={study} editProtocols={true} protocols={this.props.protocol_definitions} key={study.id}> </Study>
-          </div>
-        </Fade>
-      )
-    });
+const StudyCardList = () => {
+  const dispatch = useDispatch();
+  const studiesList = useSelector(state => state.studies_paginated)
+  const studies = studiesList.data
 
-    return(
-    <div>
-      <h1>{studies.length} {pluralize('Study', studies.length)} </h1>
-      <TransitionGroup>
-        {studies}
-      </TransitionGroup>
-    </div>)
+  const loadNextPage = () => {
+    dispatch(elicitApi.actions.studies_paginated.loadNextPage());
+  };
+
+  const studiesState = ensureSyncableListLoaded(studiesList);
+
+  useEffect(() => {
+    studiesState === 'start-load' && dispatch(elicitApi.actions.studies_paginated.loadNextPage())
+  }, [])
+  if (studiesState === 'start-load') {
+    return (<div><h1>Loading...</h1></div>)
+  }
+  if (studiesState === 'error') {
+    return (<div><h1>Error. Try reloading the page.</h1></div>)
   }
 
-  componentDidMount() {
-    if (!this.props.studies.sync && !this.props.studies.loading) {
-      this.props.loadStudies()
-    }
-  }
+  const hasMore = studies.length < studiesList.totalItems;
+
+  return (
+    <div id="scrollableTarget" style={{}}>
+      <h1>{studiesList.totalItems} {pluralize('Study', studiesList.totalItems)} (showing {studies.length})</h1>
+
+
+      {/*Put the scroll bar always on the bottom*/}
+      <div style={{}}>
+        <TransitionGroup>
+          <InfiniteScroll
+            dataLength={studies.length}
+            next={loadNextPage}
+            hasMore={hasMore}
+            loader={<h4>Loading...</h4>}
+          >
+            {
+              studies.map((study, _i) => (
+                <div key={study.id}>
+                  <Study study={study} editProtocols={true} > </Study>
+                </div>
+              ))
+            }
+
+          </InfiniteScroll>
+        </TransitionGroup>
+      </div>
+    </div>
+  )
 }
 
 StudyCardList.propTypes = {
-  protocol_definitions: ApiReturnCollectionOf(ProtocolDefinitionType),
-  studies: ApiReturnCollectionOf(StudyDefinitionType),
-  loadStudies: PropTypes.func,
 }
 
 export default StudyCardList;

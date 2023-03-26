@@ -48,10 +48,14 @@ module ChaosApi
           }
 
           trial_result = StudyResult::TrialResult.find_by(parms)
-          Rails.logger.warn "Cannot find trial result in slide #{@slideIndex}" if trial_result.nil?
-          trial_result.completed_at = DateTime.now
-          Rails.logger.info message: 'END OF TRIAL: TrialResult', trial_results: trial_result
-          trial_result.save!
+
+          if trial_result.nil?
+            Rails.logger.warn "Cannot find trial result in slide #{@slideIndex}"
+          else
+            trial_result.completed_at = DateTime.now
+            Rails.logger.info message: 'END OF TRIAL: TrialResult', trial_results: trial_result
+            trial_result.save!
+          end
         end
 
         @protocol_definition = ProtocolDefinition.find(@protocol_id)
