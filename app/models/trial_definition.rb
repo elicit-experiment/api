@@ -3,7 +3,7 @@
 class TrialDefinition < ApplicationRecord
   belongs_to :study_definition, class_name: 'StudyDefinition'
   belongs_to :protocol_definition, class_name: 'ProtocolDefinition'
-  belongs_to :phase_definition, class_name: 'PhaseDefinition'
+  belongs_to :phase_definition, class_name: 'PhaseDefinition', inverse_of: :trial_definitions
 
   has_many :components, dependent: :destroy
   has_many :stimuli, dependent: :destroy

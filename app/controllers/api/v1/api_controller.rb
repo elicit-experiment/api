@@ -61,7 +61,7 @@ module Api
         unless query_params.nil?
           qp = query_params
           qp.delete_if { |_k, v| v.nil? }
-          resources = resource_class.includes(send(:query_includes)).where(qp).order(order_params)
+          resources = resource_class.includes(send(:query_includes)).where(qp)
         end
 
         resources = resource_class.full_text_search(search_param) unless search_param.nil?
@@ -69,6 +69,8 @@ module Api
         eager_load_fields&.each do |e|
           resources = resources.includes(*e)
         end
+
+        resources = resources.order(order_params)
 
         unless page_params.nil?
           resources = resources.page(page_params[:page])

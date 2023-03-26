@@ -1,53 +1,39 @@
 import React from 'react';
-import { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import {connect} from "react-redux"
+import {useState, useEffect} from 'react';
+import {useDispatch, useSelector} from "react-redux"
 import elicitApi from "../../../api/elicit-api"
 import ProtocolPreview from "../components/ProtocolPreview"
-import {ApiReturnCollectionOf, ProtocolDefinitionType} from '../../../types';
 import {useParams} from "react-router-dom";
+import {ensureSyncableLoaded} from "../../../api/api-helpers";
 
-const ProtocolPreviewContainer = (props) => {
-  const { protocolId, studyId } = useParams()
+const ProtocolPreviewContainer = () => {
+  const {protocolId, studyId} = useParams()
 
-  const [currentProtocolId, setCurrentProtocolId] = useState(() => (parseInt(protocolId, 10)))
+  const [currentProtocolId] = useState(() => (parseInt(protocolId, 10)))
+  const [currentStudyId] = useState(() => (parseInt(studyId, 10)))
 
-  const ensureProtocolDefinitionLoaded = () => {
-    props.loadProtocolDefinition(studyId, protocolId)
+  const dispatch = useDispatch();
+  const protocolDefinitions = useSelector(state => state.protocol_definition)
+
+  const protocolDefinitionState = ensureSyncableLoaded(protocolDefinitions, (protocolDefinition) => protocolDefinition.id === currentProtocolId);
+
+  useEffect(() => {
+    protocolDefinitionState === 'start-load' && dispatch(elicitApi.actions.protocol_definition({study_definition_id: currentStudyId, protocol_definition_id: currentProtocolId}))
+  }, [])
+  if (protocolDefinitionState === 'start-load' || protocolDefinitionState === 'loading') {
+    return (<div><h1>Loading...</h1></div>)
+  }
+  if (protocolDefinitionState === 'error') {
+    return (<div><h1>Error. Try reloading the page.</h1></div>)
   }
 
-  if (!props.protocol_definition.loading && !( (props.protocol_definition.sync && (props.protocol_definition.data[0]?.id === currentProtocolId))))  {
-    ensureProtocolDefinitionLoaded()
-  }
-
-  console.dir(currentProtocolId);
-  let protocol = props.protocol_definition.data[0];
-  console.log(`Rendering protocol ${currentProtocolId} with ${protocol}`);
-  if (protocol && (protocol.id == currentProtocolId)) {
-    return (
-        <div>
-          <ProtocolPreview protocol={protocol} studyId={studyId} protocolId={currentProtocolId}></ProtocolPreview>
-        </div>
-    )
-  }
-
-  return <div>Loading Protocol {currentProtocolId} information</div>
+  let protocol = protocolDefinitions.data[0];
+  console.log(`Rendering protocol ${currentStudyId}.${currentProtocolId} with ${protocol}`);
+  return (
+    <div>
+      <ProtocolPreview protocol={protocol} studyId={studyId} protocolId={currentProtocolId}></ProtocolPreview>
+    </div>
+  )
 }
 
-ProtocolPreviewContainer.propTypes = {
-  protocol_definition: ApiReturnCollectionOf(ProtocolDefinitionType),
-  loadProtocolDefinition: PropTypes.func,
-};
-
-const mapStateToProps = (state) => ({
-  protocol_definition: state.protocol_definition,
-});
-
-const mapDispatchToProps = (dispatch) => ({
-  loadProtocolDefinition: (study_definition_id, protocol_definition_id) => dispatch(elicitApi.actions.protocol_definition({
-    study_definition_id: study_definition_id,
-    protocol_definition_id: protocol_definition_id,
-  })),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(ProtocolPreviewContainer)
+export default ProtocolPreviewContainer

@@ -4,7 +4,7 @@ class PhaseDefinition < ApplicationRecord
   belongs_to :study_definition, class_name: 'StudyDefinition'
   belongs_to :protocol_definition, class_name: 'ProtocolDefinition'
 
-  has_many :trial_definitions, dependent: :destroy
+  has_many :trial_definitions, -> { order created_at: :asc }, dependent: :destroy, inverse_of: :phase_definition
   has_many :trial_orders, dependent: :destroy
   has_many :trial_order_selection_mappings, dependent: :destroy
 
