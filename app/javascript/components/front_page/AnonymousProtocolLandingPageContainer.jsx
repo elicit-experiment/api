@@ -18,11 +18,25 @@ const AnonymousProtocolLandingPageContainer = (props) => {
   const protocols = anonymous_protocol.data.filter((p) => p.id === props.protocolId);
   const protocol = protocols.length > 0 ? protocols[0] : null;
 
+  const queryParams = window.location.search.replace(/^\?(.*)/, '$1')
+    .split('&')
+    .map((p) => {
+      const x = p.split(/=/);
+      let y = {};
+      y[x[0]] = x[1];
+      return y;
+    })
+    .reduce((l, r) => Object.assign(l, r), {});
+
   useEffect(() => {
     dispatch(elicitApi.actions.anonymous_protocol({id: props.protocolId, public: true}));
   }, [dispatch, !!protocol]);
 
-  const takeProtocol = () => dispatch(elicitApi.actions.take_protocol({study_definition_id: props.studyId, protocol_definition_id: props.protocolId}));
+  const takeProtocol = () => {
+    const pathArgs = {study_definition_id: props.studyId, protocol_definition_id: props.protocolId, ...queryParams}
+    const take = elicitApi.actions.take_protocol(pathArgs);
+    return dispatch(take);
+  }
 
   if ((!anonymous_protocol.sync && anonymous_protocol.loading)) {
     return <div>Loading Protocol {props.protocolId} information</div>;

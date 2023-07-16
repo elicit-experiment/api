@@ -41,7 +41,7 @@ module Chaos
       ).first_or_initialize do |e|
         # we need to have a real experiment with an ID for later
         e.started_at = DateTime.now
-        e.custom_parameters = custom_parameters.to_json
+        e.custom_parameters = custom_parameters.as_json
         e.save!
       end
 
