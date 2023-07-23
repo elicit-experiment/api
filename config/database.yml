@@ -4,7 +4,7 @@ default: &default
   pool: 5
   username: <%= ENV['POSTGRES_USER'] %>
   password: <%= ENV['POSTGRES_PASSWORD'] %>
-  host: postgres
+  host: postgres15
   port: 5432
 
 development:
@@ -26,5 +26,5 @@ production:
   pool: 5
   username: <%= ENV['POSTGRES_USER'] %>
   password: <%= ENV['POSTGRES_PASSWORD'] %>
-  host: postgres
+  host: postgres15
   port: 5432
