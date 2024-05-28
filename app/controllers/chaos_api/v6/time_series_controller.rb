@@ -50,25 +50,31 @@ module ChaosApi
         # @response_status = :created
         @response_status = :ok
 
+        ap time_series
+
         if params[:points]
-          append_from_json(time_series)
+          append_tsv_from_json(time_series)
         elsif params[:file]
-          append_from_file(time_series)
+          append_tsv_from_file(time_series)
+        else
+          append_json_from_json(time_series)
         end
+
+        @time_series.save!
 
         render json: @response.to_json, status: @response_status
       end
 
       private
 
-      def append_from_json(time_series)
+      def append_tsv_from_json(time_series)
         @data = post_params[:points]
 
         append_text = @data.map do |row|
           @header_set.map { |col| row[col] }.join("\t")
         end.join("\n")
 
-        time_series.append_to_tsv(append_text, @header_set, "#{@series_type}.tsv")
+        time_series.append_to_tsv(append_text, @header_set)
 
         unless time_series.save
           logger.error 'time series failed to save!'
@@ -81,7 +87,7 @@ module ChaosApi
         logger.debug "Saved time series #{time_series.id}"
       end
 
-      def append_from_file(time_series)
+      def append_tsv_from_file(time_series)
         @file = post_params[:file]
 
         # check headers
@@ -97,7 +103,21 @@ module ChaosApi
 
         # puts File.read(@file.tempfile.path)
 
-        time_series.append_file_to_tsv(@file.tempfile, @header_set, "#{@series_type}.tsv")
+        time_series.append_file_to_tsv(@file.tempfile, @header_set)
+
+        unless time_series.save
+          logger.error 'time series failed to save!'
+          logger.error time_series.ai
+          logger.error time_series.errors.full_messages.join("\n")
+          @response = ChaosResponse.new([], 'failed to save')
+          @response_status = :unprocessable_entity
+        end
+
+        logger.debug "Saved time series #{time_series.id}"
+      end
+
+      def append_json_from_json(time_series)
+        time_series.append(params[:data])
 
         unless time_series.save
           logger.error 'time series failed to save!'
@@ -118,12 +138,19 @@ module ChaosApi
 
         unprocessable_entity "invalid series type #{@series_type}" unless StudyResult::TimeSeries::SERIES_TYPES.include? @series_type
 
+        schema = case @series_type
+                 when :face_landmark
+                   'face_landmark_json'
+                 else
+                   "#{@series_type}_tsv"
+                 end
+
         time_series_params = {
           stage_id: @chaos_session.stage_id,
           study_definition_id: study_definition_id,
           protocol_definition_id: @chaos_session.protocol_definition_id,
           phase_definition_id: phase_definition_id,
-          schema: "#{@series_type}_tsv",
+          schema: schema,
           schema_metadata: nil
         }
 
@@ -140,10 +167,10 @@ module ChaosApi
 
       def post_params
         # validate POST parameters
-        @series_type = (params[:series_type] || 'webgazer').to_sym
+        @series_type = (params[:seriesType] || 'webgazer').to_sym
         @header_set = HEADERS_SET[@series_type]
 
-        params.permit(:format, :sessionGUID, :series_type, :file, points: @header_set)
+        params.permit(:format, :sessionGUID, :data, :series_type, :file, points: @header_set)
       end
     end
   end

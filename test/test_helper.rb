@@ -7,6 +7,14 @@ require File.expand_path('../config/environment', __dir__)
 require 'minitest/autorun'
 require 'rails/test_help'
 require 'mocha/minitest'
+#require 'fakefs'
+
+class StubToken
+  def acceptable?(*_scopes)
+    puts 'testing stub'
+    true
+  end
+end
 
 class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.

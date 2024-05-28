@@ -14,7 +14,42 @@ module StudyResult
 
     mount_uploader :file, TimeSeriesUploader
 
-    SERIES_TYPES = %i[webgazer mouse].freeze
+    SERIES_TYPES = %i[webgazer mouse face_landmark].freeze
+    FILE_TYPES = %i[tsv json]
+
+    # append ndjson to the file.
+    def append(data)
+      stream = if file.path.nil?
+                 StringIO.new
+               else
+                 unless File.exist?(file.path)
+                   logger.warn "Time Series file doesn't exist: #{file.path}"
+                   dir = File.dirname(file.path)
+                   FileUtils.mkdir_p dir
+                 end
+
+                 open(self.file.path, 'a')
+               end
+
+      datas = if data.is_a? Array
+                data
+              else
+                [data]
+              end
+
+      datas.each do |row|
+        stream.puts "#{row.to_json}\n"
+      end
+
+      unless file.path
+        self.file = FileIO.new(stream.string, filename)
+      end
+    ensure
+      stream.close if stream.present?
+
+      logger.debug "Wrote #{datas.size} rows to #{self.file.path}"
+    end
+
 
     def append_to_tsv(append_text, headers, filename)
       rows = append_text.split("\n").size
@@ -69,6 +104,18 @@ module StudyResult
       #      end
 
       logger.debug "Wrote #{blocks} blocks from input file to #{filepath}"
+    end
+
+    def filename
+      "#{series_type}.#{file_type}"
+    end
+
+    def series_type
+      schema.split('_')[0..-2].join('_')
+    end
+
+    def file_type
+      schema.split('_').last
     end
   end
 end
