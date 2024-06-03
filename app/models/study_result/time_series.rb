@@ -28,7 +28,7 @@ module StudyResult
                    FileUtils.mkdir_p dir
                  end
 
-                 open(self.file.path, 'a')
+                 File.open(self.file.path, 'a')
                end
 
       datas = if data.is_a? Array
@@ -51,7 +51,7 @@ module StudyResult
     end
 
 
-    def append_to_tsv(append_text, headers, filename)
+    def append_to_tsv(append_text, headers)
       rows = append_text.split("\n").size
       if !file.file
         self.file = FileIO.new("#{headers.map(&:to_s).join("\t")}\n#{append_text}\n", filename)
@@ -70,7 +70,7 @@ module StudyResult
       end
     end
 
-    def append_file_to_tsv(append_file, headers, filename)
+    def append_file_to_tsv(append_file, headers)
       unless file.file
         self.file = FileIO.new("#{headers.map(&:to_s).join("\t")}\n", filename)
         logger.info "Creating initial time series with header to #{file.path}"

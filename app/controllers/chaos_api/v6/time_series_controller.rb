@@ -92,8 +92,9 @@ module ChaosApi
 
         # check headers
         header = @file.tempfile.readline.chomp
-        if header != @header_set.join("\t")
-          logger.warn "invalid header passed through file: #{header}"
+        expected_header = @header_set.join("\t")
+        if header != expected_header
+          logger.warn "invalid header passed through file: #{header} vs. #{expected_header}"
           @response = ChaosResponse.new([], 'failed to save')
           @response_status = :unprocessable_entity
           return
@@ -136,7 +137,9 @@ module ChaosApi
         study_definition_id = @chaos_session.study_definition_id
         phase_definition_id = @chaos_session.phase_definition_id
 
-        unprocessable_entity "invalid series type #{@series_type}" unless StudyResult::TimeSeries::SERIES_TYPES.include? @series_type
+        puts "\n\n\n #{@series_type}"
+
+        unprocessable_entity "invalid series type #{@series_type}" unless StudyResult::TimeSeries::SERIES_TYPES.include? @series_type.to_sym
 
         schema = case @series_type
                  when :face_landmark
