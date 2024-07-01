@@ -3,7 +3,10 @@
 ENV['RAILS_ENV'] ||= 'test'
 require 'dotenv'
 Dotenv.load('.env.test.local')
-require File.expand_path('../config/environment', __dir__)
+
+require_relative '../config/environment'
+require 'rails/test_help'
+
 require 'minitest/autorun'
 require 'rails/test_help'
 require 'mocha/minitest'
