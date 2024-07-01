@@ -3,8 +3,14 @@
 class ApidocsController < ApplicationController
   include Swagger::Blocks
 
-  swagger_root do
+  swagger_root host: ENV['API_URL'] do
     key :swagger, '2.0'
+
+    key :schemes, [ENV['API_SCHEME']]
+    key :consumes, ['application/json']
+    key :produces, ['application/json']
+    key :basePath, '/api/v1'
+
     info do
       key :version, '1.0.0'
       key :title, 'Elicit'
@@ -153,10 +159,6 @@ class ApidocsController < ApplicationController
         key :url, 'https://'
       end
     end
-    key :host, '' # ENV['API_URL']
-    key :basePath, '/api/v1'
-    key :consumes, ['application/json']
-    key :produces, ['application/json']
   end
 
   # A list of all classes that have swagger_* declarations.
