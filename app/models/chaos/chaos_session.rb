@@ -38,11 +38,11 @@ module Chaos
       experiment = StudyResult::Experiment.where(
         study_result_id: study_result.id,
         protocol_user_id: protocol_user.id
-      ).first_or_initialize do |e|
+      ).first_or_initialize.tap do |new_experiment|
         # we need to have a real experiment with an ID for later
-        e.started_at = DateTime.now
-        e.custom_parameters = custom_parameters.as_json
-        e.save!
+        new_experiment.started_at = DateTime.now
+        new_experiment.custom_parameters = custom_parameters.as_json
+        new_experiment.save!
       end
 
       if !experiment.current_stage
