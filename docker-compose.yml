@@ -23,6 +23,10 @@ services:
       - app_public:/var/www/app/public
     expose:
       - "3000"
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
 
   app-frontend:
     container_name: frontend
@@ -34,6 +38,10 @@ services:
           - ELICIT_LANDING_URL=${ELICIT_URL}\/participant
     volumes:
       - 'fe_public:/var/www/frontend/public'
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "2"
 
   web:
     container_name: web
@@ -53,6 +61,10 @@ services:
       - "80:8080"
       - "443:8443"
       - "8080:8081"
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "2"
 
   redis:
     container_name: redis
@@ -62,6 +74,10 @@ services:
       - '6379:6379'
     volumes:
       - redis:/data
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "2"
 
   postgres15:
     container_name: postgres15
@@ -74,6 +90,10 @@ services:
       - 'postgres15:/var/lib/postgresql/data'
       - 'postgres:/var/lib/postgresql/olddata:ro'
       - 'postgres15-backups:/var/lib/postgresql/backups'
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "2"
 
 volumes:
   redis:

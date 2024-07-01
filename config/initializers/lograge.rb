@@ -11,7 +11,7 @@ Rails.application.configure do #|config|
     # log rage doesn't log params by default.
     # For production, though, the params can be HUGE (e.g. webgazer datapoints, so let's be cautious)
     config.lograge.custom_options = lambda do |event|
-      exceptions = %w[controller action format id points]
+      exceptions = %w[controller action format id points data]
       { params: event.payload[:params].except(*exceptions) }
     end
   end
@@ -41,7 +41,9 @@ Rails.application.configure do #|config|
   # Instead of extracting event as Strings, extract as Hash. You can also extract
   # additional fields to add to the formatter
   config.lograge_sql.extract_event = Proc.new do |event|
-    { name: event.payload[:name], duration: event.duration.to_f.round(2), sql: event.payload[:sql] }
+    log_event = { name: event.payload[:name], duration: event.duration.to_f.round(2) }
+    log_event[:sql] = event.payload[:sql] if ENV['LOG_SQL'] == 'true'
+    log_event
   end
   # Format the array of extracted events
   config.lograge_sql.formatter = Proc.new do |sql_queries|
