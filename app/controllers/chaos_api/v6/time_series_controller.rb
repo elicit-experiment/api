@@ -50,8 +50,6 @@ module ChaosApi
         # @response_status = :created
         @response_status = :ok
 
-        ap time_series
-
         if params[:points]
           append_tsv_from_json(time_series)
         elsif params[:file]
@@ -137,8 +135,6 @@ module ChaosApi
         study_definition_id = @chaos_session.study_definition_id
         phase_definition_id = @chaos_session.phase_definition_id
 
-        puts "\n\n\n #{@series_type}"
-
         unprocessable_entity "invalid series type #{@series_type}" unless StudyResult::TimeSeries::SERIES_TYPES.include? @series_type.to_sym
 
         schema = case @series_type
@@ -173,7 +169,7 @@ module ChaosApi
         @series_type = (params[:seriesType] || 'webgazer').to_sym
         @header_set = HEADERS_SET[@series_type]
 
-        params.permit(:format, :sessionGUID, :data, :series_type, :file, points: @header_set)
+        params.permit(:format, :sessionGUID, :data, :seriesType, :content, :series_type, :file, points: @header_set)
       end
     end
   end
