@@ -14,6 +14,12 @@ module Api
 
       rescue_from ElicitError, with: :render_elicit_error
 
+      rescue_from 'RuntimeError', with: :deny_access
+
+      def deny_access
+        head :unauthorized
+      end
+
       # Returns the resource from the created instance variable
       # @return [Object]
       def get_resource

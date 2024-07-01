@@ -8,7 +8,7 @@ Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 
   # root of site
-  root 'client_app#index', as: :client_app
+  root 'client_app#index', as: :client_app, constraints: { format: 'html' }
 
   # routes to enable the CHAOS protocol used by the clients
   scope :v6 do
@@ -106,13 +106,13 @@ Rails.application.routes.draw do
   end
 
   ## Client app pages -- just load the client app
+  get '/admin' => 'client_app#index', as: :client_app_admin, constraints: { format: 'html' }
+  get '/admin/:tab' => 'client_app#index', constraints: { format: 'html' }
+  get '/participant' => 'client_app#index', as: :client_app_participant, constraints: { format: 'html' }
+  get '/login' => 'client_app#index', as: :client_app_login, constraints: { format: 'html' }
+  match '/client_app/*remainder' => 'client_app#index', via: :all, constraints: { format: 'html' }
+  match '/participant/*remainder' => 'client_app#index', via: :all, constraints: { format: 'html' }
+  match '/login/*remainder' => 'client_app#index', via: :all, constraints: { format: 'html' }
 
-  get '/admin' => 'client_app#index', as: :client_app_admin
-  get '/participant' => 'client_app#index', as: :client_app_participant
-  get '/login' => 'client_app#index', as: :client_app_login
-  match '/client_app/*remainder' => 'client_app#index', via: :all
-  match '/participant/*remainder' => 'client_app#index', via: :all
-  match '/login/*remainder' => 'client_app#index', via: :all
-
-  match '/*path' => 'client_app#index', via: :all
+  match '/*path' => 'client_app#index', via: :all, constraints: { format: 'html' }
 end
