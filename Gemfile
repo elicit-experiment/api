@@ -75,7 +75,7 @@ group :development do
   gem 'rubocop'
   gem 'rubocop-performance'
   gem 'rubocop-rails'
-  gem 'spring'
+  # gem 'spring'
   gem 'listen'
 end
 
@@ -117,5 +117,7 @@ gem 'capybara', '~> 3.33'
 # gem "debase", "~> 0.2.4"
 
 # gem "ruby-debug-ide", "~> 0.7.2"
+
+gem "fakefs", require: false
 
 gem "lograge-sql", "~> 2.0"

@@ -11,7 +11,7 @@ module StudyResult
     belongs_to :phase_definition, class_name: 'PhaseDefinition'
 
     has_many :data_points, class_name: 'StudyResult::DataPoint', dependent: :delete_all
-    has_many :time_series, class_name: 'StudyResult::TimeSeries', dependent: :delete_all
+    has_many :time_series, class_name: 'StudyResult::TimeSeries', dependent: :destroy
 
     def trials_completed
       (last_completed_trial || -1) + 1
