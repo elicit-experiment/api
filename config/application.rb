@@ -18,6 +18,7 @@ require "rails"
 end
 
 require './lib/elicit_log_formatter'
+require './lib/handle_compressed_requests'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -50,6 +51,8 @@ module ElicitApi
     }
     default_url_options_config[:port] = port if port
     Rails.application.routes.default_url_options = default_url_options_config
+
+    config.middleware.insert_before 0, HandleCompressedRequests
 
     config.environment = {
       public_facing?: (elicit_portal[:host].include?('compute.dtu.dk') || false)
