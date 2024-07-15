@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  # root of site
+  root 'client_app#index', as: :client_app, constraints: lambda { |req| req.format == :html }
+
   mount SwaggerUiEngine::Engine, at: '/api-docs'
 
   get '/apidocs/v1/swagger.json' => 'apidocs#index', :defaults => { format: 'json' }
 
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-
-  # root of site
-  root 'client_app#index', as: :client_app, constraints: { format: 'html' }
 
   # routes to enable the CHAOS protocol used by the clients
   scope :v6 do
@@ -115,4 +115,5 @@ Rails.application.routes.draw do
   match '/login/*remainder' => 'client_app#index', via: :all, constraints: { format: 'html' }
 
   match '/*path' => 'client_app#index', via: :all, constraints: { format: 'html' }
+
 end
