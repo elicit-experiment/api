@@ -9,7 +9,7 @@ module ChaosApi
       after_action :cors_set_access_control_headers
 
       def create
-        @response = ChaosResponse.new([])
+
 
         session_guid = params[:sessionGUID]
 
@@ -42,6 +42,11 @@ module ChaosApi
         }
 
         new_datapoints = StudyResult::DataPoint.from_chaos_output(datapoint_query_fields, output)
+        ap new_datapoints
+
+        updated_datapoints = new_datapoints.select(&:changed?)
+        updated_datapoints.map(&:save!).size
+        @response = ChaosResponse.new(updated_datapoints.map(&:id))
 
         if @chaos_session.preview
           respond_to do |format|
