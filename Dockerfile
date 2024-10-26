@@ -19,7 +19,7 @@ WORKDIR $RAILS_ROOT
 RUN apt-get update -qq && apt-get install -y build-essential libpq-dev
 
 # Install node 16
-RUN curl -sL https://deb.nodesource.com/setup_16.x | bash -
+RUN curl -sL https://deb.nodesource.com/setup_22.x | bash -
 RUN apt-get -y install nodejs
 RUN node --version
 RUN npm --version

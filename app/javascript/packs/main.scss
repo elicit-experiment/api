@@ -276,7 +276,7 @@ h1 {
 
 .modal-dialog {
   height: 100%;
-  display:flex;
+  display: flex;
   justify-items: center;
   align-items: center;
 }
@@ -285,13 +285,14 @@ h1 {
   margin-top: -50%;
 }
 
-.feature-card  {
-  > h2 {
-    font-size: 1.2rem;
-  }
+.feature-card {
   min-height: 12rem;
   max-width: 20rem;
   margin: auto;
+
+  & > h2 {
+    font-size: 1.2rem;
+  }
 }
 
 .wordmark-container {
@@ -302,7 +303,7 @@ h1 {
   position: relative;
   width: 130px;
   background: radial-gradient(ellipse closest-side, #fff 0%,  #fff 70%, #efeff6 100% );
-  > div {
+  & > div {
     position: relative;
     left: -5px;
     top: 5px;

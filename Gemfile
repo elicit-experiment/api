@@ -14,7 +14,7 @@ gem 'net-smtp', require: false
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 6'
 # 6.0 is incompatible with swagger_ui_engine https://github.com/zuzannast/swagger_ui_engine/issues/43
-gem 'webpacker'
+gem 'shakapacker', '~> 8'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 # Use Puma as the app server
