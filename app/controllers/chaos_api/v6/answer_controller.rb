@@ -31,7 +31,7 @@ module ChaosApi
           return
         end
 
-        output = JSON.parse(params[:output])
+        output = JSON.parse(params[:output].to_s)
 
         datapoint_query_fields = {
           stage_id: @chaos_session.stage&.id,
@@ -41,12 +41,13 @@ module ChaosApi
           component_id: @component&.id || 0
         }
 
-        new_datapoints = StudyResult::DataPoint.from_chaos_output(datapoint_query_fields, output)
-        ap new_datapoints
+        state_datapoint, request_data_points = StudyResult::DataPoint.from_chaos_output(datapoint_query_fields, output)
 
-        updated_datapoints = new_datapoints.select(&:changed?)
-        updated_datapoints.map(&:save!).size
-        @response = ChaosResponse.new(updated_datapoints.map(&:id))
+        logger.info message: 'datapoint changes', data_point_ids: request_data_points.to_h { |dp| [dp.id || 'new', dp.changed?] }
+
+        updated_data_points = request_data_points.select(&:changed?)
+
+        @response = ChaosResponse.new([state_datapoint.id].concat(updated_data_points.map(&:id)))
 
         if @chaos_session.preview
           respond_to do |format|
@@ -67,7 +68,9 @@ module ChaosApi
             StudyResult::DataPoint.where(datapoint_query_fields)
                                   .where.not(point_type: 'State')
                                   .delete_all
-            new_datapoints.each(&:save!)
+            state_datapoint.save!
+            request_data_points.each(&:save!)
+            logger.info message: "added data points #{updated_data_points.size}", data_point_ids: updated_data_points.map(&:id)
           end
         end
 
