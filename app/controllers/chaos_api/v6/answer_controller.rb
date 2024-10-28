@@ -47,9 +47,10 @@ module ChaosApi
 
         updated_data_points = request_data_points.select(&:changed?)
 
-        @response = ChaosResponse.new([state_datapoint.id].concat(updated_data_points.map(&:id)))
 
         if @chaos_session.preview
+          @response = ChaosResponse.new([state_datapoint.id].concat(updated_data_points.map(&:id)))
+
           respond_to do |format|
             format.xml { render xml: '' }
             format.json { render json: @response.to_json }
@@ -71,6 +72,7 @@ module ChaosApi
             state_datapoint.save!
             request_data_points.each(&:save!)
             logger.info message: "added data points #{updated_data_points.size}", data_point_ids: updated_data_points.map(&:id)
+            @response = ChaosResponse.new([state_datapoint.id].concat(updated_data_points.map(&:id)))
           end
         end
 
