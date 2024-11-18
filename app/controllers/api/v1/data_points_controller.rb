@@ -33,7 +33,7 @@ module Api
 
         resources = resources.map do |dp|
           h = dp.as_json
-          h[:component_name] = dp.component.name
+          h[:component_name] = dp.component.name if dp.component.present?
           h
         end
 
