@@ -13,17 +13,6 @@ const customConfig = {
   module: {
     rules: [
       {
-        test: /\.html$/,
-        loader: 'html-loader',
-        options: {
-          minimize: true,
-          removeAttributeQuotes: false,
-          caseSensitive: true,
-          customAttrSurround: [ [/#/, /(?:)/], [/\*/, /(?:)/], [/\[?\(?/, /(?:)/] ],
-          customAttrAssign: [ /\)?\]?=/ ]
-        }
-      },
-      {
         test: /\.md$/,
         use: [
           {
@@ -38,16 +27,6 @@ const customConfig = {
           }
         ]
       },
-      // {
-      //   test: /.s[ac]ss$/,
-      //   use: ["style-loader",
-      //     "css-loader",
-      //     "sass-loader"],
-      // },{
-      //   test: /\.css$/,
-      //   use: ["style-loader",
-      //     "css-loader"]
-      // }
     ]
   },
   plugins: [
