@@ -43,6 +43,14 @@ module ChaosApi
             format.json { render json: @response.to_json }
           end
 
+          if params[:points]
+            # TODO
+          elsif params[:file]
+            # TODO
+          else
+            logger.debug params[:data].ai
+          end
+
           return
         end
 
@@ -74,15 +82,7 @@ module ChaosApi
 
         time_series.append_to_tsv(append_text, @header_set)
 
-        unless time_series.save
-          logger.error 'time series failed to save!'
-          logger.error time_series.ai
-          logger.error time_series.errors.full_messages.join("\n")
-          @response = ChaosResponse.new([], 'failed to save')
-          @response_status = :unprocessable_entity
-        end
-
-        logger.debug "Saved time series #{time_series.id}"
+        save_time_series(time_series)
       end
 
       def append_tsv_from_file(time_series)
@@ -104,20 +104,16 @@ module ChaosApi
 
         time_series.append_file_to_tsv(@file.tempfile, @header_set)
 
-        unless time_series.save
-          logger.error 'time series failed to save!'
-          logger.error time_series.ai
-          logger.error time_series.errors.full_messages.join("\n")
-          @response = ChaosResponse.new([], 'failed to save')
-          @response_status = :unprocessable_entity
-        end
-
-        logger.debug "Saved time series #{time_series.id}"
+        save_time_series(time_series)
       end
 
       def append_json_from_json(time_series)
         time_series.append(params[:data])
 
+        save_time_series(time_series)
+      end
+
+      def save_time_series(time_series)
         unless time_series.save
           logger.error 'time series failed to save!'
           logger.error time_series.ai
