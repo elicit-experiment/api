@@ -39,7 +39,7 @@ module StudyResult
       # The events just get added, not updated
       state = DataPoint.where(state_dp_params).first_or_initialize
       state.value = output.to_json
-      state.datetime = DateTime.now
+      state.datetime = Time.zone.now
 
       # Since we know that all the events are all for the same compontent, we can use the event's entity_type and kind for
       # this synthetic "state" datapoint.

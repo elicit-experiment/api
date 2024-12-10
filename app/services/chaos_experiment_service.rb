@@ -135,47 +135,12 @@ class ChaosExperimentService
                       'Component': trial_data
                     }]
                   else
-                    @components.map do |c|
-                      outputs = {}
-                      unless protocol_user_id.nil?
-                        data_points = StudyResult::DataPoint.where(component_id: c.id, protocol_user_id: protocol_user_id)
-                        events = data_points.entries.reject { |d| (d.point_type.eql? 'State') }.map do |data_point|
-                          next unless data_point.point_type != 'State'
-
-                          {
-                            'Type' => data_point.point_type,
-                            'EventId' => data_point.kind,
-                            'Data' => data_point.value,
-                            'Method' => data_point.method,
-                            'DateTime' => data_point.datetime
-                          }
-                        end
-                        state = data_points.entries.find { |d| d.point_type.eql? 'State' }
-                        outputs = JSON.parse(state.value) if state
-                      end
-
-                      begin
-                        component_data = JSON.parse(c.definition_data || '{}')
-                      rescue JSON::ParserError => e
-                        Rails.logger.error "Failed to parse component definition data='#{c.definition_data}'"
-                        Rails.logger.error e.ai
-                      end
-
-                      type ||= 'NewComponent'
-
-                      chaos_component = {
-                        'Type': type,
-                        'Id': "#{@study_definition.id}:#{c.id}",
-                        'Fullname': 'NewComponent, 1.0.0',
-                        'UserAnswer': nil,
-                        'Component': component_data
-                      }
-
-                      chaos_component
+                    @components.map do |component|
+                      component_to_chaos_format(component, protocol_user_id, type)
                     end.flatten
                   end
 
-    # ap chaos_trial
+    ap chaos_trial
     # ap @components
 
     response = ChaosResponse.new(chaos_trial)
@@ -188,6 +153,43 @@ class ChaosExperimentService
   end
 
   private
+
+  def component_to_chaos_format(component, protocol_user_id, type = 'NewComponent')
+    outputs = {}
+    unless protocol_user_id.nil?
+      data_points = StudyResult::DataPoint.where(component_id: component.id, protocol_user_id: protocol_user_id)
+      events = data_points.entries.reject { |d| (d.point_type.eql? 'State') }.map do |data_point|
+        next unless data_point.point_type != 'State'
+
+        {
+          'Type' => data_point.point_type,
+          'EventId' => data_point.kind,
+          'Data' => data_point.value,
+          'Method' => data_point.method,
+          'DateTime' => data_point.datetime
+        }
+      end
+      state = data_points.entries.find { |d| d.point_type.eql? 'State' }
+      outputs = JSON.parse(state.value) if state
+    end
+
+    begin
+      component_data = JSON.parse(component.definition_data || '{}')
+    rescue JSON::ParserError => e
+      Rails.logger.error "Failed to parse component definition data='#{component.definition_data}'"
+      Rails.logger.error e.ai
+    end
+
+    type ||= 'NewComponent'
+
+    {
+      'Type': type,
+      'Id': "#{@study_definition.id}:#{component.id}",
+      'Fullname': 'NewComponent, 1.0.0',
+      'UserAnswer': nil,
+      'Component': component_data
+    }
+  end
 
   def trial_query
     {

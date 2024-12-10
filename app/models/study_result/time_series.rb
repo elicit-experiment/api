@@ -15,7 +15,7 @@ module StudyResult
     mount_uploader :file, TimeSeriesUploader
 
     SERIES_TYPES = %i[webgazer mouse face_landmark].freeze
-    FILE_TYPES = %i[tsv json]
+    FILE_TYPES = %i[tsv json].freeze
 
     # append ndjson to the file.
     def append(data)
