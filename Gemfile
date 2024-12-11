@@ -121,3 +121,5 @@ gem 'capybara', '~> 3.33'
 gem "fakefs", require: false
 
 gem "lograge-sql", "~> 2.0"
+
+gem "newrelic_rpm", "~> 9.16"
