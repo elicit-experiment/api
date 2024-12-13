@@ -45,6 +45,7 @@ Rails.application.configure do #|config|
     log_event[:sql] = event.payload[:sql] if ENV['LOG_SQL'] == 'true'
     log_event
   end
+
   # Format the array of extracted events
   config.lograge_sql.formatter = Proc.new do |sql_queries|
     sql_queries
