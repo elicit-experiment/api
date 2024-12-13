@@ -1,14 +1,5 @@
 # frozen_string_literal: true
 
-class FileIO < StringIO
-  def initialize(stream, filename)
-    super(stream)
-    @original_filename = filename
-  end
-
-  attr_reader :original_filename
-end
-
 module ChaosApi
   module V6
     class TimeSeriesController < ChaosApiController

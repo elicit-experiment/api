@@ -1,5 +1,15 @@
 # frozen_string_literal: true
 
+
+class FileIO < StringIO
+  def initialize(stream, filename)
+    super(stream)
+    @original_filename = filename
+  end
+
+  attr_reader :original_filename
+end
+
 module StudyResult
   def self.table_name_prefix
     'study_result_'
@@ -19,6 +29,8 @@ module StudyResult
 
     # append ndjson to the file.
     def append(data)
+      # self.file is a carrierwave upload, and it won't have a path until it is created. So we buffer to a stringio and set
+      # the carrierwave file to that stringio to save.
       stream = if file.path.nil?
                  StringIO.new
                else
@@ -42,14 +54,15 @@ module StudyResult
       end
 
       unless file.path
+        puts "file.path is nil"
         self.file = FileIO.new(stream.string, filename)
+        puts file.path
       end
     ensure
       stream.close if stream.present?
 
       logger.debug "Wrote #{datas.size} rows to #{self.file.path}"
     end
-
 
     def append_to_tsv(append_text, headers)
       rows = append_text.split("\n").size
