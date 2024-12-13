@@ -205,7 +205,6 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     newrelic_rpm (9.16.1)
-    newrelic_rpm (9.16.1)
     nio4r (2.7.4)
     nokogiri (1.17.1-x86_64-darwin)
       racc (~> 1.4)
@@ -227,7 +226,7 @@ GEM
     pry-rails (0.3.11)
       pry (>= 0.13.0)
     public_suffix (6.0.1)
-    puma (5.6.9)
+    puma (6.5.0)
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (2.2.10)
@@ -391,7 +390,7 @@ DEPENDENCIES
   doorkeeper
   dotenv-rails (~> 2.7)
   fakefs
-  jbuilder (~> 2.5)
+  jbuilder (~> 2.13)
   json-schema
   json-schema-generator
   kaminari
@@ -404,10 +403,10 @@ DEPENDENCIES
   net-pop
   net-smtp
   newrelic_rpm (~> 9.16)
-  pg (~> 1.2)
+  pg (~> 1.5)
   pry-byebug
   pry-rails
-  puma (~> 5.2)
+  puma (~> 6.4)
   rack-cors
   rack-mini-profiler
   rails (~> 6)
