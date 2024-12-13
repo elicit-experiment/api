@@ -37,6 +37,57 @@ module ChaosApi
         @chaos_session.save!
       end
 
+      test 'no session' do
+        as_user(user(:registered_user)) do |headers|
+          initialize_study_result
+
+          params = {
+            questionId: "#{@study_definition.id}::#{@component.id}",
+            sessionGUID: 'does not exist',
+            format: 'json2',
+            user_http_status_codes: 'false'
+          }
+
+          # First post will create the state.
+          post chaos_api_v6_answer_create_url, params: params, headers: headers
+          assert_response :unprocessable_entity
+        end
+      end
+
+      test 'invalid parameter format' do
+        as_user(user(:registered_user)) do |headers|
+          initialize_study_result
+
+          params = {
+            questionId: "#{@study_definition.id}:",
+            sessionGUID: @chaos_session.session_guid,
+            format: 'json2',
+            user_http_status_codes: 'false'
+          }
+
+          # First post will create the state.
+          post chaos_api_v6_answer_create_url, params: params, headers: headers
+          assert_response :unprocessable_entity
+        end
+      end
+
+      test 'non-existent parameters' do
+        as_user(user(:registered_user)) do |headers|
+          initialize_study_result
+
+          params = {
+            questionId: "#{@study_definition.id}:#{Component.last.id + 1}",
+            sessionGUID: @chaos_session.session_guid,
+            format: 'json2',
+            user_http_status_codes: 'false'
+          }
+
+          # First post will create the state.
+          post chaos_api_v6_answer_create_url, params: params, headers: headers
+          assert_response :not_found
+        end
+      end
+
       test 'update the state' do
         as_user(user(:registered_user)) do |headers|
 

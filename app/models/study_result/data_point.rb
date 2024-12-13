@@ -41,7 +41,7 @@ module StudyResult
       state.value = output.to_json
       state.datetime = Time.zone.now
 
-      # Since we know that all the events are all for the same compontent, we can use the event's entity_type and kind for
+      # Since we know that all the events are all for the same component, we can use the event's entity_type and kind for
       # this synthetic "state" datapoint.
       if (first_event = events.first)
         state.entity_type ||= first_event['EntityType']
