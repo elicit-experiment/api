@@ -12,7 +12,8 @@ class ClientAppControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'wrong format' do
-    get client_app_url, as: :json, headers: { 'Accept' => 'application/json' }
-    assert_response :missing, 'Request succeeded'
+    assert_raises ActionController::RoutingError do
+      get client_app_url, as: :json, headers: { 'Accept' => 'application/json' }
+    end
   end
 end
