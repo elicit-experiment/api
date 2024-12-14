@@ -11,6 +11,8 @@ SET row_security = off;
 
 SET default_tablespace = '';
 
+SET default_table_access_method = heap;
+
 --
 -- Name: ar_internal_metadata; Type: TABLE; Schema: public; Owner: -
 --
@@ -451,7 +453,8 @@ CREATE TABLE public.study_definitions (
     max_anonymous_users integer,
     auto_created_user_count integer DEFAULT 0,
     max_auto_created_users integer DEFAULT 0,
-    max_concurrent_users integer
+    max_concurrent_users integer,
+    searchable tsvector GENERATED ALWAYS AS ((setweight(to_tsvector('english'::regconfig, (COALESCE(title, ''::character varying))::text), 'A'::"char") || setweight(to_tsvector('english'::regconfig, (COALESCE(description, ''::character varying))::text), 'B'::"char"))) STORED
 );
 
 
@@ -1509,6 +1512,13 @@ CREATE INDEX index_study_definitions_on_principal_investigator_user_id ON public
 
 
 --
+-- Name: index_study_definitions_on_searchable; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_study_definitions_on_searchable ON public.study_definitions USING gin (searchable);
+
+
+--
 -- Name: index_study_definitions_on_show_in_study_list; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1777,18 +1787,19 @@ ALTER TABLE ONLY public.trial_order_selection_mappings
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
-('20170829210919'),
-('20181207090515'),
-('20181207091722'),
-('20181210111808'),
-('20181216113752'),
-('20181218035443'),
-('20190118161909'),
-('20190120052807'),
-('20190123180343'),
-('20190212194548'),
-('20190330213822'),
+('20230226012246'),
+('20230226012108'),
+('20190401150202'),
 ('20190330213835'),
-('20190401150202');
-
+('20190330213822'),
+('20190212194548'),
+('20190123180343'),
+('20190120052807'),
+('20190118161909'),
+('20181218035443'),
+('20181216113752'),
+('20181210111808'),
+('20181207091722'),
+('20181207090515'),
+('20170829210919');
 

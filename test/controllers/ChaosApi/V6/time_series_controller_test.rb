@@ -34,6 +34,9 @@ module ChaosApi
 
         @chaos_session = Chaos::ChaosSession.new(session_params)
         @chaos_session.save!
+
+        StudyResult::TimeSeries.destroy_all
+
       end
 
       test 'face_landmark json single row' do
@@ -44,10 +47,19 @@ module ChaosApi
           post chaos_api_v6_time_series_url, params: { sessionGUID: @chaos_session.session_guid, seriesType: 'face_landmark', data: [{ test: 'this' }]}, as: :json, headers: headers
           assert_response :success
 
-          time_series = StudyResult::TimeSeries.last
+          time_series = StudyResult::TimeSeries.where({
+            stage_id: @chaos_session.stage_id,
+            study_definition_id: @study_definition.id,
+            protocol_definition_id: @chaos_session.protocol_definition_id,
+            phase_definition_id: @phase_definition.id,
+            schema: 'face_landmark_json',
+            schema_metadata: nil
+          })
           assert time_series.present?
+          assert_equal time_series.size, 1
           # TODO: check path format?
-          assert_equal File.read(time_series.file.path).strip, { test: 'this' }.to_json
+          assert_equal File.read(time_series.first.file.path).strip, { test: 'this' }.to_json
+          time_series.destroy_all
         end
       end
 
@@ -56,6 +68,16 @@ module ChaosApi
         as_user(user(:registered_user)) do |headers|
           initial_time_series_ids = Set.new(StudyResult::TimeSeries.all.pluck(:id))
           initialize_study_result
+
+          time_series = StudyResult::TimeSeries.where({
+                                                        stage_id: @chaos_session.stage_id,
+                                                        study_definition_id: @study_definition.id,
+                                                        protocol_definition_id: @chaos_session.protocol_definition_id,
+                                                        phase_definition_id: @phase_definition.id,
+                                                        schema: 'face_landmark_json',
+                                                        schema_metadata: nil
+                                                      })
+          assert time_series.blank?
 
           post chaos_api_v6_time_series_url, params: { sessionGUID: @chaos_session.session_guid, seriesType: 'face_landmark', data: [{ test: 'this' }]}, as: :json, headers: headers
           assert_response :success

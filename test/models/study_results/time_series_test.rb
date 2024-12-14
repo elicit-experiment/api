@@ -7,8 +7,6 @@ module StudyResult
   class TimeSeriesTest < ActiveSupport::TestCase
 
     test 'face_landmark json single row' do
-      initialize_study_result
-
       time_series = study_result_time_series(:json_facelandmarker_time_series_1)
 
       time_series.append([{test: 'this'}])
