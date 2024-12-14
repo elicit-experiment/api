@@ -2,7 +2,9 @@
 
 Rails.application.routes.draw do
   # root of site
-  root 'client_app#index', as: :client_app, constraints: lambda { |req| req.format == :html }
+  root 'client_app#index', as: :client_app
+
+  #match '*unmatched_route' => 'application#not_found'
 
   mount SwaggerUiEngine::Engine, at: '/api-docs'
 
@@ -116,4 +118,6 @@ Rails.application.routes.draw do
 
   match '/*path' => 'client_app#index', via: :all, constraints: { format: 'html' }
 
+  # catchall, not found
+  match '*path', to: 'application#not_found', via: :all
 end

@@ -4,7 +4,6 @@ module ChaosApi
       class UnknownSession < StandardError; end
 
       rescue_from UnknownSession, with: :unknown_session
-      rescue_from ActiveRecord::RecordNotFound, with: :not_found
 
       def load_chaos_session_guid
         referrer = request.referer
@@ -36,10 +35,6 @@ module ChaosApi
       def unknown_session(exception)
         @response = ChaosResponse.new(nil, exception.message)
         render json: @response.to_json, status: :unprocessable_entity
-      end
-
-      def not_found(_exception)
-        head :not_found
       end
     end
   end

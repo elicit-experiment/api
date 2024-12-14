@@ -16,8 +16,8 @@ First, we need to set up a user and an `oauth_application` in the DB.  So we cre
   scopes: "public"
 
   redirect_uri: "https://localhost"
-  created_at: <%= 5.day.ago.to_s(:db) %>
-  updated_at: <%= 5.day.ago.to_s(:db) %>
+  created_at: <%= 5.day.ago.to_fs(:db) %>
+  updated_at: <%= 5.day.ago.to_fs(:db) %>
   ```
 
 `users.yml`:

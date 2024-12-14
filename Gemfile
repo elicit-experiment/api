@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-ruby '3.1.2'
+ruby '3.3.6'
 
 git_source(:github) do |repo_name|
   repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?('/')
@@ -11,15 +11,13 @@ end
 
 gem 'net-smtp', require: false
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6'
+gem 'rails', '~> 7'
 # 6.0 is incompatible with swagger_ui_engine https://github.com/zuzannast/swagger_ui_engine/issues/43
 gem 'shakapacker', '~> 8'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 # Use Puma as the app server
 gem 'puma', '~> 6.4'
-gem 'net-smtp', require: false
 gem 'net-imap', require: false
 gem 'net-pop', require: false
 
