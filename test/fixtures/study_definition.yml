@@ -13,10 +13,10 @@ learning_study:
 one:
   title: MyString
   principal_investigator: admin
-  created_at: <%= 5.day.ago.to_s(:db) %>
-  updated_at: <%= 5.day.ago.to_s(:db) %>
+  created_at: <%= 5.day.ago.to_fs(:db) %>
+  updated_at: <%= 5.day.ago.to_fs(:db) %>
 two:
   title: MyString
   principal_investigator: admin
-  created_at: <%= 5.day.ago.to_s(:db) %>
-  updated_at: <%= 5.day.ago.to_s(:db) %>
+  created_at: <%= 5.day.ago.to_fs(:db) %>
+  updated_at: <%= 5.day.ago.to_fs(:db) %>

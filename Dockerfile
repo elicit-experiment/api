@@ -1,5 +1,5 @@
 # Base image:
-FROM ruby:3.1.2
+FROM ruby:3.3.6
 
 ARG SITE_SUFFIX
 ARG API_SCHEME
@@ -18,7 +18,7 @@ WORKDIR $RAILS_ROOT
 # Install dependencies
 RUN apt-get update -qq && apt-get install -y build-essential libpq-dev
 
-# Install node 16
+# Install node 22
 RUN curl -sL https://deb.nodesource.com/setup_22.x | bash -
 RUN apt-get -y install nodejs
 RUN node --version
@@ -79,7 +79,7 @@ RUN ls -als public/packs
 #RUN RAILS_ENV=test PRECOMPILE=1 bundle exec rails test
 
 # generate cookie key
-RUN PRECOMPILE=1 bundle exec rake secret > ~/secret-key-base.txt
+RUN PRECOMPILE=1 bundle exec rails secret > ~/secret-key-base.txt
 
 ENV RAILS_ENV=production
 CMD ["/bin/sh", "-c", "./run-server.sh  2>&1 | tee log/run-server.log"]

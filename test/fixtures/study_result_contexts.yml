@@ -4,12 +4,12 @@ one:
   timestamp: 2017-07-14 09:23:19
   context_type: MyText
   data: MyText
-  created_at: <%= 5.day.ago.to_s(:db) %>
-  updated_at: <%= 5.day.ago.to_s(:db) %>
+  created_at: <%= 5.day.ago.to_fs(:db) %>
+  updated_at: <%= 5.day.ago.to_fs(:db) %>
 
 two:
   timestamp: 2017-07-14 09:23:19
   context_type: MyText
   data: MyText
-  created_at: <%= 5.day.ago.to_s(:db) %>
-  updated_at: <%= 5.day.ago.to_s(:db) %>
+  created_at: <%= 5.day.ago.to_fs(:db) %>
+  updated_at: <%= 5.day.ago.to_fs(:db) %>
