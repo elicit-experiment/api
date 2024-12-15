@@ -1,5 +1,6 @@
 # Base image:
-FROM ruby:3.3.6
+# Debian Bookworm fails to find signatures for apt update on the production server so we fall back to Bullseye.
+FROM ruby:3.3.6-bullseye
 
 ARG SITE_SUFFIX
 ARG API_SCHEME
@@ -16,7 +17,9 @@ RUN mkdir -p $RAILS_ROOT
 WORKDIR $RAILS_ROOT
 
 # Install dependencies
-RUN apt-get update -qq && apt-get install -y build-essential libpq-dev
+RUN apt-get update -qq && apt-get install -y build-essential libpq-dev apt-utils libjemalloc2
+ENV LD_PRELOAD="libjemalloc.so.2" \
+    MALLOC_CONF="dirty_decay_ms:1000,narenas:2,background_thread:true,stats_print:true"
 
 # Install node 22
 RUN curl -sL https://deb.nodesource.com/setup_22.x | bash -
