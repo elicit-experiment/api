@@ -18,8 +18,9 @@ WORKDIR $RAILS_ROOT
 
 # Install dependencies
 RUN apt-get update -qq && apt-get install -y build-essential libpq-dev apt-utils libjemalloc2
+# add stats_print:true to `MALLOC_CONF for debugging.
 ENV LD_PRELOAD="libjemalloc.so.2" \
-    MALLOC_CONF="dirty_decay_ms:1000,narenas:2,background_thread:true,stats_print:true"
+    MALLOC_CONF="dirty_decay_ms:1000,narenas:2,background_thread:true"
 
 # Install node 22
 RUN curl -sL https://deb.nodesource.com/setup_22.x | bash -
