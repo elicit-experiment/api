@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     match 'Answer/Set', to: 'chaos_api/v6/answer#cors_set_access_control_headers', via: :options
     post 'time_series/:series_type' => 'chaos_api/v6/time_series#create', :defaults => { format: 'json' }
     post 'time_series/:series_type/file' => 'chaos_api/v6/time_series#append'
+    post 'time_series/:series_type/file_raw' => 'chaos_api/v6/time_series_raw#append', as: :chaos_api_v6_time_series_raw
 
     get '/*' => redirect('/')
   end
@@ -51,13 +52,14 @@ Rails.application.routes.draw do
       get 'participant/eligeable_protocols' => 'participant#eligeable_protocols'
       get 'participant/anonymous_protocols' => 'participant#anonymous_protocols'
       get 'participant/anonymous_protocols/:id' => 'participant#anonymous_protocol'
-      resources :study_results, controller: 'study_results', defaults: { format: 'json' }, only: %i[show destroy create index] do
+      resources :study_results, controller: 'study_results', only: %i[show destroy create index] do
         resources :experiments, controller: 'experiments', defaults: { format: 'json' }, only: %i[show destroy create index]
         resources :stages, controller: 'stages', defaults: { format: 'json' }, only: %i[show destroy create index]
         resources :trial_results, controller: 'trial_results', defaults: { format: 'json' }, only: %i[show destroy create index]
         resources :data_points, controller: 'data_points', defaults: { format: 'json' }, only: [:index]
-        resources :time_series, controller: 'time_series', defaults: { format: 'json' }, only: %i[destroy show update create index]
-        get 'study_results/time_series/:id/content' => 'api/v1/time_series#show_content', only: [:show]
+        resources :time_series, controller: 'time_series', only: %i[destroy show update create index] do
+          get 'content' => 'time_series/content#show', as: :content
+        end
       end
       resources :media_files, defaults: { format: 'json' }, only: %i[destroy show update create index]
       resources :study_definitions, defaults: { format: 'json' }, only: %i[destroy show update create index] do
@@ -81,7 +83,7 @@ Rails.application.routes.draw do
   scope :api do
     scope :v1 do
       get 'study_definitions/:study_definition_id/protocol_definitions/:protocol_definition_id/preview' => 'protocol_preview#take'
-      get 'study_results/time_series/:id/content' => 'api/v1/time_series#show_content', only: [:show]
+      get 'study_results/time_series/:id/content' => 'api/v1/time_series/content#show'
       get 'study_definitions/components/:id' => 'api/v1/components#show', defaults: { format: 'json' }, only: [:show]
       scope :study_definitions do
         scope :protocol_definitions do
@@ -116,8 +118,9 @@ Rails.application.routes.draw do
   match '/participant/*remainder' => 'client_app#index', via: :all, constraints: { format: 'html' }
   match '/login/*remainder' => 'client_app#index', via: :all, constraints: { format: 'html' }
 
-  match '/*path' => 'client_app#index', via: :all, constraints: { format: 'html' }
+  # catch all routes must allow the active storage (/rails) routes
+  match '/*path' => 'client_app#index', via: :all, constraints: lambda { |request| request.format == 'html' && !request.path.start_with?('/rails') }
 
   # catchall, not found
-  match '*path', to: 'application#not_found', via: :all
+  match '*path', to: 'application#not_found', via: :all, constraints: lambda { |request| !request.path.start_with?('/rails') }
 end

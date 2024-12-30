@@ -12,3 +12,16 @@ learning_study:
   definition_data: foo
   active: true
   study_definition: learning_study
+learning_study_2:
+  name: Learning Study Protocol
+  summary: Video Learning
+  description: |
+    This study proceeds as follows:
+    First, you'll calibrate your gaze to the webcam of your computer.
+    Then you'll answer some questions.
+    Then you'll watch a cool video.
+    Then another set of questions to answer.
+    Then, done!.
+  definition_data: foo
+  active: true
+  study_definition: learning_study

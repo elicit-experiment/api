@@ -2,3 +2,8 @@ learning_study_1:
   experiment: learning_study_1
   protocol_user: learning_study_1
   phase_definition: learning_study
+
+learning_study_2:
+  experiment: learning_study_2
+  protocol_user: learning_study_2
+  phase_definition: learning_study_2

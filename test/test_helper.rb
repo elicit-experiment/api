@@ -32,3 +32,7 @@ class ActiveSupport::TestCase
     yield @headers
   end
 end
+
+Minitest.after_run do
+  FileUtils.rm_rf(ActiveStorage::Blob.service.root)
+end
