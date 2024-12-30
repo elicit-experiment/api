@@ -17,9 +17,10 @@ gem 'shakapacker', '~> 8'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 # Use Puma as the app server
-gem 'puma', '~> 6.4'
+gem 'aws-sdk-s3', require: false
 gem 'net-imap', require: false
 gem 'net-pop', require: false
+gem 'puma', '~> 6.4'
 
 # See https://github.com/rails/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
@@ -116,10 +117,12 @@ gem 'capybara', '~> 3.33'
 
 # gem "ruby-debug-ide", "~> 0.7.2"
 
-gem "fakefs", require: false
+gem 'fakefs', require: false
 
-gem "lograge-sql", "~> 2.0"
+gem 'lograge-sql', '~> 2.0'
 
-gem "newrelic_rpm", "~> 9.16"
+gem 'newrelic_rpm', '~> 9.16'
 
-gem "csv", "~> 3.3"
+gem 'csv', '~> 3.3'
+
+gem 'mutex_m', '~> 0.3.0'

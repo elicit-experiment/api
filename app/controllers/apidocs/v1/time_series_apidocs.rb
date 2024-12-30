@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/ClassLength, Metrics/BlockLength
 module Apidocs
   module V1
     class TimeSeriesApidocs
@@ -460,7 +461,10 @@ module Apidocs
           key :type, :integer
           key :format, :int64
         end
-        property :file do
+        property :in_progress_file_url do
+          key :type, :string
+        end
+        property :file_url do
           key :type, :string
         end
         property :schema do
@@ -485,3 +489,4 @@ module Apidocs
     end
   end
 end
+# rubocop:enable Metrics/ClassLength, Metrics/BlockLength

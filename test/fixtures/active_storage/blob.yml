@@ -1,0 +1,2 @@
+# active_storage/blobs.yml
+face_landmarker_json_blob: <%= ActiveStorage::FixtureSet.blob filename: 'face_landmark_1.json', service_name: "test" %>

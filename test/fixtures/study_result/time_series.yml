@@ -2,10 +2,18 @@ learning_time_series_1:
   study_definition: learning_study
   protocol_definition: learning_study
   phase_definition: learning_study
+  stage: learning_study_1
 
 json_facelandmarker_time_series_1:
   study_definition: learning_study
   protocol_definition: learning_study
   phase_definition: learning_study
   stage: learning_study_1
+  schema: 'face_landmark_json'
+
+json_facelandmarker_time_series_2:
+  study_definition: learning_study_2
+  protocol_definition: learning_study_2
+  phase_definition: learning_study_2
+  stage: learning_study_2
   schema: 'face_landmark_json'

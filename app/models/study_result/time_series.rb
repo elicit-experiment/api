@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-
 class FileIO < StringIO
   def initialize(stream, filename)
     super(stream)
@@ -24,6 +23,16 @@ module StudyResult
 
     mount_uploader :file, TimeSeriesUploader
 
+    has_one_attached :in_progress_file, service: :local
+    has_one_attached :finalized_file
+
+    scope :has_finalized_file, -> { joins(finalized_file_attachment: :blob) }
+    scope :has_in_progress_file, -> { joins(in_progress_file_attachment: :blob) }
+
+    scope :has_no_finalized_file, -> { left_outer_joins(:finalized_file_attachment).where(active_storage_attachments: { id: nil }) }
+
+    scope :ready_for_finalization, -> { has_no_finalized_file.where(Arel.sql("updated_at < current_timestamp - interval '1 hour'")) }
+
     SERIES_TYPES = %i[webgazer mouse face_landmark].freeze
     FILE_TYPES = %i[tsv json].freeze
 
@@ -40,7 +49,7 @@ module StudyResult
                    FileUtils.mkdir_p dir
                  end
 
-                 File.open(self.file.path, 'a')
+                 File.open(file.path, 'a')
                end
 
       datas = if data.is_a? Array
@@ -53,15 +62,51 @@ module StudyResult
         stream.puts "#{row.to_json}\n"
       end
 
-      unless file.path
-        puts "file.path is nil"
-        self.file = FileIO.new(stream.string, filename)
-        puts file.path
+      self.file = FileIO.new(stream.string, filename) unless file.path
+    ensure
+      stream.close if stream.present?
+
+      logger.debug "Wrote #{datas.size} rows to #{file.path}"
+    end
+
+    def append_raw(data_string)
+      file_path = nil
+      stream = if in_progress_file.attached?
+                 file_path = in_progress_file.service.path_for(in_progress_file.key)
+                 unless File.exist?(file_path)
+                   logger.warn "Time Series file doesn't exist: #{file_path}"
+                   dir = File.dirname(file_path)
+                   FileUtils.mkdir_p dir
+                 end
+
+                 File.open(file_path, 'a')
+               else
+                 StringIO.new
+               end
+
+      stream << data_string
+      stream << "\n"
+
+      unless in_progress_file.attached?
+        logger.debug 'Creating in progress file attachment'
+        # This is asynchronous:
+        # in_progress_file.attach(io: StringIO.new(stream.string), filename: filename, content_type: 'application/json')
+        # self.send(:in_progress_file).analyze
+
+        # For testing and simplicity in production, we use the synchronous method here https://stackoverflow.com/questions/61309182/how-to-force-activestorageattachedattach-to-run-synchronously-disable-asyn
+        blob = ActiveStorage::Blob.create_and_upload!(
+          io: StringIO.new(stream.string), filename: filename
+        )
+        blob.analyze
+        attached = send(:in_progress_file)
+        attached.attach(blob)
+
+        file_path = in_progress_file.service.path_for(in_progress_file.key)
       end
     ensure
       stream.close if stream.present?
 
-      logger.debug "Wrote #{datas.size} rows to #{self.file.path}"
+      logger.debug "Wrote #{data_string.size} bytes to #{file_path}"
     end
 
     def append_to_tsv(append_text, headers)
@@ -76,7 +121,7 @@ module StudyResult
           FileUtils.mkdir_p dir
           File.open(file.path, 'w') { |file| file.write("#{headers.map(&:to_s).join("\t")}\n") }
         end
-        open(self.file.path, 'a') do |f|
+        File.open(self.file.path, 'a') do |f|
           f.puts append_text
         end
         logger.debug "Wrote #{rows} rows to #{self.file.path}"
@@ -124,11 +169,115 @@ module StudyResult
     end
 
     def series_type
+      return nil if schema.blank?
+
       schema.split('_')[0..-2].join('_')
     end
 
     def file_type
+      return nil if schema.blank?
+
       schema.split('_').last
+    end
+
+    def in_progress_file_path
+      in_progress_file.attached? ? in_progress_file.service.path_for(in_progress_file.key) : file.path
+    end
+
+    def in_progress_file_url
+      if in_progress_file.attached?
+        Rails.application.routes.url_helpers.rails_blob_url(in_progress_file)
+      elsif file
+        Rails.application.routes.url_helpers.api_v1_study_result_time_series_content_url(time_series_id: id,
+                                                                                         study_result_id: stage.experiment.study_result_id)
+      end
+    end
+
+    def finalize
+      return false unless finalizable?
+
+      in_progress_file_path = (in_progress_file.attached? ? in_progress_file.service.path_for(in_progress_file.key) : nil) || file&.path
+      raise "No in progress file path: '#{in_progress_file_path}'" unless in_progress_file_path && File.exist?(in_progress_file_path)
+
+      logger.info "Finalizing time series #{id} with #{in_progress_file_path}"
+
+      # Create a StringIO object to hold the gzipped data in memory
+      gzip_io = StringIO.new(+'', 'r+b')
+
+      # Use a GzipWriter to compress the file content into the StringIO object
+      Zlib::GzipWriter.wrap(gzip_io) do |gz|
+        File.open(in_progress_file_path, 'rb') do |file|
+          # Stream-read the file in chunks to minimize memory usage
+          while (chunk = file.read(4096))
+            gz.write(chunk)
+          end
+        end
+      end
+
+      gzip_io.close_write
+
+      # Sync version:
+      #
+      blob = ActiveStorage::Blob.create_and_upload!(
+        io: StringIO.new(gzip_io.string, 'r'),
+        filename: "time_series_#{id}.#{file_type}.gz",
+        content_type: 'application/gzip'
+      )
+      blob.analyze
+      attached = send(:finalized_file)
+      attached.attach(blob)
+
+      # This works async:
+      #
+      # finalized_file.attach(io: StringIO.new(gzip_io.string, 'r'),
+      #                       filename: "time_series_#{id}.#{file_type}.gz",
+      #                       content_type: 'application/gzip')
+
+      logger.info "Created final file for time series #{id} #{gzip_io.string.size} bytes"
+
+      # Clean up the in-progress files
+      # TODO: turn this on once the end-to-end validation is complete in production.
+      # purge_in_progress_files!
+
+      logger.info "Finalized time series #{id}"
+    rescue StandardError => e
+      logger.error "Failed to finalize time series #{id} #{e.class.name} #{e.message}"
+    ensure
+      gzip_io&.close
+    end
+
+    def finalizable?
+      return false if finalized_file.attached?
+      return false unless in_progress_file.attached? || file&.file&.exists?
+
+      updated_at < 1.hour.ago
+    end
+
+    def file_url
+      finalized_file.attached? ? signed_finalized_url : in_progress_file_url
+    end
+
+    def signed_finalized_url
+      require 'aws-sdk-s3'
+
+      # The ActiveStorage default urls don't seem to work with Digital Ocean Spaces. They result in Bad Gateway, possibly
+      # due to the addition of attachment/download and other query parameter pieces.
+      s3 = Aws::S3::Client.new(
+        endpoint: 'https://nyc3.digitaloceanspaces.com',
+        region: 'nyc3',
+        access_key_id: ENV.fetch('AWS_ACCESS_ID'),
+        secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY')
+      )
+
+      signer = Aws::S3::Presigner.new(client: s3)
+      signer.presigned_url(:get_object, bucket: 'elicit', key: finalized_file.key)
+    end
+
+    private
+
+    def purge_in_progress_files!
+      remove_file!
+      in_progress_file.purge
     end
   end
 end

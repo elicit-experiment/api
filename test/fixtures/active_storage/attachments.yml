@@ -1,0 +1,5 @@
+# active_storage/attachments.yml
+face_landmarker_json:
+  name: in_progress_file
+  record: json_facelandmarker_time_series_2 (StudyResult::TimeSeries)
+  blob: face_landmarker_json_blob
