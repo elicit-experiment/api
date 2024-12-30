@@ -58,6 +58,9 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
+  # Store files on Amazon S3.
+  config.active_storage.service = :digital_ocean
+
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false

@@ -4,3 +4,8 @@ learning_study:
   study_definition: learning_study
   protocol_definition: learning_study
   trial_ordering:
+learning_study_2:
+  definition_data: foo
+  study_definition: learning_study
+  protocol_definition: learning_study
+  trial_ordering:

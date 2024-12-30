@@ -20,3 +20,14 @@ two:
   principal_investigator: admin
   created_at: <%= 5.day.ago.to_fs(:db) %>
   updated_at: <%= 5.day.ago.to_fs(:db) %>
+learning_study_2:
+  title: Learning Study - FaceLandmarker
+  description: "Study of learning, using eye gaze tracking from FaceLandmarker \n                        This
+    version calibrates on the video page"
+  principal_investigator: admin
+  version: 1
+  data: Put some data here, we don't really care about it.
+  lock_question: 1
+  enable_previous: 1
+  no_of_trials:
+  trials_completed:
