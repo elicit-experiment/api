@@ -65,6 +65,8 @@ module ChaosApi
 
           post :append, body: body,  params: { series_type: 'face_landmark'}, as: :json
           assert_response :success
+          assert_equal([Mime::Type.lookup_by_extension(:json).to_s, 'charset=utf-8'].join('; '), response.headers['CONTENT-TYPE'])
+          assert_equal(JSON.parse(response.body).dig('Body','Count'), 0)
 
           time_series = StudyResult::TimeSeries.where({
             stage_id: @chaos_session.stage_id,
