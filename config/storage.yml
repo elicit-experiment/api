@@ -12,5 +12,5 @@ digital_ocean:
   endpoint: https://nyc3.digitaloceanspaces.com
   access_key_id: <%= ENV.fetch('AWS_ACCESS_ID', Rails.application.credentials.dig(:digital_ocean, :access_key_id)) %>
   secret_access_key: <%= ENV.fetch('AWS_SECRET_ACCESS_KEY', Rails.application.credentials.dig(:digital_ocean, :secret_access_key)) %>
-  bucket: elicit
+  bucket: <%= Rails.env.production? ? 'elicit' : 'elicit-dev' %>
   region: nyc3
