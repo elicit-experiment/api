@@ -15,7 +15,7 @@ import {clientToken, userToken, userTokenState, currentUser, tokenStatus} from '
 import elicitApi from '../../api/elicit-api.js';
 
 import {Navigate} from 'react-router-dom'
-import {CurrentUserType} from "../../types";
+import {CurrentUserType, UserTokenStateType} from "../../types";
 
 class LoginSignUpContainer extends React.Component {
   constructor(props) {
@@ -116,5 +116,5 @@ LoginSignUpContainer.propTypes = {
   currentUser: CurrentUserType,
   getCurrentUser: PropTypes.func.isRequired,
   tokenStatus: PropTypes.string.isRequired,
-  userTokenState: PropTypes.string,
+  userTokenState: UserTokenStateType,
 }
