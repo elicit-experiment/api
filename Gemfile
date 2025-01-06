@@ -126,3 +126,5 @@ gem 'newrelic_rpm', '~> 9.16'
 gem 'csv', '~> 3.3'
 
 gem 'mutex_m', '~> 0.3.0'
+
+gem "foreman", "~> 0.88.1"

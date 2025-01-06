@@ -1,0 +1,3 @@
+chaosfe: bash -lc "cd docker/experiment-frontend && source ~/.nvm/nvm.sh && nvm use && npm run serve"
+adminfe: bin/shakapacker-dev-server
+webapi: env MAX_RAILS_THREADS=5 bundle exec bin/rails s -b 0.0.0.0 -p 3000
