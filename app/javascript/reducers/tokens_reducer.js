@@ -20,7 +20,7 @@ const TokensReducer = (state = {
     loading: false,
     error: false,
     error_code: 0,
-    error_message: false,
+    error_message: '',
   },
 }, action) => {
   let newState;

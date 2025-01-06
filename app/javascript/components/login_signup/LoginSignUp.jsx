@@ -2,6 +2,7 @@
 import PropTypes from 'prop-types'
 import React from 'react';
 import Modal from "react-bootstrap/Modal";
+import {UserTokenStateType} from "../../types";
 
 class LogInSignUp extends React.Component {
   constructor(props) {
@@ -192,5 +193,5 @@ LogInSignUp.propTypes = {
   createUser: PropTypes.func.isRequired,
   dismissable: PropTypes.bool.isRequired,
   logInUser: PropTypes.func.isRequired,
-  userTokenState: PropTypes.string,
+  userTokenState: UserTokenStateType,
 }
