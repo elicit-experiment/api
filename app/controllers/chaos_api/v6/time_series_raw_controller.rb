@@ -7,8 +7,16 @@ module ChaosApi
       include ActionController::Cookies
       include AbstractController::Rendering
       include ActionController::Rendering
+      include ActiveSupport::Rescuable
+      include ActionController::MimeResponds
+
+      # This, and the respond_with in append, don't work to send the correct types.
+      # include ActionController::RespondWith
+      # respond_to :json
 
       def append
+        fake_request_params
+
         ensure_session
         @series_type = :face_landmark # params[:series_type].to_sym
         @response = ChaosResponse.new([])
@@ -23,12 +31,20 @@ module ChaosApi
 
         @time_series.save!
 
-        render json: @response.to_json, status: @response_status
+        response.headers['Content-Type'] = [Mime::Type.lookup_by_extension(:json).to_s, 'charset=utf-8'].join('; ')
+        render plain: @response.to_json, status: @response_status
+      end
+
+      # don't parse the params
+      def params
+        nil
       end
 
       private
 
       def append_preview
+        fake_request_params
+
         respond_to do |format|
           format.json { render json: @response.to_json }
         end
@@ -45,7 +61,7 @@ module ChaosApi
       end
 
       def append_json(time_series, blob)
-        Rails.logger.debug blob
+        #Rails.logger.debug blob
         time_series.append_raw(blob)
 
         save_time_series(time_series)
@@ -97,6 +113,11 @@ module ChaosApi
           format.json { render json: @response.to_json, status: status }
         end
       end
+
+      def fake_request_params
+        request.env['action_dispatch.request.parameters'] = {}
+      end
+
     end
   end
 end
