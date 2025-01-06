@@ -171,6 +171,7 @@ GEM
     ffi (1.17.0-x86_64-darwin)
     ffi (1.17.0-x86_64-linux-gnu)
     ffi (1.17.0-x86_64-linux-musl)
+    foreman (0.88.1)
     globalid (1.2.1)
       activesupport (>= 6.1)
     i18n (1.14.6)
@@ -481,6 +482,7 @@ DEPENDENCIES
   doorkeeper
   dotenv-rails (~> 2.7)
   fakefs
+  foreman (~> 0.88.1)
   jbuilder (~> 2.13)
   json-schema
   json-schema-generator
