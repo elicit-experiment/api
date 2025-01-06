@@ -1,7 +1,7 @@
 //Import React and Dependencies
-import React, { Suspense } from 'react';
+import React, {Suspense, useEffect} from 'react';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
-import { connect } from 'react-redux';
+import {connect, useDispatch, useSelector} from 'react-redux';
 import { Provider } from 'react-redux';
 import PropTypes from "prop-types";
 
@@ -33,7 +33,7 @@ export const tokenStatus = (clientToken, userToken, requestClientToken) => {
   if (!clientToken || !clientToken.access_token) {
     console.warn("no client token");
     if (typeof requestClientToken === 'function') {
-      requestClientToken()
+      if (requestClientToken) requestClientToken()
     }
   } else {
     token_status = 'client'
@@ -41,7 +41,9 @@ export const tokenStatus = (clientToken, userToken, requestClientToken) => {
 
   if (!userToken || !userToken.access_token) {
     console.warn("no user token");
-    console.dir(userToken);
+    if (userToken) {
+      console.dir(userToken);
+    }
   } else {
     token_status = 'user'
   }
@@ -55,12 +57,19 @@ const AdminAppWrapper = (props) => {
 }
 
 //Define Root Component and Router
-const RawRootRoutes = (props) => {
-  let token_status = tokenStatus(props.clientToken, props.userToken, props.requestClientToken);
+const RawRootRoutes = () => {
+  //const currentUser = useSelector(state => state.currentUser);
+  const clientToken = useSelector(state => state.tokens.clientToken);
+  const userToken = useSelector(state => state.tokens.userToken);
+  const dispatch = useDispatch();
 
-  if (token_status === 'user' && !props.currentUser.sync && !props.currentUser.loading) {
-    props.getCurrentUser();
-  }
+  useEffect(() => {tokenStatus(clientToken, userToken, () => dispatch(requestClientToken( () => { } )))}, [dispatch, clientToken, userToken])
+
+  let token_status = tokenStatus(clientToken, userToken, null);
+
+  // if (token_status === 'user' && !currentUser?.sync && !currentUser?.loading) {
+  //   props.getCurrentUser();
+  // }
 
   console.dir(`ROOT RE-RENDERING ${token_status}`);
   if (token_status) {
