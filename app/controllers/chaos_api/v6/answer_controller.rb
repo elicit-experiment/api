@@ -5,8 +5,6 @@ module ChaosApi
     class AnswerController < BaseChaosController
       include ActionController::MimeResponds
 
-      before_action :cors_preflight_check
-      after_action :cors_set_access_control_headers
       before_action :load_chaos_session_guid
       before_action :require_chaos_session
 

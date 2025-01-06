@@ -5,10 +5,6 @@ module ChaosApi
     class SlideController < ApplicationController
       include ActionController::MimeResponds
 
-      # TODO: REMOVE THIS OLD CORS STUFF
-      before_action :cors_preflight_check
-      after_action :cors_set_access_control_headers
-
       # TODO: Add fetching the SessionGUID to the chaosApiController base controller
       # TODO: Add quick error json response method to ChaosApiController
 
