@@ -95,7 +95,7 @@ module StudyResult
 
         # For testing and simplicity in production, we use the synchronous method here https://stackoverflow.com/questions/61309182/how-to-force-activestorageattachedattach-to-run-synchronously-disable-asyn
         blob = ActiveStorage::Blob.create_and_upload!(
-          io: StringIO.new(stream.string), filename: filename
+          io: StringIO.new(stream.string), filename: filename, service_name: :local, content_type: 'application/json'
         )
         blob.analyze
         attached = send(:in_progress_file)
@@ -193,8 +193,9 @@ module StudyResult
       end
     end
 
-    def finalize
-      return false unless finalizable?
+    def finalize(force: false)
+      puts force
+      return false unless force || finalizable?
 
       in_progress_file_path = (in_progress_file.attached? ? in_progress_file.service.path_for(in_progress_file.key) : nil) || file&.path
       raise "No in progress file path: '#{in_progress_file_path}'" unless in_progress_file_path && File.exist?(in_progress_file_path)
@@ -220,7 +221,7 @@ module StudyResult
       #
       blob = ActiveStorage::Blob.create_and_upload!(
         io: StringIO.new(gzip_io.string, 'r'),
-        filename: "time_series_#{id}.#{file_type}.gz",
+        filename: "time_series_#{id}.#{filename}.gz",
         content_type: 'application/gzip'
       )
       blob.analyze
@@ -270,7 +271,7 @@ module StudyResult
       )
 
       signer = Aws::S3::Presigner.new(client: s3)
-      signer.presigned_url(:get_object, bucket: 'elicit', key: finalized_file.key)
+      signer.presigned_url(:get_object, bucket: Rails.env.production? ? 'elicit' : 'elicit-dev', key: finalized_file.key)
     end
 
     private
