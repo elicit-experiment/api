@@ -26,7 +26,7 @@ export function userTokenIsLoading(bool) {
     userTokenState: {
       loading: bool,
       error: false,
-      error_message: false,
+      error_message: '',
     },
   };
 }
