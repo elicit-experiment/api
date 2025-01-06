@@ -13,16 +13,18 @@ class ChaosController < ApplicationController
 
     Rails.logger.info "Ending Experiment for #{session_guid}"
 
-    chaos_session = Chaos::ChaosSession.where(session_guid: session_guid)
+    chaos_sessions = Chaos::ChaosSession.where(session_guid: session_guid)
 
-    unless chaos_session.first
+    unless chaos_sessions.any?
       redirect_to client_app_participant_path
       return
     end
 
-    study_definition = StudyDefinition.find(chaos_session.first.study_definition_id)
+    study_definition = StudyDefinition.find(chaos_sessions.first.study_definition_id)
 
-    chaos_session.destroy_all
+    chaos_sessions.each { |session| session.experiment&.finalize }
+
+    chaos_sessions.destroy_all
     Chaos::ChaosSession.clear_expired!
 
     unless study_definition
