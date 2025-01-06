@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative '../../lib/elicit_config'
+
 class ProtocolPreviewController < ApplicationController
   include ActionController::MimeResponds
 
@@ -18,8 +20,7 @@ class ProtocolPreviewController < ApplicationController
     phase_definition_id = params[:phase_definition_id]
     trial_definition_id = params[:trial_definition_id]
 
-    pfe = Rails.configuration.elicit[:participant_frontend]
-    @url = "#{pfe[:scheme]}://#{pfe[:host]}:#{pfe[:port]}/?session_guid=#{session_guid}#Experiment/#{protocol_definition_id}"
+    @url = ElicitConfig.participant_url(session_guid: session_guid, protocol_definition_id: protocol_definition_id).to_s
 
     session_params = {
       user_id: current_user.id,
