@@ -55,6 +55,13 @@ export const UserTokenType = PropTypes.shape({
     token_type: PropTypes.string.isRequired,
 });
 
+export const UserTokenStateType = PropTypes.shape({
+    loading: PropTypes.bool.isRequired,
+    error: PropTypes.bool.isRequired,
+    error_code: PropTypes.number,
+    error_message: PropTypes.string,
+});
+
 export const ProtocolDefinitionType = PropTypes.shape({
     active: PropTypes.bool.isRequired,
     created_at: PropTypes.string.isRequired,
