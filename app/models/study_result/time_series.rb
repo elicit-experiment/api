@@ -194,7 +194,6 @@ module StudyResult
     end
 
     def finalize(force: false)
-      puts force
       return false unless force || finalizable?
 
       in_progress_file_path = (in_progress_file.attached? ? in_progress_file.service.path_for(in_progress_file.key) : nil) || file&.path
@@ -237,8 +236,7 @@ module StudyResult
       logger.info "Created final file for time series #{id} #{gzip_io.string.size} bytes"
 
       # Clean up the in-progress files
-      # TODO: turn this on once the end-to-end validation is complete in production.
-      # purge_in_progress_files!
+      purge_in_progress_files!
 
       logger.info "Finalized time series #{id}"
     rescue StandardError => e
