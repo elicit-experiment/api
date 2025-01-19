@@ -9,7 +9,9 @@ class ElicitConfig
   end
 
   def participant_url(session_guid: nil, protocol_definition_id: nil)
-    Addressable::URI.parse("#{@participant_frontend[:scheme]}://#{@participant_frontend[:host]}:#{@participant_frontend[:port]}").tap do |base_uri|
+    uri = "#{@participant_frontend[:scheme]}://#{@participant_frontend[:host]}"
+    uri += ":#{@participant_frontend[:port]}" unless [80, 443].include? @participant_frontend[:port]
+    Addressable::URI.parse(uri).tap do |base_uri|
       base_uri.query = "session_guid=#{session_guid}" if session_guid
       base_uri.fragment = "Experiment/#{protocol_definition_id}" if protocol_definition_id
     end
