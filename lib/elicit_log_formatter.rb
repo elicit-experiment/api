@@ -1,6 +1,5 @@
 #! frozen_string_literal
 
-# Formatter to log JSON in a similar fashion to lograge with logstash.
 class ElicitLogFormatter < ::Logger::Formatter
   # This method is invoked when a log event occurs
   def call(severity, timestamp, progname, msg)

@@ -1,4 +1,7 @@
 # frozen_string_literal: true
+
+return if Rails.env.development?
+
 require 'lograge/sql/extension'
 
 Rails.application.configure do #|config|

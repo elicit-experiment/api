@@ -62,9 +62,15 @@ module ElicitApi
       #        external_protocol: elicit_portal[:scheme]
     }
 
-    config.log_formatter = ElicitLogFormatter.new
-    logger               = ActiveSupport::Logger.new(STDOUT)
-    logger.formatter     = config.log_formatter
+    base_logger = ActiveSupport::Logger.new(STDOUT)
+    logger = if ENV.fetch('LOG_AS_JSON', Rails.env.production? ? 'true' : 'false') == 'true'
+               # Formatter to log JSON in a similar fashion to lograge with logstash.
+               config.log_formatter = ElicitLogFormatter.new
+               base_logger.tap { |logger| logger.formatter = config.log_formatter }
+             else
+               ActiveSupport::TaggedLogging.new(base_logger)
+             end
+
     config.logger        = logger
   end
 end
