@@ -26,8 +26,8 @@ Rails.application.configure do #|config|
       exception = wrapper.exception
       if exception.is_a?(ActionController::RoutingError)
         data = {
-          method: env['REQUEST_METHOD'],
-          path: env['REQUEST_PATH'],
+          method: env&.fetch('REQUEST_METHOD', nil),
+          path: env&.fetch('REQUEST_PATH', nil),
           status: wrapper.status_code,
           error: "#{exception.class.name}: #{exception.message}"
         }
