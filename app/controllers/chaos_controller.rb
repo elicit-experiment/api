@@ -22,11 +22,15 @@ class ChaosController < ApplicationController
 
     study_definition = StudyDefinition.find(chaos_sessions.first.study_definition_id)
 
-    FinalizeTimeSeriesJob.perform_later(*chaos_sessions.map(&:experiment_id).uniq)
-
-    chaos_sessions.destroy_all
+    if Rails.configuration.active_job.queue_adapter == :solid_queue
+      FinalizeTimeSeriesJob.perform_later(*chaos_sessions.map(&:experiment_id).uniq)
+    else
+      chaos_sessions.each { |session| session.experiment&.finalize }
+    end
 
     Chaos::ChaosSession.clear_expired!
+
+    chaos_sessions.destroy_all
 
     unless study_definition
       redirect_to client_app_path
