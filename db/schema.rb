@@ -217,10 +217,8 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_28_165522) do
     t.integer "auto_created_user_count", default: 0
     t.integer "max_auto_created_users", default: 0
     t.integer "max_concurrent_users"
-    t.virtual "searchable", type: :tsvector, as: "(setweight(to_tsvector('english'::regconfig, (COALESCE(title, ''::character varying))::text), 'A'::\"char\") || setweight(to_tsvector('english'::regconfig, (COALESCE(description, ''::character varying))::text), 'B'::\"char\"))", stored: true
     t.index ["allow_anonymous_users"], name: "index_study_definitions_on_allow_anonymous_users"
     t.index ["principal_investigator_user_id"], name: "index_study_definitions_on_principal_investigator_user_id"
-    t.index ["searchable"], name: "index_study_definitions_on_searchable", using: :gin
     t.index ["show_in_study_list"], name: "index_study_definitions_on_show_in_study_list"
   end
 
