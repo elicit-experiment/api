@@ -5,6 +5,8 @@ module ChaosApi
     class AnswerController < BaseChaosController
       include ActionController::MimeResponds
       include ChaosApi::V6::TraceLogging
+      
+      log_trace :create
 
       if Rails.env.development?
         log_trace :create
