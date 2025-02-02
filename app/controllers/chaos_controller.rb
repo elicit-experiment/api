@@ -22,9 +22,10 @@ class ChaosController < ApplicationController
 
     study_definition = StudyDefinition.find(chaos_sessions.first.study_definition_id)
 
-    chaos_sessions.each { |session| session.experiment&.finalize }
+    FinalizeTimeSeriesJob.perform_later(*chaos_sessions.map(&:experiment_id).uniq)
 
     chaos_sessions.destroy_all
+
     Chaos::ChaosSession.clear_expired!
 
     unless study_definition

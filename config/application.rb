@@ -42,6 +42,10 @@ module ElicitApi
 
     config.time_series_schema = config_for(:time_series_schema_config)
 
+    # Use Solid Queue in Development.
+    config.active_job.queue_adapter = :solid_queue
+    config.solid_queue.connects_to = { database: { writing: :queue } }
+
     elicit_portal = Rails.configuration.elicit['elicit_portal'].symbolize_keys
     port = elicit_portal[:port]
     port = nil if elicit_portal[:scheme] == 'https' && port == 443
