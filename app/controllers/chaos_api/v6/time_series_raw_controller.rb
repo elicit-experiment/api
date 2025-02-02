@@ -2,11 +2,14 @@
 
 module ChaosApi
   module V6
+    class UnauthorizedError < StandardError; end
+
     class TimeSeriesRawController < ActionController::Metal
       include ActionController::MimeResponds
       include ActionController::Cookies
       include AbstractController::Rendering
       include ActionController::Rendering
+      include ActionController::Head
       include ActiveSupport::Rescuable
       include ActionController::MimeResponds
 
@@ -33,6 +36,8 @@ module ChaosApi
 
         response.headers['Content-Type'] = [Mime::Type.lookup_by_extension(:json).to_s, 'charset=utf-8'].join('; ')
         render plain: @response.to_json, status: @response_status
+      rescue UnauthorizedError
+        head :unauthorized
       end
 
       # don't parse the params
@@ -57,7 +62,7 @@ module ChaosApi
 
         @chaos_session = Chaos::ChaosSession.find_by(session_guid: session_guid)
 
-        head :unauthorized unless @chaos_session
+        raise UnauthorizedError unless @chaos_session
       end
 
       def append_json(time_series, blob)

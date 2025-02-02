@@ -50,6 +50,30 @@ module ChaosApi
         StudyResult::TimeSeries.destroy_all
       end
 
+
+      test 'without authorization' do
+        initialize_study_result
+
+        # Not sending the auth header!
+        # headers['X-CHAOS-SESSION-GUID'] = @chaos_session.session_guid
+
+        body = [{a:'b'}].to_json
+
+        post :append, body: body,  params: { series_type: 'face_landmark'}, as: :json
+        assert_response :unauthorized
+      end
+
+      test 'with invalid authorization' do
+        initialize_study_result
+
+        @request.headers['X-CHAOS-SESSION-GUID'] = SecureRandom.uuid
+
+        body = [{a:'b'}].to_json
+
+        post :append, body: body,  params: { series_type: 'face_landmark'}, as: :json
+        assert_response :unauthorized
+      end
+
       test 'face_landmark json single row' do
         as_user(user(:registered_user)) do |headers|
 
