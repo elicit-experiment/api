@@ -4,17 +4,8 @@ default: &default
   pool: 5
   username: <%= ENV['POSTGRES_USER'] %>
   password: <%= ENV['POSTGRES_PASSWORD'] %>
-  host: 0.0.0.0
-  port: 5433
-
-development:
-  primary:
-    <<: *default
-    database: elicit_development
-  queue:
-    <<: *default
-    database: app_development_queue
-    migrations_paths: db/queue_migrate
+  host: <%= ENV.fetch('POSTGRES_HOST', '0.0.0.0') %>
+  port: <%= ENV.fetch('POSTGRES_PORT', '5433') %>
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -28,17 +19,21 @@ test:
     database: app_test_queue
     migrations_paths: db/queue_migrate
 
-default_non_local: &default_non_local
-  <<: *default
-  host: postgres15
-  port: 5432
+development:
+  primary:
+    <<: *default
+    database: elicit_development
+  queue:
+    <<: *default
+    database: app_development_queue
+    migrations_paths: db/queue_migrate
 
 production:
   primary:
-    <<: *default_non_local
+    <<: *default
     database: <%= ENV['POSTGRES_DB'] %>
     schema_search_path: public
   queue:
-    <<: *default_non_local
+    <<: *default
     database: app_production_queue
     migrations_paths: db/queue_migrate
