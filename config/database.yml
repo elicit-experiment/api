@@ -30,13 +30,14 @@ test:
 
 default_non_local: &default_non_local
   <<: *default
-  database: <%= ENV['POSTGRES_DB'] %>
   host: postgres15
   port: 5432
 
 production:
   primary:
     <<: *default_non_local
+    database: <%= ENV['POSTGRES_DB'] %>
+    schema_search_path: public
   queue:
     <<: *default_non_local
     database: app_production_queue
