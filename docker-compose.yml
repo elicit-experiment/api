@@ -22,6 +22,7 @@ services:
       - NEWRELIC_LICENSE_KEY=${NEWRELIC_LICENSE_KEY}
     volumes:
       - app_public:/var/www/app/public
+      - storage:/var/www/Cockpit.API/storage
     expose:
       - "3000"
     logging:
@@ -104,3 +105,4 @@ volumes:
   certs:
   fe_public:
   app_public:
+  storage:
