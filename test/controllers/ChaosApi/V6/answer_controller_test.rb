@@ -135,5 +135,82 @@ module ChaosApi
         end
       end
     end
+
+    class AnswerControllerMultipleTest < ActionDispatch::IntegrationTest
+      def initialize_study_result
+        @chaos_session = chaos_chaos_session(:chaos_session_learning_study_1)
+      end
+
+      def run_trace(component, trace_name)
+        datapoint_ids = Set.new([])
+        as_user(user(:registered_user)) do |headers|
+          @chaos_session = chaos_chaos_session(:chaos_session_learning_study_1)
+          state_data_point_id = nil
+          File.readlines(Rails.root.join("test/fixtures/files/api_traces/#{trace_name}.ndjson")).each do |line|
+            params = JSON.parse(line)['params'].slice(*%w[questionId output sessionGUID format user_http_status_codes])
+            params['sessionGUID'] = @chaos_session.session_guid
+            params['questionId'] = "#{@chaos_session.study_definition_id}:#{component.id}"
+
+            # First post will create the state.
+            post chaos_api_v6_answer_create_url, params: params.symbolize_keys, headers: headers
+            results = JSON.parse(response.body)['Body']['Results'] # changed data point ids
+            datapoint_ids |= Set.new(results)
+            assert_response :success
+
+            states = StudyResult::DataPoint.where(stage_id: @chaos_session.stage_id, point_type: 'State')
+            assert_equal 1, states.size
+            state_data_point_id ||= states.first.id
+            assert_equal state_data_point_id, states.first.id
+          end
+        end
+        datapoint_ids
+      end
+
+      # %w[free_text].each do |trace_name|
+      #   define_method "test_#{trace_name}" do
+      #     component = component(:learning_study_1)
+      #     trace_name = 'free_text'
+      #
+      #     datapoint_ids = run_trace(component, trace_name)
+      #
+      #     data_points = StudyResult::DataPoint.where(stage_id: @chaos_session.stage_id, id: datapoint_ids)
+      #     data_points.each { |datapoint| Rails.logger.debug datapoint }
+      #     assert_equal 4, data_points.size
+      #
+      #     assert_equal data_points.where(point_type: 'State').first.value, '{"Text":"1111"}'
+      #     assert_equal 1, data_points.where(point_type: 'Render').size
+      #     assert_equal 2, data_points.where(point_type: 'Change').size
+      #   end
+      # end
+      test 'trace free_text' do
+        component = component(:learning_study_1)
+        trace_name = 'free_text'
+
+        datapoint_ids = run_trace(component, trace_name)
+
+        data_points = StudyResult::DataPoint.where(stage_id: @chaos_session.stage_id, id: datapoint_ids)
+        data_points.each { |datapoint| Rails.logger.debug datapoint }
+        assert_equal 4, data_points.size
+
+        assert_equal data_points.where(point_type: 'State').first.value, '{"Text":"1111"}'
+        assert_equal 1, data_points.where(point_type: 'Render').size
+        assert_equal 2, data_points.where(point_type: 'Change').size
+      end
+
+      test 'trace radiobutton' do
+        component = component(:learning_study_1)
+        trace_name = 'radiobutton'
+
+        datapoint_ids = run_trace(component, trace_name)
+
+        data_points = StudyResult::DataPoint.where(stage_id: @chaos_session.stage_id, id: datapoint_ids)
+        data_points.each { |datapoint| Rails.logger.debug datapoint }
+        assert_equal 12, data_points.size
+
+        assert_equal data_points.where(point_type: 'State').first.value, '{"Id":"4","Correct":true}'
+        assert_equal 1, data_points.where(point_type: 'Render').size
+        assert_equal 3, data_points.where(point_type: 'Change').size
+      end
+    end
   end
 end

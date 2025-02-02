@@ -1,0 +1,1 @@
+for port in 3035 3000 5504; kill -9 (lsof -ti :$port) 2>/dev/null; end

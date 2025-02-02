@@ -27,3 +27,31 @@ chaos_session_1:
     utc: &4 2018-12-06 04:57:23.061217000 Z
     zone: *2
     time: *4
+chaos_session_learning_study_1:
+  id: 2
+  user: registered_user
+  session_guid: 65738f70-337f-44a2-afe2-0fbc912ec20f
+  study_definition: learning_study
+  protocol_definition: learning_study
+  phase_definition: learning_study
+#  trial_definition: learning_study_1
+  protocol_user: learning_study_1
+  study_result: learning_study_1
+  experiment: learning_study_1
+  stage: learning_study_1
+  trial_result: learning_study_1
+  preview:
+  url: http://localhost:5504/?session_guid=65738f70-317f-44a2-afe2-0fbc912ec20f#Experiment/1
+  expires_at: !ruby/object:ActiveSupport::TimeWithZone
+    utc: &1 2018-12-06 00:00:00.000000000 Z
+    zone: &2 !ruby/object:ActiveSupport::TimeZone
+      name: Etc/UTC
+    time: *1
+  created_at: !ruby/object:ActiveSupport::TimeWithZone
+    utc: &3 2018-12-06 04:51:10.318721000 Z
+    zone: *2
+    time: *3
+  updated_at: !ruby/object:ActiveSupport::TimeWithZone
+    utc: &4 2018-12-06 04:57:23.061217000 Z
+    zone: *2
+    time: *4

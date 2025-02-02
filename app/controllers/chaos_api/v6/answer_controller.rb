@@ -4,6 +4,11 @@ module ChaosApi
   module V6
     class AnswerController < BaseChaosController
       include ActionController::MimeResponds
+      include ChaosApi::V6::TraceLogging
+
+      if Rails.env.development?
+        log_trace :create
+      end
 
       before_action :load_chaos_session_guid
       before_action :require_chaos_session

@@ -17,6 +17,7 @@ cp ./.aprc.production ~/.aprc
 #DISABLE_DATABASE_ENVIRONMENT_CHECK=1 RAILS_ENV=production PRECOMPILE=1 bundle exec rake db:drop
 #DISABLE_DATABASE_ENVIRONMENT_CHECK=1 RAILS_ENV=production PRECOMPILE=1 bundle exec rake db:setup
 #DISABLE_DATABASE_ENVIRONMENT_CHECK=1 RAILS_ENV=production PRECOMPILE=1 bundle exec rake db:seed
+# env RAILS_ENV=production PRECOMPILE=1 rails db:setup:queue
 
 RAILS_ENV=production PRECOMPILE=1 bundle exec rake db:migrate
 
