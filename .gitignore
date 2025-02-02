@@ -49,3 +49,4 @@ yarn-error.log*
 /python-env/
 /.env.development-docker.local
 /storage/
+.aider*

@@ -128,3 +128,5 @@ gem 'csv', '~> 3.3'
 gem 'mutex_m', '~> 0.3.0'
 
 gem "foreman", "~> 0.88.1"
+
+gem "solid_queue", "~> 1.1"
