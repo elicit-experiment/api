@@ -45,7 +45,7 @@ const StudyCardList = () => {
 
   return (
     <div id="scrollableTarget" style={{}}>
-      <h1>{studiesList.totalItems} {pluralize('Study', studiesList.totalItems)} (showing {studies.length})</h1>
+      <h1>{studiesList.totalItems || 'No'} {pluralize('Study', studiesList.totalItems)} (showing {studies.length})</h1>
 
 
       {/*Put the scroll bar always on the bottom*/}
