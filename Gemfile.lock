@@ -68,6 +68,8 @@ GEM
       activemodel (= 7.2.2.1)
       activesupport (= 7.2.2.1)
       timeout (>= 0.4.0)
+    activerecord-import (2.1.0)
+      activerecord (>= 4.2)
     activestorage (7.2.2.1)
       actionpack (= 7.2.2.1)
       activejob (= 7.2.2.1)
@@ -486,6 +488,7 @@ PLATFORMS
 DEPENDENCIES
   actionpack-xml_parser
   activemodel-serializers-xml
+  activerecord-import (~> 2.1)
   awesome_print
   aws-sdk-s3
   byebug

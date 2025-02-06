@@ -42,49 +42,43 @@ module ChaosApi
           component_id: @component&.id || 0
         }
 
-        state_datapoint, request_data_points = StudyResult::DataPoint.from_chaos_output(@datapoint_query_fields, @chaos_answer_output)
-
-        logger.info message: 'datapoint changes', data_point_ids: request_data_points.to_h { |dp| [dp.id || 'new', dp.changed?] }
+        state_datapoint, request_data_point_params = StudyResult::DataPoint.from_chaos_output(@datapoint_query_fields, @chaos_answer_output)
 
 
         if @chaos_session.preview
-          render_preview(state_datapoint, request_data_points)
+          render_preview(state_datapoint, request_data_point_params)
         else
-          render_real(state_datapoint, request_data_points)
+          render_real(state_datapoint, request_data_point_params)
         end
       end
 
       private
 
-      def render_real(state_datapoint, request_data_points)
-        updated_data_points = request_data_points.select(&:changed?)
-
+      def render_real(state_datapoint, request_data_point_params)
         @stage = StudyResult::Stage.find @datapoint_query_fields[:stage_id]
         @phase_definition = PhaseDefinition.find @datapoint_query_fields[:phase_definition_id]
         @protocol_user = ProtocolUser.find @datapoint_query_fields[:protocol_user_id]
         @trial_definition ||= TrialDefinition.find @datapoint_query_fields[:trial_definition_id]
 
+        location_params = {
+          stage_id: @stage.id,
+          protocol_user_id: @protocol_user.id,
+          phase_definition_id: @phase_definition.id,
+          trial_definition_id: @trial_definition.id,
+        }
+
+        import_data_points = request_data_point_params.map { |dp| dp.merge(location_params) }
+
         StudyResult::DataPoint.transaction do
-          # because CHAOS' semantics are to republish everything, blow away existing data points.
-          # We can't easily go incremental because of chaos' rate limiting, which means some updates
-          # might not fire, and it's not easy to keep track of which ones made it to the server and which
-          # ones didn't.
-          # Note that because state entities are updated separately, we don't nuke those.
-          StudyResult::DataPoint.where(@datapoint_query_fields)
-                                .where.not(point_type: 'State')
-                                .delete_all
+          # CHAOS' semantics are to republish everything, so we can end up with duplicates. The state datapoint is
+          # handled differently: it is updated every time.
+
           state_datapoint.save!
-          request_data_points.each do |data_point|
-            # avoid ActiveRecord checking to see if the ids are valid by providing the associations directly
-            data_point.trial_definition = @trial_definition
-            data_point.phase_definition = @phase_definition
-            data_point.trial_definition = @trial_definition
-            data_point.protocol_user = @protocol_user
-            data_point.stage = @chaos_session.stage
-          end
-          request_data_points.each(&:save!)
-          logger.info message: "added data points #{updated_data_points.size}", data_point_ids: updated_data_points.map(&:id)
-          @response = ChaosResponse.new([state_datapoint.id].concat(updated_data_points.map(&:id)))
+
+          import_result = StudyResult::DataPoint.import import_data_points, validate: false
+
+          logger.info message: "added data points #{import_data_points.size}", failed_instances: import_result.failed_instances, num_inserts: import_result.num_inserts
+          @response = ChaosResponse.new(import_result.as_json.tap { |r| r['ids'] << state_datapoint.id })
         end
 
         if @chaos_answer_output['Context']

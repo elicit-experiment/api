@@ -59,8 +59,7 @@ module StudyResult
           method: event['Method'],
           datetime: event['DateTime']
         }
-        dp_params = datapoint_address.merge(dp_params)
-        DataPoint.new(dp_params)
+        datapoint_address.merge(dp_params)
       end
 
       [state, new_data_points]

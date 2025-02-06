@@ -124,3 +124,5 @@ gem 'csv', '~> 3.3'
 gem 'mutex_m', '~> 0.3.0'
 
 gem "solid_queue", '~> 1.1'
+
+gem "activerecord-import", "~> 2.1"

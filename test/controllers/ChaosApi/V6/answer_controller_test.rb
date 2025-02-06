@@ -106,16 +106,17 @@ module ChaosApi
           assert_response :success
 
           json_response = JSON.parse(response.body)
-          data_point_ids = json_response.dig('Body', 'Results').map(&:to_i)
+
+          data_point_ids = json_response.dig('Body', 'Results', 'ids').map(&:to_i)
           data_points = data_point_ids.map { |id| StudyResult::DataPoint.find(id) }
           data_points.each do |data_point|
             assert_equal data_point.entity_type, 'Instrument'
             assert_equal data_point.kind, 'Freetext'
           end
-          assert_equal data_points.first.point_type, 'State'
-          assert_equal data_points.first.value, '{"Text":"f"}'
+          assert_equal data_points.last.point_type, 'State'
+          assert_equal data_points.last.value, '{"Text":"f"}'
           assert_equal data_points.size, 3
-          first_post_ids = Set.new(data_points.map(&:id))
+          first_post_ids = data_points.map(&:id)
 
           params[:output] = '{"Text":"ff","Events":[{"Id":"Freetext","Type":"Render","EntityType":"Instrument","Method":"","Data":"{\"Text\":\"Please write what you think about this excerpts\"}","DateTime":"2024-10-28T19:17:12.227Z"},{"Id":"Freetext","Type":"Change","EntityType":"Instrument","Method":"Keyboard","Data":"f","DateTime":"2024-10-28T19:17:20.372Z"},{"Id":"Freetext","Type":"Change","EntityType":"Instrument","Method":"Keyboard","Data":"ff","DateTime":"2024-10-28T19:55:01.808Z"}]}
 '
@@ -123,15 +124,15 @@ module ChaosApi
           assert_response :success
 
           json_response = JSON.parse(response.body)
-          data_point_ids = json_response.dig('Body', 'Results').map(&:to_i)
+          data_point_ids = json_response.dig('Body', 'Results', 'ids').map(&:to_i)
           data_points = data_point_ids.map { |id| StudyResult::DataPoint.find(id) }
-          assert_equal data_points.size, 4
-          assert_equal data_points.first.point_type, 'State'
-          assert_equal data_points.first.value, '{"Text":"ff"}'
+          assert_equal 4, data_points.size
+          assert_equal 'State', data_points.last.point_type
+          assert_equal '{"Text":"ff"}', data_points.last.value
 
           # Only the state us updated; all the other events are deleted and recreated.
-          common_ids = Set.new(data_points.map(&:id)) & first_post_ids
-          assert_equal common_ids, Set.new([first_post_ids.first])
+          common_ids = Set.new(data_points.map(&:id)) & Set.new(first_post_ids)
+          assert_equal common_ids, Set.new([first_post_ids.last])
         end
       end
     end
@@ -153,7 +154,7 @@ module ChaosApi
 
             # First post will create the state.
             post chaos_api_v6_answer_create_url, params: params.symbolize_keys, headers: headers
-            results = JSON.parse(response.body)['Body']['Results'] # changed data point ids
+            results = JSON.parse(response.body)['Body']['Results']['ids'] # changed data point ids
             datapoint_ids |= Set.new(results)
             assert_response :success
 
@@ -190,11 +191,11 @@ module ChaosApi
 
         data_points = StudyResult::DataPoint.where(stage_id: @chaos_session.stage_id, id: datapoint_ids)
         data_points.each { |datapoint| Rails.logger.debug datapoint }
-        assert_equal 4, data_points.size
+        assert_equal 170, data_points.size # 4 non-duplicates
 
         assert_equal data_points.where(point_type: 'State').first.value, '{"Text":"1111"}'
-        assert_equal 1, data_points.where(point_type: 'Render').size
-        assert_equal 2, data_points.where(point_type: 'Change').size
+        assert_equal 36, data_points.where(point_type: 'Render').size
+        assert_equal 133, data_points.where(point_type: 'Change').size
       end
 
       test 'trace radiobutton' do
@@ -205,11 +206,11 @@ module ChaosApi
 
         data_points = StudyResult::DataPoint.where(stage_id: @chaos_session.stage_id, id: datapoint_ids)
         data_points.each { |datapoint| Rails.logger.debug datapoint }
-        assert_equal 12, data_points.size
+        assert_equal 81, data_points.size
 
         assert_equal data_points.where(point_type: 'State').first.value, '{"Id":"4","Correct":true}'
-        assert_equal 1, data_points.where(point_type: 'Render').size
-        assert_equal 3, data_points.where(point_type: 'Change').size
+        assert_equal 14, data_points.where(point_type: 'Render').size
+        assert_equal 37, data_points.where(point_type: 'Change').size
       end
     end
   end
