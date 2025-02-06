@@ -62,6 +62,7 @@ COPY .babelrc .
 COPY .bowerrc .
 COPY .postcssrc.yml .
 COPY bin bin
+RUN chmod +x bin/*.sh
 
 # Copy the main application.
 COPY . .
@@ -86,4 +87,4 @@ RUN ls -als public/packs
 RUN PRECOMPILE=1 bundle exec rails secret > ~/secret-key-base.txt
 
 ENV RAILS_ENV=production
-CMD ["/bin/sh", "-c", "./run-server.sh  2>&1 | tee log/run-server.log"]
+CMD ["/bin/sh", "-c", "./bin/run-elicit.sh 2>&1"]

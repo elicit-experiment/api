@@ -142,9 +142,6 @@ GEM
     crass (1.0.6)
     csv (3.3.1)
     date (3.4.1)
-    debase (3.0.2)
-      debase-ruby_core_source (~> 3.4.1)
-    debase-ruby_core_source (3.4.1)
     devise (4.9.4)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -159,9 +156,6 @@ GEM
     doorkeeper (5.8.1)
       railties (>= 5)
     dotenv (3.1.7)
-    dotenv-rails (3.1.7)
-      dotenv (= 3.1.7)
-      railties (>= 6.1)
     drb (2.2.1)
     erubi (1.13.0)
     et-orbi (1.2.11)
@@ -352,6 +346,8 @@ GEM
       ffi (~> 1.0)
     rdoc (6.9.0)
       psych (>= 4.0.0)
+    redis-client (0.23.2)
+      connection_pool
     regexp_parser (2.9.3)
     reline (0.5.12)
       io-console (~> 0.5)
@@ -398,8 +394,6 @@ GEM
       rack (>= 1.1)
       rubocop (>= 1.52.0, < 2.0)
       rubocop-ast (>= 1.31.1, < 2.0)
-    ruby-debug-ide (3.0.2)
-      debase (~> 3.0.2)
     ruby-graphviz (1.2.5)
       rexml
     ruby-progressbar (1.13.0)
@@ -497,12 +491,10 @@ DEPENDENCIES
   carrierwave
   carrierwave-base64
   csv (~> 3.3)
-  debase
   devise (~> 4.7)
   devise-doorkeeper
   doorkeeper
   dotenv (~> 3.0)
-  dotenv-rails (~> 3.0)
   fakefs
   jbuilder (~> 2.13)
   json-schema
@@ -526,12 +518,12 @@ DEPENDENCIES
   rack-mini-profiler
   rails (~> 7)
   rails-erd
+  redis-client
   responders
   rspec-rails
   rubocop
   rubocop-performance
   rubocop-rails
-  ruby-debug-ide
   shakapacker (~> 8)
   solid_queue (~> 1.1)
   sqlite3

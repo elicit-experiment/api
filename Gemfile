@@ -67,8 +67,6 @@ group :development, :test do
   gem 'mocha'
   gem 'pry-byebug'
   gem 'pry-rails'
-  gem 'debase', require: false
-  gem 'ruby-debug-ide', require: false
 end
 
 group :development do
@@ -117,12 +115,13 @@ gem 'rack-mini-profiler', require: false
 # gem 'stackprof', '~> 0.2.12', require: false
 
 gem 'dotenv', '~> 3.0'
-gem 'dotenv-rails', '~> 3.0'
 
 gem 'csv', '~> 3.3'
 
 gem 'mutex_m', '~> 0.3.0'
 
-gem "solid_queue", '~> 1.1'
+gem 'redis-client'
 
-gem "activerecord-import", "~> 2.1"
+gem 'solid_queue', '~> 1.1'
+
+gem 'activerecord-import', '~> 2.1'

@@ -6,7 +6,19 @@
 #
 
 require 'dotenv'
-Dotenv.load
+
+# For local testing, try to replicate the Dotenv::Rails files list, since this needs to get loaded first and preempts
+# Dotenv::Rails' configuration. We need to expand the env variables here so we can consume them here, before rails starts.
+def configure_dotenv
+  files = [
+    (".env.#{ENV['RAILS_ENV']}.local" if ENV['RAILS_ENV']),
+    ".env"
+  ].compact
+
+  Dotenv.load(*files)
+end
+
+configure_dotenv
 
 max_threads_count = Integer(ENV.fetch('RAILS_MAX_THREADS', 5))
 min_threads_count = Integer(ENV.fetch('RAILS_MIN_THREADS', max_threads_count))

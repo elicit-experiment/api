@@ -20,11 +20,41 @@ services:
       - SECRET_KEY_BASE=${SECRET_KEY_BASE}
       - WEB_CLIENT_SECRET=${WEB_CLIENT_SECRET}
       - NEWRELIC_LICENSE_KEY=${NEWRELIC_LICENSE_KEY}
+      - CONTAINER_ROLE=web
     volumes:
       - app_public:/var/www/app/public
       - storage:/var/www/Cockpit.API/storage
     expose:
       - "3000"
+    logging:
+      options:
+        max-size: "10m"
+        max-file: "10"
+
+  jobs:
+    container_name: jobs
+    depends_on:
+      - 'postgres15'
+      - 'redis'
+    build:
+      context: .
+      args:
+        - SITE_SUFFIX=${SITE_SUFFIX}
+        - SECRET_KEY_BASE=${SECRET_KEY_BASE}
+        - API_SCHEME=${EXTERNAL_API_SCHEME}
+        - WEB_CLIENT_SECRET=${WEB_CLIENT_SECRET}
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - SITE_SUFFIX=${SITE_SUFFIX}
+      - SECRET_KEY_BASE=${SECRET_KEY_BASE}
+      - WEB_CLIENT_SECRET=${WEB_CLIENT_SECRET}
+      - NEWRELIC_LICENSE_KEY=${NEWRELIC_LICENSE_KEY}
+      - CONTAINER_ROLE=jobs
+    volumes:
+      - app_public:/var/www/app/public
+      - storage:/var/www/Cockpit.API/storage
     logging:
       options:
         max-size: "10m"
