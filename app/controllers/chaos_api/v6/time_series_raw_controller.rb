@@ -66,7 +66,6 @@ module ChaosApi
       end
 
       def append_json(time_series, blob)
-        #Rails.logger.debug blob
         time_series.append_raw(blob)
 
         save_time_series(time_series)

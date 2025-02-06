@@ -58,7 +58,7 @@ module ChaosApi
           assert time_series.present?
           assert_equal time_series.size, 1
           # TODO: check path format?
-          assert_equal File.read(time_series.first.file.path).strip, { test: 'this' }.to_json
+          assert_equal File.read(time_series.first.in_progress_file_path).strip, { test: 'this' }.to_json
           time_series.destroy_all
         end
       end

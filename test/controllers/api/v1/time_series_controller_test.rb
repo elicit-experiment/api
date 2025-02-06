@@ -29,7 +29,7 @@ module Api
           assert_response :ok, 'Request failed'
 
           json_response = JSON.parse(response.body)
-          assert_equal json_response.size, 3, 'Response was not 3'
+          assert_equal 4, json_response.size, 'Response was not 3'
         end
       end
 

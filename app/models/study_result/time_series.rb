@@ -36,132 +36,78 @@ module StudyResult
     SERIES_TYPES = %i[webgazer mouse face_landmark].freeze
     FILE_TYPES = %i[tsv json].freeze
 
+    def file_content_type
+      return nil if schema.blank?
+
+      Mime::Type.lookup_by_extension(file_type.to_sym).to_s
+    end
+
     # append ndjson to the file.
-    def append(data)
-      # self.file is a carrierwave upload, and it won't have a path until it is created. So we buffer to a stringio and set
-      # the carrierwave file to that stringio to save.
-      stream = if file.path.nil?
-                 StringIO.new
-               else
-                 unless File.exist?(file.path)
-                   logger.warn "Time Series file doesn't exist: #{file.path}"
-                   dir = File.dirname(file.path)
-                   FileUtils.mkdir_p dir
-                 end
+    def append_data(data)
+      append_raw data.map(&:to_json).join("\n")
+    end
 
-                 File.open(file.path, 'a')
-               end
-
-      datas = if data.is_a? Array
-                data
-              else
-                [data]
-              end
-
-      datas.each do |row|
-        stream.puts "#{row.to_json}\n"
-      end
-
-      self.file = FileIO.new(stream.string, filename) unless file.path
-    ensure
-      stream.close if stream.present?
-
-      logger.debug "Wrote #{datas.size} rows to #{file.path}"
+    def append(_data)
+      raise 'Deprecated'
     end
 
     def append_raw(data_string)
-      file_path = nil
-      stream = if in_progress_file.attached?
-                 file_path = in_progress_file.service.path_for(in_progress_file.key)
-                 unless File.exist?(file_path)
-                   logger.warn "Time Series file doesn't exist: #{file_path}"
-                   dir = File.dirname(file_path)
-                   FileUtils.mkdir_p dir
-                 end
-
-                 File.open(file_path, 'a')
-               else
-                 StringIO.new
-               end
+      _file_path, stream = in_progress_stream
 
       stream << data_string
       stream << "\n"
 
-      unless in_progress_file.attached?
-        logger.debug 'Creating in progress file attachment'
-        # This is asynchronous:
-        # in_progress_file.attach(io: StringIO.new(stream.string), filename: filename, content_type: 'application/json')
-        # self.send(:in_progress_file).analyze
+      file_field = :in_progress_file
 
-        # For testing and simplicity in production, we use the synchronous method here https://stackoverflow.com/questions/61309182/how-to-force-activestorageattachedattach-to-run-synchronously-disable-asyn
-        blob = ActiveStorage::Blob.create_and_upload!(
-          io: StringIO.new(stream.string), filename: filename, service_name: :local, content_type: 'application/json'
-        )
-        blob.analyze
-        attached = send(:in_progress_file)
-        attached.attach(blob)
-
-        file_path = in_progress_file.service.path_for(in_progress_file.key)
-      end
+      file_path = ensure_attached(stream, file_field, file_content_type)
     ensure
       stream.close if stream.present?
 
       logger.debug "Wrote #{data_string.size} bytes to #{file_path}"
     end
 
-    def append_to_tsv(append_text, headers)
-      rows = append_text.split("\n").size
-      if !file.file
-        self.file = FileIO.new("#{headers.map(&:to_s).join("\t")}\n#{append_text}\n", filename)
-        logger.info "Creating initial time series with #{rows} rows to #{file.path}"
-      else
-        unless File.exist? file.path
-          logger.warn "Time Series file doesn't exist: #{file.path}"
-          dir = File.dirname(file.path)
-          FileUtils.mkdir_p dir
-          File.open(file.path, 'w') { |file| file.write("#{headers.map(&:to_s).join("\t")}\n") }
-        end
-        File.open(self.file.path, 'a') do |f|
-          f.puts append_text
-        end
-        logger.debug "Wrote #{rows} rows to #{self.file.path}"
+    def append_string_to_tsv(append_text, headers)
+      append_to_tsv(headers) do |stream|
+        stream << append_text
+        stream << "\n"
+        append_text.size + 1
       end
     end
 
+    def append_to_tsv(headers)
+      file_path, stream = in_progress_stream
+      characters_written = 0
+
+      # if the file_path doesn't exist, the file is new, and we need to add the header
+      if file_path.blank?
+        header_string = "#{headers.join("\t")}\n"
+        stream << header_string
+        characters_written = header_string.size
+      end
+
+      characters_written += yield stream
+
+      file_path = ensure_attached(stream, :in_progress_file, file_content_type)
+    ensure
+      stream.close if stream.present?
+
+      logger.debug "Wrote #{characters_written} bytes to #{file_path}"
+    end
+
     def append_file_to_tsv(append_file, headers)
-      unless file.file
-        self.file = FileIO.new("#{headers.map(&:to_s).join("\t")}\n", filename)
-        logger.info "Creating initial time series with header to #{file.path}"
-        save!
-      end
-
-      filepath = file.path
-
-      unless File.exist? filepath
-        logger.warn "Time Series file doesn't exist: #{filepath}"
-        dir = File.dirname(filepath)
-        FileUtils.mkdir_p dir
-        File.open(filepath, 'w') do |file|
-          file.write("#{headers.map(&:to_s).join("\t")}\n")
-        end
-      end
-
-      blocks = 0
-      File.open(filepath, 'a') do |outfile|
+      append_to_tsv(headers) do |stream|
+        blocks = 0
+        characters_written = 0
         while (buffer = append_file.read(4096))
-          outfile << buffer
+          stream << buffer
+          characters_written += buffer.size
           blocks += 1
         end
+
+        logger.debug "Wrote #{blocks} blocks from input file"
+
+        characters_written
       end
-
-      #      File.open(filepath, 'a') do |outfile|
-      #        while (line = append_file.gets)
-      #          outfile << line
-      #          blocks += 1
-      #        end
-      #      end
-
-      logger.debug "Wrote #{blocks} blocks from input file to #{filepath}"
     end
 
     def filename
@@ -262,7 +208,7 @@ module StudyResult
       # The ActiveStorage default urls don't seem to work with Digital Ocean Spaces. They result in Bad Gateway, possibly
       # due to the addition of attachment/download and other query parameter pieces.
       s3 = Aws::S3::Client.new(
-        endpoint: 'https://nyc3.digitaloceanspaces.com',
+        endpoéint: 'https://nyc3.digitaloceanspaces.com',
         region: 'nyc3',
         access_key_id: ENV.fetch('AWS_ACCESS_ID'),
         secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY')
@@ -273,6 +219,44 @@ module StudyResult
     end
 
     private
+
+    def ensure_attached(stream, file_field, content_type)
+      unless public_send(file_field).attached?
+        logger.debug 'Creating in progress file attachment'
+        # This is asynchronous:
+        # in_progress_file.attach(io: StringIO.new(stream.string), filename: filename, content_type: 'application/json')
+        # self.send(:in_progress_file).analyze
+
+        # For testing and simplicity in production, we use the synchronous method here https://stackoverflow.com/questions/61309182/how-to-force-activestorageattachedattach-to-run-synchronously-disable-asyn
+        blob = ActiveStorage::Blob.create_and_upload!(
+          io: StringIO.new(stream.string), filename: filename, service_name: :local, content_type: content_type
+        )
+        blob.analyze
+        attached = public_send(file_field)
+        attached.attach(blob)
+
+        file_path = public_send(file_field).service.path_for(in_progress_file.key)
+      end
+      file_path
+    end
+
+    # return the stream and filename (if it exists yet) for the in-progress file
+    def in_progress_stream
+      stream = if in_progress_file.attached?
+                 file_path = in_progress_file.service.path_for(in_progress_file.key)
+                 unless File.exist?(file_path)
+                   logger.warn "Time Series file doesn't exist: #{file_path}"
+                   dir = File.dirname(file_path)
+                   FileUtils.mkdir_p dir
+                 end
+
+                 File.open(file_path, 'a')
+               else
+                 StringIO.new
+               end
+
+      [file_path, stream]
+    end
 
     def purge_in_progress_files!
       in_progress_file.purge

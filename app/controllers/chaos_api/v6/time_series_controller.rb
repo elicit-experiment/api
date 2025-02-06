@@ -71,7 +71,7 @@ module ChaosApi
           @header_set.map { |col| row[col] }.join("\t")
         end.join("\n")
 
-        time_series.append_to_tsv(append_text, @header_set)
+        time_series.append_string_to_tsv(append_text, @header_set)
 
         save_time_series(time_series)
       end
@@ -99,7 +99,7 @@ module ChaosApi
       end
 
       def append_json_from_json(time_series)
-        time_series.append(params[:data])
+        time_series.append_data params[:data]
 
         save_time_series(time_series)
       end
