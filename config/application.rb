@@ -43,11 +43,9 @@ module ElicitApi
 
     config.time_series_schema = config_for(:time_series_schema_config)
 
-    config.dotenv.overwrite = false
-    Dotenv::Rails.overwrite = false
-    puts "Loading .env file"
-    ActiveSupport::Notifications.subscribe("load.dotenv") do |*args|
-      puts args
+    unless Rails.env.test?
+      config.dotenv.overwrite = false
+      Dotenv::Rails.overwrite = false
     end
 
     elicit_portal = Rails.configuration.elicit['elicit_portal'].symbolize_keys
