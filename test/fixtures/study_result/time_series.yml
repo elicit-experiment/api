@@ -4,6 +4,13 @@ learning_time_series_1:
   phase_definition: learning_study
   stage: learning_study_1
 
+learning_mouse_time_series_1:
+  study_definition: learning_study
+  protocol_definition: learning_study
+  phase_definition: learning_study
+  stage: learning_study_1
+  schema: 'mouse_tsv'
+
 json_facelandmarker_time_series_1:
   study_definition: learning_study
   protocol_definition: learning_study
