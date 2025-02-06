@@ -16,6 +16,7 @@ class ChaosController < ApplicationController
     chaos_sessions = Chaos::ChaosSession.where(session_guid: session_guid)
 
     unless chaos_sessions.any?
+      logger.info 'no chaos sessions found'
       redirect_to client_app_participant_path
       return
     end
@@ -23,8 +24,10 @@ class ChaosController < ApplicationController
     study_definition = StudyDefinition.find(chaos_sessions.first.study_definition_id)
 
     if Rails.configuration.active_job.queue_adapter == :solid_queue
+      logger.info 'scheduling finalization job'
       FinalizeTimeSeriesJob.perform_later(*chaos_sessions.map(&:experiment_id).uniq)
     else
+      logger.info 'finalizing inline'
       chaos_sessions.each { |session| session.experiment&.finalize }
     end
 
