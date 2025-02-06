@@ -67,15 +67,22 @@ group :development, :test do
   gem 'mocha'
   gem 'pry-byebug'
   gem 'pry-rails'
+  gem 'debase', require: false
+  gem 'ruby-debug-ide', require: false
 end
 
 group :development do
   gem 'rails-erd', require: false, group: :development
-  gem 'rubocop'
-  gem 'rubocop-performance'
-  gem 'rubocop-rails'
+  gem 'rubocop', require: false
+  gem 'rubocop-performance', require: false
+  gem 'rubocop-rails', require: false
   # gem 'spring'
   gem 'listen'
+end
+
+group :test do
+  gem 'capybara', '~> 3.33'
+  gem 'fakefs', require: false
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
@@ -89,10 +96,12 @@ gem 'activemodel-serializers-xml'
 gem 'actionpack-xml_parser'
 
 group :production do
+  gem 'newrelic_rpm', '~> 9.16'
   gem 'pg', '~> 1.5'
 end
 
 gem 'lograge'
+gem 'lograge-sql', '~> 2.0'
 gem 'logstash-event'
 
 gem 'json-schema'
@@ -103,30 +112,15 @@ gem 'carrierwave-base64'
 
 gem 'rack-mini-profiler', require: false
 
-# gem 'flamegraph', '~> 0.9.5'
+# gem 'flamegraph', '~> 0.9.5', require: false
+# gem 'memory-profiler', '~> 1.0', require: false
+# gem 'stackprof', '~> 0.2.12', require: false
 
-# gem 'memory-profiler', '~> 1.0'
-
-# gem 'stackprof', '~> 0.2.12'
-
-gem 'dotenv-rails', '~> 2.7'
-
-gem 'capybara', '~> 3.33'
-
-# gem "debase", "~> 0.2.4"
-
-# gem "ruby-debug-ide", "~> 0.7.2"
-
-gem 'fakefs', require: false
-
-gem 'lograge-sql', '~> 2.0'
-
-gem 'newrelic_rpm', '~> 9.16'
+gem 'dotenv', '~> 3.0'
+gem 'dotenv-rails', '~> 3.0'
 
 gem 'csv', '~> 3.3'
 
 gem 'mutex_m', '~> 0.3.0'
 
-gem "foreman", "~> 0.88.1"
-
-gem "solid_queue", "~> 1.1"
+gem "solid_queue", '~> 1.1'

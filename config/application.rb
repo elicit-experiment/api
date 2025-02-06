@@ -11,6 +11,7 @@ require "active_storage/engine"
   active_job/railtie
   rails/test_unit/railtie
   sprockets/railtie
+  dotenv_rails
 ).each do |railtie|
   begin
     require railtie
@@ -41,6 +42,13 @@ module ElicitApi
     config.elicit = config_for(:elicit_config)
 
     config.time_series_schema = config_for(:time_series_schema_config)
+
+    config.dotenv.overwrite = false
+    Dotenv::Rails.overwrite = false
+    puts "Loading .env file"
+    ActiveSupport::Notifications.subscribe("load.dotenv") do |*args|
+      puts args
+    end
 
     elicit_portal = Rails.configuration.elicit['elicit_portal'].symbolize_keys
     port = elicit_portal[:port]
