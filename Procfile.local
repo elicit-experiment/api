@@ -1,4 +1,4 @@
-jobs: bundle exec bin/jobs
+jobs: OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES bundle exec bin/jobs
 chaos: bash -lc "cd docker/experiment-frontend && source ~/.nvm/nvm.sh && nvm use && npm run serve"
 admin: bash -lc "source ~/.nvm/nvm.sh && nvm use && bin/shakapacker-dev-server"
 api: OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES MAX_RAILS_THREADS=5 bundle exec bin/rails s -b 0.0.0.0 -p 3000
