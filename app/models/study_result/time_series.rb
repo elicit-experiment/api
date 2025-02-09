@@ -274,8 +274,10 @@ module StudyResult
     end
 
     def purge_in_progress_files!
+      logger.info "Finalized time series #{id}"
       file&.remove!
       in_progress_file.purge
+      save! if changed?
     end
   end
 end
