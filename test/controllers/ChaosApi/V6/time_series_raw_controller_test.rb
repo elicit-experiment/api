@@ -22,12 +22,9 @@ module ChaosApi
       def initialize_study_result
         @study_definition = study_definition(:learning_study)
         @protocol_definition = protocol_definition(:learning_study)
-
         @phase_definition = phase_definition(:learning_study)
-
         @trial_definition = trial_definition(:learning_study_1)
         @user = user(:registered_user)
-
         @stage = study_result_stage(:learning_study_1)
 
         session_params = {
@@ -74,12 +71,28 @@ module ChaosApi
         assert_response :unauthorized
       end
 
+      test 'face_landmark disallows tsv format' do
+        as_user(user(:registered_user)) do |headers|
+          initialize_study_result
+
+          headers['X-CHAOS-SESSION-GUID'] = @chaos_session.session_guid
+          headers['CONTENT-TYPE'] = 'text/tab-separated-values'
+          headers.each { |k,v| @request.headers[k] = v }
+
+          body = [{a:'b'}].to_json
+
+          post :append, body: body,  params: { series_type: 'face_landmark'}
+          assert_response :unsupported_media_type
+        end
+      end
+
       test 'face_landmark json single row' do
         as_user(user(:registered_user)) do |headers|
 
           initialize_study_result
 
           headers['X-CHAOS-SESSION-GUID'] = @chaos_session.session_guid
+          headers['CONTENT-TYPE'] = 'application/json; charset=utf-8'
 
           headers.each do |k,v|
             @request.headers[k] = v
@@ -87,7 +100,7 @@ module ChaosApi
 
           body = [{a:'b'}].to_json
 
-          post :append, body: body,  params: { series_type: 'face_landmark'}, as: :json
+          post :append, body: body,  params: { series_type: 'face_landmark' }, as: :json
           assert_response :success
           assert_equal([Mime::Type.lookup_by_extension(:json).to_s, 'charset=utf-8'].join('; '), response.headers['CONTENT-TYPE'])
           assert_equal(JSON.parse(response.body).dig('Body','Count'), 0)
