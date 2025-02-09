@@ -274,6 +274,7 @@ module StudyResult
     end
 
     def purge_in_progress_files!
+      file&.remove!
       in_progress_file.purge
     end
   end
