@@ -36,6 +36,21 @@ module StudyResult
     SERIES_TYPES = %i[webgazer mouse face_landmark].freeze
     FILE_TYPES = %i[tsv json].freeze
 
+    class << self
+      def schema_for(series_type:, format:)
+        case series_type
+        when :face_landmark
+          return nil unless format == :json
+        when :mouse
+          return nil unless format == :tsv
+        else
+          return nil
+        end
+
+        "#{series_type}_#{format}"
+      end
+    end
+
     def file_content_type
       return nil if schema.blank?
 
@@ -208,7 +223,7 @@ module StudyResult
       # The ActiveStorage default urls don't seem to work with Digital Ocean Spaces. They result in Bad Gateway, possibly
       # due to the addition of attachment/download and other query parameter pieces.
       s3 = Aws::S3::Client.new(
-        endpoéint: 'https://nyc3.digitaloceanspaces.com',
+        endpoint: 'https://nyc3.digitaloceanspaces.com',
         region: 'nyc3',
         access_key_id: ENV.fetch('AWS_ACCESS_ID'),
         secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY')

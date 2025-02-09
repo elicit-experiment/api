@@ -43,6 +43,9 @@ class ChaosExperimentService
       FooterLabel: @study_definition.footer_label,
       RedirectOnCloseUrl: chaos_endexperiment_url,
       CurrentSlideIndex: stage.current_trial,
+      studyDefinitionId: @study_definition.id,
+      userId: stage.protocol_user.user_id,
+      protocolUserId: stage.protocol_user.user_id,
       Fullname: 'Questionnaire, 1.0'
     }
   end
@@ -79,6 +82,8 @@ class ChaosExperimentService
       FooterLabel: @study_definition.footer_label,
       RedirectOnCloseUrl: url,
       CurrentSlideIndex: current_trial_idx,
+      StudyDefinitionId: @study_definition.id,
+      UserId: @user_id,
       Fullname: 'Questionnaire, 1.0'
     }
   end

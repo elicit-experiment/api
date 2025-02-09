@@ -7,26 +7,21 @@ module Api
 
       include StudyResultConcern
 
+      SEARCH_FIELDS = %i[study_id protocol_user_id phase_definition_id trial_definition_id component_id protocol_user_id trial_definition_id].freeze
+      PAGE_PARAMS = %i[page page_size].freeze
+
       def index
         plural_resource_name = "@#{resource_name.pluralize}"
 
-        permitted_params = params.permit(%i[study_id protocol_user_id phase_definition_id trial_definition_id component_id])
-        filter_fields = permitted_params
-                        .to_h
-                        .keys
-                        .select { |p| (p.to_s.end_with?('_id') && !params[p].nil?) }
-                        .map { |p| { p.to_sym => params[p].to_i } }
-                        .reduce(&:merge)
+        permitted_params = params.permit(*SEARCH_FIELDS, *PAGE_PARAMS, :study_result_id, :format)
+        filter_fields = permitted_params.slice(*SEARCH_FIELDS).compact
 
-        Rails.logger.info message: 'Datapoint filter', filter_fields: filter_fields
+        logger.info message: 'Datapoint filter', filter_fields: filter_fields
 
-        resources = StudyResult::DataPoint.where(filter_fields).includes(:component)
-
-        unless page_params.nil?
-          resources = resources
-                      .page(page_params[:page])
-                      .per(page_params[:page_size])
-        end
+        resources = StudyResult::DataPoint.where(filter_fields)
+                                          .includes(:component)
+                                          .page(permitted_params[:page])
+                                          .per(permitted_params[:page_size])
 
         # cols = StudyResult::DataPoint.column_names.map(&:to_sym)
         # ap cols
@@ -66,16 +61,6 @@ module Api
                                                datetime
                                              ]).merge(origin)
         end
-      end
-
-      def query_params
-        {
-          study_result_id: params[:study_result_id],
-          protocol_user_id: params[:protocol_user_id],
-          phase_definition_id: params[:phase_definition_id],
-          component_id: params[:component_id],
-          trial_definition_id: params[:trial_definition_id]
-        }
       end
     end
   end

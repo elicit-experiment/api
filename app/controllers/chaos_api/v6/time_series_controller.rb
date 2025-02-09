@@ -3,9 +3,6 @@
 module ChaosApi
   module V6
     class TimeSeriesController < ChaosApiController
-      include ActionController::MimeResponds
-
-      include ActionController::Cookies
 
       WEBGAZER_HEADERS = %i[event x y clock_ms timeStamp
                             left_image_x left_image_y
@@ -52,13 +49,39 @@ module ChaosApi
         if params[:points]
           append_tsv_from_json(time_series)
         elsif params[:file]
-          append_tsv_from_file(time_series)
+          append_tsv_from_file(time_series(mime_type_override: Mime::Type.lookup(params[:file].content_type || params[:mimeType]).symbol))
         else
           append_json_from_json(time_series)
         end
 
         @time_series.save!
 
+        render json: @response.to_json, status: @response_status
+      end
+
+      # TODO: this being in the time series controller is an artifact of when all the mouse timeseries were handled as
+      # individual datapoints. The codebase has progressed much since then, and now we only need this functionality for
+      # the summary datapoint. Ideally we'd had a separate controller for this "send a datapoint" functionality since it's
+      # logically unrelated to time series now.
+      def summary
+        @datapoint_query_fields = {
+          stage_id: @chaos_session.stage&.id,
+          protocol_user_id: @chaos_session.protocol_user_id,
+          phase_definition_id: @chaos_session.stage&.phase_definition_id,
+          trial_definition_id: @chaos_session.trial_result&.trial_definition_id,
+          component_id: 0
+        }
+
+        fields = @datapoint_query_fields.merge(JSON.parse(params.permit(:content)[:content].to_s).symbolize_keys)
+
+        if @chaos_session.preview
+          @response = ChaosResponse.new([])
+        else
+          @data_point = StudyResult::DataPoint.create!(fields)
+          @response = ChaosResponse.new([@data_point.id])
+        end
+
+        @response_status = :ok
         render json: @response.to_json, status: @response_status
       end
 
@@ -116,7 +139,7 @@ module ChaosApi
         logger.debug "Saved time series #{time_series.id}"
       end
 
-      def time_series
+      def time_series(mime_type_override: nil)
         return @time_series if @time_series.present?
 
         study_definition_id = @chaos_session.study_definition_id
@@ -124,12 +147,8 @@ module ChaosApi
 
         unprocessable_entity "invalid series type #{@series_type}" unless StudyResult::TimeSeries::SERIES_TYPES.include? @series_type.to_sym
 
-        schema = case @series_type
-                 when :face_landmark
-                   'face_landmark_json'
-                 else
-                   "#{@series_type}_tsv"
-                 end
+        schema = StudyResult::TimeSeries.schema_for(series_type: @series_type, format: mime_type_override || request.content_mime_type.symbol)
+        unsupported_media_type('Invalid series type/format combination', "#{@series_type}#{request.content_mime_type.symbol}") if schema.blank?
 
         time_series_params = {
           stage_id: @chaos_session.stage_id,
@@ -156,7 +175,7 @@ module ChaosApi
         @series_type = (params[:seriesType] || 'webgazer').to_sym
         @header_set = HEADERS_SET[@series_type]
 
-        params.permit(:format, :sessionGUID, :data, :seriesType, :content, :series_type, :file, points: @header_set)
+        params.permit(:format, :sessionGUID, :data, :seriesType, :content, :series_type, :mimeType, :file, :userHTTPStatusCodes, points: @header_set)
       end
     end
   end

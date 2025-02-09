@@ -5,3 +5,4 @@
 
 Mime::Type.register 'text/tab-separated-values', :tsv
 Mime::Type.register 'application/x-ndjson', :ndjson
+Mime::Type.register 'application/vnd.msgpack', :msgpack

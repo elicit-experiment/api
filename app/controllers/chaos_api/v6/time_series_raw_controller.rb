@@ -7,11 +7,8 @@ module ChaosApi
     class TimeSeriesRawController < ActionController::Metal
       include ActionController::MimeResponds
       include ActionController::Cookies
-      include AbstractController::Rendering
-      include ActionController::Rendering
       include ActionController::Head
-      include ActiveSupport::Rescuable
-      include ActionController::MimeResponds
+      include ElicitErrors
 
       # This, and the respond_with in append, don't work to send the correct types.
       # include ActionController::RespondWith
@@ -21,7 +18,7 @@ module ChaosApi
         fake_request_params
 
         ensure_session
-        @series_type = :face_landmark # params[:series_type].to_sym
+        @series_type = request.path.match(%r{/v6/time_series/(?<series_type>[a-z_]+)/file_raw(?<ext>\.json)?})[:series_type]&.to_sym
         @response = ChaosResponse.new([])
 
         return append_preview if @chaos_session.preview
@@ -34,10 +31,15 @@ module ChaosApi
 
         @time_series.save!
 
-        response.headers['Content-Type'] = [Mime::Type.lookup_by_extension(:json).to_s, 'charset=utf-8'].join('; ')
-        render plain: @response.to_json, status: @response_status
+        add_json_response_header
+        self.response_body = @response.to_json
+        self.status = @response_status
       rescue UnauthorizedError
-        head :unauthorized
+        self.status = :unauthorized
+      rescue ElicitError => error
+        add_json_response_header
+        self.response_body = error.to_json
+        self.status = error.code
       end
 
       # don't parse the params
@@ -46,6 +48,10 @@ module ChaosApi
       end
 
       private
+
+      def add_json_response_header
+        response.headers['Content-Type'] = [Mime::Type.lookup_by_extension(:json).to_s, 'charset=utf-8'].join('; ')
+      end
 
       def append_preview
         fake_request_params
@@ -91,12 +97,8 @@ module ChaosApi
 
         unprocessable_entity "invalid series type #{@series_type}" unless StudyResult::TimeSeries::SERIES_TYPES.include? @series_type.to_sym
 
-        schema = case @series_type
-                 when :face_landmark
-                   'face_landmark_json'
-                 else
-                   "#{@series_type}_tsv"
-                 end
+        schema = StudyResult::TimeSeries.schema_for(series_type: @series_type, format: request.content_mime_type.symbol)
+        unsupported_media_type('Invalid series type/format combination', "#{@series_type}_#{request.content_mime_type.symbol}") if schema.blank?
 
         time_series_params = {
           stage_id: @chaos_session.stage_id,
