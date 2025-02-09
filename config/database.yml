@@ -37,3 +37,4 @@ production:
     <<: *default
     database: app_production_queue
     migrations_paths: db/queue_migrate
+    schema_search_path: public
