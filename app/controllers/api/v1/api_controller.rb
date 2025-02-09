@@ -2,6 +2,10 @@
 
 module Api
   module V1
+    # TODO: this generic api base class makes the assumption that you can call permit on multiple subsets of the params (query_params, page_params etc.)
+    # but that is not true (at least, not in Rails 7). So this needs to be refactored at some point to avoid these warnings:
+    # Unpermitted parameters: :experiment_id, :format, :study_result_id. Context: { controller: Api::V1::TrialResultsController, action: index, request: #<ActionDispatch::Request:0x00000001609bc8a8>, params: {"experiment_id"=>"66", "page_size"=>"3", "page"=>"3", "format"=>"json", "controller"=>"api/v1/trial_results", "action"=>"index", "study_result_id"=>"66"} }
+    # Note that since we're not doing mass assignment, there's no hard error, so this isn't a priority.
     class ApiController < ApplicationController
       include Authenticatable
       include ElicitErrors

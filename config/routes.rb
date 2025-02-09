@@ -19,11 +19,11 @@ Rails.application.routes.draw do
     get 'Question/Get' => 'chaos_api/v6/question#show', :defaults => { format: 'json' }
     post 'Answer/Set' => 'chaos_api/v6/answer#create', :defaults => { format: 'json' }, as: :chaos_api_v6_answer_create
     get 'Answer/Set' => 'chaos_api/v6/answer#create', :defaults => { format: 'json' }, as: :chaos_api_v6_answer_get
-    post 'Slide/DataPoint' => 'chaos_api/v6/time_series#create', :defaults => { format: 'json' }, as: :chaos_api_v6_time_series
+    post 'Slide/DataPoint' => 'chaos_api/v6/time_series#summary', :defaults => { format: 'json' }, as: :chaos_api_v6_time_series
     get 'Slide/Completed' => 'chaos_api/v6/slide#get', :defaults => { format: 'json' }
     match 'Answer/Set', to: 'chaos_api/v6/answer#cors_set_access_control_headers', via: :options
     post 'time_series/:series_type' => 'chaos_api/v6/time_series#create', :defaults => { format: 'json' }
-    post 'time_series/:series_type/file' => 'chaos_api/v6/time_series#append'
+    post 'time_series/:series_type/file' => 'chaos_api/v6/time_series#append', as: :chaos_api_v6_time_series_file
     post 'time_series/:series_type/file_raw' => 'chaos_api/v6/time_series_raw#append', as: :chaos_api_v6_time_series_raw
 
     get '/*' => redirect('/')
@@ -32,18 +32,18 @@ Rails.application.routes.draw do
   scope :chaos do
     get 'endexperiment' => 'chaos#endexperiment', as: :chaos_endexperiment
 
-    scope '/(:session_guid)/v6' do
-      get 'Session/Create' => 'chaos_api/v6/sessions#create', :defaults => { format: 'json' }
-      get 'Experiment/Get' => 'chaos_api/v6/experiments#show', :defaults => { format: 'json' }
-      get 'Question/Get' => 'chaos_api/v6/question#show', :defaults => { format: 'json' }
-      post 'Answer/Set' => 'chaos_api/v6/answer#create', :defaults => { format: 'json' }
-      get 'Answer/Set' => 'chaos_api/v6/answer#create', :defaults => { format: 'json' }
-      post 'Slide/DataPoint' => 'chaos_api/v6/time_series#create', :defaults => { format: 'json' }
-      get 'Slide/Completed' => 'chaos_api/v6/slide#get', :defaults => { format: 'json' }
-      match 'Answer/Set', to: 'chaos_api/v6/answer#cors_set_access_control_headers', via: :options
-      post 'time_series/:series_type' => 'chaos_api/v6/time_series#create', :defaults => { format: 'json' }
-      post 'time_series/:series_type/file' => 'chaos_api/v6/time_series#append'
-    end
+    # scope '/(:session_guid)/v6' do
+    #   get 'Session/Create' => 'chaos_api/v6/sessions#create', :defaults => { format: 'json' }
+    #   get 'Experiment/Get' => 'chaos_api/v6/experiments#show', :defaults => { format: 'json' }
+    #   get 'Question/Get' => 'chaos_api/v6/question#show', :defaults => { format: 'json' }
+    #   post 'Answer/Set' => 'chaos_api/v6/answer#create', :defaults => { format: 'json' }
+    #   get 'Answer/Set' => 'chaos_api/v6/answer#create', :defaults => { format: 'json' }
+    #   post 'Slide/DataPoint' => 'chaos_api/v6/time_series#summary', :defaults => { format: 'json' }
+    #   get 'Slide/Completed' => 'chaos_api/v6/slide#get', :defaults => { format: 'json' }
+    #   match 'Answer/Set', to: 'chaos_api/v6/answer#cors_set_access_control_headers', via: :options
+    #   post 'time_series/:series_type' => 'chaos_api/v6/time_series#create', :defaults => { format: 'json' }
+    #   post 'time_series/:series_type/file' => 'chaos_api/v6/time_series#append'
+    # end
   end
 
   # API

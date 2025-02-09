@@ -6,6 +6,7 @@ module PaginationHeaderLinks
 
     page = params[:page] || default_page
     page_size = params[:page_size] || default_page_size
+
     { page: page, page_size: page_size }
   end
 
