@@ -40,7 +40,7 @@ module StudyResult
       def schema_for(series_type:, format:)
         case series_type
         when :face_landmark
-          return nil unless format == :json
+          return nil unless %i[json msgpack].include?(format)
         when :mouse
           return nil unless format == :tsv
         else
@@ -59,7 +59,7 @@ module StudyResult
 
     # append ndjson to the file.
     def append_data(data)
-      append_raw data.map(&:to_json).join("\n")
+      append_raw("#{data.map(&:to_json).join("\n")}\n")
     end
 
     def append(_data)
@@ -70,7 +70,6 @@ module StudyResult
       _file_path, stream = in_progress_stream
 
       stream << data_string
-      stream << "\n"
 
       file_field = :in_progress_file
 
@@ -256,7 +255,7 @@ module StudyResult
     end
 
     # return the stream and filename (if it exists yet) for the in-progress file
-    def in_progress_stream
+    def in_progress_stream(mode = 'ab')
       stream = if in_progress_file.attached?
                  file_path = in_progress_file.service.path_for(in_progress_file.key)
                  unless File.exist?(file_path)
@@ -265,7 +264,7 @@ module StudyResult
                    FileUtils.mkdir_p dir
                  end
 
-                 File.open(file_path, 'a')
+                 File.open(file_path, mode)
                else
                  StringIO.new
                end
