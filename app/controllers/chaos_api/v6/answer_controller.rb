@@ -96,9 +96,7 @@ module ChaosApi
       end
 
       def render_preview(state_datapoint, request_data_points)
-        updated_data_points = request_data_points.select(&:changed?)
-
-        @response = ChaosResponse.new([state_datapoint.id].concat(updated_data_points.map(&:id)))
+        @response = ChaosResponse.new([state_datapoint.id].concat(request_data_points.pluck(:id)))
 
         respond_to do |format|
           format.xml { render xml: '' }
