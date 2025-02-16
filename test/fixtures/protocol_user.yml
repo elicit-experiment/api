@@ -15,3 +15,7 @@ learning_study_4:
   user: subject4
   protocol_definition: learning_study
   group_name:
+one_user_1:
+  user: subject1
+  protocol_definition: one
+  group_name:

@@ -7,10 +7,14 @@ module StudyCreation
     # Must have 'write' token
     before_action only: %i[update destroy] do # must be owner of study_definition being edited/deleted
       resource = get_resource
-      if resource.principal_investigator_user_id != current_api_user_id && !current_api_user.is_admin?
-        Rails.logger.error "Attempt to modify study owned by #{resource.principal_investigator_user_id} by #{current_api_user_id}"
-        permission_denied
-      end
+
+      authorize! :update_study_definition, resource, user: current_api_user
+    end
+
+    before_action only: %i[show index] do
+      @study_definition = StudyDefinition.find(params[:study_definition_id]) if params[:study_definition_id].present?
+
+      authorize! :read_study_definition, @study_definition, user: current_api_user
     end
 
     before_action only: [:create] do # must be admin to create

@@ -20,6 +20,11 @@ two:
   principal_investigator: admin
   created_at: <%= 5.day.ago.to_fs(:db) %>
   updated_at: <%= 5.day.ago.to_fs(:db) %>
+investigator_study:
+  title: MyString
+  principal_investigator: investigator
+  created_at: <%= 5.day.ago.to_fs(:db) %>
+  updated_at: <%= 5.day.ago.to_fs(:db) %>
 learning_study_2:
   title: Learning Study - FaceLandmarker
   description: "Study of learning, using eye gaze tracking from FaceLandmarker \n                        This

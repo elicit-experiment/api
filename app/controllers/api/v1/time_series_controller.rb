@@ -2,11 +2,7 @@
 
 module Api
   module V1
-    class TimeSeriesController < ApiController
-      include StudyCreation
-
-      include StudyResultConcern
-
+    class TimeSeriesController < StudyResultsBaseController
       include ActionController::MimeResponds
 
       respond_to :json

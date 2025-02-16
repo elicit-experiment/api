@@ -28,6 +28,10 @@ investigator:
   email: investigator@elicit.com
   anonymous: false
   role: investigator
+investigator2:
+  email: investigator2@elicit.com
+  anonymous: false
+  role: investigator
 registered_user:
   email: registered@elicit.com
   anonymous: false

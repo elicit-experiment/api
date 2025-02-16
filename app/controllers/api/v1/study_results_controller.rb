@@ -2,10 +2,7 @@
 
 module Api
   module V1
-    class StudyResultsController < ApiController
-      include StudyCreation
-
-      include StudyResultConcern
+    class StudyResultsController < StudyResultsBaseController
 
       private
 

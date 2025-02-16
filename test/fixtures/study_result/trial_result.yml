@@ -299,3 +299,8 @@ trial_result_13:
     utc: &53 2018-12-06 04:57:23.467131000 Z
     zone: *2
     time: *53
+learning_study_1:
+  experiment: learning_study_1
+  protocol_user: learning_study_1
+  phase_definition: learning_study_1
+  trial_definition: learning_study_1

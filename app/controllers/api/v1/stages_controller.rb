@@ -2,11 +2,7 @@
 
 module Api
   module V1
-    class StagesController < ApiController
-      include StudyCreation
-
-      include StudyResultConcern
-
+    class StagesController < StudyResultsBaseController
       private
 
       def stage_params

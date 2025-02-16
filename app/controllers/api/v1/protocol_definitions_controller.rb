@@ -58,7 +58,10 @@ module Api
 
       def set_protocol_user
         if current_api_user_id
-          @protocol_user = ProtocolUser.for_user(@protocol_definition_id, current_api_user_id).first!
+          @protocol_user = ProtocolUser.for_user(@protocol_definition_id, current_api_user_id).first
+
+          render json: ElicitError.new('Logged-in user not qualified for this study.', :gone), status: :ok unless performed? || @protocol_user
+
           return
         end
 

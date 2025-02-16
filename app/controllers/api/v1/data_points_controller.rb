@@ -2,11 +2,7 @@
 
 module Api
   module V1
-    class DataPointsController < ApiController
-      include StudyCreation
-
-      include StudyResultConcern
-
+    class DataPointsController < StudyResultsBaseController
       SEARCH_FIELDS = %i[study_id protocol_user_id phase_definition_id trial_definition_id component_id protocol_user_id trial_definition_id].freeze
       PAGE_PARAMS = %i[page page_size].freeze
 
