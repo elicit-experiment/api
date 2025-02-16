@@ -43,7 +43,7 @@ module StudyResult
       ]
 
       2.times.each do
-        time_series.append_raw(rows.map(&:to_json).join("\n"))
+        time_series.append_raw(rows.map(&:to_json).join("\n") + "\n")
         time_series.save!
       end
 

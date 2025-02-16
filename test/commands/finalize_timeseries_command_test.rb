@@ -71,6 +71,8 @@ class FinalizeTimeseriesCommandTest < ActionDispatch::IntegrationTest
     @time_series.file = fixture_file_upload('face_landmark_1.json', 'application/ndjson')
     @time_series.save!
 
+    original_md5 = md5_of_file @time_series.file.path
+
     # Validate finalization query
     assert(StudyResult::TimeSeries.ready_for_finalization.size == 1)
     assert(StudyResult::TimeSeries.ready_for_finalization.first.id == @time_series.id)
@@ -82,12 +84,12 @@ class FinalizeTimeseriesCommandTest < ActionDispatch::IntegrationTest
     updated_time_series = result[:updated_time_series]
     assert(updated_time_series.size == 1)
     assert(updated_time_series.first.id == @time_series.id)
+    assert(@time_series.reload.finalized_file.attached?)
 
     # Validate that it uploaded the correct gziped json file.
     gzip_path = @time_series.finalized_file.service.path_for(@time_series.finalized_file.key)
     finalized_md5 = md5_of_gzipped_file(gzip_path)
-    original_md5 = md5_of_file @time_series.file.path
-    assert(finalized_md5 == original_md5)
+    assert_equal original_md5, finalized_md5
   end
 
   test 'serialize gzip to finalized file (new in-progress)' do
@@ -118,6 +120,6 @@ class FinalizeTimeseriesCommandTest < ActionDispatch::IntegrationTest
 
     finalized_md5 = md5_of_gzipped_file(gzip_path)
     original_md5 = md5_of_file Rails.root.join('test/fixtures/files/face_landmark_1.json')
-    assert(finalized_md5 == original_md5)
+    assert_equal original_md5, finalized_md5
   end
 end

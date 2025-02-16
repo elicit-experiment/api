@@ -63,7 +63,7 @@ module ChaosApi
       # individual datapoints. The codebase has progressed much since then, and now we only need this functionality for
       # the summary datapoint. Ideally we'd had a separate controller for this "send a datapoint" functionality since it's
       # logically unrelated to time series now.
-      def summary
+      def data_point
         @datapoint_query_fields = {
           stage_id: @chaos_session.stage&.id,
           protocol_user_id: @chaos_session.protocol_user_id,

@@ -121,9 +121,7 @@ module ChaosApi
       end
 
       test 'reuses same time series' do
-
         as_user(user(:registered_user)) do |headers|
-          initial_time_series_ids = Set.new(StudyResult::TimeSeries.all.pluck(:id))
           initialize_study_result
 
           headers['X-CHAOS-SESSION-GUID'] = @chaos_session.session_guid
@@ -141,7 +139,7 @@ module ChaosApi
                                                       })
           assert time_series.blank?
 
-          body = [{ test: 'this' }].to_json
+          body = { test: 'this' }.to_json
           post :append, body: body,  params: { series_type: 'face_landmark'}, as: :json
 
           assert_response :success
@@ -153,8 +151,7 @@ module ChaosApi
 
           new_timeseries_ids = Set.new(StudyResult::TimeSeries.all.pluck(:id))
           assert_equal(new_timeseries_ids.size, 1)
-
-          assert_equal File.read(StudyResult::TimeSeries.find(new_timeseries_ids.first).in_progress_file_path).strip, [body, body].join("\n")
+          assert_equal [body, body].join(''), File.read(StudyResult::TimeSeries.find(new_timeseries_ids.first).in_progress_file_path).strip
         end
       end
 

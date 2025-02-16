@@ -19,7 +19,7 @@ Rails.application.routes.draw do
     get 'Question/Get' => 'chaos_api/v6/question#show', :defaults => { format: 'json' }
     post 'Answer/Set' => 'chaos_api/v6/answer#create', :defaults => { format: 'json' }, as: :chaos_api_v6_answer_create
     get 'Answer/Set' => 'chaos_api/v6/answer#create', :defaults => { format: 'json' }, as: :chaos_api_v6_answer_get
-    post 'Slide/DataPoint' => 'chaos_api/v6/time_series#summary', :defaults => { format: 'json' }, as: :chaos_api_v6_time_series
+    post 'Slide/DataPoint' => 'chaos_api/v6/time_series#data_point', :defaults => { format: 'json' }, as: :chaos_api_v6_slide_datapoint
     get 'Slide/Completed' => 'chaos_api/v6/slide#get', :defaults => { format: 'json' }
     match 'Answer/Set', to: 'chaos_api/v6/answer#cors_set_access_control_headers', via: :options
     post 'time_series/:series_type' => 'chaos_api/v6/time_series#create', :defaults => { format: 'json' }
@@ -52,7 +52,7 @@ Rails.application.routes.draw do
       get 'participant/eligeable_protocols' => 'participant#eligeable_protocols'
       get 'participant/anonymous_protocols' => 'participant#anonymous_protocols'
       get 'participant/anonymous_protocols/:id' => 'participant#anonymous_protocol'
-      resources :study_results, controller: 'study_results', only: %i[show destroy create index] do
+      resources :study_results, controller: 'study_results', defaults: { format: 'json' }, only: %i[show destroy create index] do
         resources :experiments, controller: 'experiments', defaults: { format: 'json' }, only: %i[show destroy create index]
         resources :stages, controller: 'stages', defaults: { format: 'json' }, only: %i[show destroy create index]
         resources :trial_results, controller: 'trial_results', defaults: { format: 'json' }, only: %i[show destroy create index]

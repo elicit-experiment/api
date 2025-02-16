@@ -14,6 +14,7 @@ module ChaosApi
         @trial_definition = trial_definition(:learning_study_1)
         @user = user(:registered_user)
         @stage = study_result_stage(:learning_study_1)
+        @trial_result = study_result_trial_result(:learning_study_1)
 
         session_params = {
           user_id: @user.id,
@@ -22,9 +23,10 @@ module ChaosApi
           expires_at: Date.today + 1.day,
           study_definition_id: @study_definition.id,
           protocol_definition_id: @protocol_definition.id,
-          protocol_user_id: nil,
+          protocol_user_id: @stage.protocol_user_id,
           phase_definition_id: @phase_definition.id,
           trial_definition_id: @trial_definition.id,
+          trial_result_id: @trial_result.id,
           stage_id: @stage.id,
           preview: false
         }
@@ -33,45 +35,6 @@ module ChaosApi
         @chaos_session.save!
 
         StudyResult::TimeSeries.destroy_all
-
-      end
-
-      test 'face_landmark invalid content type' do
-        as_user(user(:registered_user)) do |headers|
-          initialize_study_result
-
-          headers['Content-Type'] = 'text/tab-separated-values; charset=utf-8'
-          headers['HTTP_COOKIE'] = "session_guid=#{@chaos_session.session_guid}" # no param parser for tsv, so have to use cookie auth to test this
-
-          post chaos_api_v6_time_series_url, params: { seriesType: 'face_landmark', data: [{ test: 'this' }]}, as: :json, headers: headers
-          assert_response :unsupported_media_type
-        end
-      end
-
-      test 'face_landmark json single row' do
-        as_user(user(:registered_user)) do |headers|
-
-          initialize_study_result
-
-          headers['Content-Type'] = 'application/json; charset=utf-8'
-
-          post chaos_api_v6_time_series_url, params: { sessionGUID: @chaos_session.session_guid, seriesType: 'face_landmark', data: [{ test: 'this' }]}, as: :json, headers: headers
-          assert_response :success
-
-          time_series = StudyResult::TimeSeries.where({
-            stage_id: @chaos_session.stage_id,
-            study_definition_id: @study_definition.id,
-            protocol_definition_id: @chaos_session.protocol_definition_id,
-            phase_definition_id: @phase_definition.id,
-            schema: 'face_landmark_json',
-            schema_metadata: nil
-          })
-          assert time_series.present?
-          assert_equal time_series.size, 1
-          # TODO: check path format?
-          assert_equal File.read(time_series.first.in_progress_file_path).strip, { test: 'this' }.to_json
-          time_series.destroy_all
-        end
       end
 
       test 'mouse tsv single row' do
@@ -102,26 +65,23 @@ module ChaosApi
 
       test 'reuses same time series' do
         as_user(user(:registered_user)) do |headers|
-          initial_time_series_ids = Set.new(StudyResult::TimeSeries.all.pluck(:id))
+          initial_data_point_ids = Set.new(StudyResult::DataPoint.all.pluck(:id))
           initialize_study_result
 
-          time_series = StudyResult::TimeSeries.where({
-                                                        stage_id: @chaos_session.stage_id,
-                                                        study_definition_id: @study_definition.id,
-                                                        protocol_definition_id: @chaos_session.protocol_definition_id,
-                                                        phase_definition_id: @phase_definition.id,
-                                                        schema: 'face_landmark_json',
-                                                        schema_metadata: nil
-                                                      })
-          assert time_series.blank?
+          data_point = {
+            datetime: Time.now.to_i,
+            value: '',
+            method: '',
+            point_type: 'face_landmark_summary',
+          }
 
-          post chaos_api_v6_time_series_url, params: { sessionGUID: @chaos_session.session_guid, seriesType: 'face_landmark', data: [{ test: 'this' }]}, as: :json, headers: headers
+          post chaos_api_v6_slide_datapoint_url, params: { sessionGUID: @chaos_session.session_guid, seriesType: 'face_landmark', content: data_point.to_json}, as: :json, headers: headers
           assert_response :success
-          assert_equal((Set.new(StudyResult::TimeSeries.all.pluck(:id)) - initial_time_series_ids).size, 1)
+          assert_equal(1, (Set.new(StudyResult::DataPoint.all.pluck(:id)) - initial_data_point_ids).size)
 
-          post chaos_api_v6_time_series_url, params: { sessionGUID: @chaos_session.session_guid, seriesType: 'face_landmark', data: [{ test: 'this' }]}, as: :json, headers: headers
+          post chaos_api_v6_slide_datapoint_url, params: { sessionGUID: @chaos_session.session_guid, seriesType: 'face_landmark', content: data_point.to_json}, as: :json, headers: headers
           assert_response :success
-          assert_equal((Set.new(StudyResult::TimeSeries.all.pluck(:id)) - initial_time_series_ids).size, 1)
+          assert_equal(2, (Set.new(StudyResult::DataPoint.all.pluck(:id)) - initial_data_point_ids).size)
         end
       end
 
