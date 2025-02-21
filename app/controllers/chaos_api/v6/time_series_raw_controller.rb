@@ -56,11 +56,10 @@ module ChaosApi
       def append_preview
         fake_request_params
 
-        respond_to do |format|
-          format.json { render json: @response.to_json }
-        end
-
-        logger.debug request.raw_post[0..300]
+        @response_status = :ok
+        add_json_response_header
+        self.response_body = @response.to_json
+        self.status = @response_status
       end
 
       def ensure_session
