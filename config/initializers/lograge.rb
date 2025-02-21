@@ -25,12 +25,23 @@ Rails.application.configure do #|config|
     def log_error(env, wrapper)
       exception = wrapper.exception
       if exception.is_a?(ActionController::RoutingError)
+
+        detail_fields = if env.respond_to?(:[])
+                          {
+                            method: env&.[]('REQUEST_METHOD'),
+                            path: env&.[]('REQUEST_PATH')
+                          }
+                        else
+                          {
+                            klass: env.class.name,
+                          }
+                        end
+
         data = {
-          method: env&.[]('REQUEST_METHOD'),
-          path: env&.[]('REQUEST_PATH'),
           status: wrapper.status_code,
-          error: "#{exception.class.name}: #{exception.message}"
-        }
+          error: "#{exception.class.name}: #{exception.message}",
+        }.merge(detail_fields)
+
         formatted_message = Lograge.formatter.call(data)
         logger(env).send(Lograge.log_level, formatted_message)
       else
