@@ -1,6 +1,6 @@
 //Import React and Dependencies
 import PropTypes from 'prop-types'
-import React from 'react';
+import React, { useEffect } from 'react';
 import {Navigate} from 'react-router-dom'
 import ParticipantProtocolList from '../components/participant_app/components/ParticipantProtocolList'
 import { connect } from "react-redux";
@@ -16,31 +16,32 @@ import { tokenStatus } from '../reducers/selector';
 // Import API
 import elicitApi from "../api/elicit-api.js";
 
-class ParticipantApp extends React.Component {
-  render() {
-    if (this.props.tokenStatus !== 'user') {
-      return <Navigate to='/login'></Navigate>
+const ParticipantApp = ({ tokenStatus, current_user, loadCurrentUser, ...props }) => {
+  useEffect(() => {
+    if (!current_user.sync && !current_user.loading) {
+      console.log("No current user!");
+      window.setTimeout(loadCurrentUser, 50);
     }
+  }, [current_user.sync, current_user.loading, loadCurrentUser]);
 
-    if (!this.props.current_user.sync) {
-      if (!this.props.current_user.loading) {
-        console.log("No current user!");
-        window.setTimeout(this.props.loadCurrentUser, 50)
-      }
-      return <div>Loading...</div>
-    }
-
-    return(
-      <div className="page-wrapper d-flex flex-column">
-        <HeaderContainer></HeaderContainer>
-        <main id="wrap" className="participant-app-container app-container container flex-fill">
-          <ParticipantProtocolList {...this.props} />
-        </main>
-        <FooterContainer></FooterContainer>
-      </div>
-  )
+  if (tokenStatus !== 'user') {
+    return <Navigate to='/login' />;
   }
-}
+
+  if (!current_user.sync) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div className="page-wrapper d-flex flex-column">
+      <HeaderContainer />
+      <main id="wrap" className="participant-app-container app-container container flex-fill">
+        <ParticipantProtocolList {...props} current_user={current_user} />
+      </main>
+      <FooterContainer />
+    </div>
+  );
+};
 
 const mapStateToProps = (state) => ({
   current_user: state.current_user,
@@ -60,4 +61,4 @@ ParticipantApp.propTypes = {
   current_user: UserType.isRequired,
   loadCurrentUser: PropTypes.func,
   tokenStatus: PropTypes.string,
-}
+};
