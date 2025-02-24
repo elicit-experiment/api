@@ -3,80 +3,73 @@ import PropTypes from 'prop-types';
 import {ProtocolDefinitionType} from '../../types';
 import TakeProtocolLink from '../participant_app/components/TakeProtocolLink';
 
-class AnonymousProtocolLandingPage extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+const AnonymousProtocolLandingPage = ({ protocol, takeProtocol }) => {
+  const htmlDescription = {
+    dangerouslySetInnerHTML: {__html: protocol.description},
+  };
 
-  render() {
-    const htmlDescription = {
-      dangerouslySetInnerHTML: {__html: this.props.protocol.description},
-    };
+  const takeProtocolLink = <TakeProtocolLink
+      study_id={protocol.study_definition_id}
+      protocol_id={protocol.id}
+      available={protocol.has_remaining_anonymous_slots}
+      take_protocol={takeProtocol}/>;
 
-    const takeProtocol = <TakeProtocolLink
-        study_id={this.props.protocol.study_definition_id}
-        protocol_id={this.props.protocol.id}
-        available={this.props.protocol.has_remaining_anonymous_slots}
-        take_protocol={this.props.takeProtocol}/>;
+  let instructions = '';
 
-    let instructions = '';
-
+  try {
+    let instructionsHtml = "No instructions";
     try {
-      let instructionsHtml = "No instructions";
-      try {
-        instructionsHtml = (JSON.parse(this.props.protocol.definition_data) || {}).instructionsHtml;
-      } catch (e) {
-        console.warn("Error parsing instructions");
-      }
-      if (instructionsHtml) {
-        const htmlInstructions = {
-          dangerouslySetInnerHTML: {__html: instructionsHtml},
-        };
-        instructions = <div className="row">
-          <div className="col-12"><h3>Instructions</h3></div>
-          <div className="col-12" {...htmlInstructions}></div>
-        </div>;
-      }
+      instructionsHtml = (JSON.parse(protocol.definition_data) || {}).instructionsHtml;
+    } catch (e) {
+      console.warn("Error parsing instructions");
     }
-    catch (pe) {
-      console.error(pe);
+    if (instructionsHtml) {
+      const htmlInstructions = {
+        dangerouslySetInnerHTML: {__html: instructionsHtml},
+      };
+      instructions = <div className="row">
+        <div className="col-12"><h3>Instructions</h3></div>
+        <div className="col-12" {...htmlInstructions}></div>
+      </div>;
     }
-
-    return (
-        <div className="row well " key={this.props.protocol.id}>
-          <div
-              className="protocol-row protocol-header-row"
-              key={'t' + this.props.protocol.id}
-          >
-            <div className="col-10 offset-2">
-              <b>{this.props.protocol.id} — {this.props.protocol.name}</b>
-            </div>
-          </div>
-
-          <div className="row">
-            <div className="col-12"><h3>Description</h3></div>
-            <div className="col-10 offset-2"
-                 key={'d' + this.props.protocol.id}>
-              <div className="col-12" {...htmlDescription}></div>
-            </div>
-          </div>
-
-          {instructions}
-
-          <div className="row">
-            <div className="col-12 center">
-              {takeProtocol}
-            </div>
-          </div>
-        </div>
-    );
   }
-}
+  catch (pe) {
+    console.error(pe);
+  }
+
+  return (
+    <div className="row well " key={protocol.id}>
+      <div
+          className="protocol-row protocol-header-row"
+          key={'t' + protocol.id}
+      >
+        <div className="col-10 offset-2">
+          <b>{protocol.id} — {protocol.name}</b>
+        </div>
+      </div>
+
+      <div className="row">
+        <div className="col-12"><h3>Description</h3></div>
+        <div className="col-10 offset-2"
+             key={'d' + protocol.id}>
+          <div className="col-12" {...htmlDescription}></div>
+        </div>
+      </div>
+
+      {instructions}
+
+      <div className="row">
+        <div className="col-12 center">
+          {takeProtocolLink}
+        </div>
+      </div>
+    </div>
+  );
+};
 
 AnonymousProtocolLandingPage.propTypes = {
   protocol: ProtocolDefinitionType,
   takeProtocol: PropTypes.func.isRequired,
 };
-
 
 export default AnonymousProtocolLandingPage;
