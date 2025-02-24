@@ -38,7 +38,7 @@ const FrontPageContent = (props) => {
 };
 
 const FrontPageApp = (props) => {
-  return ensureCurrentUser(() => <FrontPageContent {...props} />);
+  return ensureCurrentUser(() => <FrontPageContent {...props} />)();
 };
 
 export default FrontPageApp;
