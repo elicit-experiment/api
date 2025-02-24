@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import elicitApi from '../../../api/elicit-api.js';
 import { useDispatch, useSelector } from 'react-redux';
 import {ExperimentDetails} from './ExperimentDetails.jsx';
