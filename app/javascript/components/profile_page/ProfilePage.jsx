@@ -12,8 +12,8 @@ export default class ProfilePage extends Component {
     const apiSection = (this.props.current_user.role === 'investigator' || this.props.current_user.role === 'admin') ?
       <section className="card p-2 mb-2">
         <h3>API</h3>
-        <p>Client ID: <span><pre>{publicClientId}</pre></span></p>
-        <p>Client SECRET: <span><pre>{publicClientSecret}</pre></span></p>
+        <div className="offset-3"><span>Client ID: </span><pre>{publicClientId}</pre></div>
+        <div className="offset-3"><span>Client SECRET: </span><pre>{publicClientSecret}</pre></div>
       </section>
       : '';
 
@@ -41,7 +41,7 @@ export default class ProfilePage extends Component {
 
               <section className="card p-2 mb-2">
                 <h3>Study Participation</h3>
-                <p>Under Construction...</p>
+                <p className="offset-3">Under Construction...</p>
               </section>
 
             </div>
