@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import update from 'react-addons-update'
-import PropTypes from "prop-types";
 import Study from './StudyCard'
 import {
   MatchType,
