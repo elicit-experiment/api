@@ -8,8 +8,8 @@ import BootstrapRoutesButton from 'bootstrap-switch-button-react'
 import {ApiReturnCollectionOf, ProtocolDefinitionType, StudyDefinitionType} from '../../../types';
 import SweetAlert from 'sweetalert2-react';
 import {ProtocolInfoLink} from "./ProtocolInfoLink";
-import {EditableProtocolList} from "./ProtocolDetailCard";
 import {Link} from "react-router-dom";
+import {EditableProtocolList} from "./EditableProtocolList";
 
 const StudyCard = (props) =>  {
   const [title, setTitle] = useState(props.study.title);
