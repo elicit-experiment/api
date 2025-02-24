@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { tokenStatus } from '../reducers/selector';
-import elicitApi from '../api/elicit-api';
 import { Navigate } from 'react-router-dom';
+import elicitApi from '../api/elicit-api';
+import { tokenStatus } from '../reducers/selector';
 
 const CurrentUserContext = createContext(null);
 
@@ -25,6 +25,7 @@ export function CurrentUserProvider({ children }) {
   }
 
   if (currentUser?.error) {
+    console.log(`No current user: ${JSON.stringify(currentUser.error)}`);
     if (currentUser.error.status === 401) {
       return <Navigate to='/logout' />;
     }
