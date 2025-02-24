@@ -20,5 +20,5 @@ const ParticipantAppContent = () => {
 };
 
 export const ParticipantApp = () => (
-  ensureCurrentUser(() => <ParticipantAppContent />)
+  ensureCurrentUser(() => <ParticipantAppContent />)()
 );

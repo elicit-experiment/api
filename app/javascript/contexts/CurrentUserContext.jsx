@@ -20,21 +20,20 @@ export function CurrentUserProvider({ children }) {
     }
   }, [currentTokenStatus, currentUser, dispatch]);
 
-  if (currentTokenStatus !== 'user') {
-    return <Navigate to='/login' />;
-  }
+  if (currentTokenStatus === 'user') {
+    if (currentUser?.error) {
+      console.log(`No current user: ${JSON.stringify(currentUser.error)}`);
+      if (currentUser.error.status === 401) {
+        return <Navigate to='/logout' />;
+      }
+    }
 
-  if (currentUser?.error) {
-    console.log(`No current user: ${JSON.stringify(currentUser.error)}`);
-    if (currentUser.error.status === 401) {
-      return <Navigate to='/logout' />;
+    if (!currentUser?.sync) {
+      return <div>Loading...</div>;
     }
   }
 
-  if (!currentUser?.sync) {
-    return <div>Loading...</div>;
-  }
-
+  console.log(`Current user: ${JSON.stringify(currentUser)}`);
   return (
     <CurrentUserContext.Provider value={currentUser}>
       {children}
