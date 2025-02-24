@@ -56,7 +56,7 @@ const AdminApp = (props) => {
 
   return (
     <div className="page-wrapper d-flex flex-column">
-      <HeaderContainer></HeaderContainer>
+      <HeaderContainer current_user={props.current_user}></HeaderContainer>
       <main id="wrap" className="admin-app-container app-container container flex-fill">
         <div>
           <nav className="navbar navbar-expand navbar-light">
