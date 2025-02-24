@@ -9,7 +9,7 @@ import FooterContainer from "../nav/FooterContainer"
 import ProfilePage from "./ProfilePage.jsx"
 
 // Import Selector
-import { tokenStatus } from '../../reducers/selector';
+import {currentUser, tokenStatus} from '../../reducers/selector';
 
 // Import API
 import elicitApi from "../../api/elicit-api.js";
@@ -55,7 +55,7 @@ class ProfilePageContainer extends React.Component {
 
     return(
       <div className="page-wrapper d-flex flex-column">
-        <HeaderContainer></HeaderContainer>
+        <HeaderContainer current_user={this.props.current_user}></HeaderContainer>
         <main id="wrap" className="app-container container flex-fill">
           <ProfilePage current_user={this.props.current_user.data}/>
         </main>

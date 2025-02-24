@@ -53,9 +53,10 @@ class LoginSignUpContainer extends React.Component {
 
   render() {
     if (this.showLoginSignup() && this.showPleaseWait()) {
-      // debugger;
-      console.error('invalid state');
+      console.warn('invalid state');
+      return <></>;
     }
+
     if (this.props.tokenStatus === 'user') {
       if (this.props.currentUser && this.props.currentUser.sync) {
         if ((this.state.pleaseWait === 'hidden') && (this.state.loginSignup === 'hidden')) {
