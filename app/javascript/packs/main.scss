@@ -309,3 +309,10 @@ h1 {
     top: 5px;
   }
 }
+
+.protocol-link-button {
+  > span {
+    display: inline-block;
+    width: 4.5rem;
+  }
+}
