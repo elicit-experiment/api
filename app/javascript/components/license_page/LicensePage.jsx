@@ -1,7 +1,7 @@
 import React from 'react';
+import markdown from '../../../../LICENSE.md';
 
 const LicensePage = () => {
-  const markdown = require("../../../../LICENSE.md");
   const md = markdown ? <div dangerouslySetInnerHTML={{__html: markdown}}/> : <div></div>;
 
   return (
