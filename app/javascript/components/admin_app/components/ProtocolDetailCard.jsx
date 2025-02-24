@@ -8,7 +8,7 @@ import {ProtocolDefinitionType, StudyDefinitionType} from "../../../types";
 import PropTypes from "prop-types";
 import { useDispatch } from 'react-redux';
 
-const Protocol = ({ protocol, study, children }) => {
+export const EditableProtocolCard = ({ protocol, study, children }) => {
   const [active, setActive] = useState(protocol.active);
   const [copied, setCopied] = useState(false);
   const dispatch = useDispatch();
@@ -88,7 +88,7 @@ const Protocol = ({ protocol, study, children }) => {
   );
 };
 
-Protocol.propTypes = {
+EditableProtocolCard.propTypes = {
   protocol: ProtocolDefinitionType,
   study: StudyDefinitionType,
   children: PropTypes.oneOfType([
@@ -96,6 +96,4 @@ Protocol.propTypes = {
     PropTypes.node,
   ]),
 };
-
-export const EditableProtocolCard = Protocol;
 
