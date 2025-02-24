@@ -18,6 +18,16 @@ export const currentUser = (state) => {
   return state ? state.current_user : undefined;
 };
 
+export const currentUserAnyHasRoles = (state, roles = []) => {
+  if (!state?.current_user?.data?.role) return false;
+
+  for (let i = 0; i < roles.length; i++) {
+    if (state.current_user.data.role.indexOf(roles[i]) !== -1) return true;
+  }
+
+  return false;
+};
+
 export const tokenStatus = (state) => {
   var token_status = 'none';
 

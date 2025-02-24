@@ -3,8 +3,8 @@ import React from 'react';
 // Import components
 import FrontPagePreface from './FrontPagePreface.html';
 import PropTypes from "prop-types";
-import {AnonymousProtocolsType} from "../../types";
-import {Nav} from "react-bootstrap";
+import {useSelector} from "react-redux";
+import {currentUserAnyHasRoles} from "../../reducers/selector";
 
 const htmlDoc = {__html: FrontPagePreface};
 
@@ -26,9 +26,17 @@ const Card = (props) => {
   </div>;
 }
 
-export default function FrontPage(props) {
+Card.propTypes = {
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  link_to: PropTypes.string.isRequired,
+  link_title: PropTypes.string.isRequired,
+};
+
+export default function FrontPage() {
   let admin = '';
-  if ((props.current_user_role === 'admin') || ((props.current_user_role === 'investigator'))) {
+  const isAdmin = useSelector(state => currentUserAnyHasRoles(state, ['admin', 'investigator']));
+  if (isAdmin) {
     admin = <Card description="Administration console." link_to="/admin" link_title="Admin" title="Admin"/>
   }
 
@@ -50,16 +58,3 @@ export default function FrontPage(props) {
     </div>
   )
 }
-
-FrontPage.propTypes = {
-    current_user_role: PropTypes.string,
-    current_user_email: PropTypes.string,
-    loadAnonymousProtocols: PropTypes.func,
-    anonymous_protocols: AnonymousProtocolsType.isRequired,
-};
-
-FrontPage.defaultProps = {
-    current_user_role: undefined,
-    current_user_email: undefined,
-};
-
