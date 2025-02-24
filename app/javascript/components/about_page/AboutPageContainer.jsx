@@ -2,16 +2,22 @@ import React from 'react'
 import HeaderContainer from "../nav/HeaderContainer"
 import FooterContainer from "../nav/FooterContainer"
 import AboutPage from "./AboutPage"
-import ensureCurrentUser from "../../apps/ensureCurrentUser";
+import {CurrentUserProvider, useCurrentUser} from "../../contexts/CurrentUserContext";
 
-const AboutPageContainer = () => ensureCurrentUser((currentUser) => (
+const AboutPageContent = () => (
   <div className="page-wrapper d-flex flex-column">
-    <HeaderContainer current_user={currentUser}></HeaderContainer>
+    <HeaderContainer current_user={useCurrentUser()}></HeaderContainer>
     <main id="wrap" className="app-container container flex-fill">
       <AboutPage/>
     </main>
     <FooterContainer></FooterContainer>
   </div>
-));
+)
+
+const AboutPageContainer = () => (
+  <CurrentUserProvider>
+    <AboutPageContent/>
+  </CurrentUserProvider>
+);
 
 export default AboutPageContainer;
