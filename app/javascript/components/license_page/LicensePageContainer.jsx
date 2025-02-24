@@ -2,19 +2,20 @@ import React from 'react'
 import HeaderContainer from "../nav/HeaderContainer"
 import FooterContainer from "../nav/FooterContainer"
 import LicensePage from "./LicensePage"
+import {CurrentUserProvider, useCurrentUser} from "../../contexts/CurrentUserContext";
 
-export default class LicensePageContainer extends React.Component {
-  constructor(props){
-    super(props);
-  }
+const LicensePageContainerContent = () => (
+  <div>
+    <HeaderContainer current_user={useCurrentUser()}></HeaderContainer>
+    <LicensePage/>
+    <FooterContainer></FooterContainer>
+  </div>
+)
 
-  render() {
-    return(
-        <div>
-          <HeaderContainer></HeaderContainer>
-          <LicensePage/>
-          <FooterContainer></FooterContainer>
-        </div>
-    )
-  }
-}
+const LicensePageContainer = () => (
+  <CurrentUserProvider>
+    <LicensePageContainerContent/>
+  </CurrentUserProvider>
+)
+
+export default LicensePageContainer;
