@@ -1,82 +1,90 @@
 // Import Dependencies
 import PropTypes from 'prop-types'
-import {connect} from 'react-redux';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 
 // Import Component
 import LoginSignUp from './LoginSignUp';
 import Modal from "react-bootstrap/Modal";
 
 // Import Actions
-import {logInUser} from '../../actions/tokens_actions';
-
-import {clientToken, userToken, userTokenState, currentUser, tokenStatus} from '../../reducers/selector';
-
+import { logInUser } from '../../actions/tokens_actions';
+import { clientToken, userToken, userTokenState, currentUser, tokenStatus } from '../../reducers/selector';
 import elicitApi from '../../api/elicit-api.js';
 
-import {Navigate} from 'react-router-dom'
-import {CurrentUserType, UserTokenStateType} from "../../types";
+import { Navigate } from 'react-router-dom'
+import { CurrentUserType, UserTokenStateType } from "../../types";
 
-class LoginSignUpContainer extends React.Component {
-  constructor(props) {
-    super(props);
+const LoginSignUpContainer = () => {
+  const [pleaseWait, setPleaseWait] = useState('hidden');
+  const [loginSignup, setLoginSignup] = useState('hidden');
+  
+  const dispatch = useDispatch();
+  
+  // Replace mapStateToProps with useSelector
+  const tokenStatusState = useSelector(tokenStatus);
+  const userTokenStateData = useSelector(userTokenState);
+  const currentUserData = useSelector(currentUser);
 
-    this.state = {
-      pleaseWait: 'hidden',
-      loginSignup: 'hidden',
-    }
-  }
-
-  componentWillUnmount() {
-  }
-
-  componentDidUpdate() {
-    this.setModalState()
-  }
-
-  setModalState() {
-    if (this.props.tokenStatus === 'user') {
-      if (this.props.currentUser && !this.props.currentUser.sync && !this.props.currentUser.loading) {
-        this.props.getCurrentUser()
+  // Replace componentDidUpdate with useEffect
+  useEffect(() => {
+    if (tokenStatusState === 'user') {
+      if (currentUserData && !currentUserData.sync && !currentUserData.loading) {
+        dispatch(elicitApi.actions.current_user());
       }
     }
+  }, [tokenStatusState, currentUserData, dispatch]);
+
+  const showPleaseWait = () => {
+    return (userTokenStateData && userTokenStateData.loading) ||
+      (currentUserData && currentUserData.loading);
+  };
+
+  const showLoginSignup = () => {
+    return (tokenStatusState !== 'user') && (!userTokenStateData || userTokenStateData.error);
+  };
+
+  if (showLoginSignup() && showPleaseWait()) {
+    console.warn('invalid state');
+    return <></>;
   }
 
-  showPleaseWait() {
-    return (this.props.userTokenState && this.props.userTokenState.loading) ||
-        (this.props.currentUser && this.props.currentUser.loading);
-  }
+  if (tokenStatusState === 'user') {
+    if (currentUserData && currentUserData.sync) {
+      if ((pleaseWait === 'hidden') && (loginSignup === 'hidden')) {
+        console.log('Loaded current user!');
+        console.dir(currentUserData);
 
-  showLoginSignup() {
-    return (this.props.tokenStatus !== 'user') && (!this.props.userTokenState || this.props.userTokenState.error)
-  }
-
-  render() {
-    if (this.showLoginSignup() && this.showPleaseWait()) {
-      console.warn('invalid state');
-      return <></>;
-    }
-
-    if (this.props.tokenStatus === 'user') {
-      if (this.props.currentUser && this.props.currentUser.sync) {
-        if ((this.state.pleaseWait === 'hidden') && (this.state.loginSignup === 'hidden')) {
-          console.log('Loaded current user!');
-          console.dir(this.props.currentUser);
-
-          if (this.props.currentUser.data.role === 'admin') {
-            return <Navigate to="/admin"/>
-          } else {
-            return <Navigate to="/participant"/>
-          }
+        if (currentUserData.data.role === 'admin') {
+          return <Navigate to="/admin"/>
+        } else {
+          return <Navigate to="/participant"/>
         }
       }
     }
+  }
 
-    return <div className="single-page">
+  // Create handlers for actions
+  const handleCreateUser = (new_user_def) => {
+    return dispatch(elicitApi.actions.user.post({}, {body: JSON.stringify(new_user_def)}));
+  };
+
+  const handleLogin = (data) => {
+    dispatch(logInUser(data, () => {}));
+  };
+
+  return (
+    <div className="single-page">
       <h1 className="elicit-bg-title">Elicit</h1>
       <h3 className="elicit-subtitle"/>
-      <LoginSignUp {...this.props} showLoginSignup={this.showLoginSignup()} dismissable={false}/>
-      <Modal show={this.showPleaseWait()}>
+      <LoginSignUp 
+        createUser={handleCreateUser}
+        logInUser={handleLogin}
+        showLoginSignup={showLoginSignup()}
+        dismissable={false}
+        userTokenState={userTokenStateData}
+      />
+      <Modal show={showPleaseWait()}>
         <Modal.Header><h1>Logging in...</h1></Modal.Header>
         <Modal.Body>
           <div className="progress">
@@ -88,34 +96,13 @@ class LoginSignUpContainer extends React.Component {
         </Modal.Body>
       </Modal>
     </div>
-
-  }
-}
-
-// Map State to Props
-const mapStateToProps = (state) => ({
-  clientToken: clientToken(state),
-  userToken: userToken(state),
-  userTokenState: userTokenState(state),
-  currentUser: currentUser(state),
-  tokenStatus: tokenStatus(state),
-});
-
-// Map Dispatch to Props
-const mapDispatchToProps = (dispatch) => ({
-  createUser: (new_user_def) => dispatch(elicitApi.actions.user.post({}, {body: JSON.stringify(new_user_def)})),
-  getCurrentUser: () => { dispatch(elicitApi.actions.current_user()) },
-  logInUser: (data) => dispatch(logInUser(data, () => { })),
-});
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(LoginSignUpContainer);
+  );
+};
 
 LoginSignUpContainer.propTypes = {
   currentUser: CurrentUserType,
-  getCurrentUser: PropTypes.func.isRequired,
   tokenStatus: PropTypes.string.isRequired,
   userTokenState: UserTokenStateType,
-}
+};
+
+export default LoginSignUpContainer;
