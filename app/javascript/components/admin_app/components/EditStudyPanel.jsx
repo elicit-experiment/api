@@ -7,7 +7,7 @@ import {
   ProtocolDefinitionType,
   StudyDefinitionType,
 } from "../../../types";
-import { EditableProtocolCard } from "./ProtocolDetailCard";
+import { EditableProtocolCard } from "./EditableProtocolCard";
 // import { Tooltip } from "react-bootstrap";
 
 /*

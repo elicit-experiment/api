@@ -2,7 +2,7 @@ import {useSelector} from "react-redux";
 import PropTypes from "prop-types";
 import {ProtocolDefinitionType, StudyDefinitionType} from "../../../types";
 import React from "react";
-import {EditableProtocolCard} from "./ProtocolDetailCard";
+import {EditableProtocolCard} from "./EditableProtocolCard";
 
 export function EditableProtocolList(props) {
   const protocols = useSelector(state => state.protocol_definitions)
