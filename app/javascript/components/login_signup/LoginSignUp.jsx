@@ -24,7 +24,7 @@ const LogInSignUp = ({ createUser, dismissable = false, logInUser, userTokenStat
       email,
       username,
       password,
-      password_confirmation: passwordConfirmation
+      password_confirmation: passwordConfirmation,
     };
     createUser({user: credentials}).then(() => logInUser(credentials));
   };
@@ -34,7 +34,7 @@ const LogInSignUp = ({ createUser, dismissable = false, logInUser, userTokenStat
     e.preventDefault();
     const credentials = {
       email,
-      password
+      password,
     };
     logInUser(credentials);
   };
@@ -147,7 +147,7 @@ const LogInSignUp = ({ createUser, dismissable = false, logInUser, userTokenStat
                          onChange={(e) => setPasswordConfirmation(e.target.value)}/>
                 </div>
                 <div className="checkbox">
-                  <label><input type="checkbox" value=""/>Remember me</label>
+                  <label><input type="checkbox" value="" className="mr-2"/>Remember me</label>
                 </div>
                   <button type="submit" className="btn btn-success btn-block"><span className="fas fa-power-off"></span> Sign Up</button>
               </form>

@@ -1,6 +1,5 @@
 // Import Dependencies
-import PropTypes from 'prop-types'
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 // Import Component
@@ -9,16 +8,12 @@ import Modal from "react-bootstrap/Modal";
 
 // Import Actions
 import { logInUser } from '../../actions/tokens_actions';
-import { clientToken, userToken, userTokenState, currentUser, tokenStatus } from '../../reducers/selector';
+import { userTokenState, currentUser, tokenStatus } from '../../reducers/selector';
 import elicitApi from '../../api/elicit-api.js';
 
 import { Navigate } from 'react-router-dom'
-import { CurrentUserType, UserTokenStateType } from "../../types";
 
 const LoginSignUpContainer = () => {
-  const [pleaseWait, setPleaseWait] = useState('hidden');
-  const [loginSignup, setLoginSignup] = useState('hidden');
-  
   const dispatch = useDispatch();
   
   // Replace mapStateToProps with useSelector
@@ -35,23 +30,17 @@ const LoginSignUpContainer = () => {
     }
   }, [tokenStatusState, currentUserData, dispatch]);
 
-  const showPleaseWait = () => {
-    return (userTokenStateData && userTokenStateData.loading) ||
-      (currentUserData && currentUserData.loading);
-  };
+  const pleaseWait = (userTokenStateData && userTokenStateData.loading) || (currentUserData && currentUserData.loading);
+  const loginSignup = ((tokenStatusState !== 'user') && (!userTokenStateData || userTokenStateData.error));
 
-  const showLoginSignup = () => {
-    return (tokenStatusState !== 'user') && (!userTokenStateData || userTokenStateData.error);
-  };
-
-  if (showLoginSignup() && showPleaseWait()) {
+  if (loginSignup && pleaseWait) {
     console.warn('invalid state');
     return <></>;
   }
 
   if (tokenStatusState === 'user') {
     if (currentUserData && currentUserData.sync) {
-      if ((pleaseWait === 'hidden') && (loginSignup === 'hidden')) {
+      if ((pleaseWait === false) && (loginSignup === false)) {
         console.log('Loaded current user!');
         console.dir(currentUserData);
 
@@ -80,11 +69,11 @@ const LoginSignUpContainer = () => {
       <LoginSignUp 
         createUser={handleCreateUser}
         logInUser={handleLogin}
-        showLoginSignup={showLoginSignup()}
+        showLoginSignup={loginSignup}
         dismissable={false}
         userTokenState={userTokenStateData}
       />
-      <Modal show={showPleaseWait()}>
+      <Modal show={pleaseWait}>
         <Modal.Header><h1>Logging in...</h1></Modal.Header>
         <Modal.Body>
           <div className="progress">
@@ -97,12 +86,6 @@ const LoginSignUpContainer = () => {
       </Modal>
     </div>
   );
-};
-
-LoginSignUpContainer.propTypes = {
-  currentUser: CurrentUserType,
-  tokenStatus: PropTypes.string.isRequired,
-  userTokenState: UserTokenStateType,
 };
 
 export default LoginSignUpContainer;
