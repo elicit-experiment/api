@@ -11,3 +11,5 @@ const ParticipantProtocol = ({date}) => {
 ParticipantProtocol.propTypes = {
   date: PropTypes.object.isRequired,
 }
+
+export default ParticipantProtocol;

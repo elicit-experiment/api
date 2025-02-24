@@ -3,7 +3,7 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import PropTypes from "prop-types";
 
-const SimpleModal = ({show, title, subtitle, body, handleHideModal}) => (
+export const SimpleModal = ({show, title, subtitle, body, handleHideModal}) => (
   <Modal show={show}>
     <Modal.Header>
       <h4>{title}</h4>

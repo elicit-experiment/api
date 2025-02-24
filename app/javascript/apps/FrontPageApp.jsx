@@ -5,6 +5,7 @@ import AnonymousProtocolLandingPageContainer from "../components/front_page/Anon
 import FrontPageContainer from "../components/front_page/FrontPageContainer";
 import ParticipatePage from "../components/front_page/ParticipatePage";
 import {Route, Routes, useMatch} from "react-router-dom";
+import ensureCurrentUser from "./ensureCurrentUser";
 
 const FrontPageApp = (props) => {
 
@@ -14,9 +15,9 @@ const FrontPageApp = (props) => {
 
   console.log('FRONTPAGE')
 
-  return (
+  return ensureCurrentUser((currentUser) => (
     <div className="page-wrapper d-flex flex-column">
-      <HeaderContainer></HeaderContainer>
+      <HeaderContainer current_user={currentUser}></HeaderContainer>
       <main id="wrap" className="home-page-app-container app-container container flex-fill">
         <Routes>
           <Route path={landingPageUrl}
@@ -35,7 +36,7 @@ const FrontPageApp = (props) => {
       </main>
       <FooterContainer></FooterContainer>
     </div>
-  )
+  ));
 }
 
 export default FrontPageApp;
