@@ -1,11 +1,6 @@
-
-/*
-import $ from 'jquery'
-window.jQuery = $;
- */
-
 import React from 'react'
 import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client';
 
 //Store and Root Component
 import { configureStore } from './store/store';
@@ -47,8 +42,10 @@ console.dir(preloadedStore);
 
 const onload = () => {
   console.log("Loader::onload");
-  const elt = document.getElementById('elicit-app');
-  ReactDOM.render(<ElicitRoot store={store}></ElicitRoot>, elt);
+
+  const container = document.getElementById('elicit-app');
+  const root = createRoot(container); // createRoot(container!) if you use TypeScript
+  root.render(<ElicitRoot store={store}></ElicitRoot>);
 };
 
 export default onload;

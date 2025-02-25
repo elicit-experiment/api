@@ -30,9 +30,9 @@ const ProfilePage = ({user}) => {
           <section className="card p-2 mb-2">
             <h3>Account</h3>
 
-            <div className='row'>
-              <button className='btn btn-primary offset-3 col-3' disabled={true}>Reset Password</button>
-              <button className='btn btn-danger ml-1 col-3' disabled={true}>Delete Account</button>
+            <div className='offset-3 col-9 d-flex justify-content-around'>
+              <button className='btn btn-primary' disabled={true}>Reset Password</button>
+              <button className='btn btn-danger' disabled={true}>Delete Account</button>
             </div>
             <p></p>
           </section>

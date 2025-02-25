@@ -2,7 +2,7 @@ import {
   createStore,
   applyMiddleware,
 } from "redux";
-import thunk from "redux-thunk";
+import { thunk } from "redux-thunk";
 import RootReducer from '../reducers/root_reducer';
 import {
   logger,

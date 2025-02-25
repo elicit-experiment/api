@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import update from "react-addons-update";
 import elicitApi from "../../../api/elicit-api";
-import {Link} from "react-router-dom";
-import {CopyToClipboard} from "react-copy-to-clipboard";
+import { Link } from "react-router-dom";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import BootstrapRoutesButton from "bootstrap-switch-button-react";
-import {ProtocolDefinitionType, StudyDefinitionType} from "../../../types";
+import { ProtocolDefinitionType, StudyDefinitionType } from "../../../types";
 import PropTypes from "prop-types";
 import { useDispatch } from 'react-redux';
 
@@ -61,7 +61,7 @@ export const EditableProtocolCard = ({ protocol, study, children }) => {
             text={`${window.location.origin}/studies/${study.id}/protocols/${protocol.id}`}
             onCopy={() => setCopied(true)}>
             <button type="button" className="btn btn-primary protocol-link-button">
-              {copied ? <span style={{color: 'red'}}>Copied.</span> : <span>Get Link</span>}
+              {copied ? <span style={{color: 'pink'}}>Copied.</span> : <span>Get Link</span>}
               &nbsp;
               <i className="fas fa-link" aria-hidden="true"/>
             </button>
@@ -69,7 +69,7 @@ export const EditableProtocolCard = ({ protocol, study, children }) => {
 
           <button type="button" className="btn btn-primary">
             Phases &nbsp; <span
-            className="badge badge-secondary">{protocol.phase_definitions.length}</span>
+            className="badge bg-secondary">{protocol.phase_definitions.length}</span>
           </button>
           <BootstrapRoutesButton
             onChange={onToggle}

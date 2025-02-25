@@ -58,7 +58,7 @@ module Api
         logger.info @user.role
         logger.info [User::ROLES[:admin]].include?(@user.role)
         authorize! :upgrade, @user if user_params.key? :role
-        if @user.update!(user_params)
+        if @user.update!(user_params.merge({ updated_at: Time.now }))
           render json: @user
         else
           render json: @user.errors, status: :unauthorized

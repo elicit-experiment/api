@@ -1,13 +1,13 @@
-import PropTypes from 'prop-types'
-import React, { useEffect, useState, useRef } from 'react';
-import ReactDataGrid from 'react-data-grid';
-const { Editors, Toolbar } = require('react-data-grid-addons');
-const { DropDownEditor } = Editors;
+import React, { useEffect, useState } from 'react';
+import DataGrid from 'react-data-grid';
+import { textEditor } from 'react-data-grid';
+
 import UserConstants from '../../../constants/UserConstants';
 import update from 'react-addons-update';
 import elicitApi from "../../../api/elicit-api";
 import { useDispatch, useSelector } from "react-redux";
 import {ApiReturnCollectionOf, UserType} from "../../../types";
+import 'react-data-grid/lib/styles.css';
 
 const COLUMNS = [
   {
@@ -19,6 +19,11 @@ const COLUMNS = [
   {
     key: 'username',
     name: 'Name',
+    renderEditCell: textEditor,
+    renderCell({ row }) {
+      if (row.syncing) { return <i className="fas fa-sync fa-spin"/> }
+      return <div>{row.username}</div>;
+    },
     editable: true,
     width: 200,
     resizable: true,
@@ -26,6 +31,11 @@ const COLUMNS = [
   {
     key: 'email',
     name: 'Email',
+    renderEditCell: textEditor,
+    renderCell({ row }) {
+      if (row.syncing) { return <i className="fas fa-sync fa-spin"/> }
+      return <div>{row.email}</div>;
+    },
     editable: true,
     width: 200,
     resizable: true,
@@ -33,7 +43,27 @@ const COLUMNS = [
   {
     key: 'role',
     name: 'Role',
-    editor: <DropDownEditor options={UserConstants.roles}/>,
+    //editor: <DropDownEditor options={UserConstants.roles}/>,
+    renderEditCell({ row, onRowChange }) {
+      return (
+        <select
+          className={''}
+          value={row.role}
+          onChange={(event) => onRowChange({ ...row, role: event.target.value }, true)}
+          autoFocus
+        >
+          {UserConstants.roles.map((role) => (
+            <option key={role} value={role}>
+              {role}
+            </option>
+          ))}
+        </select>
+      );
+    },
+    renderCell({ row }) {
+      if (row.syncing) { return <i className="fas fa-sync fa-spin"/> }
+      return <div>{row.role}</div>;
+    },
     editable: true,
     width: 200,
     resizable: true,
@@ -41,7 +71,12 @@ const COLUMNS = [
   {
     key: 'auto_created',
     name: 'How Created?',
-    formatter: (col) => (col.value ? 'Auto Created' : 'Investigator Specified'),
+    renderCell({ row }) {
+      if (row.syncing) { return <i className="fas fa-sync fa-spin"/> }
+
+      const text = (row.value ? 'Auto Created' : 'Investigator Specified');
+      return <div>{text}</div>;
+    },
     editable: false,
     width: 200,
     resizable: true,
@@ -51,31 +86,27 @@ const COLUMNS = [
 const UserList = ({ users }) => {
   const dispatch = useDispatch();
   const [rows, setRows] = useState([]);
-  const gridRef = useRef(null);
 
   const getColumns = () => {
     let clonedColumns = COLUMNS.slice();
-    clonedColumns[2].events = {
-      onClick: (_ev, args) => {
-        const idx = args.idx;
-        const rowIdx = args.rowIdx;
-        gridRef.current.openCellEditor(rowIdx, idx);
-      },
-    };
     return clonedColumns;
   };
 
-  const handleGridRowsUpdated = ({ fromRow, toRow, updated }) => {
-    let newRows = rows.slice();
-    for (let i = fromRow; i <= toRow; i++) {
-      let rowToUpdate = newRows[i];
-      let updatedRow = update(rowToUpdate, {$merge: updated});
+  const handleGridRowsUpdated = (updatedRows, rowChangeData) => {
+    console.dir(updatedRows)
+    console.dir(rowChangeData)
+
+    rowChangeData.indexes.forEach((index) => {
+      const updatedRow = updatedRows[index];
+      const localSyncingRow = update(updatedRow, {$merge: { syncing: true }});
       dispatch(elicitApi.actions.user.patch(
-        {id: updatedRow.id}, 
+        { id: updatedRow.id },
         { body: JSON.stringify({user: updatedRow}) }
       ));
-      newRows[i] = updatedRow;
-    }
+      updatedRows[index] = localSyncingRow;
+    })
+
+    setRows(updatedRows);
   };
 
   const handleAddRow = () => {
@@ -90,49 +121,9 @@ const UserList = ({ users }) => {
     newRow.id = 0;
   };
 
-  const getSize = () => rows.length;
-
-  const getRowAt = (index) => {
-    const lastLoadedRow = users.currentPage * users.pageSize;
-
-    // Time to load more rows?
-    if (users.sync && !users.loading) {
-      const target = Math.min(index + users.pageSize, users.totalItems);  // don't try to load past end of data
-      if (target > lastLoadedRow) {
-        console.log("Triggered reload at getRow " + index);
-        dispatch(elicitApi.actions.users_paginated.loadNextPage());
-      }
-    }
-
-    // Return the row if we have it
-    if (index < getSize()) {
-      return rows[index];
-    } else {
-      return emptyRow();
-    }
-  };
-
-  const emptyRow = () => ({
-    auto_created: null,
-    created_at: null,
-    email: null,
-    id: null,
-    role: null,
-    updated_at: null,
-    username: null,
-  });
-
-  const ensureUsersLoaded = () => {
-    if (!users.sync) {
-      if (!users.loading && !users.error) {
-        dispatch(elicitApi.actions.users_paginated.loadNextPage());
-      }
-    }
-  };
-
-  useEffect(() => {
-    ensureUsersLoaded();
-  }, []);
+  const handleFetchMore = () => {
+    dispatch(elicitApi.actions.users_paginated.loadNextPage());
+  }
 
   useEffect(() => {
     if (!users?.data) return;
@@ -142,12 +133,13 @@ const UserList = ({ users }) => {
       setRows(combinedRows);
       return;
     }
-    
+
     const newRows = combinedRows.slice(1).reduce((accumulatedRows, currentElement) => {
       const lastAccum = accumulatedRows[accumulatedRows.length - 1];
       if (lastAccum.id !== currentElement.id) {
         return [...accumulatedRows, currentElement];
       } else {
+        console.log(`Updating ${currentElement.id} ${lastAccum.updated_at} / ${lastAccum.syncing} --  ${currentElement.updated_at} / ${currentElement.syncing}`)
         if (lastAccum.updated_at < currentElement.updated_at) {
           accumulatedRows.splice((accumulatedRows.length - 1), 1, currentElement)
         }
@@ -157,6 +149,17 @@ const UserList = ({ users }) => {
 
     setRows(newRows);
   }, [users?.data]);
+
+
+  // Initial load of rows.
+  useEffect(() => {
+    if (users.sync) { return }
+    if (users.loading) { return }
+    if (users.error) { return }
+
+    dispatch(elicitApi.actions.users_paginated.loadNextPage());
+  }, [users.sync, users.loading])
+
 
   if (!users.sync && rows.length === 0) {
     if (!users.loading && users.error) {
@@ -171,20 +174,21 @@ const UserList = ({ users }) => {
   return (
     <div>
       <h1>{users.totalItems} Users {loadingGlyph}</h1>
-      <ReactDataGrid
-        ref={gridRef}
-        onChange={x => console.log(x)}
+      <div><button className="btn btn-info mb-sm-2" onClick={handleAddRow}><i className="fas fa-plus"></i> Add User</button></div>
+      <DataGrid
         enableCellSelect={true}
         columns={getColumns()}
-        rowGetter={getRowAt}
-        rowsCount={getSize()}
-        onGridRowsUpdated={handleGridRowsUpdated}
-        toolbar={<Toolbar addRowButtonText={<span><i className="fas fa-plus"></i> Add User</span>} onAddRow={handleAddRow}/>}
-        enableRowSelect={true}
+        rows={rows}
+        rowKeyGetter={(row) => row.id}
+        onRowsChange={handleGridRowsUpdated}
         rowHeight={50}
         minHeight={(Math.floor(window.innerHeight*0.65/50)*50)}
         rowScrollTimeout={200}
       />
+      <div className="d-flex justify-content-end">
+        <button className="btn btn-info mt-sm-2" onClick={handleFetchMore}><i className="fas fa-download"></i>Fetch More
+        </button>
+      </div>
     </div>
   );
 };
@@ -193,9 +197,10 @@ UserList.propTypes = {
   users: ApiReturnCollectionOf(UserType),
 };
 
+
 const UserManagement = () => {
   const users = useSelector(state => state.users_paginated);
-  
+
   return (
     <div>
       <UserList users={users} />

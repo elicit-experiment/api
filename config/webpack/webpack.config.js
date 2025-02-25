@@ -22,7 +22,7 @@ const customConfig = {
             loader: 'markdown-loader',
             options: {
               pedantic: true,
-              renderer,
+//              renderer,
             }
           }
         ]
