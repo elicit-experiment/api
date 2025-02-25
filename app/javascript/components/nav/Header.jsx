@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types';
-import { Navbar, Nav, NavDropdown } from "react-bootstrap";
+import {Navbar, Nav, NavDropdown, Container} from "react-bootstrap";
 import {useDispatch} from "react-redux";
 import elicitApi from "../../api/elicit-api";
 import {logoutUser} from "../../actions/tokens_actions";
@@ -19,23 +19,25 @@ export const Header = (props) => {
       <NavDropdown.Item href="/profile">Profile</NavDropdown.Item>
       <NavDropdown.Divider />
       <NavDropdown.Item href="#" onClick={(_e) => {
-        console.dir(elicitApi);
-        console.dir(elicitApi.actions);
         dispatch(logoutUser());
       }}>Logout</NavDropdown.Item>
     </NavDropdown>
   return (
     <Navbar bg="light" expand="lg">
-      <Navbar.Brand href="/"><span className="navbar-brand">Elicit</span></Navbar.Brand>
-      <Navbar.Toggle aria-controls="basic-navbar-nav" />
-      <Navbar.Collapse id="basic-navbar-nav">
-        <Nav className="ml-auto">
-          { admin }
-          <Nav.Link href='/participant'>Participant</Nav.Link>
-          <Nav.Link href='/about'>About</Nav.Link>
-          {profile}
-        </Nav>
-      </Navbar.Collapse>
+      <Container>
+        <Navbar.Brand href="/"><span className="navbar-brand">Elicit</span></Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="me-auto">
+            { admin }
+            <Nav.Link href='/participant'>Participant</Nav.Link>
+            <Nav.Link href='/about'>About</Nav.Link>
+          </Nav>
+          <Nav>
+          { profile }
+          </Nav>
+        </Navbar.Collapse>
+      </Container>
     </Navbar>
   )
 }

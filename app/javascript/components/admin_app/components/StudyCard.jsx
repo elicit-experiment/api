@@ -6,7 +6,7 @@ import elicitApi from "../../../api/elicit-api.js";
 import {useDispatch} from "react-redux";
 import BootstrapRoutesButton from 'bootstrap-switch-button-react'
 import {ApiReturnCollectionOf, ProtocolDefinitionType, StudyDefinitionType} from '../../../types';
-import SweetAlert from 'sweetalert2-react';
+import SweetAlert from 'react-sweetalert2';
 import {ProtocolInfoLink} from "./ProtocolInfoLink";
 import {Link} from "react-router-dom";
 import {EditableProtocolList} from "./EditableProtocolList";
@@ -136,10 +136,10 @@ const StudyCard = (props) =>  {
           <div className="row study-info-row">
             <div className="col-2" />
 
-            <div className="col-8">
+            <div className="col-6 d-flex justify-content-around align-items-center">
               <Link to={`/admin/studies/${props.study.id}/edit`}
                     className="mr-2">
-                <div className="fas fa-edit" style={{width:'1em'}} aria-hidden="true"/> Edit
+                <span className="fas fa-edit pe-1" aria-hidden="true"/><span>Edit</span>
               </Link>
               <span className="mr-2">
                 <BootstrapRoutesButton
@@ -167,7 +167,7 @@ const StudyCard = (props) =>  {
                   />
                 </span>
             </div>
-            <div className="col-2  text-right">
+            <div className="col-4 d-flex justify-content-end">
               <button
                 onClick={() => setDeleteVerify(true)}
                 className="active btn btn-danger"
