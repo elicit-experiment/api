@@ -5,8 +5,8 @@ module Api
     class TrialDefinitionsController < ApiController
       include StudyCreation
 
-      Fix      QUERY_PARAM_FIELDS = %i[study_definition_id protocol_definition_id phase_definition_id]
-      
+      QUERY_PARAM_FIELDS = %i[study_definition_id protocol_definition_id phase_definition_id].freeze
+
       private
 
       def query_params
