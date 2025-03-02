@@ -63,7 +63,7 @@ const ParticipantProtocol = ({ experiment, protocol, study }) => {
             #{protocol.id} — {protocol.name}
           </div>
           <div className="offset-3 col-2">
-            <button className="active btn btn-link"
+            <button className="btn btn-link"
                     onClick={handleShowModal}>
               <span>Study</span>&nbsp;
               <span className="fas fa-info-circle"
