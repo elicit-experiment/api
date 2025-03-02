@@ -20,7 +20,7 @@ const TakeProtocolLink = (props) => {
   }
 
   return (
-    <button onClick={take} disabled={!props.available} className="active btn btn-primary">
+    <button onClick={take} disabled={!props.available} className="btn btn-primary">
       Participate
     </button>
   )

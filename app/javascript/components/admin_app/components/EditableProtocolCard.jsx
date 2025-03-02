@@ -53,7 +53,7 @@ export const EditableProtocolCard = ({ protocol, study, children }) => {
         <div className="col-12 "><p className="col-12" {...htmlDescription}></p></div>
         <div className="col-12 study-action-bar">
           <Link to={`/admin/studies/${study.id}/protocols/${protocol.id}`}
-                className="active btn btn-primary">
+                className="btn btn-primary">
             Preview
           </Link>
 

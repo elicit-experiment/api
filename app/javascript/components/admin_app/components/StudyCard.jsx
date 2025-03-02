@@ -170,7 +170,7 @@ const StudyCard = (props) =>  {
             <div className="col-4 d-flex justify-content-end">
               <button
                 onClick={() => setDeleteVerify(true)}
-                className="active btn btn-danger"
+                className="btn btn-danger"
               >
                 Delete Study
               </button>
