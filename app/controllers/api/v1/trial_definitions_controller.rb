@@ -5,7 +5,17 @@ module Api
     class TrialDefinitionsController < ApiController
       include StudyCreation
 
+      Fix      QUERY_PARAM_FIELDS = %i[study_definition_id protocol_definition_id phase_definition_id]
+      
       private
+
+      def query_params
+        QUERY_PARAM_FIELDS.each_with_object({}) do |field, hash|
+          raise ArgumentError, "Missing #{field}" unless params.key?(field)
+
+          hash[field] = params[field]
+        end
+      end
 
       def trial_definition_params
         params.require(%i[study_definition_id protocol_definition_id phase_definition_id])

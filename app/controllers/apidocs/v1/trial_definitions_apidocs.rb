@@ -38,6 +38,30 @@ module Apidocs
             key :required, false
             key :type, :integer
           end
+          parameter do
+            key :name, :study_definition_id
+            key :in, :path
+            key :description, 'ID of study definition for the trial definitions to fetch'
+            key :required, true
+            key :type, :integer
+            key :format, :int64
+          end
+          parameter do
+            key :name, :protocol_definition_id
+            key :in, :path
+            key :description, 'ID of protocol definition for the trial definitions to fetch'
+            key :required, true
+            key :type, :integer
+            key :format, :int64
+          end
+          parameter do
+            key :name, :phase_definition_id
+            key :in, :path
+            key :description, 'ID of phase definition for the trial definitions to fetch'
+            key :required, true
+            key :type, :integer
+            key :format, :int64
+          end
           response 200 do
             key :description, 'Array of TrialDefinition objects matching the query'
             schema do

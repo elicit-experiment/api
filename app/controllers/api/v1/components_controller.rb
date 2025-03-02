@@ -5,7 +5,17 @@ module Api
     class ComponentsController < ApiController
       include StudyCreation
 
+      QUERY_PARAM_FIELDS = %i[study_definition_id protocol_definition_id phase_definition_id trial_definition_id].freeze
+
       private
+
+      def query_params
+        QUERY_PARAM_FIELDS.each_with_object({}) do |field, hash|
+          raise ArgumentError, "Missing #{field}" unless params.key?(field)
+
+          hash[field] = params[field]
+        end
+      end
 
       def component_params
         params.require(%i[study_definition_id protocol_definition_id phase_definition_id trial_definition_id])

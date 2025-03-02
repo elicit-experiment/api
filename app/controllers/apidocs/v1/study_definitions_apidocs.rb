@@ -97,8 +97,53 @@ module Apidocs
         end
       end
 
-      # Update Study Definition Object
+      # Get Study Definition Object
       swagger_path '/study_definitions/{id}' do
+        operation :get do
+          key :description, 'Gets a Study Definition'
+          key :summary, 'Gets a Study Definition'
+          key :operationId, 'getStudyDefinition'
+          key :tags, [
+            'Study Definition', 'Study Creation'
+          ]
+          parameter do
+            key :name, :authorization
+            key :in, :header
+            key :description, "Authenticated User's access token"
+            key :required, true
+            key :type, :string
+            key :default, 'Bearer PASTE_ACCESS_TOKEN_HERE'
+          end
+          parameter do
+            key :name, :id
+            key :in, :path
+            key :description, 'ID of study definition to fetch'
+            key :required, true
+            key :type, :integer
+            key :format, :int64
+          end
+
+          response 200 do
+            key :description, 'Study Definition Object'
+            schema do
+              key :'$ref', :StudyDefinition
+            end
+          end
+          response 401 do
+            key :description, 'Unauthorized Request'
+          end
+          response 403 do
+            key :description, "Insufficient Scope (tip: ensure access_token was obtained with 'password' grant_type)"
+          end
+          response :default do
+            key :description, 'Returned when an unexpected error occurs'
+            schema do
+              key :'$ref', :ElicitError
+            end
+          end
+        end
+
+      # Update Study Definition Object
         operation :put do
           key :description, 'Updates a Study Definition'
           key :summary, 'Updates a Study Definition'
@@ -151,10 +196,8 @@ module Apidocs
             end
           end
         end
-      end
 
       # Delete Study Definition Object
-      swagger_path '/study_definitions/{id}' do
         operation :delete do
           key :description, 'Deletes a Study Definition'
           key :summary, 'Deletes a Study Definition'
