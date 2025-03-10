@@ -11,8 +11,9 @@ import {ProtocolInfoLink} from "./ProtocolInfoLink";
 import {Link} from "react-router-dom";
 import {EditableProtocolList} from "./EditableProtocolList";
 
-const StudyCard = (props) =>  {
-  const [title, setTitle] = useState(props.study.title);
+
+const StudyCard = ({ study, protocols, editProtocols = false}) =>  {
+  const [title, setTitle] = useState(study.title);
   const [deleteVerify, setDeleteVerify] = useState(false);
   const dispatch = useDispatch();
 
@@ -26,10 +27,10 @@ const StudyCard = (props) =>  {
   };
 
   const titleChanged = (data) => {
-    const newData = update(props.study, {
+    const newData = update(study, {
       title: { $set: data.title },
     });
-    updateStudyDefinition(props.study.id, newData);
+    updateStudyDefinition(study.id, newData);
     setTitle(data.title);
   }
 
@@ -38,37 +39,37 @@ const StudyCard = (props) =>  {
   const dropDownOnChange = (_x) => {}
 
   const onToggleAllowAnonymousUsers = () => {
-    const newValue = !props.study.allow_anonymous_users;
-    updateStudyDefinition(props.study.id, {
+    const newValue = !study.allow_anonymous_users;
+    updateStudyDefinition(study.id, {
       allow_anonymous_users: newValue,
     });
   }
 
   const onToggleShowInStudyList = () => {
-    const newValue = !props.study.show_in_study_list;
-    updateStudyDefinition(props.study.id, {
+    const newValue = !study.show_in_study_list;
+    updateStudyDefinition(study.id, {
       show_in_study_list: newValue,
     });
   }
-  const deleteStudy = () => deleteStudyDefinition(props.study.id);
+  const deleteStudy = () => deleteStudyDefinition(study.id);
 
   let protocolsRow, studyClass;
 
-  if (props.editProtocols) {
+  if (editProtocols) {
     protocolsRow = (
       <EditableProtocolList
-        study={props.study}
-        study_protocols={props.study.protocol_definitions}
-        protocols={props.protocols}
+        study={study}
+        study_protocols={study.protocol_definitions}
+        protocols={protocols}
       />
     );
     studyClass = "card show study-detail my-4";
   } else {
     protocolsRow = (
       <ProtocolInfoLink
-        study={props.study}
-        study_protocols={props.study.protocol_definitions}
-        protocol_definitions={props.protocols}
+        study={study}
+        study_protocols={study.protocol_definitions}
+        protocol_definitions={protocols}
       />
     );
     studyClass = "card show study-summary my-4";
@@ -80,10 +81,12 @@ const StudyCard = (props) =>  {
     show={deleteVerify}
     title="Really delete?"
     text="Are you sure you want to delete this study and all its results?"
-    type='warning'
+    icon='warning'
     buttonsStyling={false}
-    confirmButtonClass='btn btn-primary btn-lg'
-    cancelButtonClass='btn btn-lg'
+    customClass={{
+      confirmButton: 'btn btn-primary btn-lg',
+      cancelButton: 'btn btn-lg',
+    }}
     showCancelButton={true}
     confirmButtonText="Yes, delete it!"
     onConfirm={() => {
@@ -92,16 +95,16 @@ const StudyCard = (props) =>  {
     }}
   />
 
-  const created = new Date(Date.parse(props.study.created_at));
+  const created = new Date(Date.parse(study.created_at));
   return (
-    <div className="study-wrapper" key={props.study.id}>
+    <div className="study-wrapper" key={study.id}>
       {deleteAlert}
-      <div className={studyClass} data-studyid={props.study.id}>
+      <div className={studyClass} data-studyid={study.id}>
         <div className="container">
           <div className="row study-info-row">
             <b className="col-2">ID:</b>
             <div className="col-5">
-              {props.study.id}
+              {study.id}
             </div>
           </div>
           <div className="row study-info-row">
@@ -119,13 +122,13 @@ const StudyCard = (props) =>  {
           <div className="row study-info-row">
             <b className="col-2">PI:</b>
             <div className="col-5">
-              <b>{props.study.principal_investigator.email}</b>
+              <b>{study.principal_investigator.email}</b>
             </div>
           </div>
           <div className="row study-info-row">
             <b className="col-2">Description:</b>
             <div className="col-10">
-              {props.study.description}
+              {study.description}
             </div>
           </div>
           {protocolsRow}
@@ -137,7 +140,7 @@ const StudyCard = (props) =>  {
             <div className="col-2" />
 
             <div className="col-6 d-flex justify-content-around align-items-center">
-              <Link to={`/admin/studies/${props.study.id}/edit`}
+              <Link to={`/admin/studies/${study.id}/edit`}
                     className="mr-2">
                 <span className="fas fa-edit pe-1" aria-hidden="true"/><span>Edit</span>
               </Link>
@@ -150,7 +153,7 @@ const StudyCard = (props) =>  {
                   offstyle="danger"
                   onstyle="success"
                   width="180"
-                  checked={props.study.allow_anonymous_users}
+                  checked={study.allow_anonymous_users}
                   onChange={onToggleAllowAnonymousUsers}
                 />
                 </span>
@@ -162,7 +165,7 @@ const StudyCard = (props) =>  {
                     offstyle="danger"
                     onstyle="success"
                     width="150"
-                    checked={props.study.show_in_study_list}
+                    checked={study.show_in_study_list}
                     onChange={onToggleShowInStudyList}
                   />
                 </span>
@@ -186,10 +189,6 @@ StudyCard.propTypes = {
   protocols: ApiReturnCollectionOf(ProtocolDefinitionType),
   study: StudyDefinitionType,
   editProtocols: PropTypes.bool,
-};
-
-StudyCard.defaultProps = {
-  editProtocols:   false,
 };
 
 export default StudyCard;

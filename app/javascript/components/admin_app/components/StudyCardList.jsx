@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import TransitionGroup from 'react-transition-group/TransitionGroup'
 import CSSTransition from 'react-transition-group/CSSTransition';
 import Study from './StudyCard'
-import {ProtocolDefinitionType, ApiReturnCollectionOf} from '../../../types';
 import pluralize from 'pluralize';
 import InfiniteScroll from 'react-infinite-scroll-component'
 import {useDispatch, useSelector} from "react-redux";
