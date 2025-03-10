@@ -106,6 +106,7 @@ export function makePaginatedApi(restApiDefinition, entityName, entityPluralName
         case`@@redux-api@${entityPluralName}_delete_${entityName}`:
             return {
               ...state,
+              totalItems: state.totalItems - 1,
               data: state.data.filter((item, _index) => item.id !== action.id),
             };
          case `@@redux-api@${entityPluralName}_update_${entityName}`:
