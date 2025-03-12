@@ -14,7 +14,11 @@ module StudyCreation
     before_action only: %i[show index] do
       @study_definition = StudyDefinition.find(params[:study_definition_id]) if params[:study_definition_id].present?
 
-      authorize! :read_study_definition, @study_definition, user: current_api_user
+      if @study_definition.blank?
+        authorize! :read_study_definitions, StudyDefinition, user: current_api_user
+      else
+        authorize! :read_study_definitions, @study_definition, user: current_api_user
+      end
     end
 
     before_action only: [:create] do # must be admin to create

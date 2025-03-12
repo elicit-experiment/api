@@ -33,7 +33,7 @@ module Api
         if current_user.role == User::ROLES[:admin]
           root_scope = StudyDefinition.all
         elsif current_user.role == User::ROLES[:investigator]
-          root_scope = StudyDefinition.where(principal_investigator_user_id: current_user.id)
+          root_scope = StudyDefinition.where(principal_investigator_user_id: current_api_user.id)
         end
 
         resources = root_scope.includes(query_includes).joins(:principal_investigator).order(created_at: :desc)
