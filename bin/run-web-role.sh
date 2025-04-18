@@ -19,4 +19,4 @@ cp ./.aprc.production ~/.aprc
 env PRECOMPILE=1 bundle exec rake db:migrate
 
 # The default command that gets ran will be to start the Puma server.
-bundle exec puma -C config/puma.rb
+RUBYOPT=--yjit bundle exec puma -C config/puma.rb
