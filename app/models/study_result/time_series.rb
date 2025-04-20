@@ -232,6 +232,28 @@ module StudyResult
       signer.presigned_url(:get_object, bucket: Rails.env.production? ? 'elicit' : 'elicit-dev', key: finalized_file.key)
     end
 
+    def validate_in_progress_file
+      if in_progress_file.attached?
+        file_path = in_progress_file.service.path_for(in_progress_file.key)
+        unless File.exist?(file_path)
+          logger.warn "Time Series file doesn't exist: #{file_path}"
+          errors.add(:in_progress_file, "File doesn't exist: #{file_path}")
+        end
+
+        File.foreach(file_path).with_index do |line, index|
+          if line.strip.empty?
+            logger.warn "Empty line at #{index + 1}: #{line}"
+            errors.add(:in_progress_file, "Invalid JSON line format at line #{index + 1}")
+
+          end
+          unless line.start_with?('{') && line.strip.end_with?('}')
+            logger.warn "Invalid JSON line format at line #{index + 1}: #{line}"
+            errors.add(:in_progress_file, "Invalid JSON line format at line #{index + 1}")
+          end
+        end
+      end
+    end
+
     private
 
     def ensure_attached(stream, file_field, content_type)

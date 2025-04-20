@@ -72,7 +72,8 @@ module ChaosApi
           component_id: 0
         }
 
-        fields = @datapoint_query_fields.merge(JSON.parse(params.permit(:content)[:content].to_s).symbolize_keys)
+        content = post_params['content']
+        fields = @datapoint_query_fields.merge(JSON.parse(content).symbolize_keys)
 
         if @chaos_session.preview
           @response = ChaosResponse.new([])
@@ -175,7 +176,7 @@ module ChaosApi
         @series_type = (params[:seriesType] || 'webgazer').to_sym
         @header_set = HEADERS_SET[@series_type]
 
-        params.permit(:format, :sessionGUID, :data, :seriesType, :content, :series_type, :mimeType, :file, :userHTTPStatusCodes, points: @header_set)
+        params.permit(:format, :sessionGUID, :data, :seriesType, :content, :series_type, :mimeType, :file, :questionaireId, :userHTTPStatusCodes, points: @header_set)
       end
     end
   end

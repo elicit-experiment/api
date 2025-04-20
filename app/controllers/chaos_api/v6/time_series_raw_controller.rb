@@ -56,6 +56,15 @@ module ChaosApi
       def append_preview
         fake_request_params
 
+        request.raw_post.split("\n").each do |line|
+          # puts line
+          unless line.start_with?('{"')
+            self.response_body = { error: 'incorrect line' }.to_json
+            self.status = :bad_request
+            return
+          end
+        end
+
         @response_status = :ok
         add_json_response_header
         self.response_body = @response.to_json
@@ -77,6 +86,8 @@ module ChaosApi
       end
 
       def save_time_series(time_series)
+        time_series.validate_in_progress_file unless Rails.env.production?
+
         unless time_series.save
           logger.error 'time series failed to save!'
           logger.error time_series.ai
