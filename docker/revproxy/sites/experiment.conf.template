@@ -10,6 +10,9 @@ root /var/www;
 
 try_files /frontend/public/$uri/index.html /frontend/public/$uri /app/public/$uri/index.html /app/public/$uri  @frontend;
 
+add_header Cross-Origin-Opener-Policy same-origin';
+add_header Cross-Origin-Embedder-Policy require-corp';
+
 access_log /var/www/log/nginx-frontend.access.log;
 error_log /var/www/log/nginx-frontend.error.log;
 
