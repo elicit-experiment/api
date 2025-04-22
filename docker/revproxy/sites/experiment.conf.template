@@ -8,6 +8,13 @@ source_charset utf-8;
 
 root /var/www;
 
+location ~ .+\.wasm\.gz$ {
+    gzip off; # Do not attempt dynamic gzip compression on an already compressed file
+    add_header Content-Encoding gzip;
+    # Enable streaming WebAssembly compilation by specifying the correct MIME type for
+    # Wasm files.
+    default_type application/wasm;
+}
 location ~ .+\.wasm$ {
     gzip on; # Do not attempt dynamic gzip compression on an already compressed file
     # Enable streaming WebAssembly compilation by specifying the correct MIME type for
