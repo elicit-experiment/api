@@ -1,5 +1,9 @@
 keepalive_timeout 10;
 
+types {
+    application/wasm wasm;
+}
+
 upstream app-api {
   server app-api:3000;
 }
