@@ -8,6 +8,13 @@ source_charset utf-8;
 
 root /var/www;
 
+location ~ .+\.wasm$ {
+    gzip on; # Do not attempt dynamic gzip compression on an already compressed file
+    # Enable streaming WebAssembly compilation by specifying the correct MIME type for
+    # Wasm files.
+    default_type application/wasm;
+}
+
 try_files /frontend/public/$uri/index.html /frontend/public/$uri /app/public/$uri/index.html /app/public/$uri  @frontend;
 
 add_header Cross-Origin-Opener-Policy same-origin;
@@ -44,14 +51,6 @@ if ($request_method !~ ^(GET|HEAD|PUT|PATCH|POST|DELETE|OPTIONS)$ ){
 
 if (-f $document_root/system/maintenance.html) {
   return 503;
-}
-
-location ~ .+\.wasm$ {
-    gzip on; # Do not attempt dynamic gzip compression on an already compressed file
-    add_header Content-Encoding gzip;
-    # Enable streaming WebAssembly compilation by specifying the correct MIME type for
-    # Wasm files.
-    default_type application/wasm;
 }
 
 #  location ~ /.*\.(php|html)$ {
