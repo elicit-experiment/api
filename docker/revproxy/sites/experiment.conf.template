@@ -46,6 +46,14 @@ if (-f $document_root/system/maintenance.html) {
   return 503;
 }
 
+location ~ .+\.wasm$ {
+    gzip on; # Do not attempt dynamic gzip compression on an already compressed file
+    add_header Content-Encoding gzip;
+    # Enable streaming WebAssembly compilation by specifying the correct MIME type for
+    # Wasm files.
+    default_type application/wasm;
+}
+
 #  location ~ /.*\.(php|html)$ {
 #    return 405;
 #  }
