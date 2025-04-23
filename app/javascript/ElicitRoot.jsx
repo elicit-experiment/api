@@ -11,6 +11,7 @@ const AdminApp = React.lazy(() => import('./apps/AdminApp'));
 import { ParticipantApp } from './apps/ParticipantApp';
 import LoginSignUpContainer from './components/login_signup/LoginSignUpContainer.jsx';
 import AboutPageContainer from './components/about_page/AboutPageContainer.jsx';
+import ContactPageContainer from './components/contact_page/ContactPageContainer.jsx';
 import LicensePageContainer from './components/license_page/LicensePageContainer.jsx';
 import FrontPageApp from './apps/FrontPageApp.jsx';
 import ProfilePageContainer from './components/profile_page/ProfilePageContainer.jsx';
@@ -79,6 +80,7 @@ const RawRootRoutes = () => {
         <Route exact path="/profile" element={<ProfilePageContainer/>}/>
         <Route exact path="/participant" element={<ParticipantApp/>}/>
         <Route exact path="/about" element={<AboutPageContainer/>}/>
+        <Route exact path="/contact" element={<ContactPageContainer/>}/>
         <Route exact path="/license" element={<LicensePageContainer/>}/>
         <Route path="/admin/*" element={<AdminAppWrapper/>}/>
         <Route path="/*" element={<FrontPageApp/>}/>

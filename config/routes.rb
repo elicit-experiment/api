@@ -109,11 +109,15 @@ Rails.application.routes.draw do
     end
   end
 
+  # Contact form submission endpoint
+  post '/contact' => 'client_app#contact', defaults: { format: 'json' }
+
   ## Client app pages -- just load the client app
   get '/admin' => 'client_app#index', as: :client_app_admin, constraints: { format: 'html' }
   get '/admin/:tab' => 'client_app#index', constraints: { format: 'html' }
   get '/participant' => 'client_app#index', as: :client_app_participant, constraints: { format: 'html' }
   get '/login' => 'client_app#index', as: :client_app_login, constraints: { format: 'html' }
+  get '/contact' => 'client_app#index', as: :client_app_contact, constraints: { format: 'html' }
   match '/client_app/*remainder' => 'client_app#index', via: :all, constraints: { format: 'html' }
   match '/participant/*remainder' => 'client_app#index', via: :all, constraints: { format: 'html' }
   match '/login/*remainder' => 'client_app#index', via: :all, constraints: { format: 'html' }

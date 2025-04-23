@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types';
 import {Navbar, Nav, NavDropdown, Container} from "react-bootstrap";
 import {useDispatch} from "react-redux";
-import elicitApi from "../../api/elicit-api";
 import {logoutUser} from "../../actions/tokens_actions";
 
 export const Header = (props) => {
@@ -32,6 +31,7 @@ export const Header = (props) => {
             { admin }
             <Nav.Link href='/participant'>Participant</Nav.Link>
             <Nav.Link href='/about'>About</Nav.Link>
+            <Nav.Link href='/contact'>Contact</Nav.Link>
           </Nav>
           <Nav>
           { profile }
