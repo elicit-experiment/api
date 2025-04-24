@@ -67,7 +67,7 @@ const LogInSignUp = ({ createUser, dismissable = false, logInUser, userTokenStat
         </Modal.Header>
         <Modal.Body>
           <form role="form" onSubmit={handleLogin}>
-            <div className="form-group">
+            <div className="mb-3">
               <label htmlFor="usrname"><span className="fas fa-user fa-envelope"></span> Username or Email</label>
               <input type="text"
                      className="form-control"
@@ -77,7 +77,7 @@ const LogInSignUp = ({ createUser, dismissable = false, logInUser, userTokenStat
                      value={email}
                      onChange={(e) => setEmail(e.target.value)}/>
             </div>
-            <div className="form-group">
+            <div className="mb-3">
               <label htmlFor="psw"><span className="fas fa-eye"></span> Password</label>
               <input type="password"
                      className="form-control"
@@ -90,7 +90,7 @@ const LogInSignUp = ({ createUser, dismissable = false, logInUser, userTokenStat
             <button type="submit" className="btn btn-success btn-block"><span className="fas fa-power-off"></span> Login</button>
           </form>
         </Modal.Body>
-        <Modal.Footer>
+        <Modal.Footer className="justify-content-between">
           <p>Not a member? <a href="#" onClick={toggleLogIn}>Sign Up</a></p>
           <p>Forgot <a href="#">Password?</a></p>
         </Modal.Footer>
