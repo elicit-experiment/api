@@ -57,6 +57,8 @@ const AdminAppWrapper = (props) => {
   </Suspense>
 }
 
+const RequestPageContainer = () => <ContactPageContainer action="request"/>
+
 //Define Root Component and Router
 const RawRootRoutes = () => {
   //const currentUser = useSelector(state => state.currentUser);
@@ -81,6 +83,7 @@ const RawRootRoutes = () => {
         <Route exact path="/participant" element={<ParticipantApp/>}/>
         <Route exact path="/about" element={<AboutPageContainer/>}/>
         <Route exact path="/contact" element={<ContactPageContainer/>}/>
+        <Route exact path="/request" element={<RequestPageContainer/>}/>
         <Route exact path="/license" element={<LicensePageContainer/>}/>
         <Route path="/admin/*" element={<AdminAppWrapper/>}/>
         <Route path="/*" element={<FrontPageApp/>}/>
