@@ -24,8 +24,9 @@ location ~ .+\.wasm$ {
 
 try_files /$uri/index.html /$uri /app/public/$uri/index.html /app/public/$uri  @frontend;
 
-add_header Cross-Origin-Opener-Policy same-origin;
-add_header Cross-Origin-Embedder-Policy require-corp;
+# NOTE: this is required for SharedMemoryBuffer, but breaks YouTube videos; maybe one day Google will fix this.
+# add_header Cross-Origin-Opener-Policy same-origin;
+# add_header Cross-Origin-Embedder-Policy require-corp;
 
 access_log /var/www/log/nginx-frontend.access.log;
 error_log /var/www/log/nginx-frontend.error.log;
