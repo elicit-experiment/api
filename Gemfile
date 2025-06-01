@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-ruby '3.3.6'
+ruby '3.4.4'
 
 git_source(:github) do |repo_name|
   repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?('/')
@@ -125,3 +125,6 @@ gem 'redis-client'
 gem 'solid_queue', '~> 1.1.4'
 
 gem 'activerecord-import', '~> 2.1'
+
+# Email sending via Mailgun
+gem 'mailgun-ruby', '~> 1.2'

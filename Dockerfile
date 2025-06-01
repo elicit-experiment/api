@@ -1,6 +1,6 @@
 # Base image:
 # Debian Bookworm fails to find signatures for apt update on the production server so we fall back to Bullseye.
-FROM ruby:3.3.6-bullseye
+FROM ruby:3.4.4-bullseye
 
 ARG SITE_SUFFIX
 ARG API_SCHEME
