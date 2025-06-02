@@ -126,5 +126,4 @@ gem 'solid_queue', '~> 1.1.4'
 
 gem 'activerecord-import', '~> 2.1'
 
-# Email sending via Mailgun
-gem 'mailgun-ruby', '~> 1.2'
+gem "rest-client", "~> 2.1"

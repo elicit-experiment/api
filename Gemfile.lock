@@ -153,6 +153,7 @@ GEM
       doorkeeper
       rails
     diff-lcs (1.5.1)
+    domain_name (0.6.20240107)
     doorkeeper (5.8.1)
       railties (>= 5)
     dotenv (3.1.7)
@@ -162,20 +163,15 @@ GEM
       tzinfo
     execjs (2.10.0)
     fakefs (2.8.0)
-    faraday (2.13.1)
-      faraday-net_http (>= 2.0, < 3.5)
-      json
-      logger
-    faraday-multipart (1.1.0)
-      multipart-post (~> 2.0)
-    faraday-net_http (3.4.0)
-      net-http (>= 0.5.0)
     ffi (1.17.0)
     fugit (1.11.1)
       et-orbi (~> 1, >= 1.2.11)
       raabro (~> 1.4)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    http-accept (1.7.0)
+    http-cookie (1.0.8)
+      domain_name (~> 0.5)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
     image_processing (1.13.0)
@@ -232,10 +228,6 @@ GEM
       net-imap
       net-pop
       net-smtp
-    mailgun-ruby (1.3.5)
-      faraday (~> 2.1)
-      faraday-multipart (~> 1.1.0)
-      mime-types
     marcel (1.0.4)
     matrix (0.4.2)
     method_source (1.1.0)
@@ -250,10 +242,7 @@ GEM
     mocha (2.7.1)
       ruby2_keywords (>= 0.0.5)
     multi_json (1.15.0)
-    multipart-post (2.4.1)
     mutex_m (0.3.0)
-    net-http (0.6.0)
-      uri
     net-imap (0.5.1)
       date
       net-protocol
@@ -263,6 +252,7 @@ GEM
       timeout
     net-smtp (0.5.0)
       net-protocol
+    netrc (0.11.0)
     newrelic_rpm (9.16.1)
     nio4r (2.7.4)
     nokogiri (1.18.3)
@@ -375,6 +365,11 @@ GEM
     responders (3.1.1)
       actionpack (>= 5.2)
       railties (>= 5.2)
+    rest-client (2.1.0)
+      http-accept (>= 1.7.0, < 2.0)
+      http-cookie (>= 1.0.2, < 2.0)
+      mime-types (>= 1.16, < 4.0)
+      netrc (~> 0.8)
     rexml (3.3.9)
     rspec-core (3.13.2)
       rspec-support (~> 3.13.0)
@@ -465,7 +460,6 @@ GEM
     unicode-display_width (3.1.2)
       unicode-emoji (~> 4.0, >= 4.0.4)
     unicode-emoji (4.0.4)
-    uri (1.0.3)
     useragent (0.16.11)
     warden (1.2.9)
       rack (>= 2.0.9)
@@ -516,7 +510,6 @@ DEPENDENCIES
   lograge
   lograge-sql (~> 2.0)
   logstash-event
-  mailgun-ruby (~> 1.2)
   mocha
   mutex_m (~> 0.3.0)
   net-imap
@@ -533,6 +526,7 @@ DEPENDENCIES
   rails-erd
   redis-client
   responders
+  rest-client (~> 2.1)
   rspec-rails
   rubocop
   rubocop-performance

@@ -21,9 +21,7 @@ class ClientAppController < ApplicationController
   def contact
     contact_params = params.require(:contact).permit(:firstName, :lastName, :email, :notes)
 
-    # TODO: send email.
-    # Example for sending email (using Rails built-in mailer):
-    # ContactMailer.contact_email(contact_params).deliver_later
+    ContactMailer.send_contact_email(contact_params)
 
     # For now, we'll just respond with success
     begin
