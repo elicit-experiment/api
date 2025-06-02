@@ -13,7 +13,7 @@ class ContactMailer < ApplicationMailer
     # Prepare message parameters
     message_params = {
       from: "Elicit Experiment <#{from_email}>",
-      to: 'bryson.iain@gmail.com',
+      to: ELICIT_CONTACT_ADDRESS,
       subject: 'New Contact Form Submission',
       html: generate_email_html(contact_params)
     }
