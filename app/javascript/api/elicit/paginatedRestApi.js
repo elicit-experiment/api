@@ -36,8 +36,8 @@ const paginatingAdapterFetch = (fetch) => {
           if (resp.status >= 200 && resp.status < 300) {
             if (resp.headers.get('PageSize') || resp.headers.get('Total')) {
               return {
-                totalItems: parseInt(resp.headers.get('Total'), 10),
-                pageSize: parseInt(resp.headers.get('PageSize'), 10),
+                totalItems: parseInt(resp.headers.get('Total'), 10) || 0,
+                pageSize: parseInt(resp.headers.get('PageSize'), 10) || 0,
                 totalPages: parseInt(resp.headers.get('TotalPages'), 10) || 0,
                 data,
               };
