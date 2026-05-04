@@ -346,6 +346,8 @@ const UserList = ({ users }) => {
         rowScrollTimeout={200}
         sortColumns={sortColumns}
         onSortColumnsChange={handleSortChange}
+        // Force light mode since the rest of the admin page is light-themed
+        style={{ colorScheme: 'light' }}
       />
 
       <PaginationControls
