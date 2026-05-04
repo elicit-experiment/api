@@ -202,11 +202,10 @@ const UserList = ({ users }) => {
   useEffect(() => {
     const sortCol = sortColumns.length > 0 ? sortColumns[0].columnKey : 'created_at';
     const sortDir = sortColumns.length > 0 ? sortColumns[0].direction.toLowerCase() : 'desc';
-    const q = debouncedSearch;
     const role = roleFilter || null;
 
     triggerLoad({
-      q: q || undefined,
+      q: debouncedSearch,
       sort_column: sortCol,
       sort_direction: sortDir,
       role: role,
