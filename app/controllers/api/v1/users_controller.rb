@@ -66,17 +66,23 @@ module Api
       end
 
       def index
-        if !params.key?(:query) || (params[:query].length < 3)
-          if params.key?(:q)
-            username_query = { username: /#{params[:q]}/i }
-            email_query = { email: params[:q] }
-            @all_users = User.or(username_query, email_query).all
-          else
-            @all_users = User.all
-          end
-        else
-          @all_users = User.where(email: params[:query]).or(User.where(username: params[:query]))
+        @all_users = User.all
+
+        # Search by username or email
+        if params[:q].present?
+          query = params[:q].to_s[0..99]
+          escaped_query = query.gsub(/([%_\\])/, '\\\\\1')
+          @all_users = @all_users.where('username ILIKE ? OR email ILIKE ?', "%#{escaped_query}%", "%#{escaped_query}%")
         end
+
+        # Role filter
+        @all_users = @all_users.where(role: params[:role]) if params[:role].present?
+
+        # Sorting
+        sortable_columns = %w[username email role created_at id]
+        sort_column = params[:sort_column].presence_in(sortable_columns) || 'created_at'
+        sort_direction = params[:sort_direction] == 'asc' ? 'asc' : 'desc'
+        @all_users = @all_users.order("#{sort_column} #{sort_direction}")
 
         authorize! :read, User
 
@@ -87,7 +93,6 @@ module Api
                              .per(page_params[:page_size])
         end
 
-        # render json: { page: page_params[:page], total_items: @all_users.size }
         set_pagination_headers @users, @all_users, page_params
 
         render json: @users
@@ -108,9 +113,13 @@ module Api
         render json: @user
       end
 
-      def edit; super; end
+      def edit
+        super
+      end
 
-      def destroy; super; end
+      def destroy
+        super
+      end
 
       private
 

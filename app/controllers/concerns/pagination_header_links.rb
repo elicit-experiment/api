@@ -37,5 +37,6 @@ module PaginationHeaderLinks
     headers['Link'] = pagination_links.join(', ') unless pagination_links.empty?
     headers['Total'] = root_scope.size if root_scope.present?
     headers['PageSize'] = options[:page_size] if options[:page_size].present?
+    headers['TotalPages'] = paginated_scope.total_pages
   end
 end
