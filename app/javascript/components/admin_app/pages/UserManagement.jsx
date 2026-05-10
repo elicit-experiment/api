@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import DataGrid, { textEditor } from 'react-data-grid';
+import Modal from 'react-bootstrap/Modal';
+import Button from 'react-bootstrap/Button';
 
 import UserConstants from '../../../constants/UserConstants';
 import update from 'react-addons-update';
@@ -179,12 +181,181 @@ const PaginationControls = ({ currentPage, totalPages, totalItems, pageSize, onP
   );
 };
 
+const AddUserModal = ({ show, onHide, onUserCreated }) => {
+  const dispatch = useDispatch();
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    role: 'registered_user',
+    password: '',
+    password_confirmation: '',
+  });
+  const [errors, setErrors] = useState({});
+  const [submitting, setSubmitting] = useState(false);
+
+  const resetForm = () => {
+    setFormData({
+      username: '',
+      email: '',
+      role: 'registered_user',
+      password: '',
+      password_confirmation: '',
+    });
+    setErrors({});
+    setSubmitting(false);
+  };
+
+  const handleShow = () => {
+    resetForm();
+  };
+
+  const handleChange = (field, value) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    if (errors[field]) {
+      setErrors((prev) => {
+        const next = { ...prev };
+        delete next[field];
+        return next;
+      });
+    }
+  };
+
+  const validate = () => {
+    const newErrors = {};
+    if (!formData.username.trim()) newErrors.username = 'Username is required';
+    if (!formData.email.trim()) newErrors.email = 'Email is required';
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = 'Invalid email format';
+    if (!formData.password) newErrors.password = 'Password is required';
+    else if (formData.password.length < 8) newErrors.password = 'Password must be at least 8 characters';
+    if (formData.password !== formData.password_confirmation) newErrors.password_confirmation = 'Passwords do not match';
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validate()) return;
+
+    setSubmitting(true);
+    try {
+      await dispatch(
+        elicitApi.actions.user.post({}, { body: JSON.stringify({ user: formData }) }),
+      );
+      resetForm();
+      onUserCreated();
+      onHide();
+    } catch {
+      setErrors({ submit: 'Failed to create user. Please try again.' });
+      setSubmitting(false);
+    }
+  };
+
+  const handleModalHide = () => {
+    resetForm();
+    onHide();
+  };
+
+  return (
+    <Modal show={show} onShow={handleShow} onHide={handleModalHide}>
+      <form onSubmit={handleSubmit}>
+        <Modal.Header closeButton>
+          <Modal.Title>Add User</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {errors.submit && (
+            <div className="alert alert-danger">{errors.submit}</div>
+          )}
+          <div className="mb-3">
+            <label htmlFor="add-user-username" className="form-label">
+              Username
+            </label>
+            <input
+              type="text"
+              id="add-user-username"
+              className={`form-control ${errors.username ? 'is-invalid' : ''}`}
+              value={formData.username}
+              onChange={(e) => handleChange('username', e.target.value)}
+              autoFocus
+            />
+            {errors.username && <div className="invalid-feedback">{errors.username}</div>}
+          </div>
+          <div className="mb-3">
+            <label htmlFor="add-user-email" className="form-label">
+              Email
+            </label>
+            <input
+              type="email"
+              id="add-user-email"
+              className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+              value={formData.email}
+              onChange={(e) => handleChange('email', e.target.value)}
+            />
+            {errors.email && <div className="invalid-feedback">{errors.email}</div>}
+          </div>
+          <div className="mb-3">
+            <label htmlFor="add-user-role" className="form-label">
+              Role
+            </label>
+            <select
+              id="add-user-role"
+              className="form-select"
+              value={formData.role}
+              onChange={(e) => handleChange('role', e.target.value)}
+            >
+              {UserConstants.roles.map((role) => (
+                <option key={role} value={role}>
+                  {role}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="mb-3">
+            <label htmlFor="add-user-password" className="form-label">
+              Password
+            </label>
+            <input
+              type="password"
+              id="add-user-password"
+              className={`form-control ${errors.password ? 'is-invalid' : ''}`}
+              value={formData.password}
+              onChange={(e) => handleChange('password', e.target.value)}
+            />
+            {errors.password && <div className="invalid-feedback">{errors.password}</div>}
+          </div>
+          <div className="mb-3">
+            <label htmlFor="add-user-password-confirm" className="form-label">
+              Confirm Password
+            </label>
+            <input
+              type="password"
+              id="add-user-password-confirm"
+              className={`form-control ${errors.password_confirmation ? 'is-invalid' : ''}`}
+              value={formData.password_confirmation}
+              onChange={(e) => handleChange('password_confirmation', e.target.value)}
+            />
+            {errors.password_confirmation && <div className="invalid-feedback">{errors.password_confirmation}</div>}
+          </div>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleModalHide}>
+            Cancel
+          </Button>
+          <Button variant="primary" type="submit" disabled={submitting}>
+            {submitting ? 'Creating...' : 'Create User'}
+          </Button>
+        </Modal.Footer>
+      </form>
+    </Modal>
+  );
+};
+
 const UserList = ({ users }) => {
   const dispatch = useDispatch();
   const [rows, setRows] = useState([]);
   const [searchInput, setSearchInput] = useState('');
   const [roleFilter, setRoleFilter] = useState('');
   const [sortColumns, setSortColumns] = useState([]);
+  const [showAddModal, setShowAddModal] = useState(false);
 
   const debouncedSearch = useDebounce(searchInput, 300);
 
@@ -238,16 +409,21 @@ const UserList = ({ users }) => {
     setRows(updatedRows);
   };
 
-  const handleAddRow = () => {
-    const newRow = {
-      email: `user${rows.length + 2 + Math.floor(Math.random() * 100)}@elicit.com`,
-      username: 'New User',
-      role: 'registered_user',
-      password: 'password',
-      password_confirmation: 'password',
-    };
-    dispatch(elicitApi.actions.user.post({}, { body: JSON.stringify({ user: newRow }) }));
-    setRows((prev) => [{ ...newRow, id: 0, syncing: false }, ...prev]);
+  const handleShowAddModal = () => {
+    setShowAddModal(true);
+  };
+
+  const handleHideAddModal = () => {
+    setShowAddModal(false);
+  };
+
+  const handleUserCreated = () => {
+    triggerLoad({
+      q: debouncedSearch,
+      sort_column: sortColumns.length > 0 ? sortColumns[0].columnKey : 'created_at',
+      sort_direction: sortColumns.length > 0 ? sortColumns[0].direction.toLowerCase() : 'desc',
+      role: roleFilter,
+    });
   };
 
   const handlePageChange = (page) => {
@@ -328,7 +504,7 @@ const UserList = ({ users }) => {
         </div>
 
         <div>
-          <button className="btn btn-info" onClick={handleAddRow}>
+          <button className="btn btn-info" onClick={handleShowAddModal}>
             <i className="fas fa-plus"></i> Add User
           </button>
         </div>
@@ -355,6 +531,12 @@ const UserList = ({ users }) => {
         totalItems={users.totalItems}
         pageSize={users.pageSize}
         onPageChange={handlePageChange}
+      />
+
+      <AddUserModal
+        show={showAddModal}
+        onHide={handleHideAddModal}
+        onUserCreated={handleUserCreated}
       />
     </div>
   );
