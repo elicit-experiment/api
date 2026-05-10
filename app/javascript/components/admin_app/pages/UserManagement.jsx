@@ -202,7 +202,7 @@ const UserList = ({ users }) => {
   useEffect(() => {
     const sortCol = sortColumns.length > 0 ? sortColumns[0].columnKey : 'created_at';
     const sortDir = sortColumns.length > 0 ? sortColumns[0].direction.toLowerCase() : 'desc';
-    const role = roleFilter || null;
+    const role = roleFilter;
 
     triggerLoad({
       q: debouncedSearch,
@@ -240,14 +240,14 @@ const UserList = ({ users }) => {
 
   const handleAddRow = () => {
     const newRow = {
-      email: `user${rows.length + 2 + Math.random(100)}@elicit.com`,
-      name: 'New User',
+      email: `user${rows.length + 2 + Math.floor(Math.random() * 100)}@elicit.com`,
+      username: 'New User',
       role: 'registered_user',
       password: 'password',
       password_confirmation: 'password',
     };
     dispatch(elicitApi.actions.user.post({}, { body: JSON.stringify({ user: newRow }) }));
-    newRow.id = 0;
+    setRows((prev) => [{ ...newRow, id: 0, syncing: false }, ...prev]);
   };
 
   const handlePageChange = (page) => {
