@@ -57,7 +57,7 @@
     "redux-thunk": "^3.1.0",
     "sass": "^1.78.0",
     "sass-loader": "^16.0.1",
-    "shakapacker": "^8",
+    "shakapacker": "^8.4.0",
     "speed-measure-webpack-plugin": "^1.5.0",
     "style-loader": "^4.0.0",
     "terser-webpack-plugin": "5",
