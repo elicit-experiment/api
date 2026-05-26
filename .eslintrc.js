@@ -10,7 +10,6 @@ module.exports = {
     "jquery": true
   },
   "globals": {
-    "newrelic": true,
     "fbq": true,
     "FB": true,
     "gtag": true

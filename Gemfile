@@ -94,7 +94,7 @@ gem 'activemodel-serializers-xml'
 gem 'actionpack-xml_parser'
 
 group :production do
-  gem 'newrelic_rpm', '~> 9.16'
+  gem 'newrelic_rpm', '~> 10.5'
   gem 'pg', '~> 1.5'
 end
 
