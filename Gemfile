@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-ruby '3.4.4'
+ruby '4.0.5'
 
 git_source(:github) do |repo_name|
   repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?('/')
@@ -10,6 +10,7 @@ git_source(:github) do |repo_name|
 end
 
 gem 'net-smtp', require: false
+gem 'cgi', require: false
 
 gem 'rails', '~> 7'
 # 6.0 is incompatible with swagger_ui_engine https://github.com/zuzannast/swagger_ui_engine/issues/43

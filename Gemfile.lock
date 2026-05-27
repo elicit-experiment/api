@@ -549,6 +549,7 @@ DEPENDENCIES
   capybara (~> 3.33)
   carrierwave
   carrierwave-base64
+  cgi
   csv (~> 3.3)
   devise (~> 4.7)
   devise-doorkeeper
@@ -593,7 +594,7 @@ DEPENDENCIES
   uglifier
 
 RUBY VERSION
-   ruby 3.4.4p34
+   ruby 4.0.5p0
 
 BUNDLED WITH
-   2.5.22
+   4.0.12
