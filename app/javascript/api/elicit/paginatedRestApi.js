@@ -82,6 +82,7 @@ export function makePaginatedApi(restApiDefinition, entityName, entityPluralName
     sortColumn: 'created_at',
     sortDirection: 'desc',
     roleFilter: null,
+    appendNextPage: false,
   });
 
   const initialState = makePaginationDefaultState();
@@ -96,6 +97,9 @@ export function makePaginatedApi(restApiDefinition, entityName, entityPluralName
         case api.events[storeName].setPageAsLoading:
           return { ...state, loading: true, syncing: true, sync: false };
 
+        case api.events[storeName].setAppendNextPage:
+          return { ...state, appendNextPage: true };
+
         case api.events[storeName].setSearchParams:
           return {
             ...state,
@@ -103,6 +107,7 @@ export function makePaginatedApi(restApiDefinition, entityName, entityPluralName
             sortColumn: action.sortColumn ?? state.sortColumn,
             sortDirection: action.sortDirection ?? state.sortDirection,
             roleFilter: action.roleFilter ?? state.roleFilter,
+            appendNextPage: action.appendNextPage ?? false,
           };
 
         case api.events[storeName].reloadWithParams:
@@ -115,12 +120,15 @@ export function makePaginatedApi(restApiDefinition, entityName, entityPluralName
             currentPage: action.currentPage ?? 1,
             loading: true,
             syncing: true,
+            appendNextPage: false,
           };
 
         case api.events[entityPluralName].actionSuccess:
           return {
             ...state,
-            data: action.data.data,
+            data: state.appendNextPage
+              ? state.data.concat(action.data.data)
+              : action.data.data,
             currentPage: action.request.pathvars?.page ?? state.currentPage,
             totalItems: action.data.totalItems,
             totalPages: action.data.totalPages ?? state.totalPages,
@@ -128,6 +136,7 @@ export function makePaginatedApi(restApiDefinition, entityName, entityPluralName
             loading: false,
             syncing: false,
             sync: true,
+            appendNextPage: false,
           };
 
         case `@@redux-api@${entityPluralName}_append_${entityName}`:
@@ -180,6 +189,7 @@ export function makePaginatedApi(restApiDefinition, entityName, entityPluralName
       setPageAsLoading: `@redux-api@paginated@${entityPluralName}@setPageAsLoading`,
       setSearchParams: `@redux-api@paginated@${entityPluralName}@setSearchParams`,
       reloadWithParams: `@redux-api@paginated@${entityPluralName}@reloadWithParams`,
+      setAppendNextPage: `@redux-api@paginated@${entityPluralName}@setAppendNextPage`,
     };
   }
 
@@ -218,8 +228,8 @@ export function makePaginatedApi(restApiDefinition, entityName, entityPluralName
           const paginatedState = state[storeName];
           if (paginatedState.loading) return;
           if (page < 1 || page > paginatedState.totalPages) return;
+          dispatch(api.actions[storeName].setSearchParams({ appendNextPage: false }));
           dispatch(api.actions[storeName].setPageAsLoading());
-          dispatch(api.actions[storeName].setSearchParams({}));
           dispatch(
             api.actions[entityPluralName].force({ ...buildQueryParams({ ...paginatedState, currentPage: page }) }),
           );
@@ -230,10 +240,11 @@ export function makePaginatedApi(restApiDefinition, entityName, entityPluralName
         return function (dispatch, getState) {
           const state = getState();
           const paginatedState = state[storeName];
-          const nextPage = paginatedState.currentPage + 1;
+          const nextPage = paginatedState.data.length === 0 ? 1 : paginatedState.currentPage + 1;
           if (paginatedState.loading) return;
           if (paginatedState.totalPages > 0 && nextPage > paginatedState.totalPages) return;
           dispatch(api.actions[storeName].setPageAsLoading());
+          dispatch({ type: api.events[storeName].setAppendNextPage });
           dispatch(
             api.actions[entityPluralName].force({ ...buildQueryParams({ ...paginatedState, currentPage: nextPage }) }),
           );

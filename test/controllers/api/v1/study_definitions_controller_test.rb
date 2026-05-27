@@ -88,5 +88,52 @@ module Api::V1
 
       assert_response :success
     end
+
+    test 'index returns studies ordered by created_at desc' do
+      old_study = StudyDefinition.create!(title: 'Old Study', principal_investigator: user(:admin), created_at: 10.days.ago)
+      new_study = StudyDefinition.create!(title: 'New Study', principal_investigator: user(:admin), created_at: 1.day.ago)
+
+      get api_v1_study_definitions_url, as: :json, headers: @headers
+      assert_response :success
+
+      studies = JSON.parse(response.body)
+      titles = studies.map { |s| s['title'] }
+      assert titles.index('New Study') < titles.index('Old Study'), 'Expected new study to appear before old study'
+    end
+
+    test 'index paginates without overlap' do
+      # Create enough studies to exceed default page size of 20
+      25.times do |i|
+        StudyDefinition.create!(title: "Paginated Study #{i}", principal_investigator: user(:admin), created_at: (i + 1).days.ago)
+      end
+
+      get api_v1_study_definitions_url, params: { page: 1, page_size: 10 }, as: :json, headers: @headers
+      assert_response :success
+      page1 = JSON.parse(response.body)
+      assert_equal 10, page1.length
+
+      get api_v1_study_definitions_url, params: { page: 2, page_size: 10 }, as: :json, headers: @headers
+      assert_response :success
+      page2 = JSON.parse(response.body)
+      assert_equal 10, page2.length
+
+      page1_ids = page1.map { |s| s['id'] }
+      page2_ids = page2.map { |s| s['id'] }
+      assert_empty page1_ids & page2_ids, 'Expected pages to not overlap'
+    end
+
+    test 'index does not duplicate studies with multiple protocols' do
+      study = StudyDefinition.create!(title: 'Multi-Protocol Study', principal_investigator: user(:admin))
+      ProtocolDefinition.create!(name: 'Protocol 1', study_definition: study, active: true)
+      ProtocolDefinition.create!(name: 'Protocol 2', study_definition: study, active: true)
+
+      get api_v1_study_definitions_url, as: :json, headers: @headers
+      assert_response :success
+
+      studies = JSON.parse(response.body)
+      ids = studies.map { |s| s['id'] }
+      assert_equal ids.uniq.length, ids.length, 'Expected no duplicate studies in index'
+      assert_includes ids, study.id
+    end
   end
 end
