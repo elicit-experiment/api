@@ -36,7 +36,7 @@ module Api
           root_scope = StudyDefinition.where(principal_investigator_user_id: current_api_user.id)
         end
 
-        resources = root_scope.includes(query_includes).joins(:principal_investigator).order(created_at: :desc)
+        resources = root_scope.preload(query_includes).joins(:principal_investigator).order(created_at: :desc)
 
         unless page_params.nil?
           resources = resources.page(page_params[:page])
