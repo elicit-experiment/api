@@ -55,10 +55,20 @@ module Api
 
       def update
         @user = User.find(params[:id])
-        logger.info @user.role
-        logger.info [User::ROLES[:admin]].include?(@user.role)
+
+        # User-account operations require a user identity. A client-only token
+        # (no resource owner) must never be able to modify an account.
+        return head :forbidden if current_resource_owner.blank?
+
+        # Every update is authorized against the target account, whether or not
+        # the payload contains a role. Self-service is limited to the caller's
+        # own account; administrators hold :manage on all users.
+        authorize! :update, @user
+        authorize! :change_password, @user if password_change?
         authorize! :upgrade, @user if user_params.key? :role
-        if @user.update!(user_params.merge({ updated_at: Time.now }))
+        authorize! :update_auto_created, @user if user_params.key? :auto_created
+
+        if @user.update(user_params.merge({ updated_at: Time.current }))
           render json: @user
         else
           render json: @user.errors, status: :unauthorized
@@ -130,6 +140,10 @@ module Api
       def user_params
         @user_params ||= params.require(:user).permit(:email, :username, :password, :password_confirmation, :role, :auto_created)
         @user_params
+      end
+
+      def password_change?
+        user_params.key?(:password) || user_params.key?(:password_confirmation)
       end
 
       def sign_up_params
