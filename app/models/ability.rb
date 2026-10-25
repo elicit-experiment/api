@@ -50,6 +50,13 @@ class Ability
       return
     end
 
+    # Self-service: every authenticated user may maintain their own account.
+    # Changing the role of an account (including one's own) requires :upgrade,
+    # and changing the legacy auto-created flag requires :update_auto_created;
+    # neither is granted here, so both stay administrator-only.
+    can :update, User, id: user.id
+    can :change_password, User, id: user.id
+
     return unless [User::ROLES[:investigator]].include?(user.role)
 
     can :read, User
