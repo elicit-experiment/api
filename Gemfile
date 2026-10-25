@@ -122,7 +122,7 @@ gem 'mutex_m', '~> 0.3.0'
 
 gem 'redis-client'
 
-gem 'solid_queue', '~> 1.1.4'
+gem 'solid_queue', '~> 1.4.0'
 
 gem 'activerecord-import', '~> 2.1'
 
