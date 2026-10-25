@@ -5,6 +5,10 @@ module Api
     class StagesController < StudyResultsBaseController
       private
 
+      def child_parent_link
+        %i[experiments experiment_id]
+      end
+
       def stage_params
         params.require([:study_result_id])
         permit_json_params(params[:stage], :stage) do

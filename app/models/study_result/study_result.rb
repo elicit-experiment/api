@@ -11,6 +11,14 @@ module StudyResult
 
     has_many :experiments, class_name: 'StudyResult::Experiment', dependent: :destroy
 
+    # All child results of this study result. Reads and mutations are scoped
+    # through these associations so a child can never be reached via a
+    # different study result's id.
+    has_many :stages, class_name: 'StudyResult::Stage', through: :experiments
+    has_many :trial_results, class_name: 'StudyResult::TrialResult', through: :experiments
+    has_many :time_series, class_name: 'StudyResult::TimeSeries', through: :experiments
+    has_many :data_points, class_name: 'StudyResult::DataPoint', through: :stages
+
     include Swagger::Blocks
 
     swagger_schema :StudyResult do
