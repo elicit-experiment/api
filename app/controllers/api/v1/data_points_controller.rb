@@ -14,10 +14,11 @@ module Api
 
         logger.info message: 'Datapoint filter', filter_fields: filter_fields
 
-        resources = StudyResult::DataPoint.where(filter_fields)
-                                          .includes(:component)
-                                          .page(permitted_params[:page])
-                                          .per(permitted_params[:page_size])
+        root_scope = nested_under_study_result? ? parent_study_result.data_points : StudyResult::DataPoint.all
+        resources = root_scope.where(filter_fields)
+                              .includes(:component)
+                              .page(permitted_params[:page])
+                              .per(permitted_params[:page_size])
 
         # cols = StudyResult::DataPoint.column_names.map(&:to_sym)
         # ap cols

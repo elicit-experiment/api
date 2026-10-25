@@ -20,7 +20,7 @@ module Api
         end
 
         def show
-          time_series = StudyResult::TimeSeries.find(params[:time_series_id])
+          time_series = parent_study_result.time_series.find(params[:time_series_id])
 
           query_params = {
             user_name: params[:user_name],

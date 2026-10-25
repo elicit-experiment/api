@@ -4,6 +4,13 @@
 class Ability
   include CanCan::Ability
 
+  STUDY_RESULT_ACTIONS = %i[
+    read_study_results
+    create_study_results
+    update_study_results
+    destroy_study_results
+  ].freeze
+
   def initialize(user)
     # Define abilities for the passed in user here. For example:
     #
@@ -59,21 +66,12 @@ class Ability
       study_definition.principal_investigator_user_id == user.id
     end
 
-    # `:read_study_results` works in consort with `StudyResultConcern` . All actions that are children of study_results will get
-    # authorized by loading the study result in params[:study_result_id]. `StudyResult::StudyResult` will get authorized by the
-    # common `authorize!` of `get_resource`, which will load the `StudyResult` based on `params[:id]` for that particular controller.
-    # We do this because the params are different for the top route `resource` in the route hierarchy (`:id` for the top, `:study_result_id` elsewhere)
-    # Thus everything in the model hierarchy for a given result is authorized based on the study result.
-    can :read_study_results, StudyResult::StudyResult do |study_result|
-      study_result.study_definition.principal_investigator_user_id == user.id
-    end
-
-    all_study_result_classes.each do |study_result_class|
-      can :read_study_results, StudyResult.const_get(study_result_class)
-    end
-  end
-
-  def all_study_result_classes
-    @all_study_result_classes ||= ::StudyResult.constants.reject { |c| c == :StudyResult }
+    # Every study result action is authorized against the parent
+    # StudyResult::StudyResult, including reads of its child results. Hash
+    # conditions (rather than a block) keep the rule usable with
+    # `accessible_by`, which is how top-level collections are restricted to
+    # permitted studies.
+    can STUDY_RESULT_ACTIONS, StudyResult::StudyResult,
+        study_definition: { principal_investigator_user_id: user.id }
   end
 end

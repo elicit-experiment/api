@@ -1,8 +1,8 @@
 learning_study_1:
-  study_result: study_result_1
+  study_result: learning_study_1
   protocol_user: learning_study_1
 learning_study_2:
-  study_result: study_result_2
+  study_result: learning_study_2
   protocol_user: learning_study_2
 investigator_study_result1:
   study_result: investigator_study_result1

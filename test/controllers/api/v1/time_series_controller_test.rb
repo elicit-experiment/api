@@ -29,7 +29,8 @@ module Api
           assert_response :ok, 'Request failed'
 
           json_response = JSON.parse(response.body)
-          assert_equal 4, json_response.size, 'Response was not 3'
+          assert_equal 3, json_response.size, 'Response did not contain exactly the study result time series'
+          assert_equal study_result.time_series.pluck(:id).sort, json_response.map { |s| s['id'] }.sort
         end
       end
 

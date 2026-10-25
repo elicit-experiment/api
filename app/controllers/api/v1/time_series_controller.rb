@@ -24,17 +24,19 @@ module Api
         @search_params = search_params
         @query_clauses = query_clauses
 
-        resources = StudyResult::TimeSeries.where(@query_clauses)
-                                           .page(@search_params[:page])
-                                           .per(@search_params[:page_size])
-
-        puts resources.to_sql
+        resources = parent_study_result.time_series.where(@query_clauses)
+                                       .page(@search_params[:page])
+                                       .per(@search_params[:page_size])
 
         instance_variable_set(plural_resource_name, resources)
         @collection = instance_variable_get(plural_resource_name)
       end
 
       private
+
+      def child_parent_link
+        %i[stages stage_id]
+      end
 
       def search_params
         params.permit(*SEARCH_FIELDS, *PAGE_PARAMS, :study_result_id)
