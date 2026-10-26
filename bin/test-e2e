@@ -1,0 +1,203 @@
+#!/usr/bin/env python3
+"""Own disposable smoke services; never attach to a developer database/server."""
+import json
+import os
+from pathlib import Path
+import shutil
+import signal
+import socket
+import subprocess
+import sys
+import tempfile
+import time
+import urllib.request
+import uuid
+
+ROOT = Path(__file__).resolve().parents[1]
+SUITE = ROOT / 'test/e2e'
+
+
+def main():
+    if len(sys.argv) < 2 or sys.argv[1] != 'smoke':
+        sys.exit('Usage: bin/test-e2e smoke [Playwright arguments]\ncompatibility/spaces are not implemented.')
+    for command in ('docker', 'bundle', 'npm', 'node', 'git', 'cargo', 'wasm-pack'):
+        if not shutil.which(command):
+            sys.exit(f'Missing prerequisite: {command}. See test/e2e/README.md')
+    if not (ROOT / 'docker/experiment-frontend/source/application/Main.ts').exists():
+        sys.exit('Initialize submodules first: git submodule update --init --recursive')
+    if not (SUITE / 'node_modules/@playwright/test').exists():
+        sys.exit('Install the runner first: npm ci --prefix test/e2e')
+    run_id = 'smoke-' + uuid.uuid4().hex[:12]
+    artifacts = ROOT / 'tmp/e2e' / run_id
+    artifacts.mkdir(parents=True)
+    work = Path(tempfile.mkdtemp(prefix=run_id + '-'))
+    api_root = work / 'api'
+    env = os.environ.copy()
+    processes, handles = [], []
+    compose = ['docker', 'compose', '-p', run_id, '-f', str(SUITE / 'compose.yml')]
+
+    def run(args, cwd=api_root, timeout=600):
+        with (artifacts / 'setup.log').open('a') as log:
+            process = subprocess.Popen(args, cwd=cwd, env=env, stdout=log,
+                                       stderr=subprocess.STDOUT, start_new_session=True)
+            processes.append(process)
+            code = process.wait(timeout=timeout)
+            if code:
+                raise subprocess.CalledProcessError(code, args)
+
+    def output(args):
+        return subprocess.check_output(args, cwd=ROOT, env=env, text=True, timeout=30).strip()
+
+    def start(args, name, cwd=api_root):
+        log = (artifacts / (name + '.log')).open('w')
+        handles.append(log)
+        process = subprocess.Popen(args, cwd=cwd, env=env, stdout=log,
+                                   stderr=subprocess.STDOUT, start_new_session=True)
+        processes.append(process)
+        return process
+
+    def port():
+        with socket.socket() as sock:
+            sock.bind(('127.0.0.1', 0))
+            return sock.getsockname()[1]
+
+    def ready(url, process):
+        deadline = time.monotonic() + 90
+        while time.monotonic() < deadline:
+            if process.poll() is not None:
+                raise RuntimeError(f'Service exited before ready: {url}')
+            try:
+                with urllib.request.urlopen(url, timeout=2) as response:
+                    if response.status == 200:
+                        return
+            except (OSError, TimeoutError):
+                pass
+            time.sleep(0.25)
+        raise RuntimeError(f'Readiness timeout: {url}')
+
+    # Cancellation follows the same cleanup path as a test failure.
+    def interrupted(signum, frame):
+        raise KeyboardInterrupt
+    signal.signal(signal.SIGTERM, interrupted)
+    try:
+        api_port, frontend_port = port(), port()
+        while frontend_port == api_port:
+            frontend_port = port()
+        env.update({
+            'RAILS_ENV': 'test', 'ELICIT_E2E': '1',
+            'ELICIT_E2E_ROOT': str(work),
+            'ELICIT_E2E_API_ROOT': str(api_root),
+            'BUNDLE_GEMFILE': str(api_root / 'Gemfile'),
+            'ELICIT_E2E_API_PORT': str(api_port),
+            'ELICIT_E2E_FRONTEND_PORT': str(frontend_port),
+            'ELICIT_E2E_API_URL': f'http://localhost:{api_port}',
+            'ELICIT_E2E_FRONTEND_URL': f'http://localhost:{frontend_port}',
+            'ELICIT_E2E_ARTIFACTS': str(artifacts),
+            'POSTGRES_HOST': '127.0.0.1', 'POSTGRES_USER': 'smoke',
+            'POSTGRES_PASSWORD': 'smoke', 'POSTGRES_DB': 'elicit_test',
+            # Local password auth needs no Kerberos; avoids libpq GSS startup after macOS fork.
+            'PGGSSENCMODE': 'disable',
+            'API_SCHEME': 'http', 'EXTERNAL_API_SCHEME': 'http',
+            'API_URL': f'localhost:{api_port}', 'ELICIT_URL': f'http://localhost:{api_port}',
+            'SITE_SUFFIX': 'localhost', 'REDIS_PASSWORD': 'unused',
+            'SECRET_KEY_BASE': 'smoke-only-' + 'a' * 64,
+            'PUBLIC_CLIENT_ID': 'smoke', 'PUBLIC_CLIENT_SECRET': 'smoke',
+            'ADMIN_USER': 'smoke@example.invalid', 'ADMIN_PASSWORD': 'smoke-only-password',
+            'SUBJECT_DEFAULT_PASSWORD': 'smoke-only-password',
+            'WEBAPP_CLIENT_ID': 'webapp_public', 'WEBAPP_CLIENT_SECRET': 'smoke-webapp-secret',
+            # Browser assets use the production Babel path; Rails still uses test DB/storage.
+            'NODE_ENV': 'production', 'BABEL_ENV': 'production',
+        })
+        # Never inherit a URL that would override the disposable database settings.
+        for key in list(env):
+            if key.endswith('DATABASE_URL'):
+                del env[key]
+        metadata = {
+            'api': output(['git', 'rev-parse', 'HEAD']),
+            'frontend': output(['git', '-C', 'docker/experiment-frontend', 'rev-parse', 'HEAD']),
+            'submodules': output(['git', 'submodule', 'status', '--recursive']),
+            'node': output(['node', '--version']), 'ruby': output(['ruby', '--version']),
+            'run': run_id,
+            'api_worktree': output(['git', 'status', '--short']),
+            'frontend_worktree': output(['git', '-C', 'docker/experiment-frontend', 'status', '--short']),
+        }
+        (artifacts / 'revisions.json').write_text(json.dumps(metadata, indent=2))
+        print(f'Smoke artifacts: {artifacts}', flush=True)
+        # Both applications build privately, including Rails assets, logs and schema dumps.
+        api_root.mkdir()
+        for directory in ('app', 'bin', 'config', 'db', 'gems', 'lib', 'public', 'vendor', 'test'):
+            ignored = ('.git', 'node_modules', '.sprockets*')
+            if directory == 'public':
+                ignored += ('packs', 'packs-test')
+            shutil.copytree(ROOT / directory, api_root / directory,
+                            ignore=shutil.ignore_patterns(*ignored))
+        for name in ('Gemfile', 'Gemfile.lock', 'Rakefile', 'config.ru', 'package.json',
+                     'package-lock.json', 'yarn.lock', 'babel.config.js', '.babelrc', '.postcssrc.yml'):
+            if (ROOT / name).exists():
+                shutil.copy2(ROOT / name, api_root / name)
+        for name in ('.browserslistrc', 'postcss.config.js', 'LICENSE.md'):
+            if (ROOT / name).exists():
+                shutil.copy2(ROOT / name, api_root / name)
+        # Webpack derives asset paths from resolved dependency locations, so a
+        # symlink back to the checkout can emit files outside the temporary tree.
+        shutil.copytree(ROOT / 'node_modules', api_root / 'node_modules', symlinks=True,
+                        ignore=shutil.ignore_patterns('.cache'))
+        (api_root / 'log').mkdir()
+        (api_root / 'tmp/pids').mkdir(parents=True)
+        run(['bundle', 'check'])
+        run(['node', '-e', "require('@playwright/test').chromium.launch().then(browser => browser.close())"],
+            cwd=SUITE, timeout=30)
+        run(compose + ['up', '-d', '--wait', '--wait-timeout', '90'], cwd=ROOT, timeout=180)
+        env['POSTGRES_PORT'] = output(compose + ['port', 'postgres', '5432']).rsplit(':', 1)[1]
+        run(['bundle', 'exec', 'rails', 'db:prepare'])
+        run(['bundle', 'exec', 'rails', 'assets:precompile'])
+        # Compile a private frontend checkout: never rewrite developer config or dist.
+        frontend = work / 'frontend'
+        shutil.copytree(ROOT / 'docker/experiment-frontend', frontend,
+                        ignore=shutil.ignore_patterns('.git', 'node_modules', 'dist', 'target'))
+        config = {
+            'PortalPath': env['ELICIT_E2E_API_URL'] + '/',
+            'ElicitLandingPath': env['ELICIT_E2E_API_URL'] + '/participant/',
+            'LarmPortalPath': '', 'WayfPath': '',
+        }
+        (frontend / 'source/configuration.json').write_text(json.dumps(config))
+        run(['npm', 'ci', '--include=dev'], cwd=frontend)
+        run(['npm', 'run', 'build'], cwd=frontend)
+        worker = start(['bundle', 'exec', 'bin/jobs'], 'worker')
+        api = start(['bundle', 'exec', 'rails', 'server', '-b', '127.0.0.1', '-p',
+                     str(api_port), '-P', str(work / 'rails.pid')], 'rails')
+        participant = start([sys.executable, '-m', 'http.server', str(frontend_port),
+                             '--bind', '127.0.0.1', '--directory', str(frontend / 'dist')], 'frontend')
+        ready(env['ELICIT_E2E_API_URL'] + '/login', api)
+        ready(env['ELICIT_E2E_FRONTEND_URL'], participant)
+        if worker.poll() is not None:
+            raise RuntimeError('Worker exited during startup')
+        run(['bundle', 'exec', 'rails', 'runner', 'test/e2e/check_worker.rb'], timeout=60)
+        run([str(SUITE / 'node_modules/.bin/playwright'), 'test', '--config',
+             str(SUITE / 'playwright.config.js'), *sys.argv[2:]], cwd=ROOT, timeout=360)
+    finally:
+        for process in reversed(processes):
+            if process.poll() is None:
+                os.killpg(process.pid, signal.SIGTERM)
+        for process in processes:
+            try:
+                process.wait(timeout=10)
+            except subprocess.TimeoutExpired:
+                os.killpg(process.pid, signal.SIGKILL)
+                process.wait()
+        for handle in handles:
+            handle.close()
+        try:
+            with (artifacts / 'postgres.log').open('w') as log:
+                subprocess.run(compose + ['logs', '--no-color'], stdout=log,
+                               stderr=subprocess.STDOUT, timeout=30)
+            subprocess.run(compose + ['down', '--volumes', '--remove-orphans'], check=True, timeout=60)
+        finally:
+            shutil.rmtree(work)
+
+
+if __name__ == '__main__':
+    try:
+        main()
+    except (subprocess.SubprocessError, RuntimeError, KeyboardInterrupt) as error:
+        sys.exit(f'Smoke run failed: {error}. See tmp/e2e for logs.')

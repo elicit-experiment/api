@@ -161,6 +161,7 @@ class ChaosExperimentService
 
   def component_to_chaos_format(component, protocol_user_id, type = 'NewComponent')
     outputs = {}
+    events = []
     unless protocol_user_id.nil?
       data_points = StudyResult::DataPoint.where(component_id: component.id, protocol_user_id: protocol_user_id)
       events = data_points.entries.reject { |d| (d.point_type.eql? 'State') }.map do |data_point|
@@ -168,7 +169,8 @@ class ChaosExperimentService
 
         {
           'Type' => data_point.point_type,
-          'EventId' => data_point.kind,
+          'Id' => data_point.kind,
+          'EntityType' => data_point.entity_type,
           'Data' => data_point.value,
           'Method' => data_point.method,
           'DateTime' => data_point.datetime
@@ -192,6 +194,7 @@ class ChaosExperimentService
       'Id': "#{@study_definition.id}:#{component.id}",
       'Fullname': 'NewComponent, 1.0.0',
       'UserAnswer': nil,
+      'Output': outputs.merge('Events' => events),
       'Component': component_data
     }
   end

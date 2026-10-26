@@ -1,0 +1,43 @@
+{
+  "version": 1,
+  "title": "Smoke study v1",
+  "trials": [
+    {
+      "key": "defaults",
+      "type": "CheckBoxGroup",
+      "instrument": {
+        "HeaderLabel": "Keep the default choice",
+        "QuestionsPerRow": 1,
+        "MinNoOfSelections": 1,
+        "MaxNoOfSelections": 2,
+        "Items": { "Item": [
+          { "Id": "default", "Label": "Default choice", "Selected": "1", "Correct": true },
+          { "Id": "alternative", "Label": "Alternative choice", "Selected": "0", "Correct": false }
+        ] }
+      }
+    },
+    {
+      "key": "text",
+      "type": "Freetext",
+      "instrument": {
+        "HeaderLabel": "Describe your experience",
+        "Label": "Your response",
+        "LabelPosition": "top",
+        "Validation": ".+",
+        "QuestionsPerRow": 1,
+        "Resizeable": false
+      }
+    },
+    {
+      "key": "scale",
+      "type": "OneDScale",
+      "instrument": {
+        "HeaderLabel": "Rate your experience",
+        "QuestionsPerRow": 1,
+        "Position": "-1",
+        "X1AxisLabel": "Rating"
+      }
+    },
+    { "key": "end", "type": "EndOfExperiment", "instrument": {} }
+  ]
+}

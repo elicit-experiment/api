@@ -13,6 +13,14 @@ development:
 
 test:
   <<: *default
+  participant_frontend:
+    host: localhost
+    port: <%= ENV['ELICIT_E2E'] == '1' ? Integer(ENV.fetch('ELICIT_E2E_FRONTEND_PORT')) : 5504 %>
+    scheme: http
+  elicit_portal:
+    host: localhost
+    port: <%= ENV['ELICIT_E2E'] == '1' ? Integer(ENV.fetch('ELICIT_E2E_API_PORT')) : 3000 %>
+    scheme: http
 
 prod_env: &prod_env
   participant_frontend:

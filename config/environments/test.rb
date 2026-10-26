@@ -52,6 +52,19 @@ Rails.application.configure do
   # Store files on "test"
   config.active_storage.service = :test
 
+  # Only the owned browser harness opts into real jobs and isolated disk storage.
+  if ENV['ELICIT_E2E'] == '1'
+    raise 'ELICIT_E2E_ROOT is required' if ENV['ELICIT_E2E_ROOT'].blank?
+
+    config.active_job.queue_adapter = :solid_queue
+    config.solid_queue.connects_to = { database: { writing: :queue } }
+    config.active_storage.service_configurations = {
+      'test' => { 'service' => 'Disk', 'root' => File.join(ENV.fetch('ELICIT_E2E_ROOT'), 'storage') },
+      # In-progress time series explicitly select :local.
+      'local' => { 'service' => 'Disk', 'root' => File.join(ENV.fetch('ELICIT_E2E_ROOT'), 'storage') }
+    }
+  end
+
   # Raises error for missing translations.
   # config.i18n.raise_on_missing_translations = true
 

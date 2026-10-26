@@ -40,7 +40,7 @@ module ChaosApi
                                          @protocol_definition,
                                          @phase_definition,
                                          @effective_user_id)
-        @response = svc.make_slide(trial_index, nil, @trial_definition)
+        @response = svc.make_slide(trial_index, @chaos_session.preview? ? nil : @chaos_session.protocol_user_id, @trial_definition)
 
         if !@chaos_session.preview? && (trial_definition = svc.trial_definition)
           if @chaos_session.phase_definition_id != trial_definition.phase_definition.id
