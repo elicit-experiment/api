@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "trialOrder": ["defaults", "text", "scale", "end"],
+  "initialText": "My first response",
+  "answers": {
+    "defaults": { "Selections": ["default"], "Correct": true },
+    "text": { "Text": "My edited response" },
+    "scale": { "Position": "0.5" }
+  },
+  "numericTolerance": 0.000001
+}
