@@ -1,0 +1,75 @@
+{
+  "selection": "Representative workflows, selected by feature coverage rather than execution frequency. No usage telemetry is available.",
+  "source_repository": "client-api",
+  "source_revision": "7ef952fc50e0d22b66611b7fab94796dc2b7f27b",
+  "examples": [
+    {
+      "file": "01-likert.study.json",
+      "sources": [
+        "Testcase_likertscale.py"
+      ],
+      "coverage": "Nine-point scale, stable choices, attached audio, side-by-side layout."
+    },
+    {
+      "file": "02-single-choice.study.json",
+      "sources": [
+        "Testcase_radiobutton.py"
+      ],
+      "coverage": "Optional and required single choice, correctness metadata, feedback and answer-once configuration."
+    },
+    {
+      "file": "03-multiple-choice.study.json",
+      "sources": [
+        "Testcase_checkboxgroup.py"
+      ],
+      "coverage": "Array-valued selections, minimum/maximum cardinality, optional empty selection."
+    },
+    {
+      "file": "04-free-text.study.json",
+      "sources": [
+        "Testcase_freetext.py"
+      ],
+      "coverage": "Required and optional text, bounded length, multiline presentation, validation pattern."
+    },
+    {
+      "file": "05-scale.study.json",
+      "sources": [
+        "Testcase_onedscale.py"
+      ],
+      "coverage": "Typed numeric response and bounded tick positions; presentation variants are consolidated."
+    },
+    {
+      "file": "06-instrument-stimuli.study.json",
+      "sources": [
+        "Testcase_instrument_stimuli.py",
+        "Testcase_image_stimuli.py"
+      ],
+      "coverage": "Study-scoped image/audio/video assets, instrument attachment, media lifecycle output."
+    },
+    {
+      "file": "07-video-monitoring.study.json",
+      "sources": [
+        "Testcase_video_stimuli_timing.py",
+        "Testcase_video_stimuli.py"
+      ],
+      "coverage": "Separate video events, mouse samples and keyboard events; timing uses occurrence IDs and explicit sequence numbers."
+    },
+    {
+      "file": "08-face-landmarks.study.json",
+      "sources": [
+        "Testcase_landmarker_calibration.py",
+        "Testcase_landmarker.py"
+      ],
+      "coverage": "Explicit calibration component, normalized landmark rows, blendshape rows, sample IDs, optional z coordinates."
+    },
+    {
+      "file": "09-ordering-completion.study.json",
+      "sources": [
+        "Testcase_TrialOrder_anonymous.py",
+        "random-and-completion-code.py",
+        "Testcase_completioncode.py"
+      ],
+      "coverage": "Declarative shuffle and replacement sampling, scoped key reuse, occurrence-aware results, completion outside random phases."
+    }
+  ]
+}

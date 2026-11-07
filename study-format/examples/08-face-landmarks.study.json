@@ -1,0 +1,120 @@
+{
+  "$schema": "../elicit_study/contracts/study.schema.json",
+  "schema_version": "1",
+  "key": "face-landmarks",
+  "title": "Face calibration and capture",
+  "description": "Offline rewrite of a client-api example; see README.md for migration scope.",
+  "settings": {
+    "allow_anonymous": true
+  },
+  "assets": [
+    {
+      "key": "clip",
+      "kind": "video",
+      "uri": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+      "mime_type": "video/mp4"
+    }
+  ],
+  "protocols": [
+    {
+      "key": "main",
+      "phases": [
+        {
+          "key": "capture",
+          "trials": [
+            {
+              "key": "welcome",
+              "components": [
+                {
+                  "key": "instructions",
+                  "type": "text",
+                  "type_version": "1",
+                  "config": {
+                    "text": "Allow camera access, then look at each calibration target."
+                  }
+                }
+              ]
+            },
+            {
+              "key": "calibrate",
+              "components": [
+                {
+                  "key": "calibration",
+                  "type": "face_calibration",
+                  "type_version": "1",
+                  "config": {
+                    "number_of_faces": 1,
+                    "duration_seconds": 5,
+                    "landmarks": true,
+                    "blendshapes": true,
+                    "include_z": false,
+                    "max_rate_hz": 30
+                  }
+                }
+              ]
+            },
+            {
+              "key": "view",
+              "components": [
+                {
+                  "key": "face",
+                  "type": "face_landmark",
+                  "type_version": "1",
+                  "config": {
+                    "number_of_faces": 1,
+                    "landmarks": true,
+                    "blendshapes": true,
+                    "include_z": true,
+                    "max_rate_hz": 30
+                  }
+                },
+                {
+                  "key": "clip",
+                  "type": "media",
+                  "type_version": "1",
+                  "config": {
+                    "asset": "clip"
+                  }
+                }
+              ]
+            }
+          ],
+          "order": {
+            "mode": "fixed",
+            "sequence": [
+              "welcome",
+              "calibrate",
+              "view"
+            ]
+          }
+        },
+        {
+          "key": "finish",
+          "trials": [
+            {
+              "key": "thanks",
+              "components": [
+                {
+                  "key": "end",
+                  "type": "end",
+                  "type_version": "1",
+                  "config": {}
+                }
+              ]
+            }
+          ],
+          "order": {
+            "mode": "fixed",
+            "sequence": [
+              "thanks"
+            ]
+          }
+        }
+      ],
+      "phase_order": [
+        "capture",
+        "finish"
+      ]
+    }
+  ]
+}

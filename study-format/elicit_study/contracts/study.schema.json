@@ -1,0 +1,1287 @@
+{
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": "1"
+    },
+    "key": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_-]*$",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "description": {
+      "type": "string",
+      "default": ""
+    },
+    "settings": {
+      "type": "object",
+      "properties": {
+        "allow_anonymous": {
+          "type": "boolean",
+          "default": false
+        },
+        "allow_previous": {
+          "type": "boolean",
+          "default": false
+        },
+        "lock_answers": {
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]*$",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "image",
+              "audio",
+              "video"
+            ]
+          },
+          "uri": {
+            "type": "string",
+            "minLength": 1
+          },
+          "mime_type": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "key",
+          "kind",
+          "uri",
+          "mime_type"
+        ],
+        "additionalProperties": false
+      },
+      "default": []
+    },
+    "protocols": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "key": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]*$",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "title": {
+            "type": "string"
+          },
+          "phases": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_-]*$",
+                  "minLength": 1,
+                  "maxLength": 100
+                },
+                "title": {
+                  "type": "string"
+                },
+                "trials": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "key": {
+                        "type": "string",
+                        "pattern": "^[a-z][a-z0-9_-]*$",
+                        "minLength": 1,
+                        "maxLength": 100
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "components": {
+                        "type": "array",
+                        "items": {
+                          "oneOf": [
+                            {
+                              "type": "object",
+                              "properties": {
+                                "key": {
+                                  "type": "string",
+                                  "pattern": "^[a-z][a-z0-9_-]*$",
+                                  "minLength": 1,
+                                  "maxLength": 100
+                                },
+                                "type": {
+                                  "const": "text"
+                                },
+                                "type_version": {
+                                  "const": "1"
+                                },
+                                "config": {
+                                  "type": "object",
+                                  "properties": {
+                                    "text": {
+                                      "type": "string"
+                                    }
+                                  },
+                                  "required": [
+                                    "text"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                "stimuli": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "pattern": "^[a-z][a-z0-9_-]*$",
+                                    "minLength": 1,
+                                    "maxLength": 100
+                                  },
+                                  "uniqueItems": true,
+                                  "default": []
+                                },
+                                "layout": {
+                                  "type": "object",
+                                  "properties": {
+                                    "columns": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "number",
+                                        "exclusiveMinimum": 0,
+                                        "maximum": 100
+                                      },
+                                      "minItems": 1,
+                                      "maxItems": 4
+                                    }
+                                  },
+                                  "required": [
+                                    "columns"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              },
+                              "required": [
+                                "key",
+                                "type",
+                                "type_version",
+                                "config"
+                              ],
+                              "additionalProperties": false,
+                              "title": "Text",
+                              "description": "Formatted instructions and headings; no answer output."
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "key": {
+                                  "type": "string",
+                                  "pattern": "^[a-z][a-z0-9_-]*$",
+                                  "minLength": 1,
+                                  "maxLength": 100
+                                },
+                                "type": {
+                                  "const": "likert"
+                                },
+                                "type_version": {
+                                  "const": "1"
+                                },
+                                "config": {
+                                  "type": "object",
+                                  "properties": {
+                                    "prompt": {
+                                      "type": "string"
+                                    },
+                                    "choices": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "key": {
+                                            "type": "string",
+                                            "pattern": "^[a-z][a-z0-9_-]*$",
+                                            "minLength": 1,
+                                            "maxLength": 100
+                                          },
+                                          "label": {
+                                            "type": "string"
+                                          },
+                                          "correct": {
+                                            "type": "boolean",
+                                            "default": false
+                                          }
+                                        },
+                                        "required": [
+                                          "key",
+                                          "label"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      "minItems": 2
+                                    },
+                                    "required": {
+                                      "type": "boolean",
+                                      "default": true
+                                    },
+                                    "show_feedback": {
+                                      "type": "boolean",
+                                      "default": false
+                                    },
+                                    "answer_once": {
+                                      "type": "boolean",
+                                      "default": false
+                                    }
+                                  },
+                                  "required": [
+                                    "prompt",
+                                    "choices"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                "stimuli": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "pattern": "^[a-z][a-z0-9_-]*$",
+                                    "minLength": 1,
+                                    "maxLength": 100
+                                  },
+                                  "uniqueItems": true,
+                                  "default": []
+                                },
+                                "layout": {
+                                  "type": "object",
+                                  "properties": {
+                                    "columns": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "number",
+                                        "exclusiveMinimum": 0,
+                                        "maximum": 100
+                                      },
+                                      "minItems": 1,
+                                      "maxItems": 4
+                                    }
+                                  },
+                                  "required": [
+                                    "columns"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              },
+                              "required": [
+                                "key",
+                                "type",
+                                "type_version",
+                                "config"
+                              ],
+                              "additionalProperties": false,
+                              "title": "Likert scale",
+                              "description": "One stable choice key per response. Choice labels are presentation only."
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "key": {
+                                  "type": "string",
+                                  "pattern": "^[a-z][a-z0-9_-]*$",
+                                  "minLength": 1,
+                                  "maxLength": 100
+                                },
+                                "type": {
+                                  "const": "single_choice"
+                                },
+                                "type_version": {
+                                  "const": "1"
+                                },
+                                "config": {
+                                  "type": "object",
+                                  "properties": {
+                                    "prompt": {
+                                      "type": "string"
+                                    },
+                                    "choices": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "key": {
+                                            "type": "string",
+                                            "pattern": "^[a-z][a-z0-9_-]*$",
+                                            "minLength": 1,
+                                            "maxLength": 100
+                                          },
+                                          "label": {
+                                            "type": "string"
+                                          },
+                                          "correct": {
+                                            "type": "boolean",
+                                            "default": false
+                                          }
+                                        },
+                                        "required": [
+                                          "key",
+                                          "label"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      "minItems": 2
+                                    },
+                                    "required": {
+                                      "type": "boolean",
+                                      "default": true
+                                    },
+                                    "show_feedback": {
+                                      "type": "boolean",
+                                      "default": false
+                                    },
+                                    "answer_once": {
+                                      "type": "boolean",
+                                      "default": false
+                                    }
+                                  },
+                                  "required": [
+                                    "prompt",
+                                    "choices"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                "stimuli": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "pattern": "^[a-z][a-z0-9_-]*$",
+                                    "minLength": 1,
+                                    "maxLength": 100
+                                  },
+                                  "uniqueItems": true,
+                                  "default": []
+                                },
+                                "layout": {
+                                  "type": "object",
+                                  "properties": {
+                                    "columns": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "number",
+                                        "exclusiveMinimum": 0,
+                                        "maximum": 100
+                                      },
+                                      "minItems": 1,
+                                      "maxItems": 4
+                                    }
+                                  },
+                                  "required": [
+                                    "columns"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              },
+                              "required": [
+                                "key",
+                                "type",
+                                "type_version",
+                                "config"
+                              ],
+                              "additionalProperties": false,
+                              "title": "Single choice",
+                              "description": "One stable choice key per response. Choice labels are presentation only."
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "key": {
+                                  "type": "string",
+                                  "pattern": "^[a-z][a-z0-9_-]*$",
+                                  "minLength": 1,
+                                  "maxLength": 100
+                                },
+                                "type": {
+                                  "const": "multiple_choice"
+                                },
+                                "type_version": {
+                                  "const": "1"
+                                },
+                                "config": {
+                                  "type": "object",
+                                  "properties": {
+                                    "prompt": {
+                                      "type": "string"
+                                    },
+                                    "choices": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "key": {
+                                            "type": "string",
+                                            "pattern": "^[a-z][a-z0-9_-]*$",
+                                            "minLength": 1,
+                                            "maxLength": 100
+                                          },
+                                          "label": {
+                                            "type": "string"
+                                          },
+                                          "correct": {
+                                            "type": "boolean",
+                                            "default": false
+                                          }
+                                        },
+                                        "required": [
+                                          "key",
+                                          "label"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      "minItems": 2
+                                    },
+                                    "required": {
+                                      "type": "boolean",
+                                      "default": true
+                                    },
+                                    "show_feedback": {
+                                      "type": "boolean",
+                                      "default": false
+                                    },
+                                    "answer_once": {
+                                      "type": "boolean",
+                                      "default": false
+                                    },
+                                    "min_selections": {
+                                      "type": "integer",
+                                      "minimum": 0,
+                                      "default": 0
+                                    },
+                                    "max_selections": {
+                                      "type": "integer",
+                                      "minimum": 1
+                                    }
+                                  },
+                                  "required": [
+                                    "prompt",
+                                    "choices"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                "stimuli": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "pattern": "^[a-z][a-z0-9_-]*$",
+                                    "minLength": 1,
+                                    "maxLength": 100
+                                  },
+                                  "uniqueItems": true,
+                                  "default": []
+                                },
+                                "layout": {
+                                  "type": "object",
+                                  "properties": {
+                                    "columns": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "number",
+                                        "exclusiveMinimum": 0,
+                                        "maximum": 100
+                                      },
+                                      "minItems": 1,
+                                      "maxItems": 4
+                                    }
+                                  },
+                                  "required": [
+                                    "columns"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              },
+                              "required": [
+                                "key",
+                                "type",
+                                "type_version",
+                                "config"
+                              ],
+                              "additionalProperties": false,
+                              "title": "Multiple choice",
+                              "description": "Unique selected choice keys, with configured cardinality constraints."
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "key": {
+                                  "type": "string",
+                                  "pattern": "^[a-z][a-z0-9_-]*$",
+                                  "minLength": 1,
+                                  "maxLength": 100
+                                },
+                                "type": {
+                                  "const": "free_text"
+                                },
+                                "type_version": {
+                                  "const": "1"
+                                },
+                                "config": {
+                                  "type": "object",
+                                  "properties": {
+                                    "prompt": {
+                                      "type": "string"
+                                    },
+                                    "required": {
+                                      "type": "boolean",
+                                      "default": true
+                                    },
+                                    "max_length": {
+                                      "type": "integer",
+                                      "minimum": 1
+                                    },
+                                    "validation_pattern": {
+                                      "type": "string"
+                                    },
+                                    "rows": {
+                                      "type": "integer",
+                                      "minimum": 1,
+                                      "default": 4
+                                    }
+                                  },
+                                  "required": [
+                                    "prompt"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                "stimuli": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "pattern": "^[a-z][a-z0-9_-]*$",
+                                    "minLength": 1,
+                                    "maxLength": 100
+                                  },
+                                  "uniqueItems": true,
+                                  "default": []
+                                },
+                                "layout": {
+                                  "type": "object",
+                                  "properties": {
+                                    "columns": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "number",
+                                        "exclusiveMinimum": 0,
+                                        "maximum": 100
+                                      },
+                                      "minItems": 1,
+                                      "maxItems": 4
+                                    }
+                                  },
+                                  "required": [
+                                    "columns"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              },
+                              "required": [
+                                "key",
+                                "type",
+                                "type_version",
+                                "config"
+                              ],
+                              "additionalProperties": false,
+                              "title": "Free text",
+                              "description": "Text response; regular expressions use the portable JSON Schema pattern dialect."
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "key": {
+                                  "type": "string",
+                                  "pattern": "^[a-z][a-z0-9_-]*$",
+                                  "minLength": 1,
+                                  "maxLength": 100
+                                },
+                                "type": {
+                                  "const": "scale_1d"
+                                },
+                                "type_version": {
+                                  "const": "1"
+                                },
+                                "config": {
+                                  "type": "object",
+                                  "properties": {
+                                    "prompt": {
+                                      "type": "string"
+                                    },
+                                    "min": {
+                                      "type": "number",
+                                      "default": -1
+                                    },
+                                    "max": {
+                                      "type": "number",
+                                      "default": 1
+                                    },
+                                    "required": {
+                                      "type": "boolean",
+                                      "default": true
+                                    },
+                                    "ticks": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "object",
+                                        "properties": {
+                                          "value": {
+                                            "type": "number"
+                                          },
+                                          "label": {
+                                            "type": "string"
+                                          }
+                                        },
+                                        "required": [
+                                          "value",
+                                          "label"
+                                        ],
+                                        "additionalProperties": false
+                                      },
+                                      "default": []
+                                    }
+                                  },
+                                  "required": [
+                                    "prompt"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                "stimuli": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "pattern": "^[a-z][a-z0-9_-]*$",
+                                    "minLength": 1,
+                                    "maxLength": 100
+                                  },
+                                  "uniqueItems": true,
+                                  "default": []
+                                },
+                                "layout": {
+                                  "type": "object",
+                                  "properties": {
+                                    "columns": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "number",
+                                        "exclusiveMinimum": 0,
+                                        "maximum": 100
+                                      },
+                                      "minItems": 1,
+                                      "maxItems": 4
+                                    }
+                                  },
+                                  "required": [
+                                    "columns"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              },
+                              "required": [
+                                "key",
+                                "type",
+                                "type_version",
+                                "config"
+                              ],
+                              "additionalProperties": false,
+                              "title": "One dimensional scale",
+                              "description": "Numeric response with explicit bounds; defaults preserve the existing normalized -1 to 1 range."
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "key": {
+                                  "type": "string",
+                                  "pattern": "^[a-z][a-z0-9_-]*$",
+                                  "minLength": 1,
+                                  "maxLength": 100
+                                },
+                                "type": {
+                                  "const": "media"
+                                },
+                                "type_version": {
+                                  "const": "1"
+                                },
+                                "config": {
+                                  "type": "object",
+                                  "properties": {
+                                    "asset": {
+                                      "type": "string",
+                                      "pattern": "^[a-z][a-z0-9_-]*$",
+                                      "minLength": 1,
+                                      "maxLength": 100
+                                    },
+                                    "optional": {
+                                      "type": "boolean",
+                                      "default": true
+                                    },
+                                    "pausable": {
+                                      "type": "boolean",
+                                      "default": true
+                                    },
+                                    "replayable": {
+                                      "type": "boolean",
+                                      "default": true
+                                    },
+                                    "max_replays": {
+                                      "type": "integer",
+                                      "minimum": 0
+                                    },
+                                    "autoplay": {
+                                      "type": "boolean",
+                                      "default": false
+                                    }
+                                  },
+                                  "required": [
+                                    "asset"
+                                  ],
+                                  "additionalProperties": false
+                                },
+                                "stimuli": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "pattern": "^[a-z][a-z0-9_-]*$",
+                                    "minLength": 1,
+                                    "maxLength": 100
+                                  },
+                                  "uniqueItems": true,
+                                  "default": []
+                                },
+                                "layout": {
+                                  "type": "object",
+                                  "properties": {
+                                    "columns": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "number",
+                                        "exclusiveMinimum": 0,
+                                        "maximum": 100
+                                      },
+                                      "minItems": 1,
+                                      "maxItems": 4
+                                    }
+                                  },
+                                  "required": [
+                                    "columns"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              },
+                              "required": [
+                                "key",
+                                "type",
+                                "type_version",
+                                "config"
+                              ],
+                              "additionalProperties": false,
+                              "title": "Media stimulus",
+                              "description": "Standalone image, audio or video; lifecycle events are distinct from answers."
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "key": {
+                                  "type": "string",
+                                  "pattern": "^[a-z][a-z0-9_-]*$",
+                                  "minLength": 1,
+                                  "maxLength": 100
+                                },
+                                "type": {
+                                  "const": "monitor"
+                                },
+                                "type_version": {
+                                  "const": "1"
+                                },
+                                "config": {
+                                  "type": "object",
+                                  "properties": {
+                                    "mouse": {
+                                      "type": "boolean",
+                                      "default": true
+                                    },
+                                    "keyboard": {
+                                      "type": "boolean",
+                                      "default": false
+                                    },
+                                    "max_rate_hz": {
+                                      "type": "number",
+                                      "exclusiveMinimum": 0,
+                                      "maximum": 240,
+                                      "default": 30
+                                    }
+                                  },
+                                  "required": [],
+                                  "additionalProperties": false
+                                },
+                                "stimuli": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "pattern": "^[a-z][a-z0-9_-]*$",
+                                    "minLength": 1,
+                                    "maxLength": 100
+                                  },
+                                  "uniqueItems": true,
+                                  "default": []
+                                },
+                                "layout": {
+                                  "type": "object",
+                                  "properties": {
+                                    "columns": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "number",
+                                        "exclusiveMinimum": 0,
+                                        "maximum": 100
+                                      },
+                                      "minItems": 1,
+                                      "maxItems": 4
+                                    }
+                                  },
+                                  "required": [
+                                    "columns"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              },
+                              "required": [
+                                "key",
+                                "type",
+                                "type_version",
+                                "config"
+                              ],
+                              "additionalProperties": false,
+                              "title": "Mouse and keyboard monitor",
+                              "description": "Mouse coordinates are CSS pixels; keyboard events are emitted only when enabled."
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "key": {
+                                  "type": "string",
+                                  "pattern": "^[a-z][a-z0-9_-]*$",
+                                  "minLength": 1,
+                                  "maxLength": 100
+                                },
+                                "type": {
+                                  "const": "face_landmark"
+                                },
+                                "type_version": {
+                                  "const": "1"
+                                },
+                                "config": {
+                                  "type": "object",
+                                  "properties": {
+                                    "number_of_faces": {
+                                      "type": "integer",
+                                      "minimum": 1,
+                                      "maximum": 8,
+                                      "default": 1
+                                    },
+                                    "landmarks": {
+                                      "type": "boolean",
+                                      "default": true
+                                    },
+                                    "blendshapes": {
+                                      "type": "boolean",
+                                      "default": false
+                                    },
+                                    "include_z": {
+                                      "type": "boolean",
+                                      "default": false
+                                    },
+                                    "max_rate_hz": {
+                                      "type": "number",
+                                      "exclusiveMinimum": 0,
+                                      "maximum": 240,
+                                      "default": 30
+                                    }
+                                  },
+                                  "required": [],
+                                  "additionalProperties": false
+                                },
+                                "stimuli": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "pattern": "^[a-z][a-z0-9_-]*$",
+                                    "minLength": 1,
+                                    "maxLength": 100
+                                  },
+                                  "uniqueItems": true,
+                                  "default": []
+                                },
+                                "layout": {
+                                  "type": "object",
+                                  "properties": {
+                                    "columns": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "number",
+                                        "exclusiveMinimum": 0,
+                                        "maximum": 100
+                                      },
+                                      "minItems": 1,
+                                      "maxItems": 4
+                                    }
+                                  },
+                                  "required": [
+                                    "columns"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              },
+                              "required": [
+                                "key",
+                                "type",
+                                "type_version",
+                                "config"
+                              ],
+                              "additionalProperties": false,
+                              "title": "Face landmark capture",
+                              "description": "One landmark row per point, and one blendshape row per category; x/y/z use MediaPipe normalized coordinates."
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "key": {
+                                  "type": "string",
+                                  "pattern": "^[a-z][a-z0-9_-]*$",
+                                  "minLength": 1,
+                                  "maxLength": 100
+                                },
+                                "type": {
+                                  "const": "face_calibration"
+                                },
+                                "type_version": {
+                                  "const": "1"
+                                },
+                                "config": {
+                                  "type": "object",
+                                  "properties": {
+                                    "number_of_faces": {
+                                      "type": "integer",
+                                      "minimum": 1,
+                                      "maximum": 8,
+                                      "default": 1
+                                    },
+                                    "landmarks": {
+                                      "type": "boolean",
+                                      "default": true
+                                    },
+                                    "blendshapes": {
+                                      "type": "boolean",
+                                      "default": false
+                                    },
+                                    "include_z": {
+                                      "type": "boolean",
+                                      "default": false
+                                    },
+                                    "max_rate_hz": {
+                                      "type": "number",
+                                      "exclusiveMinimum": 0,
+                                      "maximum": 240,
+                                      "default": 30
+                                    },
+                                    "duration_seconds": {
+                                      "type": "number",
+                                      "exclusiveMinimum": 0,
+                                      "default": 5
+                                    }
+                                  },
+                                  "required": [],
+                                  "additionalProperties": false
+                                },
+                                "stimuli": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "pattern": "^[a-z][a-z0-9_-]*$",
+                                    "minLength": 1,
+                                    "maxLength": 100
+                                  },
+                                  "uniqueItems": true,
+                                  "default": []
+                                },
+                                "layout": {
+                                  "type": "object",
+                                  "properties": {
+                                    "columns": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "number",
+                                        "exclusiveMinimum": 0,
+                                        "maximum": 100
+                                      },
+                                      "minItems": 1,
+                                      "maxItems": 4
+                                    }
+                                  },
+                                  "required": [
+                                    "columns"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              },
+                              "required": [
+                                "key",
+                                "type",
+                                "type_version",
+                                "config"
+                              ],
+                              "additionalProperties": false,
+                              "title": "Face calibration",
+                              "description": "Calibration is an explicit component, replacing special trial-level configuration. Calibration x/y are CSS pixels."
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "key": {
+                                  "type": "string",
+                                  "pattern": "^[a-z][a-z0-9_-]*$",
+                                  "minLength": 1,
+                                  "maxLength": 100
+                                },
+                                "type": {
+                                  "const": "completion_code"
+                                },
+                                "type_version": {
+                                  "const": "1"
+                                },
+                                "config": {
+                                  "type": "object",
+                                  "properties": {
+                                    "prefix": {
+                                      "type": "string",
+                                      "default": ""
+                                    },
+                                    "length": {
+                                      "type": "integer",
+                                      "minimum": 4,
+                                      "maximum": 64,
+                                      "default": 8
+                                    }
+                                  },
+                                  "required": [],
+                                  "additionalProperties": false
+                                },
+                                "stimuli": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "pattern": "^[a-z][a-z0-9_-]*$",
+                                    "minLength": 1,
+                                    "maxLength": 100
+                                  },
+                                  "uniqueItems": true,
+                                  "default": []
+                                },
+                                "layout": {
+                                  "type": "object",
+                                  "properties": {
+                                    "columns": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "number",
+                                        "exclusiveMinimum": 0,
+                                        "maximum": 100
+                                      },
+                                      "minItems": 1,
+                                      "maxItems": 4
+                                    }
+                                  },
+                                  "required": [
+                                    "columns"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              },
+                              "required": [
+                                "key",
+                                "type",
+                                "type_version",
+                                "config"
+                              ],
+                              "additionalProperties": false,
+                              "title": "Completion code",
+                              "description": "Runtime-generated code; definition compilation must never generate participant codes."
+                            },
+                            {
+                              "type": "object",
+                              "properties": {
+                                "key": {
+                                  "type": "string",
+                                  "pattern": "^[a-z][a-z0-9_-]*$",
+                                  "minLength": 1,
+                                  "maxLength": 100
+                                },
+                                "type": {
+                                  "const": "end"
+                                },
+                                "type_version": {
+                                  "const": "1"
+                                },
+                                "config": {
+                                  "type": "object",
+                                  "properties": {
+                                    "message": {
+                                      "type": "string",
+                                      "default": "Thank you for participating."
+                                    }
+                                  },
+                                  "required": [],
+                                  "additionalProperties": false
+                                },
+                                "stimuli": {
+                                  "type": "array",
+                                  "items": {
+                                    "type": "string",
+                                    "pattern": "^[a-z][a-z0-9_-]*$",
+                                    "minLength": 1,
+                                    "maxLength": 100
+                                  },
+                                  "uniqueItems": true,
+                                  "default": []
+                                },
+                                "layout": {
+                                  "type": "object",
+                                  "properties": {
+                                    "columns": {
+                                      "type": "array",
+                                      "items": {
+                                        "type": "number",
+                                        "exclusiveMinimum": 0,
+                                        "maximum": 100
+                                      },
+                                      "minItems": 1,
+                                      "maxItems": 4
+                                    }
+                                  },
+                                  "required": [
+                                    "columns"
+                                  ],
+                                  "additionalProperties": false
+                                }
+                              },
+                              "required": [
+                                "key",
+                                "type",
+                                "type_version",
+                                "config"
+                              ],
+                              "additionalProperties": false,
+                              "title": "End study",
+                              "description": "Explicit end marker, outside shuffled assessment trials."
+                            }
+                          ]
+                        },
+                        "minItems": 1
+                      }
+                    },
+                    "required": [
+                      "key",
+                      "components"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "minItems": 1
+                },
+                "order": {
+                  "type": "object",
+                  "properties": {
+                    "mode": {
+                      "type": "string",
+                      "enum": [
+                        "fixed",
+                        "shuffle",
+                        "sample_with_replacement"
+                      ]
+                    },
+                    "sequence": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "pattern": "^[a-z][a-z0-9_-]*$",
+                        "minLength": 1,
+                        "maxLength": 100
+                      },
+                      "minItems": 1
+                    },
+                    "count": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  },
+                  "required": [
+                    "mode",
+                    "sequence"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "key",
+                "trials",
+                "order"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1
+          },
+          "phase_order": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_-]*$",
+              "minLength": 1,
+              "maxLength": 100
+            },
+            "minItems": 1,
+            "uniqueItems": true
+          }
+        },
+        "required": [
+          "key",
+          "phases",
+          "phase_order"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "schema_version",
+    "key",
+    "title",
+    "protocols"
+  ],
+  "additionalProperties": false,
+  "title": "Elicit study definition v1",
+  "description": "Portable authored study. Keys are scoped to their containing object; assets are scoped to the study.",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://elicit-experiment.com/schemas/study-v1.json"
+}

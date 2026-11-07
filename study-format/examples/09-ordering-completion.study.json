@@ -1,0 +1,284 @@
+{
+  "$schema": "../elicit_study/contracts/study.schema.json",
+  "schema_version": "1",
+  "key": "ordering-completion",
+  "title": "Random ordering and completion codes",
+  "description": "Offline rewrite of a client-api example; see README.md for migration scope.",
+  "settings": {
+    "allow_anonymous": true
+  },
+  "assets": [],
+  "protocols": [
+    {
+      "key": "main",
+      "phases": [
+        {
+          "key": "shuffled",
+          "trials": [
+            {
+              "key": "trial-1",
+              "components": [
+                {
+                  "key": "text",
+                  "type": "text",
+                  "type_version": "1",
+                  "config": {
+                    "text": "Trial 1"
+                  }
+                },
+                {
+                  "key": "answer",
+                  "type": "single_choice",
+                  "type_version": "1",
+                  "config": {
+                    "prompt": "Continue?",
+                    "choices": [
+                      {
+                        "key": "option-1",
+                        "label": "Yes"
+                      },
+                      {
+                        "key": "option-2",
+                        "label": "No"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "key": "trial-2",
+              "components": [
+                {
+                  "key": "text",
+                  "type": "text",
+                  "type_version": "1",
+                  "config": {
+                    "text": "Trial 2"
+                  }
+                },
+                {
+                  "key": "answer",
+                  "type": "single_choice",
+                  "type_version": "1",
+                  "config": {
+                    "prompt": "Continue?",
+                    "choices": [
+                      {
+                        "key": "option-1",
+                        "label": "Yes"
+                      },
+                      {
+                        "key": "option-2",
+                        "label": "No"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "key": "trial-3",
+              "components": [
+                {
+                  "key": "text",
+                  "type": "text",
+                  "type_version": "1",
+                  "config": {
+                    "text": "Trial 3"
+                  }
+                },
+                {
+                  "key": "answer",
+                  "type": "single_choice",
+                  "type_version": "1",
+                  "config": {
+                    "prompt": "Continue?",
+                    "choices": [
+                      {
+                        "key": "option-1",
+                        "label": "Yes"
+                      },
+                      {
+                        "key": "option-2",
+                        "label": "No"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ],
+          "order": {
+            "mode": "shuffle",
+            "sequence": [
+              "trial-1",
+              "trial-2",
+              "trial-3"
+            ]
+          }
+        },
+        {
+          "key": "repeated",
+          "trials": [
+            {
+              "key": "trial-1",
+              "components": [
+                {
+                  "key": "text",
+                  "type": "text",
+                  "type_version": "1",
+                  "config": {
+                    "text": "Trial 1"
+                  }
+                },
+                {
+                  "key": "answer",
+                  "type": "single_choice",
+                  "type_version": "1",
+                  "config": {
+                    "prompt": "Continue?",
+                    "choices": [
+                      {
+                        "key": "option-1",
+                        "label": "Yes"
+                      },
+                      {
+                        "key": "option-2",
+                        "label": "No"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "key": "trial-2",
+              "components": [
+                {
+                  "key": "text",
+                  "type": "text",
+                  "type_version": "1",
+                  "config": {
+                    "text": "Trial 2"
+                  }
+                },
+                {
+                  "key": "answer",
+                  "type": "single_choice",
+                  "type_version": "1",
+                  "config": {
+                    "prompt": "Continue?",
+                    "choices": [
+                      {
+                        "key": "option-1",
+                        "label": "Yes"
+                      },
+                      {
+                        "key": "option-2",
+                        "label": "No"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "key": "trial-3",
+              "components": [
+                {
+                  "key": "text",
+                  "type": "text",
+                  "type_version": "1",
+                  "config": {
+                    "text": "Trial 3"
+                  }
+                },
+                {
+                  "key": "answer",
+                  "type": "single_choice",
+                  "type_version": "1",
+                  "config": {
+                    "prompt": "Continue?",
+                    "choices": [
+                      {
+                        "key": "option-1",
+                        "label": "Yes"
+                      },
+                      {
+                        "key": "option-2",
+                        "label": "No"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ],
+          "order": {
+            "mode": "sample_with_replacement",
+            "sequence": [
+              "trial-1",
+              "trial-2",
+              "trial-3"
+            ],
+            "count": 5
+          }
+        },
+        {
+          "key": "code",
+          "trials": [
+            {
+              "key": "code",
+              "components": [
+                {
+                  "key": "completion",
+                  "type": "completion_code",
+                  "type_version": "1",
+                  "config": {
+                    "prefix": "STUDY-",
+                    "length": 8
+                  }
+                }
+              ]
+            }
+          ],
+          "order": {
+            "mode": "fixed",
+            "sequence": [
+              "code"
+            ]
+          }
+        },
+        {
+          "key": "finish",
+          "trials": [
+            {
+              "key": "thanks",
+              "components": [
+                {
+                  "key": "end",
+                  "type": "end",
+                  "type_version": "1",
+                  "config": {}
+                }
+              ]
+            }
+          ],
+          "order": {
+            "mode": "fixed",
+            "sequence": [
+              "thanks"
+            ]
+          }
+        }
+      ],
+      "phase_order": [
+        "shuffled",
+        "repeated",
+        "code",
+        "finish"
+      ]
+    }
+  ]
+}

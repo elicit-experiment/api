@@ -1,0 +1,829 @@
+{
+  "contract_version": "1",
+  "components": {
+    "text": {
+      "version": "1",
+      "title": "Text",
+      "description": "Formatted instructions and headings; no answer output.",
+      "config_schema": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "text"
+        ],
+        "additionalProperties": false
+      },
+      "outputs": {}
+    },
+    "likert": {
+      "version": "1",
+      "title": "Likert scale",
+      "description": "One stable choice key per response. Choice labels are presentation only.",
+      "config_schema": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string"
+          },
+          "choices": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_-]*$",
+                  "minLength": 1,
+                  "maxLength": 100
+                },
+                "label": {
+                  "type": "string"
+                },
+                "correct": {
+                  "type": "boolean",
+                  "default": false
+                }
+              },
+              "required": [
+                "key",
+                "label"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 2
+          },
+          "required": {
+            "type": "boolean",
+            "default": true
+          },
+          "show_feedback": {
+            "type": "boolean",
+            "default": false
+          },
+          "answer_once": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "required": [
+          "prompt",
+          "choices"
+        ],
+        "additionalProperties": false
+      },
+      "outputs": {
+        "answer": {
+          "type": "object",
+          "properties": {
+            "choice_key": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "choice_key"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "single_choice": {
+      "version": "1",
+      "title": "Single choice",
+      "description": "One stable choice key per response. Choice labels are presentation only.",
+      "config_schema": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string"
+          },
+          "choices": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_-]*$",
+                  "minLength": 1,
+                  "maxLength": 100
+                },
+                "label": {
+                  "type": "string"
+                },
+                "correct": {
+                  "type": "boolean",
+                  "default": false
+                }
+              },
+              "required": [
+                "key",
+                "label"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 2
+          },
+          "required": {
+            "type": "boolean",
+            "default": true
+          },
+          "show_feedback": {
+            "type": "boolean",
+            "default": false
+          },
+          "answer_once": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "required": [
+          "prompt",
+          "choices"
+        ],
+        "additionalProperties": false
+      },
+      "outputs": {
+        "answer": {
+          "type": "object",
+          "properties": {
+            "choice_key": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "choice_key"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "multiple_choice": {
+      "version": "1",
+      "title": "Multiple choice",
+      "description": "Unique selected choice keys, with configured cardinality constraints.",
+      "config_schema": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string"
+          },
+          "choices": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "key": {
+                  "type": "string",
+                  "pattern": "^[a-z][a-z0-9_-]*$",
+                  "minLength": 1,
+                  "maxLength": 100
+                },
+                "label": {
+                  "type": "string"
+                },
+                "correct": {
+                  "type": "boolean",
+                  "default": false
+                }
+              },
+              "required": [
+                "key",
+                "label"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 2
+          },
+          "required": {
+            "type": "boolean",
+            "default": true
+          },
+          "show_feedback": {
+            "type": "boolean",
+            "default": false
+          },
+          "answer_once": {
+            "type": "boolean",
+            "default": false
+          },
+          "min_selections": {
+            "type": "integer",
+            "minimum": 0,
+            "default": 0
+          },
+          "max_selections": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "prompt",
+          "choices"
+        ],
+        "additionalProperties": false
+      },
+      "outputs": {
+        "answer": {
+          "type": "object",
+          "properties": {
+            "choice_keys": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "choice_keys"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "free_text": {
+      "version": "1",
+      "title": "Free text",
+      "description": "Text response; regular expressions use the portable JSON Schema pattern dialect.",
+      "config_schema": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string"
+          },
+          "required": {
+            "type": "boolean",
+            "default": true
+          },
+          "max_length": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "validation_pattern": {
+            "type": "string"
+          },
+          "rows": {
+            "type": "integer",
+            "minimum": 1,
+            "default": 4
+          }
+        },
+        "required": [
+          "prompt"
+        ],
+        "additionalProperties": false
+      },
+      "outputs": {
+        "answer": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "text"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "scale_1d": {
+      "version": "1",
+      "title": "One dimensional scale",
+      "description": "Numeric response with explicit bounds; defaults preserve the existing normalized -1 to 1 range.",
+      "config_schema": {
+        "type": "object",
+        "properties": {
+          "prompt": {
+            "type": "string"
+          },
+          "min": {
+            "type": "number",
+            "default": -1
+          },
+          "max": {
+            "type": "number",
+            "default": 1
+          },
+          "required": {
+            "type": "boolean",
+            "default": true
+          },
+          "ticks": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "number"
+                },
+                "label": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "value",
+                "label"
+              ],
+              "additionalProperties": false
+            },
+            "default": []
+          }
+        },
+        "required": [
+          "prompt"
+        ],
+        "additionalProperties": false
+      },
+      "outputs": {
+        "answer": {
+          "type": "object",
+          "properties": {
+            "position": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "position"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "media": {
+      "version": "1",
+      "title": "Media stimulus",
+      "description": "Standalone image, audio or video; lifecycle events are distinct from answers.",
+      "config_schema": {
+        "type": "object",
+        "properties": {
+          "asset": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]*$",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "optional": {
+            "type": "boolean",
+            "default": true
+          },
+          "pausable": {
+            "type": "boolean",
+            "default": true
+          },
+          "replayable": {
+            "type": "boolean",
+            "default": true
+          },
+          "max_replays": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "autoplay": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "required": [
+          "asset"
+        ],
+        "additionalProperties": false
+      },
+      "outputs": {
+        "event": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "type": "string",
+              "enum": [
+                "render",
+                "play",
+                "pause",
+                "ended",
+                "error"
+              ]
+            },
+            "position_seconds": {
+              "type": [
+                "number",
+                "null"
+              ],
+              "minimum": 0
+            }
+          },
+          "required": [
+            "action",
+            "position_seconds"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "monitor": {
+      "version": "1",
+      "title": "Mouse and keyboard monitor",
+      "description": "Mouse coordinates are CSS pixels; keyboard events are emitted only when enabled.",
+      "config_schema": {
+        "type": "object",
+        "properties": {
+          "mouse": {
+            "type": "boolean",
+            "default": true
+          },
+          "keyboard": {
+            "type": "boolean",
+            "default": false
+          },
+          "max_rate_hz": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 240,
+            "default": 30
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "outputs": {
+        "mouse": {
+          "type": "object",
+          "properties": {
+            "x": {
+              "type": "number"
+            },
+            "y": {
+              "type": "number"
+            },
+            "viewport_width": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "viewport_height": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "x",
+            "y",
+            "viewport_width",
+            "viewport_height"
+          ],
+          "additionalProperties": false
+        },
+        "keyboard": {
+          "type": "object",
+          "properties": {
+            "action": {
+              "type": "string",
+              "enum": [
+                "down",
+                "up"
+              ]
+            },
+            "key": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "action",
+            "key"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "face_landmark": {
+      "version": "1",
+      "title": "Face landmark capture",
+      "description": "One landmark row per point, and one blendshape row per category; x/y/z use MediaPipe normalized coordinates.",
+      "config_schema": {
+        "type": "object",
+        "properties": {
+          "number_of_faces": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 8,
+            "default": 1
+          },
+          "landmarks": {
+            "type": "boolean",
+            "default": true
+          },
+          "blendshapes": {
+            "type": "boolean",
+            "default": false
+          },
+          "include_z": {
+            "type": "boolean",
+            "default": false
+          },
+          "max_rate_hz": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 240,
+            "default": 30
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "outputs": {
+        "landmark": {
+          "type": "object",
+          "properties": {
+            "sample_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "face_index": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "landmark_index": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "x": {
+              "type": "number"
+            },
+            "y": {
+              "type": "number"
+            },
+            "z": {
+              "type": [
+                "number",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "sample_id",
+            "face_index",
+            "landmark_index",
+            "x",
+            "y",
+            "z"
+          ],
+          "additionalProperties": false
+        },
+        "blendshape": {
+          "type": "object",
+          "properties": {
+            "sample_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "face_index": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "category": {
+              "type": "string"
+            },
+            "score": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          },
+          "required": [
+            "sample_id",
+            "face_index",
+            "category",
+            "score"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "face_calibration": {
+      "version": "1",
+      "title": "Face calibration",
+      "description": "Calibration is an explicit component, replacing special trial-level configuration. Calibration x/y are CSS pixels.",
+      "config_schema": {
+        "type": "object",
+        "properties": {
+          "number_of_faces": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 8,
+            "default": 1
+          },
+          "landmarks": {
+            "type": "boolean",
+            "default": true
+          },
+          "blendshapes": {
+            "type": "boolean",
+            "default": false
+          },
+          "include_z": {
+            "type": "boolean",
+            "default": false
+          },
+          "max_rate_hz": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 240,
+            "default": 30
+          },
+          "duration_seconds": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "default": 5
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "outputs": {
+        "calibration": {
+          "type": "object",
+          "properties": {
+            "point_key": {
+              "type": "string"
+            },
+            "x": {
+              "type": "number"
+            },
+            "y": {
+              "type": "number"
+            },
+            "viewport_width": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "viewport_height": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          "required": [
+            "point_key",
+            "x",
+            "y",
+            "viewport_width",
+            "viewport_height"
+          ],
+          "additionalProperties": false
+        },
+        "landmark": {
+          "type": "object",
+          "properties": {
+            "sample_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "face_index": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "landmark_index": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "x": {
+              "type": "number"
+            },
+            "y": {
+              "type": "number"
+            },
+            "z": {
+              "type": [
+                "number",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "sample_id",
+            "face_index",
+            "landmark_index",
+            "x",
+            "y",
+            "z"
+          ],
+          "additionalProperties": false
+        },
+        "blendshape": {
+          "type": "object",
+          "properties": {
+            "sample_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "face_index": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "category": {
+              "type": "string"
+            },
+            "score": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          },
+          "required": [
+            "sample_id",
+            "face_index",
+            "category",
+            "score"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "completion_code": {
+      "version": "1",
+      "title": "Completion code",
+      "description": "Runtime-generated code; definition compilation must never generate participant codes.",
+      "config_schema": {
+        "type": "object",
+        "properties": {
+          "prefix": {
+            "type": "string",
+            "default": ""
+          },
+          "length": {
+            "type": "integer",
+            "minimum": 4,
+            "maximum": 64,
+            "default": 8
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "outputs": {
+        "answer": {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "text"
+          ],
+          "additionalProperties": false
+        }
+      }
+    },
+    "end": {
+      "version": "1",
+      "title": "End study",
+      "description": "Explicit end marker, outside shuffled assessment trials.",
+      "config_schema": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "default": "Thank you for participating."
+          }
+        },
+        "required": [],
+        "additionalProperties": false
+      },
+      "outputs": {}
+    }
+  },
+  "attached_media_output": {
+    "type": "object",
+    "properties": {
+      "asset_key": {
+        "type": "string"
+      },
+      "action": {
+        "type": "string",
+        "enum": [
+          "render",
+          "play",
+          "pause",
+          "ended",
+          "error"
+        ]
+      },
+      "position_seconds": {
+        "type": [
+          "number",
+          "null"
+        ],
+        "minimum": 0
+      }
+    },
+    "required": [
+      "asset_key",
+      "action",
+      "position_seconds"
+    ],
+    "additionalProperties": false
+  }
+}

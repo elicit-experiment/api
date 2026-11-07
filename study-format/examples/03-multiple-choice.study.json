@@ -1,0 +1,122 @@
+{
+  "$schema": "../elicit_study/contracts/study.schema.json",
+  "schema_version": "1",
+  "key": "multiple-choice",
+  "title": "Checkbox groups",
+  "description": "Offline rewrite of a client-api example; see README.md for migration scope.",
+  "settings": {
+    "allow_anonymous": true
+  },
+  "assets": [],
+  "protocols": [
+    {
+      "key": "main",
+      "phases": [
+        {
+          "key": "questions",
+          "trials": [
+            {
+              "key": "one-to-three",
+              "components": [
+                {
+                  "key": "question",
+                  "type": "multiple_choice",
+                  "type_version": "1",
+                  "config": {
+                    "prompt": "Select one to three answers",
+                    "choices": [
+                      {
+                        "key": "option-1",
+                        "label": "One"
+                      },
+                      {
+                        "key": "option-2",
+                        "label": "Two"
+                      },
+                      {
+                        "key": "option-3",
+                        "label": "Three"
+                      },
+                      {
+                        "key": "option-4",
+                        "label": "Four"
+                      },
+                      {
+                        "key": "option-5",
+                        "label": "Five"
+                      }
+                    ],
+                    "min_selections": 1,
+                    "max_selections": 3
+                  }
+                }
+              ]
+            },
+            {
+              "key": "optional",
+              "components": [
+                {
+                  "key": "question",
+                  "type": "multiple_choice",
+                  "type_version": "1",
+                  "config": {
+                    "prompt": "Select any, or skip",
+                    "choices": [
+                      {
+                        "key": "option-1",
+                        "label": "A"
+                      },
+                      {
+                        "key": "option-2",
+                        "label": "B"
+                      },
+                      {
+                        "key": "option-3",
+                        "label": "C"
+                      }
+                    ],
+                    "required": false,
+                    "min_selections": 0
+                  }
+                }
+              ]
+            }
+          ],
+          "order": {
+            "mode": "fixed",
+            "sequence": [
+              "one-to-three",
+              "optional"
+            ]
+          }
+        },
+        {
+          "key": "finish",
+          "trials": [
+            {
+              "key": "thanks",
+              "components": [
+                {
+                  "key": "end",
+                  "type": "end",
+                  "type_version": "1",
+                  "config": {}
+                }
+              ]
+            }
+          ],
+          "order": {
+            "mode": "fixed",
+            "sequence": [
+              "thanks"
+            ]
+          }
+        }
+      ],
+      "phase_order": [
+        "questions",
+        "finish"
+      ]
+    }
+  ]
+}
