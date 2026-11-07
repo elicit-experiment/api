@@ -16,10 +16,21 @@ These nine studies were selected for feature coverage, not measured popularity. 
 
 These are curated rewrites of the workflows, not lossless imports of every historical presentation variant. Repeated label-position, column-width and axis-decoration permutations are consolidated. Legacy enrolment, fixed user IDs, passwords, redirects and server-specific metadata are intentionally outside this portable definition. Source trials that put calibration settings directly in trial metadata are expressed as explicit calibration components. Random per-user sequence creation becomes a declarative per-run ordering rule. Completion is placed after randomized phases.
 
-Important remaining parity work: exact legacy layout/markup rendering, keyboard method names, face transformation matrices, WebGazer, TaggingA and other unselected component types, legacy result normalization, mapping legacy attached-media events to asset keys, and end-to-end browser behavior. The new documents are not currently accepted by the v1 runtime. Their configured behavior and output shapes are proposals enforced by this package, awaiting the runtime adapter.
+Important remaining parity work: exact legacy layout/markup rendering, keyboard method names, face transformation matrices, WebGazer, TaggingA and other unselected component types, legacy result normalization, mapping legacy attached-media events to asset keys, and end-to-end browser behavior. The new documents are accepted by the asynchronous v2 delivery API; v1 participant execution still requires an adapter. Their configured behavior and output shapes are proposals enforced by this package, awaiting the runtime adapter.
 
 Open any `.study.json` file in a JSON Schema-aware editor for local completion. From the repository root, validate with:
 
 ```bash
 elicit-study validate study-format/examples/08-face-landmarks.study.json
 ```
+
+
+Upload any of the nine examples through the same delivery client:
+
+```bash
+ELICIT_API_URL=http://localhost:3000 ELICIT_TOKEN=your-token \
+  python study-format/examples/deliver.py study-format/examples/01-likert.study.json \
+  --output /tmp/results.zip
+```
+
+Add `--results /path/results.ndjson` to import a complete result batch before exporting, or `--participant participant-1` to select one participant. The token needs the existing `public` OAuth scope and an investigator/admin owner. [Delivery details](../../doc/canonical-study-delivery.md) describe result envelopes, operation polling, idempotency and deployment.

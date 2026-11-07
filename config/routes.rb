@@ -46,6 +46,22 @@ Rails.application.routes.draw do
     # end
   end
 
+  # Complete-document canonical study delivery.
+  namespace :api do
+    namespace :v2, defaults: { format: :json } do
+      post 'study-imports', to: 'study_transfers#import_definition'
+      post 'studies/:study_id/revision-imports', to: 'study_transfers#import_definition'
+      get 'studies/:study_id/revisions/:revision_id', to: 'study_transfers#definition'
+      get 'studies/:study_id/revisions/:revision_id/result-schema', to: 'study_transfers#result_schema'
+      post 'studies/:study_id/revisions/:revision_id/result-imports', to: 'study_transfers#import_results'
+      post 'studies/:study_id/revisions/:revision_id/result-exports', to: 'study_transfers#export_results'
+      resources :study_operations, controller: 'study_transfers', only: :show do
+        post :retry_operation, on: :member, path: 'retry'
+        get 'artifacts/:artifact_id', action: :download, on: :member, as: :download
+      end
+    end
+  end
+
   # API
   namespace :api do
     namespace :v1 do

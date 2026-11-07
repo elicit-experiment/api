@@ -18,3 +18,10 @@ public/assets/
 public/packs/
 yarn-error.log
 
+
+# Local Python development artifacts are not compiler source.
+study-format/.venv/
+study-format/build/
+study-format/dist/
+study-format/*.egg-info/
+**/__pycache__/

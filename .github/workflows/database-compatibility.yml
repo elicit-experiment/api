@@ -53,15 +53,20 @@ jobs:
         with:
           ruby-version: '3.4.4'
           bundler-cache: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install './study-format[parquet]'
       - name: Create databases from adapter-specific schemas
         run: bin/rails db:prepare
       - name: JSON, IDs, time series storage and finalization
-        run: bin/rails test test/database/demo_storage_test.rb test/database/configuration_test.rb test/database/compatibility_test.rb test/commands/finalize_timeseries_command_test.rb test/controllers/ChaosApi/V6/answer_controller_test.rb
+        run: bin/rails test test/database/demo_storage_test.rb test/database/configuration_test.rb test/database/compatibility_test.rb test/commands/finalize_timeseries_command_test.rb test/controllers/ChaosApi/V6/answer_controller_test.rb test/integration/study_delivery_test.rb
       - name: Case-insensitive search and literal wildcard escaping
         run: bin/rails test test/controllers/api/v1/users_controller_test.rb -n /search/
       - name: Real worker and logical schema
         run: |
           bin/rails runner test/database/worker_probe.rb
+          bin/rails runner test/database/study_delivery_probe.rb
           bin/rails runner test/database/schema_signature.rb tmp/schema-${{ matrix.adapter }}.json
       - name: Upload schema comparison input
         uses: actions/upload-artifact@v4

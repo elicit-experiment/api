@@ -8,3 +8,13 @@
 #     command: "SoftDeletedRecord.due.delete_all"
 #     priority: 2
 #     schedule: at 5am every day
+
+# Recover submissions committed before enqueue, and attempts whose worker died.
+production:
+  recover_study_transfers:
+    class: StudyTransferRecoveryJob
+    schedule: every 5 minutes
+development:
+  recover_study_transfers:
+    class: StudyTransferRecoveryJob
+    schedule: every 5 minutes

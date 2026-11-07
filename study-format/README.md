@@ -1,8 +1,10 @@
-# Canonical study format: first stacked branch
+# Canonical study format and asynchronous delivery
 
 This package is the contract foundation on top of the SQLite migration. It rewrites nine representative client-api workflows as complete, portable study documents and compiles them into typed result contracts. It runs without Rails, a database, credentials, network access, or participant accounts.
 
-This branch does not yet import documents into the existing runtime, migrate historical results, provide an editor UI, or expose asynchronous HTTP/S3 operations. The local Parquet writer is the artifact-generation primitive for that next branch. The existing v1 API and frontend remain unchanged.
+The branch includes asynchronous canonical definition/result uploads, durable operation polling, participant-filtered Parquet ZIP exports, and authorized local or signed S3-compatible downloads. See [the delivery API guide](../doc/canonical-study-delivery.md) and [Python example](examples/deliver.py).
+
+The existing participant runtime still requires a compatibility adapter. Canonical imports return `runtime_status: definition_only`; they store a versioned definition and typed results but do not create runnable v1 protocol graphs. Historical v1 result conversion and the editor UI are separate work. V1 mutation of canonical studies is blocked so it cannot bypass their revision contract.
 
 ## Try the examples
 
@@ -98,17 +100,10 @@ selected = answers.to_table(
 )
 ```
 
-## Next stacked branch: runtime and async delivery
+## Runtime compatibility boundary
 
 The next branch should use these fixtures as acceptance inputs for a legacy-runtime compiler and immutable revision persistence. The existing opaque `definition_data` fields must become projections of a validated revision; v1 mutation must not bypass that revision boundary. Both incoming results and export adapters must validate against the run's pinned result contract. A deployed server must use this compiler or a conformance-tested implementation; simply loading the editor schema omits semantic checks.
 
-Proposed operations:
-
-1. `POST /api/v2/study-validations` or `/studies/{id}/revisions` stages the complete definition and returns `202` plus a durable operation resource. Use idempotency keys and an expected base revision for updates. Publish a revision atomically only after validation/compilation succeeds.
-2. `POST /api/v2/studies/{id}/result-exports` selects participants/runs and revisions. Authorization applies to the operation, every selected run, and downloads.
-3. A worker materializes a consistent SQLite/PostgreSQL result snapshot, then passes immutable rows to the writer. Updated state records and growing stream files require snapshot copies; a cutoff timestamp alone is insufficient. Exports spanning revisions get separate revision datasets within one manifest.
-4. Upload finalized artifacts under a unique private S3-compatible prefix. Publish the manifest only after every object is complete; successful operations refer to that immutable manifest. Retried workers must not publish duplicate or partial datasets.
-5. `GET /api/v2/operations/{id}` reports queued/running/succeeded/failed, phase/progress, structured diagnostics, snapshot/contract identities, and download resources. Keep stable export IDs distinct from expiring signed URLs. Refresh authorized links without rerunning exports.
-6. Provide optional storage-mode ZIP packaging for one-download use. Preserve manifest-listed objects for direct dataset access. Apply retention and cleanup to unsuccessful staging prefixes.
+The [delivery implementation](../doc/canonical-study-delivery.md) already provides full-document staging, immutable revision publication, result batch validation, snapshot export, ZIP packaging, operation recovery and authorized download links. Exports are explicitly scoped to one revision; consumers can request several revision exports when needed. Legacy result extraction and runtime rendering remain the compatibility boundary.
 
 A schema-based offline editor can precede that server branch: edit a portable document, validate it locally, inspect its generated result contract, save it, then submit the same document when connected. The runtime compiler and rendering preview remain necessary before claiming behavioral parity with the old examples.

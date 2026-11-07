@@ -4,8 +4,8 @@ Elicit experiment is a system for creating psychological studies, presenting the
 
 The experimental [canonical study format](study-format/README.md) provides offline
 validation, nine rewritten client-api examples, derived result schemas, and local
-Parquet export primitives. Runtime import and asynchronous delivery are planned
-as the next layer; the existing API is unchanged.
+Parquet exports with [asynchronous upload/download APIs](doc/canonical-study-delivery.md).
+Compatibility with the existing participant runtime remains separate work.
 
 ## Try Elicit with Docker
 

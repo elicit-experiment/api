@@ -1,3 +1,5 @@
+FROM ghcr.io/astral-sh/uv:0.12.19 AS uv
+
 # Base image:
 # Debian Bookworm fails to find signatures for apt update on the production server so we fall back to Bullseye.
 FROM ruby:3.4.4-bullseye
@@ -44,6 +46,15 @@ COPY Gemfile.lock Gemfile.lock
 COPY gems gems
 RUN gem install bundler
 RUN bundle install
+
+# Shared offline/server compiler and Parquet writer. Managed Python keeps this
+# independent of the older distribution Python shipped by Bullseye.
+COPY --from=uv /uv /usr/local/bin/uv
+ENV UV_PYTHON_INSTALL_DIR=/opt/python
+RUN uv python install 3.13 && uv venv --python 3.13 /opt/study-format
+COPY study-format /tmp/study-format
+RUN uv pip install --python /opt/study-format/bin/python '/tmp/study-format[parquet]' && rm -rf /tmp/study-format
+ENV STUDY_FORMAT_PYTHON=/opt/study-format/bin/python
 
 # Node:
 COPY package.json .

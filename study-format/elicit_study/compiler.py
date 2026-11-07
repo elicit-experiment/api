@@ -182,7 +182,7 @@ def compile_study(study):
         format='date-time',
         pattern=r'^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(\.[0-9]{1,6})?(Z|[+-][0-9]{2}:[0-9]{2})$',
     )
-    identity = {'revision_id': _string(const=revision), 'participant_id': _string(minLength=1), 'run_id': _string(minLength=1)}
+    identity = {'revision_id': _string(const=revision), 'participant_id': _string(minLength=1, maxLength=200), 'run_id': _string(minLength=1)}
     occurrence = {**identity, 'protocol_key': _string(), 'phase_key': _string(), 'trial_key': _string(), 'trial_occurrence_id': _string(minLength=1)}
     status = _string(enum=['in_progress', 'completed', 'skipped', 'abandoned'])
     tables = {
