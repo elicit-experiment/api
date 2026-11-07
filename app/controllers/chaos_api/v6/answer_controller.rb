@@ -75,10 +75,16 @@ module ChaosApi
 
           state_datapoint.save!
 
-          import_result = StudyResult::DataPoint.import import_data_points, validate: false
+          # Rails' native INSERT ... RETURNING works with both adapters. The
+          # activerecord-import SQLite adapter omits inserted IDs from its result.
+          inserted = StudyResult::DataPoint.insert_all!(import_data_points, returning: %w[id])
+          import_result = {
+            'failed_instances' => [], 'num_inserts' => import_data_points.empty? ? 0 : 1,
+            'ids' => inserted.rows.flatten, 'results' => []
+          }
 
-          logger.info message: "added data points #{import_data_points.size}", failed_instances: import_result.failed_instances, num_inserts: import_result.num_inserts
-          @response = ChaosResponse.new(import_result.as_json.tap { |r| r['ids'] << state_datapoint.id })
+          logger.info message: "added data points #{import_data_points.size}", failed_instances: import_result.fetch('failed_instances'), num_inserts: import_result.fetch('num_inserts')
+          @response = ChaosResponse.new(import_result.tap { |r| r['ids'] << state_datapoint.id })
         end
 
         if @chaos_answer_output['Context']

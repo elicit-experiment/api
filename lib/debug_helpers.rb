@@ -37,7 +37,7 @@ class DebugHelpers
               dump(associated_object)
             end
           end
-        rescue PG::UndefinedColumn, StandardError
+        rescue StandardError
           puts "** Undefined column #{current_root.class.name}##{association.name}"
         end
       end

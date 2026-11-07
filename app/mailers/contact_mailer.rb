@@ -6,6 +6,9 @@ class ContactMailer < ApplicationMailer
   ELICIT_CONTACT_ADDRESS = 'elicit.experiment@gmail.com'
 
   def self.send_contact_email(contact_params)
+    # The evaluation stack has no external mail account and must not send real mail.
+    return Rails.logger.info('Contact email delivery disabled in Elicit demo') if ENV['ELICIT_DEMO'] == 'true'
+
     api_key = ENV.fetch('MAILGUN_API_KEY')
     domain = ENV.fetch('MAILGUN_DOMAIN', 'elicit-experiment.com')
     from_email = ENV.fetch('MAILGUN_FROM_EMAIL', "noreply@#{domain}")

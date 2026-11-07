@@ -71,8 +71,10 @@ module Api
         # Search by username or email
         if params[:q].present?
           query = params[:q].to_s[0..99]
-          escaped_query = query.gsub(/([%_\\])/, '\\\\\1')
-          @all_users = @all_users.where('username ILIKE ? OR email ILIKE ?', "%#{escaped_query}%", "%#{escaped_query}%")
+          pattern = "%#{ActiveRecord::Base.sanitize_sql_like(query)}%"
+          users = User.arel_table
+          @all_users = @all_users.where(users[:username].matches(pattern, '\\')
+                                                   .or(users[:email].matches(pattern, '\\')))
         end
 
         # Role filter

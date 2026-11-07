@@ -152,6 +152,16 @@ module Api::V1
       end
     end
 
+    test 'index search matches literal wildcard and backslash characters' do
+      special = User.create!(email: 'special-search@example.invalid', username: 'literal%_\\name',
+                             password: 'search-password', role: User::ROLES[:registered])
+      as_user(user(:admin)) do |headers|
+        get users_url, params: { q: '%_\\' }, headers: headers
+        assert_response :success
+        assert_equal [special.id], JSON.parse(response.body).map { |item| item.fetch('id') }
+      end
+    end
+
     test 'index search truncates long query strings' do
       as_user(user(:admin)) do |headers|
         long_query = 'a' * 200
