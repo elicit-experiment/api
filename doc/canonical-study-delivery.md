@@ -4,6 +4,8 @@ The v2 API delivers the canonical format from end to end: stage a whole definiti
 
 The server invokes the same Python package used for offline authoring, with file arguments and no shell interpolation. Definitions and compiled result contracts are immutable and stored together. Imports return `runtime_status: definition_only`: the existing v1 participant runtime and its historical results need an explicit compatibility adapter. The API does not pretend those studies are runnable or export legacy data as canonical results. Canonical studies are hidden from the public study list, and v1 mutations return `409`.
 
+For authoring fields and typed rows, see the [schema reference](../study-format/docs/schema.md). For local validation/export functions, the client API and CLI, see the [Python library guide](../study-format/docs/python.md).
+
 ## Run locally with SQLite
 
 Use the project's normal Ruby setup and environment variables, then install the worker dependency and prepare both databases:

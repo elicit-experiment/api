@@ -1,10 +1,18 @@
 # Canonical study format and asynchronous delivery
 
-This package is the contract foundation on top of the SQLite migration. It rewrites nine representative client-api workflows as complete, portable study documents and compiles them into typed result contracts. It runs without Rails, a database, credentials, network access, or participant accounts.
+This package is the contract foundation on top of the SQLite migration. It rewrites nine representative client-api workflows as complete, portable study documents and compiles them into typed result contracts. Its local tools run without Rails, a database service, credentials, network access, or participant accounts.
 
 The branch includes asynchronous canonical definition/result uploads, durable operation polling, participant-filtered Parquet ZIP exports, and authorized local or signed S3-compatible downloads. See [the delivery API guide](../doc/canonical-study-delivery.md) and [Python example](examples/deliver.py).
 
 The existing participant runtime still requires a compatibility adapter. Canonical imports return `runtime_status: definition_only`; they store a versioned definition and typed results but do not create runnable v1 protocol graphs. Historical v1 result conversion and the editor UI are separate work. V1 mutation of canonical studies is blocked so it cannot bypass their revision contract.
+
+## Documentation
+
+- [Study and result schema reference](docs/schema.md): complete definition, fields, component catalogue, ordering, identities, result rows and offline editor support.
+- [Python library and CLI](docs/python.md): installation, a complete local batch/export example, API reference, async client and error handling.
+- [Delivery API](../doc/canonical-study-delivery.md): deployment, HTTP operations, authorization, snapshots and downloads.
+- [Example catalogue](examples/README.md): the nine workflows and their legacy sources.
+- [Contributor instructions](AGENTS.md): schema generation and verification workflow.
 
 ## Try the examples
 
@@ -102,8 +110,8 @@ selected = answers.to_table(
 
 ## Runtime compatibility boundary
 
-The next branch should use these fixtures as acceptance inputs for a legacy-runtime compiler and immutable revision persistence. The existing opaque `definition_data` fields must become projections of a validated revision; v1 mutation must not bypass that revision boundary. Both incoming results and export adapters must validate against the run's pinned result contract. A deployed server must use this compiler or a conformance-tested implementation; simply loading the editor schema omits semantic checks.
+Future runtime work should use these fixtures as acceptance inputs for a legacy-runtime compiler; immutable revision persistence is already implemented. The existing opaque `definition_data` fields must become projections of a validated revision; v1 mutation must not bypass that revision boundary. Both incoming results and export adapters must validate against the run's pinned result contract. A deployed server must use this compiler or a conformance-tested implementation; simply loading the editor schema omits semantic checks.
 
 The [delivery implementation](../doc/canonical-study-delivery.md) already provides full-document staging, immutable revision publication, result batch validation, snapshot export, ZIP packaging, operation recovery and authorized download links. Exports are explicitly scoped to one revision; consumers can request several revision exports when needed. Legacy result extraction and runtime rendering remain the compatibility boundary.
 
-A schema-based offline editor can precede that server branch: edit a portable document, validate it locally, inspect its generated result contract, save it, then submit the same document when connected. The runtime compiler and rendering preview remain necessary before claiming behavioral parity with the old examples.
+A schema-based offline editor can use the existing contracts and delivery API: edit a portable document, validate it locally, inspect its generated result contract, save it, then submit the same document when connected. The runtime compiler and rendering preview remain necessary before claiming behavioral parity with the old examples.
