@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "elicit-study-format"
+version = "0.1.0"
+description = "Offline study contracts, validation, compilation and Parquet export primitives"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["fastjsonschema>=2.21,<3"]
+
+[project.optional-dependencies]
+parquet = ["pyarrow>=18"]
+
+[project.scripts]
+elicit-study = "elicit_study.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["elicit_study*"]
+
+[tool.setuptools.package-data]
+elicit_study = ["contracts/*.json"]

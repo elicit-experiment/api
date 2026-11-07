@@ -1,0 +1,182 @@
+{
+  "$schema": "../elicit_study/contracts/study.schema.json",
+  "schema_version": "1",
+  "key": "likert",
+  "title": "Sleepiness rating",
+  "description": "Offline rewrite of a client-api example; see README.md for migration scope.",
+  "settings": {
+    "allow_anonymous": true
+  },
+  "assets": [
+    {
+      "key": "piano",
+      "kind": "audio",
+      "uri": "https://www.mfiles.co.uk/mp3-downloads/franz-liszt-liebestraum-3-easy-piano.mp3",
+      "mime_type": "audio/mpeg"
+    }
+  ],
+  "protocols": [
+    {
+      "key": "main",
+      "phases": [
+        {
+          "key": "ratings",
+          "trials": [
+            {
+              "key": "baseline",
+              "components": [
+                {
+                  "key": "instructions",
+                  "type": "text",
+                  "type_version": "1",
+                  "config": {
+                    "text": "Rate your current level of sleepiness."
+                  }
+                },
+                {
+                  "key": "rating",
+                  "type": "likert",
+                  "type_version": "1",
+                  "config": {
+                    "prompt": "How alert do you feel?",
+                    "choices": [
+                      {
+                        "key": "option-1",
+                        "label": "1 — sleepy / tired / drowsy"
+                      },
+                      {
+                        "key": "option-2",
+                        "label": "2"
+                      },
+                      {
+                        "key": "option-3",
+                        "label": "3"
+                      },
+                      {
+                        "key": "option-4",
+                        "label": "4"
+                      },
+                      {
+                        "key": "option-5",
+                        "label": "5 — neutral"
+                      },
+                      {
+                        "key": "option-6",
+                        "label": "6"
+                      },
+                      {
+                        "key": "option-7",
+                        "label": "7"
+                      },
+                      {
+                        "key": "option-8",
+                        "label": "8"
+                      },
+                      {
+                        "key": "option-9",
+                        "label": "9 — alert / wakeful / awake"
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "key": "audio",
+              "components": [
+                {
+                  "key": "rating",
+                  "type": "likert",
+                  "type_version": "1",
+                  "config": {
+                    "prompt": "How alert do you feel while listening?",
+                    "choices": [
+                      {
+                        "key": "option-1",
+                        "label": "1 — sleepy / tired / drowsy"
+                      },
+                      {
+                        "key": "option-2",
+                        "label": "2"
+                      },
+                      {
+                        "key": "option-3",
+                        "label": "3"
+                      },
+                      {
+                        "key": "option-4",
+                        "label": "4"
+                      },
+                      {
+                        "key": "option-5",
+                        "label": "5 — neutral"
+                      },
+                      {
+                        "key": "option-6",
+                        "label": "6"
+                      },
+                      {
+                        "key": "option-7",
+                        "label": "7"
+                      },
+                      {
+                        "key": "option-8",
+                        "label": "8"
+                      },
+                      {
+                        "key": "option-9",
+                        "label": "9 — alert / wakeful / awake"
+                      }
+                    ]
+                  },
+                  "stimuli": [
+                    "piano"
+                  ],
+                  "layout": {
+                    "columns": [
+                      30,
+                      70
+                    ]
+                  }
+                }
+              ]
+            }
+          ],
+          "order": {
+            "mode": "fixed",
+            "sequence": [
+              "baseline",
+              "audio"
+            ]
+          }
+        },
+        {
+          "key": "finish",
+          "trials": [
+            {
+              "key": "thanks",
+              "components": [
+                {
+                  "key": "end",
+                  "type": "end",
+                  "type_version": "1",
+                  "config": {}
+                }
+              ]
+            }
+          ],
+          "order": {
+            "mode": "fixed",
+            "sequence": [
+              "thanks"
+            ]
+          }
+        }
+      ],
+      "phase_order": [
+        "ratings",
+        "finish"
+      ]
+    }
+  ]
+}

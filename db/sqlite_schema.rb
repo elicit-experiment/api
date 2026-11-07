@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_28_165522) do
+ActiveRecord::Schema[7.2].define(version: 2026_11_08_000000) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -37,6 +37,29 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_28_165522) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "canonical_result_rows", force: :cascade do |t|
+    t.integer "canonical_study_revision_id", null: false
+    t.integer "study_transfer_operation_id", null: false
+    t.string "table_name", null: false
+    t.string "participant_id", null: false
+    t.string "row_key", null: false
+    t.json "payload", null: false
+    t.index ["canonical_study_revision_id", "participant_id"], name: "canonical_participant_results"
+    t.index ["canonical_study_revision_id", "table_name", "row_key"], name: "canonical_result_identity", unique: true
+    t.index ["canonical_study_revision_id"], name: "index_canonical_result_rows_on_canonical_study_revision_id"
+    t.index ["study_transfer_operation_id"], name: "index_canonical_result_rows_on_study_transfer_operation_id"
+  end
+
+  create_table "canonical_study_revisions", force: :cascade do |t|
+    t.integer "study_definition_id", null: false
+    t.string "definition_digest", null: false
+    t.string "contract_digest", null: false
+    t.json "compiled_contract", null: false
+    t.datetime "created_at", null: false
+    t.index ["study_definition_id", "definition_digest"], name: "canonical_revision_identity", unique: true
+    t.index ["study_definition_id"], name: "index_canonical_study_revisions_on_study_definition_id"
   end
 
   create_table "chaos_sessions", force: :cascade do |t|
@@ -330,6 +353,29 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_28_165522) do
     t.index ["trial_definition_id"], name: "index_study_result_trial_results_on_trial_definition_id"
   end
 
+  create_table "study_transfer_operations", force: :cascade do |t|
+    t.integer "requester_id", null: false
+    t.integer "study_definition_id"
+    t.integer "canonical_study_revision_id"
+    t.string "kind", null: false
+    t.string "status", default: "queued", null: false
+    t.string "phase", default: "queued", null: false
+    t.string "idempotency_key", null: false
+    t.string "request_digest", null: false
+    t.json "options", default: {}, null: false
+    t.json "diagnostics", default: [], null: false
+    t.json "result", default: {}, null: false
+    t.string "claim_token"
+    t.datetime "lease_expires_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["canonical_study_revision_id"], name: "index_study_transfer_operations_on_canonical_study_revision_id"
+    t.index ["requester_id", "idempotency_key"], name: "study_transfer_idempotency", unique: true
+    t.index ["requester_id"], name: "index_study_transfer_operations_on_requester_id"
+    t.index ["status", "lease_expires_at"], name: "index_study_transfer_operations_on_status_and_lease_expires_at"
+    t.index ["study_definition_id"], name: "index_study_transfer_operations_on_study_definition_id"
+  end
+
   create_table "trial_definitions", force: :cascade do |t|
     t.string "definition_data"
     t.integer "study_definition_id", null: false
@@ -393,6 +439,12 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_28_165522) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "canonical_result_rows", "canonical_study_revisions"
+  add_foreign_key "canonical_result_rows", "study_transfer_operations"
+  add_foreign_key "canonical_study_revisions", "study_definitions"
+  add_foreign_key "study_transfer_operations", "canonical_study_revisions"
+  add_foreign_key "study_transfer_operations", "study_definitions"
+  add_foreign_key "study_transfer_operations", "users", column: "requester_id"
   add_foreign_key "trial_order_selection_mappings", "phase_definitions"
   add_foreign_key "trial_order_selection_mappings", "trial_orders"
   add_foreign_key "trial_order_selection_mappings", "users"

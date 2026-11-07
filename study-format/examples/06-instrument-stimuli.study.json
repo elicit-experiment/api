@@ -1,0 +1,162 @@
+{
+  "$schema": "../elicit_study/contracts/study.schema.json",
+  "schema_version": "1",
+  "key": "instrument-stimuli",
+  "title": "Instruments with media",
+  "description": "Offline rewrite of a client-api example; see README.md for migration scope.",
+  "settings": {
+    "allow_anonymous": true
+  },
+  "assets": [
+    {
+      "key": "picture",
+      "kind": "image",
+      "uri": "https://dummyimage.com/750x550/996633/fff",
+      "mime_type": "image/png"
+    },
+    {
+      "key": "piano",
+      "kind": "audio",
+      "uri": "https://www.mfiles.co.uk/mp3-downloads/franz-liszt-liebestraum-3-easy-piano.mp3",
+      "mime_type": "audio/mpeg"
+    },
+    {
+      "key": "clip",
+      "kind": "video",
+      "uri": "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+      "mime_type": "video/mp4"
+    }
+  ],
+  "protocols": [
+    {
+      "key": "main",
+      "phases": [
+        {
+          "key": "questions",
+          "trials": [
+            {
+              "key": "image",
+              "components": [
+                {
+                  "key": "rating",
+                  "type": "single_choice",
+                  "type_version": "1",
+                  "config": {
+                    "prompt": "Do you like the image?",
+                    "choices": [
+                      {
+                        "key": "option-1",
+                        "label": "Yes"
+                      },
+                      {
+                        "key": "option-2",
+                        "label": "No"
+                      }
+                    ]
+                  },
+                  "stimuli": [
+                    "picture"
+                  ],
+                  "layout": {
+                    "columns": [
+                      30,
+                      70
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "key": "audio",
+              "components": [
+                {
+                  "key": "rating",
+                  "type": "likert",
+                  "type_version": "1",
+                  "config": {
+                    "prompt": "Rate the music",
+                    "choices": [
+                      {
+                        "key": "option-1",
+                        "label": "Low"
+                      },
+                      {
+                        "key": "option-2",
+                        "label": "Medium"
+                      },
+                      {
+                        "key": "option-3",
+                        "label": "High"
+                      }
+                    ]
+                  },
+                  "stimuli": [
+                    "piano"
+                  ]
+                }
+              ]
+            },
+            {
+              "key": "video",
+              "components": [
+                {
+                  "key": "clip",
+                  "type": "media",
+                  "type_version": "1",
+                  "config": {
+                    "asset": "clip",
+                    "optional": false,
+                    "pausable": false,
+                    "max_replays": 2
+                  }
+                },
+                {
+                  "key": "comment",
+                  "type": "free_text",
+                  "type_version": "1",
+                  "config": {
+                    "prompt": "Describe the clip"
+                  }
+                }
+              ]
+            }
+          ],
+          "order": {
+            "mode": "fixed",
+            "sequence": [
+              "image",
+              "audio",
+              "video"
+            ]
+          }
+        },
+        {
+          "key": "finish",
+          "trials": [
+            {
+              "key": "thanks",
+              "components": [
+                {
+                  "key": "end",
+                  "type": "end",
+                  "type_version": "1",
+                  "config": {}
+                }
+              ]
+            }
+          ],
+          "order": {
+            "mode": "fixed",
+            "sequence": [
+              "thanks"
+            ]
+          }
+        }
+      ],
+      "phase_order": [
+        "questions",
+        "finish"
+      ]
+    }
+  ]
+}

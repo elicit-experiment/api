@@ -1,4 +1,6 @@
 # syntax=docker/dockerfile:1
+FROM ghcr.io/astral-sh/uv:0.12.19 AS uv
+
 FROM node:22.23.4-bookworm AS admin-build
 WORKDIR /app
 COPY package.json package-lock.json ./
@@ -51,9 +53,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && useradd --create-home --uid 1000 elicit
 COPY --from=gems /usr/local/bundle /usr/local/bundle
 COPY --from=admin-build /usr/local/bin/node /usr/local/bin/node
+COPY --from=uv /uv /usr/local/bin/uv
+ENV UV_PYTHON_INSTALL_DIR=/opt/python STUDY_FORMAT_PYTHON=/opt/study-format/bin/python
 ENV BUNDLE_WITHOUT=development:test BUNDLE_FROZEN=true RAILS_ENV=production
 WORKDIR /app
 COPY --chown=elicit:elicit . .
+# The canonical delivery worker shares the offline Python compiler and Parquet writer.
+RUN uv python install 3.13 && uv venv --python 3.13 /opt/study-format \
+    && uv pip install --python /opt/study-format/bin/python '/app/study-format[parquet]'
 COPY --from=admin-build --chown=elicit:elicit /app/public/packs public/packs
 RUN mkdir -p storage public/uploads tmp/pids log && chown -R elicit:elicit storage public/uploads tmp log
 USER elicit

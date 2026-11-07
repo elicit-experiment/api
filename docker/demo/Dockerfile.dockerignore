@@ -24,3 +24,9 @@ log
 certs
 frontend
 notes
+
+# Offline authoring environment and build artifacts are not image inputs.
+study-format/.venv
+study-format/build
+study-format/*.egg-info
+**/__pycache__

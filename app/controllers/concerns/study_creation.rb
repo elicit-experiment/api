@@ -26,6 +26,14 @@ module StudyCreation
     end
 
     before_action :authenticate_user!
+
+    before_action only: %i[create update destroy] do
+      study_id = params[:study_definition_id]
+      study_id ||= params[:id] if controller_name == 'study_definitions'
+      if study_id && CanonicalStudyRevision.exists?(study_definition_id: study_id)
+        render json: { error: 'Canonical studies are immutable through v1; import a complete v2 revision' }, status: :conflict
+      end
+    end
     #  before_action :doorkeeper_authorize!, except: [:show]
     #  before_action -> { doorkeeper_authorize! :write }, only: [:create, :update, :destroy]
   end

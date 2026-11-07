@@ -1,0 +1,21 @@
+name: Study format
+on:
+  pull_request:
+  push:
+    branches: [master]
+permissions:
+  contents: read
+jobs:
+  contracts:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install './study-format[parquet]'
+      - name: Offline contracts, examples and Parquet round trips
+        run: python -m unittest discover -s study-format/tests -v
+      - name: Installed CLI and packaged schema resources
+        working-directory: /tmp
+        run: elicit-study schema > /tmp/elicit-study.schema.json

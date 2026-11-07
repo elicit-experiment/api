@@ -1,0 +1,131 @@
+{
+  "$schema": "../elicit_study/contracts/study.schema.json",
+  "schema_version": "1",
+  "key": "single-choice",
+  "title": "Radio buttons and feedback",
+  "description": "Offline rewrite of a client-api example; see README.md for migration scope.",
+  "settings": {
+    "allow_anonymous": true
+  },
+  "assets": [],
+  "protocols": [
+    {
+      "key": "main",
+      "phases": [
+        {
+          "key": "questions",
+          "trials": [
+            {
+              "key": "optional",
+              "components": [
+                {
+                  "key": "question",
+                  "type": "single_choice",
+                  "type_version": "1",
+                  "config": {
+                    "prompt": "Optional question",
+                    "choices": [
+                      {
+                        "key": "option-1",
+                        "label": "Answer 1",
+                        "correct": true
+                      },
+                      {
+                        "key": "option-2",
+                        "label": "Answer 2"
+                      },
+                      {
+                        "key": "option-3",
+                        "label": "Answer 3"
+                      },
+                      {
+                        "key": "option-4",
+                        "label": "Answer 4"
+                      },
+                      {
+                        "key": "option-5",
+                        "label": "Answer 5"
+                      }
+                    ],
+                    "required": false
+                  }
+                }
+              ]
+            },
+            {
+              "key": "feedback",
+              "components": [
+                {
+                  "key": "question",
+                  "type": "single_choice",
+                  "type_version": "1",
+                  "config": {
+                    "prompt": "Choose the first answer",
+                    "choices": [
+                      {
+                        "key": "option-1",
+                        "label": "Answer 1",
+                        "correct": true
+                      },
+                      {
+                        "key": "option-2",
+                        "label": "Answer 2"
+                      },
+                      {
+                        "key": "option-3",
+                        "label": "Answer 3"
+                      },
+                      {
+                        "key": "option-4",
+                        "label": "Answer 4"
+                      },
+                      {
+                        "key": "option-5",
+                        "label": "Answer 5"
+                      }
+                    ],
+                    "show_feedback": true,
+                    "answer_once": true
+                  }
+                }
+              ]
+            }
+          ],
+          "order": {
+            "mode": "fixed",
+            "sequence": [
+              "optional",
+              "feedback"
+            ]
+          }
+        },
+        {
+          "key": "finish",
+          "trials": [
+            {
+              "key": "thanks",
+              "components": [
+                {
+                  "key": "end",
+                  "type": "end",
+                  "type_version": "1",
+                  "config": {}
+                }
+              ]
+            }
+          ],
+          "order": {
+            "mode": "fixed",
+            "sequence": [
+              "thanks"
+            ]
+          }
+        }
+      ],
+      "phase_order": [
+        "questions",
+        "finish"
+      ]
+    }
+  ]
+}
