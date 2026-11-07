@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+# Builds and starts the demo; leaves it running. Never deletes data or volumes.
+set -euo pipefail
+cd "$(dirname "$0")/.."
+compose=(docker compose -f compose.demo.yml)
+"${compose[@]}" config --quiet
+"${compose[@]}" up --build -d --wait --wait-timeout 300
+"${compose[@]}" exec -T app ruby -rnet/http -e 'response = Net::HTTP.get_response(URI("http://127.0.0.1:3000/apidocs/v1/swagger.json")); abort "API HTTP smoke failed" unless response.code == "200"'
+"${compose[@]}" exec -T experiment wget -q -O /dev/null http://127.0.0.1/
+"${compose[@]}" exec -T app ruby docker/demo/boot.rb run bundle exec rails runner docker/demo/probe.rb
+# Preparing again must retain records and the existing generated credentials.
+before=$("${compose[@]}" exec -T app ruby -rdigest -e 'puts Digest::SHA256.file("/app/storage/demo/credentials.json").hexdigest')
+"${compose[@]}" restart app
+"${compose[@]}" up -d --wait --wait-timeout 120
+after=$("${compose[@]}" exec -T app ruby -rdigest -e 'puts Digest::SHA256.file("/app/storage/demo/credentials.json").hexdigest')
+[[ "$before" == "$after" ]] || { echo 'Credentials changed on restart' >&2; exit 1; }
+"${compose[@]}" exec -T app ruby docker/demo/boot.rb run bundle exec rails runner docker/demo/probe.rb
+echo 'Demo smoke and restart checks passed; services are running.'

@@ -2,6 +2,11 @@
 
 Elicit experiment is a system for creating psychological studies, presenting them to subject and gathering the results.
 
+## Try Elicit with Docker
+
+For a local evaluation with SQLite, local uploads, and no database setup, use the
+[standalone demo stack](doc/docker-demo.md).
+
 ## Installation
 
 Installation instructions are found [here](./INSTALL.md). PostgreSQL remains the default;

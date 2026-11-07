@@ -1,0 +1,26 @@
+# This Dockerfile needs the demo files and frontend; production .dockerignore excludes them.
+.git
+**/.git
+.env
+.env.*
+**/.env
+**/.env.*
+config/master.key
+config/credentials.yml.enc
+config/credentials/*.key
+config/credentials/*.yml.enc
+**/node_modules
+**/target
+**/pkg
+**/dist
+.bundle
+.yarn
+storage
+public/uploads
+public/packs*
+public/assets
+tmp
+log
+certs
+frontend
+notes

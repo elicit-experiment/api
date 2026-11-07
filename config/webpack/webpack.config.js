@@ -30,7 +30,7 @@ const customConfig = {
     ]
   },
   plugins: [
-    new webpack.EnvironmentPlugin(process.env)
+    new webpack.EnvironmentPlugin(['PUBLIC_CLIENT_ID', 'PUBLIC_CLIENT_SECRET', 'WEBAPP_CLIENT_SECRET'])
   ],
   resolve: {
     // fallback: {

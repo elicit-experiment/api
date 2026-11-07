@@ -217,6 +217,10 @@ module StudyResult
     end
 
     def signed_finalized_url
+      if finalized_file.service.is_a?(ActiveStorage::Service::DiskService)
+        return Rails.application.routes.url_helpers.rails_blob_url(finalized_file)
+      end
+
       require 'aws-sdk-s3'
 
       # The ActiveStorage default urls don't seem to work with Digital Ocean Spaces. They result in Bad Gateway, possibly

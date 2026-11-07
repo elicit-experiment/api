@@ -1,0 +1,58 @@
+# Independent, local evaluation stack. No .env file, PostgreSQL, Redis or TLS needed.
+name: elicit-demo
+x-app: &app
+  image: elicit-demo-app:local
+  build:
+    context: .
+    dockerfile: docker/demo/Dockerfile
+    target: app
+  environment: &environment
+    ELICIT_DEMO_HOST: ${ELICIT_DEMO_HOST:-localhost}
+    ELICIT_DEMO_PORT: ${ELICIT_DEMO_PORT:-8080}
+    ELICIT_DEMO_EXPERIMENT_PORT: ${ELICIT_DEMO_EXPERIMENT_PORT:-5505}
+    ELICIT_DEMO_DATA: /app/storage/demo
+  volumes:
+    - demo-storage:/app/storage
+    - demo-uploads:/app/public/uploads
+  init: true
+  stop_grace_period: 30s
+
+services:
+  app:
+    <<: *app
+    command: [web]
+    ports:
+      - "127.0.0.1:${ELICIT_DEMO_PORT:-8080}:3000"
+    healthcheck:
+      test: [CMD, ruby, -rnet/http, -e, "exit(Net::HTTP.get_response(URI('http://127.0.0.1:3000/apidocs/v1/swagger.json')).code == '200' ? 0 : 1)"]
+      interval: 5s
+      timeout: 5s
+      start_period: 60s
+      retries: 30
+
+  jobs:
+    <<: *app
+    command: [jobs]
+    depends_on:
+      app:
+        condition: service_healthy
+
+  experiment:
+    build:
+      context: .
+      dockerfile: docker/demo/Dockerfile
+      target: experiment
+      args:
+        ELICIT_DEMO_HOST: ${ELICIT_DEMO_HOST:-localhost}
+        ELICIT_DEMO_PORT: ${ELICIT_DEMO_PORT:-8080}
+    ports:
+      - "127.0.0.1:${ELICIT_DEMO_EXPERIMENT_PORT:-5505}:80"
+    healthcheck:
+      test: [CMD-SHELL, "wget -q -O /dev/null http://127.0.0.1/ || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  demo-storage:
+  demo-uploads:

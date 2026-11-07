@@ -56,7 +56,7 @@ jobs:
       - name: Create databases from adapter-specific schemas
         run: bin/rails db:prepare
       - name: JSON, IDs, time series storage and finalization
-        run: bin/rails test test/database/configuration_test.rb test/database/compatibility_test.rb test/commands/finalize_timeseries_command_test.rb test/controllers/ChaosApi/V6/answer_controller_test.rb
+        run: bin/rails test test/database/demo_storage_test.rb test/database/configuration_test.rb test/database/compatibility_test.rb test/commands/finalize_timeseries_command_test.rb test/controllers/ChaosApi/V6/answer_controller_test.rb
       - name: Case-insensitive search and literal wildcard escaping
         run: bin/rails test test/controllers/api/v1/users_controller_test.rb -n /search/
       - name: Real worker and logical schema

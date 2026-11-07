@@ -62,8 +62,8 @@ Rails.application.configure do
 
   config.action_mailer.perform_caching = false
 
-  # Store files on Amazon S3.
-  config.active_storage.service = :digital_ocean
+  # The standalone demo stores files on disk; normal deployments use Spaces.
+  config.active_storage.service = ENV['ELICIT_DEMO'] == 'true' ? :local : :digital_ocean
 
   # Using Mailgun SDK directly for sending emails
 
@@ -124,4 +124,11 @@ Rails.application.configure do
   # below are only used for swagger ui to auto-populate test client id
   config.swagger_default_client_id = 'ef4032ea6c300bc4e11aa8326951b5142f14f6b1741b6d4f3aaeefffe6e6df02'
   config.swagger_default_client_secret = '6bd054801b29825b9926266a68263fe9b5af7c3d393924435f12a826865befd1'
+
+  if ENV['ELICIT_DEMO'] == 'true'
+    config.action_mailer.perform_deliveries = false
+    config.swagger_default_client_id = ENV.fetch('PUBLIC_CLIENT_ID')
+    config.swagger_default_client_secret = ENV.fetch('PUBLIC_CLIENT_SECRET')
+  end
+
 end
