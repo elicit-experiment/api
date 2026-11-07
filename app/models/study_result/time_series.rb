@@ -31,7 +31,7 @@ module StudyResult
 
     scope :has_no_finalized_file, -> { left_outer_joins(:finalized_file_attachment).where(active_storage_attachments: { id: nil }) }
 
-    scope :ready_for_finalization, -> { has_no_finalized_file.where(Arel.sql("updated_at < current_timestamp - interval '1 hour'")) }
+    scope :ready_for_finalization, -> { has_no_finalized_file.where(arel_table[:updated_at].lt(1.hour.ago)) }
 
     SERIES_TYPES = %i[webgazer mouse face_landmark].freeze
     FILE_TYPES = %i[tsv json].freeze

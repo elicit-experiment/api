@@ -2,6 +2,7 @@
 
 class AddCustomParametersToExperiments < ActiveRecord::Migration[5.1]
   def change
-    add_column :study_result_experiments, :custom_parameters, :jsonb
+    type = connection.adapter_name == 'PostgreSQL' ? :jsonb : :json
+    add_column :study_result_experiments, :custom_parameters, type
   end
 end

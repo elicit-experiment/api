@@ -1,0 +1,87 @@
+name: Database compatibility
+on:
+  pull_request:
+  push:
+    branches: [master]
+permissions:
+  contents: read
+jobs:
+  compatibility:
+    name: ${{ matrix.adapter }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        adapter: [postgresql, sqlite3]
+    services:
+      postgres:
+        image: ${{ matrix.adapter == 'postgresql' && 'postgres:15.2-alpine' || '' }}
+        env:
+          POSTGRES_USER: compatibility
+          POSTGRES_PASSWORD: compatibility
+          POSTGRES_DB: postgres
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U compatibility"
+          --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      RAILS_ENV: test
+      DATABASE_ADAPTER: ${{ matrix.adapter }}
+      SQLITE_DATABASE_DIR: tmp/compatibility
+      POSTGRES_HOST: 127.0.0.1
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: compatibility
+      POSTGRES_PASSWORD: compatibility
+      POSTGRES_DB: postgres
+      API_SCHEME: http
+      EXTERNAL_API_SCHEME: http
+      API_URL: localhost:3000
+      ELICIT_URL: http://localhost:3000
+      SITE_SUFFIX: localhost
+      REDIS_PASSWORD: unused
+      SECRET_KEY_BASE: database-compatibility-tests-only
+      PUBLIC_CLIENT_ID: compatibility
+      PUBLIC_CLIENT_SECRET: compatibility
+      ADMIN_USER: compatibility@example.invalid
+      ADMIN_PASSWORD: compatibility-password
+      SUBJECT_DEFAULT_PASSWORD: compatibility-password
+    steps:
+      - uses: actions/checkout@v4
+      - run: git submodule update --init gems/swagger_ui_engine
+      - uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.4.4'
+          bundler-cache: true
+      - name: Create databases from adapter-specific schemas
+        run: bin/rails db:prepare
+      - name: JSON, IDs, time series storage and finalization
+        run: bin/rails test test/database/configuration_test.rb test/database/compatibility_test.rb test/commands/finalize_timeseries_command_test.rb test/controllers/ChaosApi/V6/answer_controller_test.rb
+      - name: Case-insensitive search and literal wildcard escaping
+        run: bin/rails test test/controllers/api/v1/users_controller_test.rb -n /search/
+      - name: Real worker and logical schema
+        run: |
+          bin/rails runner test/database/worker_probe.rb
+          bin/rails runner test/database/schema_signature.rb tmp/schema-${{ matrix.adapter }}.json
+      - name: Upload schema comparison input
+        uses: actions/upload-artifact@v4
+        with:
+          name: schema-${{ matrix.adapter }}
+          path: tmp/schema-${{ matrix.adapter }}.json
+      - name: Upload failure logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: logs-${{ matrix.adapter }}
+          path: |
+            log/test.log
+            tmp/database-worker.log
+  schema-parity:
+    runs-on: ubuntu-latest
+    needs: compatibility
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: schema-*
+          merge-multiple: true
+      - name: Compare logical schemas
+        run: diff -u schema-postgresql.json schema-sqlite3.json

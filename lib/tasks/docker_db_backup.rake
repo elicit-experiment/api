@@ -1,6 +1,7 @@
 namespace :docker do
   namespace :db do
     task backup: :environment do
+      abort 'docker:db tasks require PostgreSQL; use a SQLite-aware backup/restore tool for SQLite' unless ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
       Rails.application.eager_load!
       #`docker exec -i postgres apk add --no-cache postgresql-client`
       #`docker exec -e PGPASSWORD=#{ENV['POSTGRES_PASSWORD']} -i postgres pg_dump -U elicit #{ENV['POSTGRES_DB']} >postgres-backup-sql`
@@ -10,6 +11,7 @@ namespace :docker do
 
 
     task restore: :environment do
+      abort 'docker:db tasks require PostgreSQL; use a SQLite-aware backup/restore tool for SQLite' unless ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
       Rails.application.eager_load!
       puts ActiveRecord::Base.connection.select_value('SELECT version()')
       `docker cp postgres-backup.sql postgres15:/var/lib/postgresql/backups/`

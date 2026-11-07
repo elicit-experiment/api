@@ -4,7 +4,9 @@ Elicit experiment is a system for creating psychological studies, presenting the
 
 ## Installation
 
-Installation instructions are found [here](./INSTALL.md).
+Installation instructions are found [here](./INSTALL.md). PostgreSQL remains the default;
+[database backend instructions](./doc/database-backends.md) cover opting into SQLite
+locally or for a new single-host production installation.
 
 ## Development
 
